@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -24,12 +25,6 @@ public class TimeManager : MonoBehaviour
     [Header("RealTime")]
     [SerializeField] float _currentRealTimePass;
 
-    [Header("In-Game Clock")]
-    [SerializeField] bool _printClock = true;
-
-    int _currentHour;
-    int _currentMinute;
-    bool _isPM;
     private void Start()
     {
         _weekPass += OnEndOfWeek;
@@ -44,38 +39,6 @@ public class TimeManager : MonoBehaviour
     {
         WeekPass();
         _currentRealTimePass += Time.deltaTime;
-
-        UpdateInGameClock();
-
-    }
-
-    void UpdateInGameClock()
-    {
-        // Normalize day progress (0–1)
-        float dayProgress = GetDayNormalized();
-
-        // Convert to total in-game minutes (24h * 60m)
-        float totalMinutes = dayProgress * 1440f;
-
-        // Snap to 10-minute intervals
-        int snappedMinutes = Mathf.FloorToInt(totalMinutes / 10f) * 10;
-
-        int hour24 = snappedMinutes / 60;
-        int minute = snappedMinutes % 60;
-
-        // Convert to 12-hour format
-        _isPM = hour24 >= 12;
-        _currentHour = hour24 % 12;
-        if (_currentHour == 0) _currentHour = 12;
-
-        _currentMinute = minute;
-
-        if (_printClock)
-        {
-            Debug.Log(
-                $"In-Game Time: {_currentHour:D2}:{_currentMinute:D2} {(_isPM ? "PM" : "AM")}"
-            );
-        }
     }
     public void WeekPass()
     {
@@ -103,7 +66,7 @@ public class TimeManager : MonoBehaviour
     public void OnEndOfWeek()
     {
         week++;
-        day = 1;       
+        day = 0;       
     }
     public void OnEndOfMonth()
     {
@@ -124,8 +87,10 @@ public class TimeManager : MonoBehaviour
     public float GetCurrentRealTime () => _currentRealTimePass;
     public int GetCurrentWeek() => week;
     public int GetCurrentDay() => day;
+    public int GetCurrentMonth() => _month;
     public int GetMaxWeek() => _maxWeek;
     public int GetMaxDay() => _maxDay;
+    public int GetMaxMonth() => _maxMonth;
     public int GetTotalDayPass() => _totalDayPass;
 
 }

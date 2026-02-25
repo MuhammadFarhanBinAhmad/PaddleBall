@@ -24,7 +24,7 @@ public class BrickGenerator : MonoBehaviour
     BrickPool _brickPool;
     TimeManager _timeManager;
 
-    public List<BrickFormationEntry> _brickFormationList;
+    public List<BrickFormationEntry> _brickFormationList = new List<BrickFormationEntry>();
 
     [Header("AttributePoints")]
     [SerializeField] int _firstAttributePoints;
@@ -70,7 +70,7 @@ public class BrickGenerator : MonoBehaviour
     private void Awake()
     {
         _brickPool = GetComponent<BrickPool>();
-        _time_manager_find();
+        _timeManager = FindAnyObjectByType<TimeManager>();
         _onSpawnNextWave += SpawnNextWave;
     }
 
@@ -83,13 +83,6 @@ public class BrickGenerator : MonoBehaviour
     private void OnDisable()
     {
         _onSpawnNextWave -= SpawnNextWave;
-    }
-
-    void _time_manager_find()
-    {
-        _timeManager = FindAnyObjectByType<TimeManager>();
-        if (_timeManager == null)
-            Debug.LogWarning("TimeManager not found on Awake.");
     }
 
     public void OnBrickDestroyed()
@@ -129,7 +122,7 @@ public class BrickGenerator : MonoBehaviour
     {
         int phases = 1;
         if (_timeManager != null)
-            phases = _timeManager.GetMaxWeek() * _timeManager.GetMaxDay();
+            phases = _timeManager.GetMaxWeek() * _timeManager.GetMaxDay() * _timeManager.GetMaxMonth() ;
         else
             Debug.LogWarning("TimeManager not found when generating health per phase. Defaulting to 1 phase.");
 
@@ -241,16 +234,19 @@ public class BrickGenerator : MonoBehaviour
             case 0: // normal
                 _healthBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.5f);
                 _speedBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.5f);
+                _bb.ChangeSpiteColour(Color.white);
                 break;
 
             case 1: // fast
                 _healthBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.2f);
                 _speedBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.8f);
+                _bb.ChangeSpiteColour(Color.lightBlue);
                 break;
 
             case 2: // tank
                 _healthBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.8f);
                 _speedBudget = Mathf.RoundToInt(_attributePoints[_timeManager.GetTotalDayPass()] * 0.2f);
+                _bb.ChangeSpiteColour(Color.darkRed);
                 break;
         }
 

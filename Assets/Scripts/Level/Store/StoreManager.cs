@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public enum STORETYPE
 {
@@ -16,11 +13,10 @@ public class StoreManager : MonoBehaviour
 
     TimeManager _timeManager;
 
-
     [Header("Store Open")]
-    public int _weekToOpen;
+    public Action OnStoreOpen,OnStoreClose;
+    public int _dayToOpen;
     public bool _storeIsOpen;
-    public bool _storeOpenThisMonth;
 
     [Header("Brick Ability Content")]
     public Button[] _abilityButton;
@@ -36,13 +32,13 @@ public class StoreManager : MonoBehaviour
     private void Start()
     {
         _timeManager = FindAnyObjectByType<TimeManager>();
-        _timeManager._weekPass += OpenStore;
+        _timeManager._dayPass += OpenStore;
 
         GenerateBrickAbilityCosts();
     }
     private void OnDisable()
     {
-        _timeManager._weekPass -= OpenStore;
+        _timeManager._dayPass -= OpenStore;
     }
     public void GenerateBrickAbilityCosts()
     {
@@ -79,14 +75,16 @@ public class StoreManager : MonoBehaviour
     public int GetBrickAbilityCost(int tier) => _brickAbilityCostList[tier];
     void OpenStore()
     {
-        if(_weekToOpen == _timeManager.GetCurrentWeek() && !_storeIsOpen)
+        if(_dayToOpen == _timeManager.GetCurrentDay() && !_storeIsOpen)
         {
             _storeIsOpen = true;
+            OnStoreOpen?.Invoke();
             print("StoreOPEN");
         }
         else
         {
             _storeIsOpen = false;
+            OnStoreClose?.Invoke();
             print("StoreClose");
         }
     }

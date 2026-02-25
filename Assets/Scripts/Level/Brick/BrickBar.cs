@@ -26,7 +26,7 @@ public class StatusInstance
 public class BrickBar : MonoBehaviour
 {
 
-    Dictionary<StatusType, StatusInstance> _statuses =new Dictionary<StatusType, StatusInstance>();
+    Dictionary<StatusType, StatusInstance> _statuses = new Dictionary<StatusType, StatusInstance>();
     List<StatusType> toRemove = new List<StatusType>();
 
     BrickPool _brickPool;
@@ -38,6 +38,8 @@ public class BrickBar : MonoBehaviour
     MoneyManager _moneyManager;
     //UIManager
     MoneyUIManager _moneyUIManager;
+
+    SpriteRenderer _spriteRenderer;
 
     public GameObject _destroyParticleEffect;
 
@@ -52,7 +54,9 @@ public class BrickBar : MonoBehaviour
     public int _essenceMinAmountToSpawn;
     public int _essenceMaxAmountToSpawn;
 
-    bool pendingDeath ;
+    List<SpriteRenderer> _spritesRenderer = new List<SpriteRenderer>();
+
+    bool pendingDeath;
 
     public Action _onDeath;
     public Action _onDeathByPaddle;
@@ -64,6 +68,13 @@ public class BrickBar : MonoBehaviour
         _towerManager = FindAnyObjectByType<TowerManager>();
         _moneyManager = FindAnyObjectByType<MoneyManager>();
         _moneyUIManager = FindAnyObjectByType<MoneyUIManager>();
+
+        foreach (Transform child in transform)
+        {
+            var sr = child.GetComponent<SpriteRenderer>();
+            if (sr != null)
+                _spritesRenderer.Add(sr);
+        }
 
         _brickPool = FindAnyObjectByType<BrickPool>();
         _essencePool = FindAnyObjectByType<EssencePool>();
@@ -87,7 +98,7 @@ public class BrickBar : MonoBehaviour
         if (_health > 0)
             ExecuteStatusEffect();
 
-        if(pendingDeath)
+        if (pendingDeath)
             _onDeath?.Invoke();
 
     }
@@ -158,7 +169,7 @@ public class BrickBar : MonoBehaviour
         _moneyManager.CalculateBrickValue(this);
         _brickPool.RemoveActiveBrick(this.gameObject);
         SpawnEssence();
-        Instantiate(_destroyParticleEffect,transform.position, Quaternion.identity);
+        Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
 
         pendingDeath = false;
@@ -179,7 +190,7 @@ public class BrickBar : MonoBehaviour
     void SpawnEssence()
     {
         int essencetoSpawn = UnityEngine.Random.Range(_essenceMinAmountToSpawn, _essenceMaxAmountToSpawn);
-        for(int i = 0;i < essencetoSpawn; i++)
+        for (int i = 0; i < essencetoSpawn; i++)
         {
             GameObject essence = _essencePool.GetEssence();
             essence.transform.position = transform.position;
@@ -193,7 +204,7 @@ public class BrickBar : MonoBehaviour
     int maxStacks)
     {
         //check if status already exist
-        if(_statuses.Count > 0)
+        if (_statuses.Count > 0)
         {
             foreach (StatusType st in _statuses.Keys)
             {
@@ -232,5 +243,10 @@ public class BrickBar : MonoBehaviour
         print(gameObject.name + " :new status added");
         print(status.stacks + " :stack");
 
+    }
+    public void ChangeSpiteColour(Color color)
+    {
+        for(int i=0; i< _spritesRenderer.Count; i++)
+            _spritesRenderer[i].color = color;
     }
 }

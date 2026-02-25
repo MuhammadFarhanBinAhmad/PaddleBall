@@ -25,8 +25,8 @@ public class UIStoreManager : AbstractStoreUI
     TowerManager _towerManager;
     StoreManager _storeManager;
 
-    public GameObject _storeUI;
-    public Button _OpenStore;
+    public GameObject _storeUI,_OpenStoreIndicator;
+    public Button _OpenStore,_CloseStore;
 
     [Header("Ability")]
     public AbilityTreeDetail[] _abilityContentDetail;
@@ -35,10 +35,14 @@ public class UIStoreManager : AbstractStoreUI
     {
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _towerManager = FindAnyObjectByType<TowerManager>();
-        _storeManager = FindAnyObjectByType<StoreManager>();    
+        _storeManager = FindAnyObjectByType<StoreManager>();
 
         storeUI = _storeUI;
-        _OpenStore.onClick.AddListener(ToggleUICanvas);
+        _CloseStore.onClick.AddListener(CloseStorePage);
+        _OpenStore.onClick.AddListener(OpenStorePage);
+
+        _storeManager.OnStoreOpen += StoreIsOpenIndicator;
+        _storeManager.OnStoreClose += StoreIsCloseIndicator;
 
         // Wire each button and initialize interactable state
         for (int treeIndex = 0; treeIndex < _abilityContentDetail.Length; treeIndex++)
@@ -60,6 +64,12 @@ public class UIStoreManager : AbstractStoreUI
                 UpdateAbilityButton(t, ti);
             }
         }
+    }
+    private void OnDestroy()
+    {
+
+        _storeManager.OnStoreOpen -= StoreIsOpenIndicator;
+        _storeManager.OnStoreClose -= StoreIsCloseIndicator;
     }
 
     // Called by button press
@@ -204,6 +214,19 @@ public class UIStoreManager : AbstractStoreUI
                 UpdateAbilityButton(t, ti);
             }
         }
+    }
+
+    public void StoreIsOpenIndicator() => _OpenStoreIndicator.SetActive(true);
+    public void StoreIsCloseIndicator() => _OpenStoreIndicator?.SetActive(false);
+    public void OpenStorePage() 
+    {
+        _storeUI?.SetActive(true);
+        TimeManager.StopTime();
+    }
+    public void CloseStorePage()
+    {
+        _storeUI?.SetActive(false);
+        TimeManager.StartTime();
     }
 
 }
