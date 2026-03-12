@@ -112,8 +112,6 @@ public class UIStoreManager : AbstractStoreUI
         // Perform purchase:
         _abilityManager.AddAbility(so); // instantiate and add ability
 
-        _abilityManager.IncreaseCurrentBrickAbilityAcquired();
-        _abilityManager.IncreaseCurrentBrickAbilityTierLevel();
 
         // Refresh UI states (so next tier becomes interactable, button disabled, etc.)
         RefreshAllAbilityButtons();

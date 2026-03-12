@@ -27,13 +27,19 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        _dayPass += PlayDayPassAudio;
         _weekPass += OnEndOfWeek;
+        _weekPass += PlayWeekPassAudio;
         _monthPass += OnEndOfMonth;
+        _monthPass += PlayMonthPassAudio;
     }
     private void OnDisable()
     {
+        _dayPass -= PlayDayPassAudio;
         _weekPass -= OnEndOfWeek;
+        _weekPass -= PlayWeekPassAudio;
         _monthPass -= OnEndOfMonth;
+        _monthPass -= PlayMonthPassAudio;
     }
     private void Update()
     {
@@ -92,5 +98,10 @@ public class TimeManager : MonoBehaviour
     public int GetMaxDay() => _maxDay;
     public int GetMaxMonth() => _maxMonth;
     public int GetTotalDayPass() => _totalDayPass;
+
+    public void PlayDayPassAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onNewDay, transform.position);
+    public void PlayWeekPassAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onNewWeek, transform.position);
+    public void PlayMonthPassAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onNewMonth, transform.position);
+
 
 }

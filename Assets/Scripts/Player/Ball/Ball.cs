@@ -29,14 +29,7 @@ public class Ball : MonoBehaviour
     [Header("Damage")]
     [SerializeField] int _baseDamage;
     internal int _damageValueModifier;
-    [SerializeField] int _baseDamageLevel;
-    [SerializeField] TWEENTYPE _damageTweenType = TWEENTYPE.QUAD;
-    [SerializeField] int _maxDamageLevel;
-    [SerializeField] int _maxDamagePerLevel;
 
-    [Header("UpgradeCost")]
-    [SerializeField] TWEENTYPE _damageCostTween = TWEENTYPE.QUAD;
-    [SerializeField] int _baseBallUpgradeCost, _nextBallUpgradeCost, _maxBallUpgradeCost;
 
     [Header("Combo")]
     [SerializeField] int _feverThreshold;
@@ -99,16 +92,13 @@ public class Ball : MonoBehaviour
 
         OnBallReset += ResetCombo;
         OnBallReset += ResetPosition;
-
-        OnUpgradeBallBaseDamage += UpgradeBallLevel;
+        OnBallReset += PlayBallDestroyAudio;
     }
     private void Start()
     {
         // initial downward velocity - preserve your original intent
         _rigRigidbody.linearVelocity = Vector2.down * _gravityScale;
         _rigRigidbody.linearDamping = normalDrag;
-
-        _nextBallUpgradeCost = _baseBallUpgradeCost;
     }
     private void OnDisable()
     {
@@ -117,8 +107,7 @@ public class Ball : MonoBehaviour
 
         OnBallReset -= ResetCombo;
         OnBallReset -= ResetPosition;
-
-        OnUpgradeBallBaseDamage -= UpgradeBallLevel;
+        OnBallReset -= PlayBallDestroyAudio;
     }
 
     private void FixedUpdate()
@@ -302,6 +291,7 @@ public class Ball : MonoBehaviour
     IEnumerator ResettingBall()
     {
         yield return new WaitForSeconds(_respawnTime);
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
         transform.position = _respawnPos.position;
         _spriteRenderer.enabled = true;
         _rigRigidbody.linearVelocity = Vector2.down * _gravityScale;
@@ -319,41 +309,9 @@ public class Ball : MonoBehaviour
         _currentCombo = 0;
         _particleTrail.SetActive(false);
     }
+    void PlayBallDestroyAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallDestroy, transform.position);
+    void PlayBallRespawnAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
 
-    
-    public void UpgradeBallLevel()
-    {
-        if(!CanUpgradeDamage())
-            { return; }
-
-        _baseDamageLevel++;
-        // Normalize progress (0–1)
-        float t = Mathf.Clamp01((float)_baseDamageLevel / _maxDamageLevel);
-
-        // Apply tween
-        float eased = TweenService.GetEased(t, _damageTweenType);
-
-        // Compute bonus damage
-        _damageValueModifier = Mathf.RoundToInt(_maxDamagePerLevel * eased);
-        IncreaseBallDamage(_damageValueModifier);
-        IncreaseBallCost();
-    }
-    public bool CanUpgradeDamage()
-    {
-        return false;
-    }
-    public void IncreaseBallDamage(int dmg) => _baseDamage += _damageValueModifier;
-    public void IncreaseBallCost()
-    {
-        float t = Mathf.Clamp01((float)_baseDamageLevel / _maxDamageLevel);
-        float eased = TweenService.GetEased(t, _damageCostTween);
-        float rawCost = Mathf.Lerp(_baseBallUpgradeCost, _maxBallUpgradeCost, eased);
-        _nextBallUpgradeCost = RoundToNearestFive(Mathf.RoundToInt(rawCost));
-    }
-    int RoundToNearestFive(int value)
-    {
-        return Mathf.RoundToInt(value / 5f) * 5;
-    }
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Paddle") || other.gameObject.CompareTag("Brick"))

@@ -28,6 +28,7 @@ public class BallFeedbackManager : MonoBehaviour
 
         _ballManager.OnBallHit += ChangeSpriteOnHit;
         _ballManager.OnBallHit += ActivateHitVFX;
+        _ballManager.OnBallHit += PlayHitWallAudio;
 
         _ballManager.OnBallReset += ResetGlow;
 
@@ -36,6 +37,7 @@ public class BallFeedbackManager : MonoBehaviour
     {
         _ballManager.OnBallHit -= ChangeSpriteOnHit;
         _ballManager.OnBallHit -= ActivateHitVFX;
+        _ballManager.OnBallHit -= PlayHitWallAudio;
 
         _ballManager.OnBallReset -= ResetGlow;
     }
@@ -73,5 +75,6 @@ public class BallFeedbackManager : MonoBehaviour
             }
         }
     }
+    public void PlayHitWallAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallHitWall, transform.position);
     void ResetGlow() => _glowLight.intensity = _startLightIntensity;
 }

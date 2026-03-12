@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
-  m_Name: SO_SharpnelAbility
+  m_Name: SO_MiniBombAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: MiniBombAbility
   _abilityType: 0
-  _abilityPrefab: {fileID: 5149136428972693915, guid: 72a0075e5de6fd2418f9d4b9662f3b71, type: 3}
-  _abilitiesChild: []
+  _abilityPrefab: {fileID: 5673996661896187042, guid: afbaa9d67a07c3b42a02663dcae63d05, type: 3}
+  _abilitiesChild:
+  - {fileID: 0}
   _genericEffect: 0
   _applyStatus: 0
   _spawnEffect: 1
@@ -27,6 +28,6 @@ MonoBehaviour:
   _effectDuration: 0
   _statusDamage: 0
   _maxStack: 0
-  _amountToSpawn: 10
+  _amountToSpawn: 1
   _baseCritChance: 0
   _critMultiplier: 0

@@ -11,6 +11,13 @@ public abstract class ABSAbility : MonoBehaviour
     [SerializeField] protected AbilityManager _abilityManager;
 
     public SOAbilityEffect _SOAbilityEffect;
+
+    public bool IsUnlocked { get; private set; }
+
+    public void SetUnlocked(bool value)
+    {
+        IsUnlocked = value;
+    }
     private void OnEnable()
     {
         _ball = FindAnyObjectByType<Ball>();

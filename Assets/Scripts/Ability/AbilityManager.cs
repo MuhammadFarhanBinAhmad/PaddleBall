@@ -11,11 +11,9 @@ public class AbilityManager : MonoBehaviour
     public List<ABSAbility> _brickAbilities = new List<ABSAbility>();
     public List<ABSAbility> _ballAbilities = new List<ABSAbility>();
 
-    int _currentTotalBrickAbility, _currentTotalBallAbility, _currentBrickAbilityTier;
-    //int _currentMaxBrickAbility = 1;
+    Dictionary<string, ABSAbility> _abilitiesByID = new Dictionary<string, ABSAbility>();
 
     public List<SOAbilityEffect> test = new List<SOAbilityEffect>();
-
     private void Start()
     {
         foreach (var abilitySo in test)
@@ -51,6 +49,18 @@ public class AbilityManager : MonoBehaviour
         // store ability directly
         _brickAbilities.Add(ability);
 
+        string id = so._abilityName;
+
+        if (!_abilitiesByID.ContainsKey(id))
+        {
+            _abilitiesByID.Add(id, ability);
+        }
+        else
+        {
+            Debug.LogWarning($"Ability {id} already exists.");
+        }
+        UnlockAbility(id);
+
         return ability;
     }
 
@@ -64,11 +74,45 @@ public class AbilityManager : MonoBehaviour
 
         if (_brickAbilities.Remove(ability))
         {
+            string id = ability._SOAbilityEffect._abilityName;
+
+            if (_abilitiesByID.ContainsKey(id))
+                _abilitiesByID.Remove(id);
+
             Destroy(ability.gameObject);
             return ability;
         }
 
         return null;
+    }
+
+    public bool HasAbility(string id)
+    {
+        return _abilitiesByID.ContainsKey(id);
+    }
+
+    public T GetAbility<T>(string id) where T : ABSAbility
+    {
+        if (_abilitiesByID.TryGetValue(id, out ABSAbility ability))
+            return ability as T;
+
+        return null;
+    }
+
+    public bool IsAbilityUnlocked(string id)
+    {
+        if (_abilitiesByID.TryGetValue(id, out ABSAbility ability))
+            return ability.IsUnlocked;
+
+        return false;
+    }
+    public void UnlockAbility(string id)
+    {
+        if (_abilitiesByID.TryGetValue(id, out ABSAbility ability))
+        {
+            print(id + " is unlocked");
+            ability.SetUnlocked(true);
+        }
     }
 
     // „Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ Brick Events „Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
@@ -132,15 +176,6 @@ public class AbilityManager : MonoBehaviour
             }
         }
     }
-
-
-    //----------------ABILITYRELATED----------------//
-    public void IncreaseCurrentBrickAbilityAcquired() => _currentTotalBrickAbility++;
-    //public void IncreaseCurrentMaxBrickAbility() => _currentMaxBrickAbility++;
-    public void IncreaseCurrentBrickAbilityTierLevel() => _currentBrickAbilityTier++;
-
-    //public int GetCurrentMaxBrickAbility() => _currentMaxBrickAbility;
-    public int GetCurrentBrickAbilityAcquired() => _currentTotalBrickAbility;
 
    
 }

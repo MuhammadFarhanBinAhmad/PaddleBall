@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
   m_Name: ExplosiveAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: ExplosionAbility
   _abilityType: 1
   _abilityPrefab: {fileID: 6187691896045833673, guid: 5144710e562cc854cba2230c873eb293, type: 3}
   _abilitiesChild:

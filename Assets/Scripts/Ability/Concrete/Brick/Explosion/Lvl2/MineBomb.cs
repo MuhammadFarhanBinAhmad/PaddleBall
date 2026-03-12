@@ -42,10 +42,20 @@ public class MineBomb : MonoBehaviour
 
     void Explode()
     {
-        GameObject explosion = _explosionPool.GetExplosion();
-        explosion.transform.position = transform.position;
-        var ed = explosion.GetComponent<ExplosionDamage>();
-        if (ed != null) ed.SetDamage(_damage);
+        GameObject explosionGO = _explosionPool.GetExplosion();
+        explosionGO.transform.position = transform.position;
+
+        var ed = explosionGO.GetComponent<ExplosionDamage>();
+        if (ed != null)
+        {
+            var ctx = new ExplosionContext
+            {
+                _damage = _damage,
+                _source = gameObject,
+                _position = transform.position
+            };
+            ed.Initialize(ctx);
+        }
 
         gameObject.SetActive(false);
     }

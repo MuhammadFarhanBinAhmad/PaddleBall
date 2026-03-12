@@ -10,8 +10,6 @@ public class UIWorkshopManager : AbstractStoreUI
     private void Start()
     {
         _ball = FindAnyObjectByType<Ball>();
-
-        _upgradeBaseDamage.onClick.AddListener(_ball.OnUpgradeBallBaseDamage.Invoke);
     }
 
 }

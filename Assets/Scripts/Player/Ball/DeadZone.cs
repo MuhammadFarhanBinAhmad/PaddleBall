@@ -10,6 +10,7 @@ public class DeadZone : MonoBehaviour
         {
             Ball ball = other.GetComponent<Ball>();
             _deathVFX.SetActive(true);
+            AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallDestroy, transform.position);
             ball.OnBallReset?.Invoke();
         }
         if(other.GetComponent<PaddleHealth>() != null)
@@ -20,6 +21,7 @@ public class DeadZone : MonoBehaviour
         if( other.GetComponent<TowerEssence>() != null)
         {
             TowerEssence te = other.GetComponent<TowerEssence>();
+            AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_essenceDestroyed, transform.position);
             te.gameObject.SetActive(false);
         }
     }

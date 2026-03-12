@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ExplosiveAbility : ABSAbility
@@ -12,11 +13,23 @@ public class ExplosiveAbility : ABSAbility
 
     public override void OnHit(HitContext ctx)
     {
-        GameObject explosion = _explosionPool.GetExplosion();
-        explosion.transform.position = ctx._brick.transform.position;
-        ExplosionDamage ed = explosion.GetComponent<ExplosionDamage>();
+        GameObject explosionGO = _explosionPool.GetExplosion();
+        explosionGO.transform.position = transform.position;
 
-        ed.SetDamage((int)_SOAbilityEffect._baseDamageValue);
+        var ed = explosionGO.GetComponent<ExplosionDamage>();
+        if (ed != null)
+        {
+            print("create new explosion");
+            var ectx = new ExplosionContext
+            {
+                _damage = ctx._baseDamage,
+                _source = gameObject,
+                _position = ctx._brick.gameObject.transform.position,
+            };
+            ed.Initialize(ectx);
+        }
+
+        gameObject.SetActive(false);
     }
 
 }

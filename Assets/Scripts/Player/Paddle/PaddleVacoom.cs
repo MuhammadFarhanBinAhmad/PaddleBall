@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using FMOD.Studio;
 
 public class PaddleVacoom : MonoBehaviour
 {
@@ -16,9 +17,16 @@ public class PaddleVacoom : MonoBehaviour
 
     bool _isPaddleDisable;
 
+    EventInstance _paddleInhale;
+    float inhalePower = 0;
+    public float increaseSpeed = 1.5f;
+    public float decreaseSpeed = 1f;
     private void Start()
     {
         _paddleMovement = GetComponentInParent<PaddleMovement>();
+
+
+        _paddleInhale = AudioManager.Instance.CreateEventInstance(FmodEvent.Instance.sfx_onPaddleSucking);
     }
 
     void Update()
@@ -40,6 +48,32 @@ public class PaddleVacoom : MonoBehaviour
         // Precompute dot threshold for angle test (faster than Angle())
         float halfAngleRad = (coneAngle * 0.5f) * Mathf.Deg2Rad;
         float cosThreshold = Mathf.Cos(halfAngleRad);
+
+        if (attracting)
+        {
+            inhalePower += increaseSpeed * Time.deltaTime;
+        }
+        else
+        {
+            inhalePower -= decreaseSpeed * Time.deltaTime;
+        }
+
+        inhalePower = Mathf.Clamp01(inhalePower);
+
+        _paddleInhale.setParameterByName("InhalePower", inhalePower);
+
+        PLAYBACK_STATE state;
+        _paddleInhale.getPlaybackState(out state);
+
+        if (inhalePower > 0 && state != PLAYBACK_STATE.PLAYING)
+        {
+            _paddleInhale.start();
+        }
+
+        if (inhalePower <= 0 && state == PLAYBACK_STATE.PLAYING)
+        {
+            _paddleInhale.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
 
         for (int i = 0; i < hits.Length; i++)
         {
@@ -70,6 +104,7 @@ public class PaddleVacoom : MonoBehaviour
                 else
                 {
                     ess.StopAttraction();
+
                 }
 
                 continue; // skip ball handling if this collider is an essence

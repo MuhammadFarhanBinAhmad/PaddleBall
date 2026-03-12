@@ -85,10 +85,10 @@ public class TowerManager : MonoBehaviour
         if (_currentEssenceCount >= _essenceThreshold)
         {
             _currentEssenceCount = 0;
-            //_totalEssenceCollected += _essenceThreshold;
             _totalBrickCount++;
             _currentBrickCount++;
             _currentPureEssence++;
+            AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBrickMade, transform.position);
         }
         OnEssenceCollect?.Invoke();
     }
@@ -101,6 +101,7 @@ public class TowerManager : MonoBehaviour
         {
             _currentBrickCount = 0;
             _currentTowerHeight++;
+            AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onFloorMade, transform.position);
 
             // Apply milestone logic: every milestoneFloors floors, increase essence threshold
             if (milestoneFloors > 0 && _currentTowerHeight % milestoneFloors == 0)

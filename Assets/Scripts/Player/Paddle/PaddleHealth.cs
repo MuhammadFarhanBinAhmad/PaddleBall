@@ -34,16 +34,20 @@ public class PaddleHealth : MonoBehaviour
 
         OnPaddleDisable += DisablePaddle;
         OnPaddleDisable += StartRespawnPaddleTimer;
+        OnPaddleDisable += PlayPaddleDisableAudio;
 
         OnPaddleEnable += EnablePaddle;
+        OnPaddleEnable += PlayPaddleEnableAudio;
 
     }
     private void OnDisable()
     {
         OnPaddleDisable -= DisablePaddle;
         OnPaddleDisable -= StartRespawnPaddleTimer;
+        OnPaddleDisable -= PlayPaddleDisableAudio;
 
         OnPaddleEnable -= EnablePaddle;
+        OnPaddleEnable -= PlayPaddleEnableAudio;
 
     }
 
@@ -86,6 +90,8 @@ public class PaddleHealth : MonoBehaviour
             StartCoroutine(Knockback());
         }
     }
+    public void PlayPaddleDisableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleDestroy, transform.position);
+    public void PlayPaddleEnableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleRespawn, transform.position);
 
     IEnumerator Knockback()
     {

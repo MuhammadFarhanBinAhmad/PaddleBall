@@ -1324,6 +1324,53 @@ MonoBehaviour:
   _brickPool: []
   _activeBrick: []
   _brickToSpawn: 70
+--- !u!1 &226086665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 226086666}
+  - component: {fileID: 226086667}
+  m_Layer: 0
+  m_Name: ClusterBombPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &226086666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226086665}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 501465892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &226086667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226086665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a523647ee9caa974b8350f4eccdce054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClusterBombPool
+  go_ObjectToSpawn: {fileID: 1046947099530871439, guid: 52b86466459cae34ab317ecc2a7046dc, type: 3}
+  _amountToSpawn: 50
+  _objectPool: []
 --- !u!1 &249254888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1383,6 +1430,20 @@ MonoBehaviour:
       Data3: -2095460190
       Data4: 1309320374
     Path: event:/Brick/BrickHit
+  <sfx_onBrickMade>k__BackingField:
+    Guid:
+      Data1: 563580624
+      Data2: 1291001062
+      Data3: -1235571549
+      Data4: 267640592
+    Path: event:/Brick/BrickCreate
+  <sfx_onFloorMade>k__BackingField:
+    Guid:
+      Data1: -2038629486
+      Data2: 1207629071
+      Data3: -1104059971
+      Data4: 435257982
+    Path: event:/Floor/FloorCreate
   <sfx_essenceCollect>k__BackingField:
     Guid:
       Data1: 981894364
@@ -1390,7 +1451,133 @@ MonoBehaviour:
       Data3: -1118647378
       Data4: -1080398603
     Path: event:/Essence/CollectEssence
-  <sfx_onPaddleHit>k__BackingField:
+  <sfx_essenceDestroyed>k__BackingField:
+    Guid:
+      Data1: 1902636492
+      Data2: 1333048189
+      Data3: 2065601671
+      Data4: -1755874828
+    Path: event:/Essence/DestroyEssence
+  <sfx_onPaddleHitByBrick>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onPaddleDestroy>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onPaddleRespawning>k__BackingField:
+    Guid:
+      Data1: 1587303085
+      Data2: 1255680437
+      Data3: -186441077
+      Data4: 1577917859
+    Path: event:/Paddle/PaddleRespawn
+  <sfx_onPaddleRespawn>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onPaddleSucking>k__BackingField:
+    Guid:
+      Data1: 1495057360
+      Data2: 1172638100
+      Data3: -1438659454
+      Data4: -195344576
+    Path: event:/Paddle/PaddleInhale
+  <sfx_onBallDestroy>k__BackingField:
+    Guid:
+      Data1: 1347966961
+      Data2: 1144408881
+      Data3: -1331051133
+      Data4: -1313134524
+    Path: event:/Ball/BallDestroy
+  <sfx_onBallRespawn>k__BackingField:
+    Guid:
+      Data1: 1092124615
+      Data2: 1171969456
+      Data3: -1895545694
+      Data4: -267802818
+    Path: event:/Ball/BallRespawn
+  <sfx_onBallHitWall>k__BackingField:
+    Guid:
+      Data1: -497356112
+      Data2: 1197104266
+      Data3: -1124512581
+      Data4: -1076380225
+    Path: event:/Ball/BallHit
+  <sfx_onNewDay>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onNewWeek>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onNewMonth>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onDRank>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onCRank>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onBRank>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onARank>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onSRank>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onButtonPress>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <sfx_onButtonHover>k__BackingField:
     Guid:
       Data1: 0
       Data2: 0
@@ -6709,7 +6896,8 @@ MonoBehaviour:
   test:
   - {fileID: 11400000, guid: 8be43c92b028fe34e90d2da52d1e2a5f, type: 2}
   - {fileID: 11400000, guid: 5dcb711000751a3419e58d1d7adea391, type: 2}
-  - {fileID: 11400000, guid: 544d11dc0d11e904984711846662c0ba, type: 2}
+  - {fileID: 11400000, guid: db00cc9cc634a4e4cb079da6a3e48063, type: 2}
+  - {fileID: 11400000, guid: 5de7c52bc536d6447bb57908f2d36056, type: 2}
 --- !u!4 &381268553
 Transform:
   m_ObjectHideFlags: 0
@@ -11981,6 +12169,8 @@ Transform:
   - {fileID: 768639603}
   - {fileID: 2054693733}
   - {fileID: 137860632}
+  - {fileID: 226086666}
+  - {fileID: 1212991826}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &502884787
@@ -12115,10 +12305,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightBackground
   mainCamera: {fileID: 519420031}
-  dawnColor: {r: 0.8396226, g: 0.53821963, b: 0, a: 1}
-  dayColor: {r: 0, g: 0.9056604, b: 0.15427154, a: 1}
-  duskColor: {r: 0.4289049, g: 0, b: 0.46226418, a: 1}
-  nightColor: {r: 0, g: 0.009883826, b: 0.5849056, a: 1}
+  dawnColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  dayColor: {r: 0, g: 0.48406723, b: 0.7264151, a: 1}
+  duskColor: {r: 0, g: 0.17528407, b: 0.33962262, a: 1}
+  nightColor: {r: 0, g: 0.015877057, b: 0.33962262, a: 1}
   fadeSpeed: 0.25
 --- !u!1 &519420028
 GameObject:
@@ -14452,6 +14642,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   pullmouseButton: 0
+  increaseSpeed: 1.5
+  decreaseSpeed: 3
 --- !u!1 &1043556249
 GameObject:
   m_ObjectHideFlags: 0
@@ -15360,12 +15552,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177956922}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.2171392, y: -5.129439, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 23.33936, y: 22.345171, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1474004088}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1177956925
 MonoBehaviour:
@@ -15480,6 +15672,53 @@ Transform:
   - {fileID: 1043556250}
   m_Father: {fileID: 2046084694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1212991825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1212991826}
+  - component: {fileID: 1212991827}
+  m_Layer: 0
+  m_Name: MiniBombPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1212991826
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212991825}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 501465892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1212991827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212991825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b71b2c22e9b5e45bcd6a8c69d0b1f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniBombPool
+  go_ObjectToSpawn: {fileID: 2809856363453721177, guid: 25aa9071f66eab24fb11590fb45fae4d, type: 3}
+  _amountToSpawn: 200
+  _objectPool: []
 --- !u!1 &1219185793
 GameObject:
   m_ObjectHideFlags: 0
@@ -17012,6 +17251,39 @@ Transform:
   - {fileID: 1497597502}
   m_Father: {fileID: 1325390813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1474004087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1474004088}
+  m_Layer: 0
+  m_Name: GlobalItem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1474004088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474004087}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.5565, y: -27.47461, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1177956924}
+  - {fileID: 1556872812}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1489772411
 GameObject:
   m_ObjectHideFlags: 0
@@ -17740,6 +18012,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1539131292}
   m_CullTransparentMesh: 1
+--- !u!1 &1556872811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1556872812}
+  - component: {fileID: 1556872813}
+  m_Layer: 0
+  m_Name: GlobalEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1556872812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556872811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1474004088}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1556872813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556872811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bfc3d652d303f746990af26e4eb5a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalGameplayEventManager
 --- !u!1 &1558596511
 GameObject:
   m_ObjectHideFlags: 0
@@ -19426,7 +19742,7 @@ MonoBehaviour:
   _smallExplosionPrefab: {fileID: 6617740689369184858, guid: 8580fac13a4a0564994139d1868e9bba, type: 3}
   _explosionPrefabPool: []
   _smallExplosionPrefabPool: []
-  _explosionToSpawn: 15
+  _explosionToSpawn: 100
 --- !u!4 &1824850479
 Transform:
   m_ObjectHideFlags: 0
@@ -20935,6 +21251,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5209257556626525879, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
+      propertyPath: _baseDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209257556626525879, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
       propertyPath: _respawnPos
       value: 
       objectReference: {fileID: 625229727}
@@ -20986,6 +21306,6 @@ SceneRoots:
   - {fileID: 1858196796}
   - {fileID: 461198136}
   - {fileID: 345154200}
-  - {fileID: 1177956924}
   - {fileID: 1422767211}
   - {fileID: 1864984248}
+  - {fileID: 1474004088}

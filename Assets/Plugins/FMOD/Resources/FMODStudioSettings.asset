@@ -481,6 +481,7 @@ MonoBehaviour:
   Banks:
   - Bricks
   - Essence
+  - Paddle
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

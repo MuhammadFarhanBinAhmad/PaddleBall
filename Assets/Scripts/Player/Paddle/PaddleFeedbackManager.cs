@@ -90,7 +90,7 @@ public class PaddleFeedbackManager : MonoBehaviour
     }
 
     void SpawnHitParticleEffect() => _hitParticleEffect.SetActive(true);
-    void PlayHitSoundEffect() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleHit, transform.position);
+    void PlayHitSoundEffect() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleHitByBrick, transform.position);
     void PlayAnimatePaddleHit(float ballSpeed)
     {
         if (_paddleHitRoutine != null)
