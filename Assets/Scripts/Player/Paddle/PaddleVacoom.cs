@@ -24,30 +24,22 @@ public class PaddleVacoom : MonoBehaviour
     private void Start()
     {
         _paddleMovement = GetComponentInParent<PaddleMovement>();
-
-
         _paddleInhale = AudioManager.Instance.CreateEventInstance(FmodEvent.Instance.sfx_onPaddleSucking);
     }
 
     void Update()
+    {
+
+        IsSucking();
+
+    }
+    void IsSucking()
     {
         if (_isPaddleDisable)
             return;
 
         bool attracting = Input.GetMouseButton(pullmouseButton);
         _paddleMovement.SetCursorState(attracting);
-
-        // Get all colliders in radius on the collectible layer
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attractRadius, collectibleLayer);
-
-        if (hits == null || hits.Length == 0) return;
-
-        // compute forward direction toward mouse in worldspace (2D)
-        Vector2 forward = GetMouseForward();
-
-        // Precompute dot threshold for angle test (faster than Angle())
-        float halfAngleRad = (coneAngle * 0.5f) * Mathf.Deg2Rad;
-        float cosThreshold = Mathf.Cos(halfAngleRad);
 
         if (attracting)
         {
@@ -59,21 +51,24 @@ public class PaddleVacoom : MonoBehaviour
         }
 
         inhalePower = Mathf.Clamp01(inhalePower);
+        PlaySuctionAudio();
+        SuctionObject(attracting);
 
-        _paddleInhale.setParameterByName("InhalePower", inhalePower);
+    }
 
-        PLAYBACK_STATE state;
-        _paddleInhale.getPlaybackState(out state);
+    void SuctionObject(bool attracting)
+    {
+        // Get all colliders in radius on the collectible layer
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attractRadius, collectibleLayer);
 
-        if (inhalePower > 0 && state != PLAYBACK_STATE.PLAYING)
-        {
-            _paddleInhale.start();
-        }
+        if (hits == null || hits.Length == 0) return;
 
-        if (inhalePower <= 0 && state == PLAYBACK_STATE.PLAYING)
-        {
-            _paddleInhale.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        }
+        // compute forward direction toward mouse in worldspace (2D)
+        Vector2 forward = GetMouseForward();
+
+        // Precompute dot threshold for angle test (faster than Angle())
+        float halfAngleRad = (coneAngle * 0.5f) * Mathf.Deg2Rad;
+        float cosThreshold = Mathf.Cos(halfAngleRad);
 
         for (int i = 0; i < hits.Length; i++)
         {
@@ -110,24 +105,40 @@ public class PaddleVacoom : MonoBehaviour
                 continue; // skip ball handling if this collider is an essence
             }
 
-            // Ball
-            var ball = hits[i].GetComponent<Ball>();
-            if (ball != null)
-            {
-                if (attracting)
-                {
-                    // pass the cap so Ball limits the pull applied to itself
-                    ball.StartAttraction(transform, _pushPullStrength, attractRadius, ballAttractForceCap);
-                    ball.UpdateAttractionTarget(transform.position);
-                }
-                else
-                {
-                    ball.StopAttraction();
-                }
-            }
+            //// Ball
+            //var ball = hits[i].GetComponent<Ball>();
+            //if (ball != null)
+            //{
+            //    if (attracting)
+            //    {
+            //        // pass the cap so Ball limits the pull applied to itself
+            //        ball.StartAttraction(transform, _pushPullStrength, attractRadius, ballAttractForceCap);
+            //        ball.UpdateAttractionTarget(transform.position);
+            //    }
+            //    else
+            //    {
+            //        ball.StopAttraction();
+            //    }
+            //}
         }
     }
+    void PlaySuctionAudio()
+    {
+        _paddleInhale.setParameterByName("InhalePower", inhalePower);
 
+        PLAYBACK_STATE state;
+        _paddleInhale.getPlaybackState(out state);
+
+        if (inhalePower > 0 && state != PLAYBACK_STATE.PLAYING)
+        {
+            _paddleInhale.start();
+        }
+
+        if (inhalePower <= 0 && state == PLAYBACK_STATE.PLAYING)
+        {
+            _paddleInhale.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+    }
     /// <summary>
     /// Returns a normalized forward direction vector pointing from this object to the mouse world position.
     /// Falls back to transform.up if mouse world position is essentially the same as this object's position.

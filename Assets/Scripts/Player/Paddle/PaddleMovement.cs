@@ -38,7 +38,7 @@ public class PaddleMovement : MonoBehaviour
     public void SetCursorState(bool state)
     {
         _isPaddleSucking = state;
-        Cursor.visible = state;
+        Cursor.visible = true;
 
         if (Cursor.visible) 
         Cursor.lockState = CursorLockMode.None;

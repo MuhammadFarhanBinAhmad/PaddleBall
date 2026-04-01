@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    StoreManager _storeManager;
-
     [Header("TimeKeeper")]
     [SerializeField] int week;
     [SerializeField] int day;

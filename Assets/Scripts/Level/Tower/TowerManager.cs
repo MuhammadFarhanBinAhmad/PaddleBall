@@ -5,8 +5,6 @@ public class TowerManager : MonoBehaviour
 {
 
     TimeManager _timeManager;
-
-
     public GameObject _collectedBrick;
 
     [Header("Essence")]
@@ -16,7 +14,7 @@ public class TowerManager : MonoBehaviour
     public int _essenceThreshold;
     public int _totalEssenceCollected;
     public int _currentEssenceCount;
-    public int _currentPureEssence;
+    internal int _currentPureEssence;
     public Action OnEssenceCollect;
 
     [Header("Essence scaling (milestones)")]
@@ -188,5 +186,7 @@ public class TowerManager : MonoBehaviour
         }
     }
 
+    public void DeductPureEssence(int value) => _currentPureEssence -= value;
+    public int GetTotalPureEssence() => _currentPureEssence;
     
 }

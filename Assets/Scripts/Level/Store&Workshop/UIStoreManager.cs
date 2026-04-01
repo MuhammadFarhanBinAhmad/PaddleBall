@@ -23,7 +23,7 @@ public class UIStoreManager : AbstractStoreUI
 {
     AbilityManager _abilityManager;
     TowerManager _towerManager;
-    StoreManager _storeManager;
+    StoreAbilityManager _storeAbilityManager;
 
     public GameObject _storeUI,_OpenStoreIndicator;
     public Button _OpenStore,_CloseStore;
@@ -35,14 +35,14 @@ public class UIStoreManager : AbstractStoreUI
     {
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _towerManager = FindAnyObjectByType<TowerManager>();
-        _storeManager = FindAnyObjectByType<StoreManager>();
+        _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
 
         storeUI = _storeUI;
         _CloseStore.onClick.AddListener(CloseStorePage);
         _OpenStore.onClick.AddListener(OpenStorePage);
 
-        _storeManager.OnStoreOpen += StoreIsOpenIndicator;
-        _storeManager.OnStoreClose += StoreIsCloseIndicator;
+        _storeAbilityManager.OnStoreOpen += StoreIsOpenIndicator;
+        _storeAbilityManager.OnStoreClose += StoreIsCloseIndicator;
 
         // Wire each button and initialize interactable state
         for (int treeIndex = 0; treeIndex < _abilityContentDetail.Length; treeIndex++)
@@ -68,8 +68,8 @@ public class UIStoreManager : AbstractStoreUI
     private void OnDestroy()
     {
 
-        _storeManager.OnStoreOpen -= StoreIsOpenIndicator;
-        _storeManager.OnStoreClose -= StoreIsCloseIndicator;
+        _storeAbilityManager.OnStoreOpen -= StoreIsOpenIndicator;
+        _storeAbilityManager.OnStoreClose -= StoreIsCloseIndicator;
     }
 
     // Called by button press
