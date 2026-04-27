@@ -51,4 +51,4 @@ Projectiles are managed with object pooling to reduce unnecessary instantiation 
 
 ## Notes
 
-PaddleBall is an ongoing personal project focused on gameplay systems, clean architecture, iteration, and responsive player experience.
+PaddleBall is an ongoing personal project focused on gameplay systems, clean architecture, iteration, and responsive player experience. Goal is to release it by the end of the year
