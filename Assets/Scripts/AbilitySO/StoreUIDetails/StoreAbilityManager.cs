@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,6 @@ public class ShopLevelState
     {
         return Mathf.RoundToInt(_baseCost * Mathf.Pow(_multiplier, _purchases));
     }
-
     public void RegisterPurchase() => _purchases++;
 }
 
@@ -32,7 +32,10 @@ public class StoreAbilityManager : MonoBehaviour
     private TowerManager _towerManager;
 
     [Header("Ball Ability Database")]
-    [SerializeField] private List<SOStoreAbilityContent> allAbilities = new List<SOStoreAbilityContent>();
+    [SerializeField] private List<SOStoreAbilityContent> explosiveAbilities = new List<SOStoreAbilityContent>();
+    [SerializeField] private List<SOStoreAbilityContent> criticalAbilities = new List<SOStoreAbilityContent>();
+    [SerializeField] private List<SOStoreAbilityContent> dischargeAbilities = new List<SOStoreAbilityContent>();
+    [SerializeField] private List<SOStoreAbilityContent> toxicAbilities = new List<SOStoreAbilityContent>();
 
     [SerializeField] private ShopLevelState[] _abilityLevelAndCostState = new ShopLevelState[4];
 
@@ -50,6 +53,11 @@ public class StoreAbilityManager : MonoBehaviour
     public Action OnStoreOpen, OnStoreClose;
     public bool _storeIsOpen;
 
+    public event Action<string> OnAbilityPurchased;
+
+    [SerializeField] int _maxReroll;
+    int _numberOfReroll;
+
 
     private void Awake()
     {
@@ -57,6 +65,12 @@ public class StoreAbilityManager : MonoBehaviour
 
     }
     private void Start()
+    {
+        ResetRoroll();
+        SetItemAvailableToPurchase();
+        SetUpAbility();
+    }
+    internal void SetUpAbility(STATUSTYPE _type = STATUSTYPE.EXPLOSION)
     {
         for (int i = 0; i < _abilityLevelAndCostState.Length; i++)
         {
@@ -67,12 +81,41 @@ public class StoreAbilityManager : MonoBehaviour
 
             _abilityLevelAndCostState[i]._level = i;
         }
+        switch (_type)
+        {
+            case STATUSTYPE.EXPLOSION:
+                {
+                    abilityLookup = explosiveAbilities
+                    .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
+                    .ToDictionary(a => a.abilityID, a => a);
+                    break;
+                }
+            case STATUSTYPE.CRIT:
+                {
+                    abilityLookup = criticalAbilities
+                    .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
+                    .ToDictionary(a => a.abilityID, a => a);
+                    break;
+                }
+            case STATUSTYPE.TOXIC:
+                {
+                    abilityLookup = toxicAbilities
+                    .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
+                    .ToDictionary(a => a.abilityID, a => a);
+                    break;
+                }
+            case STATUSTYPE.DISCHARGE:
+                {
+                    abilityLookup = dischargeAbilities
+                    .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
+                    .ToDictionary(a => a.abilityID, a => a);
+                    break;
+                }
 
-        abilityLookup = allAbilities
-            .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
-            .ToDictionary(a => a.abilityID, a => a);
+        }
 
-        SetItemAvailableToPurchase();
+
+
     }
     public bool CanPurchase(string abilityID)
     {
@@ -120,7 +163,7 @@ public class StoreAbilityManager : MonoBehaviour
 
         _abilityLevelAndCostState[abilityLevel].RegisterPurchase();
 
-        print($"Purchased ability: {ability.ability_Name}");
+        OnAbilityPurchased?.Invoke(abilityID);
 
         return true;
     }
@@ -149,22 +192,36 @@ public class StoreAbilityManager : MonoBehaviour
         return true;
     }
 
-    void OpenStore()
+    public List<SOStoreAbilityContent> GetAbilityList(STATUSTYPE _type)
     {
-        if (!_storeIsOpen)
+        List<SOStoreAbilityContent> list = null;
+
+        switch (_type)
         {
-            _storeIsOpen = true;
-            OnStoreOpen?.Invoke();
-            print("StoreOPEN");
+            case STATUSTYPE.EXPLOSION:
+                {
+                    list = new List<SOStoreAbilityContent>(explosiveAbilities);
+                    break;
+                }
+            case STATUSTYPE.DISCHARGE:
+                {
+                    list = new List<SOStoreAbilityContent>(dischargeAbilities);
+                    break;
+                }
+            case STATUSTYPE.CRIT:
+                {
+                    list = new List<SOStoreAbilityContent>(criticalAbilities);
+                    break;
+                }
+            case STATUSTYPE.TOXIC:
+                {
+                    list = new List<SOStoreAbilityContent>(toxicAbilities);
+                    break;
+                }
         }
-        else
-        {
-            _storeIsOpen = false;
-            OnStoreClose?.Invoke();
-            print("StoreClose");
-        }
+        return list;
+
     }
-    public List<SOStoreAbilityContent> GetAbilityList() => new List<SOStoreAbilityContent>(allAbilities);
 
     public int GetAbilityCost(int level)
     {
@@ -200,7 +257,6 @@ public class StoreAbilityManager : MonoBehaviour
     }
     public int GetItemCost(ITEMRARITY rarity)
     {
-        print(rarity.ToString());
         int cost = 0;
         switch (rarity)
         {
@@ -219,4 +275,14 @@ public class StoreAbilityManager : MonoBehaviour
         }
         return cost;
     }
+
+    public void RerollItem()
+    {
+        if(_numberOfReroll > 0)
+        {
+            SetItemAvailableToPurchase();
+            _numberOfReroll--;
+        }
+    }
+    public void ResetRoroll() => _numberOfReroll = _maxReroll;
 }

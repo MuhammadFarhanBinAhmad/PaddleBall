@@ -13,31 +13,36 @@ MonoBehaviour:
   m_Name: CritAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _abilityType: 1
   _statusType: 0
   _abilityPrefab: {fileID: 5621834340312411328, guid: a67b1dbdb1991f541b6b02cc51811e69, type: 3}
-  _abilitiesChild: []
-  _abilityToRemove: {fileID: 0}
   _genericEffect: 1
   _applyStatus: 0
   _spawnEffect: 0
   _critEffect: 1
   _explosionEffect: 0
-  _baseValue: 0
-  _baseDamageValue: 5
+  _counterEffect: 0
+  _abilityBaseDamageValue: 0
+  _baseDamagePlus: 0
+  _baseDamageMinus: 0
   _baseDamageMultiplier: 0.2
+  _speedMultiplier: 0
   _bonusPerFail: 0.01
   _scaleSizeMultiplier: 0
+  _timeRate: 0
+  _comboThreshold: 0
   _maxStacks: 0
   _stacksToAdd: 0
+  _maxStacksToAdd: 0
+  _increaseStacksToAdd: 0
   _damagePerStack: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
-  _resetEffectTimer: 0
+  _resetStackTimer: 0
+  _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
   _baseCritChance: 0.1
-  _critMultiplier: 200
+  _critMultiplier: 2
   _layerToDestroy: 0
   _explosionDamageMultiplier: 0
   _explosionSizeMultiplier: 0

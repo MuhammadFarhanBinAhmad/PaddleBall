@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HotZoneArea : MonoBehaviour
 {
@@ -75,6 +76,7 @@ public class HotZoneArea : MonoBehaviour
         _damageTimeInterval = t;
         transform.localScale = transform.localScale * scale;
     }
+
 
     public void SetCombustion(bool set) => _isCombustion = set; 
     private void Update()

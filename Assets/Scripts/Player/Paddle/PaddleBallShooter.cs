@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PaddleBallShooter : MonoBehaviour
@@ -6,8 +7,15 @@ public class PaddleBallShooter : MonoBehaviour
     [SerializeField] private Transform _launchPoint; // optional, can be the paddle child
     [SerializeField] private Camera _gameCamera;
 
+    Action OnBallLaunch;
+
+
     private void Start()
     {
+
+        OnBallLaunch += _ball.PlayBallRedirectEffect;
+        OnBallLaunch += _ball.StartAnimateBallRespawn;
+
         if (_gameCamera == null)
             _gameCamera = Camera.main;
 
@@ -17,6 +25,9 @@ public class PaddleBallShooter : MonoBehaviour
 
     private void Update()
     {
+        if (TimeManager.IsGamePause())
+            return;
+
         if (_ball == null || !_ball.IsAwaitingLaunch)
             return;
 
@@ -28,6 +39,12 @@ public class PaddleBallShooter : MonoBehaviour
         {
             LaunchBallTowardMouse();
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnBallLaunch -= _ball.PlayBallRedirectEffect;
+        OnBallLaunch -= _ball.StartAnimateBallRespawn;
     }
 
     void LaunchBallTowardMouse()
@@ -46,5 +63,7 @@ public class PaddleBallShooter : MonoBehaviour
 
         Vector2 direction = mouseWorld - origin;
         _ball.Launch(direction);
+
+        OnBallLaunch?.Invoke();
     }
 }

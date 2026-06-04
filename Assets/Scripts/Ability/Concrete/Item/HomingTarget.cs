@@ -2,22 +2,12 @@ using UnityEngine;
 
 public class HomingTarget : ABSAbility
 {
+    [SerializeField]float _homingStrength;
+
     private void Start()
     {
-        _ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
-    }
-    public override void ModifyHit(HitContext ctx)
-    {
-        var val = _SOAbilityEffect._baseValue;
-
-        if(_ball == null)
-        {
-            _ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>();
-            ModifyHit(ctx);
-        }
-        else
-            _ball.SetHomingValue(val);
-
+        Ball ball = FindAnyObjectByType<Ball>();
+        ball.IncreaseHomingStrength(_homingStrength);
 
     }
 }

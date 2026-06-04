@@ -9,6 +9,8 @@ TagManager:
   - Wall
   - Paddle
   - Brick
+  - Shield
+  - DeathZone
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - Essence
   - Brick
   - MineBomb
-  - 
+  - Shield
   - 
   - 
   - 
@@ -48,6 +50,9 @@ TagManager:
     locked: 0
   - name: Explosion
     uniqueID: 3132966231
+    locked: 0
+  - name: BackGround
+    uniqueID: 2015533223
     locked: 0
   m_RenderingLayers:
   - Default

@@ -12,7 +12,7 @@ public class TowerManager : MonoBehaviour
 
     [Header("Essence")]
     [Tooltip("Starting threshold of essence required to trigger an OnEssenceCollect.")]
-    public int _initialEssenceThreshold = 5;
+    public int _initialEssenceThreshold;
     [Tooltip("Current threshold; starts at initial and is increased on milestones.")]
     public int _essenceToPureEssenceConversionRate;
     public int _currentEssenceCount;
@@ -22,22 +22,27 @@ public class TowerManager : MonoBehaviour
 
     [Header("Essence scaling (milestones)")]
     public TWEENTYPE _essenceTweenType = TWEENTYPE.LINEAR;
-    [Tooltip("How many floors make 1 milestone (default 5).")]
     public int milestoneFloors = 5;
-    [Tooltip("Base increase applied each milestone (multiplied by eased progress).")]
     public int _essenceIncreaseBase = 2;
 
     [Header("Brick")]
     [SerializeField] int _brickToFloorConversionRate;
     [SerializeField] int _currentBrickCount;
+
+
     public Action OnBrickIncrease;
     public Action OnBrickDecrease;
     public Vector2 _posOffset;
+    public Vector2 _startPosOffset;
 
     [Header("Layer")]
     public int _currentTowerHeight;
-    List<GameObject> _createdBricks = new List<GameObject>();
+    [SerializeField]List<GameObject> _createdBricks = new List<GameObject>();
     public Action OnHeightIncrease;
+    public Action OnHeightDecrease;
+
+    [Header("Floor")]
+    public List<GameObject> _brickList;
     [Header("Floor Animation")]
     [SerializeField] float _floorMoveDuration = 0.3f;
     [SerializeField] AnimationCurve _floorMoveCurve;
@@ -67,10 +72,16 @@ public class TowerManager : MonoBehaviour
     {
         // subscribe to month pass if TimeManager exposes this
         if (_timeManager != null)
+        {
             _timeManager._dayPass += EndOfDayCheck;
+            _timeManager._endGame += EndOfGame;
+        }
 
         OnEssenceCollect += IncreaseBrickCount;
+
         OnHeightIncrease += CreateNewFloor;
+
+
         _onTowerTakingDamage += TowerTakeDamage;
 
         OnAddPureEssence += AddPureEssence;
@@ -89,8 +100,13 @@ public class TowerManager : MonoBehaviour
     private void OnDisable()
     {
         _timeManager._dayPass -= EndOfDayCheck;
+        
+        _timeManager._endGame -= EndOfGame;
+        
         OnEssenceCollect -= IncreaseBrickCount;
+        
         OnHeightIncrease -= CreateNewFloor;
+
         _onTowerTakingDamage -= TowerTakeDamage;
 
         OnAddPureEssence -= AddPureEssence;
@@ -109,7 +125,7 @@ public class TowerManager : MonoBehaviour
             _currentBrickCount++;
             _currentPureEssence++;
             GameObject brick = Instantiate(_collectedBrick);
-            Vector3 pos = new Vector2(transform.position.x + (transform.position.x / 2) + (_posOffset.x * _currentBrickCount), transform.position.y);
+            Vector3 pos = new Vector2((transform.position.x + _startPosOffset.x) + (transform.position.x / 2) + (_posOffset.x * _currentBrickCount), transform.position.y);
             brick.transform.position = pos;
             _createdBricks.Add(brick);
             AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBrickMade, transform.position);
@@ -170,36 +186,80 @@ public class TowerManager : MonoBehaviour
 
         _moveRoutine = StartCoroutine(AnimateShiftDown());
     }
+
+    public void TowerTakeDamage()
+    {
+        RemoveBrick();
+        if (_currentBrickCount <= -1)
+        {
+            RemoveFloor();
+            OnHeightDecrease?.Invoke();
+        }
+
+    }
+    void RemoveBrick()
+    {
+        if(_createdBricks.Count > 0)
+        {
+            _currentBrickCount--;
+            GameObject brick = _createdBricks[_createdBricks.Count - 1];
+            _createdBricks.RemoveAt(_createdBricks.Count - 1);
+            Destroy(brick);
+        }
+    }
+    void RemoveFloor()
+    {
+        if (_currentTowerHeight >0 )
+        {
+            _currentTowerHeight--;
+            _currentBrickCount = _brickToFloorConversionRate - 1;
+            if (_moveRoutine != null)
+                StopCoroutine(_moveRoutine);
+            _moveRoutine = StartCoroutine(AnimateShiftUp());
+        }
+    }
     IEnumerator AnimateShiftDown()
     {
+        if (_createdBricks.Count == 0)
+        {
+            _moveRoutine = null;
+            yield break;
+        }
+
         float time = 0f;
 
-        int count = _createdBricks.Count;
+        List<GameObject> bricksSnapshot = new List<GameObject>(_createdBricks);
 
-        // store start + target positions
+        int count = bricksSnapshot.Count;
         Vector3[] startPos = new Vector3[count];
         Vector3[] targetPos = new Vector3[count];
 
-        float shiftAmount = _posOffset.y; // how much to move down per floor
+        float shiftAmount = _posOffset.y;
 
         for (int i = 0; i < count; i++)
         {
-            if (_createdBricks[i] == null) continue;
+            if (bricksSnapshot[i] == null) continue;
 
-            startPos[i] = _createdBricks[i].transform.position;
+            startPos[i] = bricksSnapshot[i].transform.position;
             targetPos[i] = startPos[i] - new Vector3(0f, shiftAmount, 0f);
         }
 
         while (time < _floorMoveDuration)
         {
+            if (_createdBricks.Count == 0)
+            {
+                _moveRoutine = null;
+                yield break;
+            }
+
             float t = time / _floorMoveDuration;
             float curveT = _floorMoveCurve != null ? _floorMoveCurve.Evaluate(t) : t;
 
             for (int i = 0; i < count; i++)
             {
-                if (_createdBricks[i] == null) continue;
+                if (bricksSnapshot[i] == null) continue;
 
-                _createdBricks[i].transform.position =
+                bricksSnapshot[i].transform.position =
                     Vector3.Lerp(startPos[i], targetPos[i], curveT);
             }
 
@@ -207,34 +267,95 @@ public class TowerManager : MonoBehaviour
             yield return null;
         }
 
-        // snap to final
         for (int i = 0; i < count; i++)
         {
-            if (_createdBricks[i] == null) continue;
-            _createdBricks[i].transform.position = targetPos[i];
+            if (bricksSnapshot[i] == null) continue;
+            bricksSnapshot[i].transform.position = targetPos[i];
+        }
+
+        _moveRoutine = null;
+    }
+    IEnumerator AnimateShiftUp()
+    {
+        if (_createdBricks.Count == 0)
+        {
+            _moveRoutine = null;
+            yield break;
+        }
+
+        float time = 0f;
+
+        // Snapshot the current bricks
+        List<GameObject> bricksSnapshot = new List<GameObject>(_createdBricks);
+
+        int count = bricksSnapshot.Count;
+        Vector3[] startPos = new Vector3[count];
+        Vector3[] targetPos = new Vector3[count];
+
+        float shiftAmount = _posOffset.y;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (bricksSnapshot[i] == null) continue;
+
+            startPos[i] = bricksSnapshot[i].transform.position;
+            targetPos[i] = startPos[i] + new Vector3(0f, shiftAmount, 0f);
+        }
+
+        while (time < _floorMoveDuration)
+        {
+            if (_createdBricks.Count == 0)
+            {
+                _moveRoutine = null;
+                yield break;
+            }
+
+            float t = time / _floorMoveDuration;
+            float curveT = _floorMoveCurve != null ? _floorMoveCurve.Evaluate(t) : t;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (bricksSnapshot[i] == null) continue;
+
+                bricksSnapshot[i].transform.position =
+                    Vector3.Lerp(startPos[i], targetPos[i], curveT);
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            if (bricksSnapshot[i] == null) continue;
+            bricksSnapshot[i].transform.position = targetPos[i];
         }
 
         _moveRoutine = null;
     }
     public void EndOfDayCheck()
     {
-        if(_currentTowerHeight >= _towerHeightCheck[_timeManager.GetTotalDayPass()])
-        {
-            print("pass");
-        }
-        else
-        {
-            if (!_receiveWarning)
-            {
-                OnReceivingWarning?.Invoke();
-            }
-            else
-            {
-                _OnGameOver?.Invoke();
-                TimeManager.StopTime();
-                print("fail");
-            }
-        }
+        //if(_currentTowerHeight >= _towerHeightCheck[_timeManager.GetTotalDayPass()])
+        //{
+        //    print("pass");
+        //}
+        //else
+        //{
+        //    if (!_receiveWarning)
+        //    {
+        //        OnReceivingWarning?.Invoke();
+        //    }
+        //    else
+        //    {
+        //        _OnGameOver?.Invoke();
+        //        TimeManager.StopTime();
+        //        print("fail");
+        //    }
+        //}
+    }
+    public void EndOfGame()
+    {
+        TimeManager.StopTime();
     }
     void PopulateTowerHeightCheck()
     {
@@ -262,23 +383,7 @@ public class TowerManager : MonoBehaviour
             _towerHeightCheck[i] = Mathf.RoundToInt(val);    // integer thresholds
         }
     }
-    public void TowerTakeDamage()
-    {
-        if(_currentTowerHeight > 0)
-        {
-            if (_currentBrickCount < _brickToFloorConversionRate)
-            {
-                _currentBrickCount--;
 
-                if (_currentBrickCount == 0)
-                {
-                    _currentTowerHeight--;
-                    _currentBrickCount = _brickToFloorConversionRate - 1;
-                }
-            }
-        }
-
-    }
     public int GetCurrentEssence() => _currentEssenceCount;
     public void DeductPureEssence(int value) => _currentPureEssence -= value;
     public int GetTotalPureEssenceCount() => _currentPureEssence;

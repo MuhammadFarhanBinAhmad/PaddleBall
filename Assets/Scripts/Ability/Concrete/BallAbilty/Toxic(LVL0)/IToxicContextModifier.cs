@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface IToxicContextModifier
 {
-    void ModifyToxicContext(AbilityContext critContext);
+    void ModifyToxicContext(AbilityContext toxicContext);
 
 }

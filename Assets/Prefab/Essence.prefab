@@ -114,6 +114,7 @@ MonoBehaviour:
   - 10
   - 15
   - 20
+  - 30
   _essenceCurrentLiveTime: 0
   _light2D: {fileID: 8287269463037795241}
   _startIntensity: 15

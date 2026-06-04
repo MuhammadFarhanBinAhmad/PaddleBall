@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AbilityStoreLayoutUI : AbstractStoreUI
 {
-
+    [SerializeField]AbilityInfoPageUI _abilityInfoPageUI;
     StoreAbilityManager _storeAbilityManager;
 
     [Header("UI")]
@@ -21,12 +21,16 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
     [SerializeField] float minRadius;
     [SerializeField] float maxRadius; [SerializeField] float startAngle;
 
-    private void Start()
+    private void Awake()
     {
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
+
+    }
+
+    private void Start()
+    {
         
         InitLevels();
-        BuildStore();
     }
 
     void InitLevels()
@@ -37,12 +41,12 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
             spawnedButtonsLevels[i] = new List<BallAbilityButtonUI>();
         }
     }
-    public void BuildStore()
+    public void BuildStore(STATUSTYPE _type)
     {
-
+        ClearStoreButtons();
 
         // Get abilities
-        abilityList = _storeAbilityManager.GetAbilityList();
+        abilityList = _storeAbilityManager.GetAbilityList(_type);
 
         // Group abilities by level
         foreach (SOStoreAbilityContent ability in abilityList)
@@ -57,16 +61,50 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
             foreach (SOStoreAbilityContent ability in abilityLevels[level])
             {
                 BallAbilityButtonUI button = Instantiate(_abilityButtonPrefab, _contentParent);
-                button.Setup(ability, _storeAbilityManager);
-
+                button.Setup(ability,_storeAbilityManager);
                 spawnedButtonsLevels[level].Add(button);
             }
         }
-
         // Arrange into concentric circles
         ArrangeRadial();
-    }
 
+        SetDefaultPreview();
+    }
+    void SetDefaultPreview()
+    {
+        BallAbilityButtonUI firstButton = null;
+
+        for (int level = 0; level < spawnedButtonsLevels.Length; level++)
+        {
+            if (spawnedButtonsLevels[level].Count > 0)
+            {
+                firstButton = spawnedButtonsLevels[level][0];
+                break;
+            }
+        }
+
+        if (firstButton != null)
+        {
+            Debug.Log(_abilityInfoPageUI);
+            Debug.Log(firstButton);
+            Debug.Log(firstButton.GetAbilityInfo());
+            _abilityInfoPageUI.SetUpAbilityDescription(firstButton.GetAbilityInfo());
+        }
+    }
+    void ClearStoreButtons()
+    {
+        for (int level = 0; level < spawnedButtonsLevels.Length; level++)
+        {
+            for (int i = 0; i < spawnedButtonsLevels[level].Count; i++)
+            {
+                if (spawnedButtonsLevels[level][i] != null)
+                    Destroy(spawnedButtonsLevels[level][i].gameObject);
+            }
+
+            spawnedButtonsLevels[level].Clear();
+            abilityLevels[level].Clear();
+        }
+    }
     void ArrangeRadial()
     {
         for (int level = 0; level < 4; level++)
@@ -98,11 +136,6 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
         }
     }
 
-    public override void ToggleUICanvas()
-    {
-        base.ToggleUICanvas();
-        RefreshAll();
-    }
     public void RefreshAll()
     {
         for (int level = 0; level < 4; level++)

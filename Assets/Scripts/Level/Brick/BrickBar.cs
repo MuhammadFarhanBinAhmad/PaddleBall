@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +12,9 @@ public enum STATUSTYPE
     DISCHARGE = 1 << 1,
     CRIT = 1 << 2,
     TOXIC = 1 << 3,
+    CHANCE = 1 << 4,
+    TIMED = 1 << 5,
+    ELEMENTAL = 1 << 6
 }
 public enum DeathCause
 {
@@ -65,13 +69,15 @@ public class BrickBar : MonoBehaviour
     public GameObject _destroyParticleEffect;
 
     [Header("BrickStats")]
-    public int _startingHealth;
-    public int _health;
-    public int _layer;
-    public int _shield;
-    public float _tickTimer;
-    public float _baseFallSpeed;
-    public float _fallSpeed;
+    [SerializeField] internal int _startingHealth;
+    [SerializeField] internal int _health;
+    [SerializeField] internal int _elementID;
+    [SerializeField] internal int _layerNumber;
+    [SerializeField] internal int _shield;
+    [SerializeField] internal float _tickTimer;
+    [SerializeField] internal float _baseFallSpeed;
+    [SerializeField] internal float _fallSpeed;
+    [SerializeField] internal int _baseDamage;
     bool _speedDirty;
 
 
@@ -260,6 +266,8 @@ public class BrickBar : MonoBehaviour
     }
     public void OnDamage(int dmg,DeathCause deathcause = DeathCause.NORMAL)
     {
+        if(dmg == 0) dmg = 1;
+
         int modified = dmg;
         for (int i = 0; i < _modifiers.Count; i++)
         {
@@ -278,41 +286,61 @@ public class BrickBar : MonoBehaviour
 
         UpdateBrickAfterDamage(deathcause);
     }
+    public void OnDeathByBrick()
+    {
+        pendingDeathCause = DeathCause.PADDLE;
+        pendingDeath = true;
+    }
     public void OnDamageLayer(int amount, DeathCause deathcause = DeathCause.NORMAL)
     {
-        _layer -= amount;
-        if (_layer > 0)
-        {
-            SetBrick(_brickHealthStats[_layer]);
-        }
-        else
-        {
-            pendingDeathCause = deathcause;
-            pendingDeath = true;
-        }
+        //Need resolve branching brick issue on this one
+        //_elementID -= amount;
+        //if (_elementID > 0)
+        //{
+        //    SetBrick(_brickHealthStats[_elementID]);
+        //}
+        //else
+        //{
+        //    pendingDeathCause = deathcause;
+        //    pendingDeath = true;
+        //}
     }
 
     void UpdateBrickAfterDamage(DeathCause deathcause = DeathCause.NORMAL)
     {
-        if (_health <= 0)
+        switch (deathcause)
         {
-            _AnimCurveEffect.PlayEffect(_onDeathAnimEffect, this.gameObject);
-            if (_layer >0 )
-            {
-                _layer--;
-                SetBrick(_brickHealthStats[_layer]);
-            }
-            else
-            {
-                pendingDeathCause = deathcause;
-                pendingDeath = true;
-            }
+            case DeathCause.NORMAL:
+                {
+                    if (_health <= 0)
+                    {
+                        _AnimCurveEffect.PlayEffect(_onDeathAnimEffect, this.gameObject);
+                        if (_elementID > 0)
+                        {
+                            _elementID = _brickHealthStats[_elementID]._parentElementID;
+                            SetBrick(_brickHealthStats[_elementID]);
+                        }
+                        else
+                        {
+                            pendingDeathCause = deathcause;
+                            pendingDeath = true;
+                        }
+                    }
+                    else
+                    {
+                        _AnimCurveEffect.PlayEffect(_onDamageAnimEffect, this.gameObject);
+                        _damageParticle.Play();
+                    }
+                    break;
+                }
+            case DeathCause.TOWER:
+                {
+                    pendingDeathCause = deathcause;
+                    pendingDeath = true;
+                    break;
+                }
         }
-        else
-        {
-            _AnimCurveEffect.PlayEffect(_onDamageAnimEffect, this.gameObject);
-            _damageParticle.Play();
-        }
+        
         _brickUI.SetLayerHealthFillAmount(_startingHealth,_health);
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickHit, transform.position);
     }
@@ -373,7 +401,9 @@ public class BrickBar : MonoBehaviour
             else
                 existing.stacks += (int)_statusEffect._Stats[STATID.STACKS_TO_ADD];
 
-            if(existing.resetStackLifeTimeUponHit)
+            print("MaxStack: " + _statusEffect._Stats[STATID.MAX_STACKS] + " Current Stack: " + existing.stacks);
+
+            if (existing.resetStackLifeTimeUponHit)
             {
                 existing.remainingStackTime = existing.stackLifeTime;
             }
@@ -401,7 +431,9 @@ public class BrickBar : MonoBehaviour
                 spawnPrefab = _statusEffect._spawnPrefab,
                 affectsSpeed = _statusEffect._Statsbool[STATID.AFFECTS_SPEED],
                 speedMultiplier = _statusEffect._Stats[STATID.SPEED_MULTIPLIER]
+                
             };
+            print("MaxStack" + _statusEffect._Stats[STATID.MAX_STACKS]);
 
 
             _statuses.Add(_statusEffect._statusType, sinst);
@@ -415,9 +447,10 @@ public class BrickBar : MonoBehaviour
         _health = _stats._health;
         _baseFallSpeed = _stats._dropSpeed;
         _fallSpeed = _stats._dropSpeed;
-        _layer = _stats._layerNumber;
-        _brickUI.SetCurrentLayer(_layer);
-        _brickUI.PrepBrickLayerColour(_layer);
+        _elementID = _stats._elementID;
+        _layerNumber = _stats._layerNumber;
+        _brickUI.SetCurrentLayer(_stats._layerNumber,_stats._color);
+        _brickUI.PrepBrickLayerColour(_stats._layerNumber);
     }
 
     void MarkSpeedDirty() => _speedDirty = true;
@@ -442,12 +475,11 @@ public class BrickBar : MonoBehaviour
         _fallSpeed = _baseFallSpeed * (1 - speedMultiplier);
     }
     //MODIFIERS
-    public BrickModifierBase AddModifier(BrickModifierBase modifierPrefab)
+    public BrickModifierBase AddModifier(SOBrickModifier modifierPrefab)
     {
         if (modifierPrefab == null) return null;
         // instantiate as child of the brick (could come from a pool)
-        var instance = Instantiate(modifierPrefab, transform.position, Quaternion.identity);
-        instance.transform.SetParent(transform, false);
+        var instance = Instantiate(modifierPrefab._modifierPrefab, transform.position, Quaternion.identity);
         instance.Initialize(this);
         _modifiers.Add(instance);
         return instance;
@@ -479,4 +511,6 @@ public class BrickBar : MonoBehaviour
         }
     }
     public int GetHealth() => _health;
+    public int GetLayer() => _layerNumber;
+    public int GetShieldDamageValue () => _layerNumber * _baseDamage;
 }

@@ -4,6 +4,7 @@ using FMOD.Studio;
 public class PaddleVacoom : MonoBehaviour
 {
     PaddleMovement _paddleMovement;
+    PaddleHealth _paddleHealth;
 
     [Header("Vacuum Settings")]
     public float attractRadius = 3f;
@@ -13,6 +14,11 @@ public class PaddleVacoom : MonoBehaviour
     [Tooltip("Max force per FixedUpdate applied to balls by the vacuum.")]
     public float ballAttractForceCap = 5f;       // cap specifically for Ball
     public LayerMask collectibleLayer;           // set to the layer used by essences/balls
+    [Header("Cone Visual")]
+    [SerializeField] LineRenderer _coneLine;
+    [SerializeField] int _coneSegments = 24;
+    [SerializeField] Color _coneColor = new Color(1f, 1f, 1f, 0.35f);
+
 
     bool _isPaddleDisable;
 
@@ -20,25 +26,71 @@ public class PaddleVacoom : MonoBehaviour
     float inhalePower = 0;
     public float increaseSpeed = 1.5f;
     public float decreaseSpeed = 1f;
+    private void Awake()
+    {
+        _paddleHealth = FindAnyObjectByType<PaddleHealth>();
+        _paddleMovement = GetComponentInParent<PaddleMovement>();
+
+    }
     private void Start()
     {
-        _paddleMovement = GetComponentInParent<PaddleMovement>();
         _paddleInhale = AudioManager.Instance.CreateEventInstance(FmodEvent.Instance.sfx_onPaddleSucking);
+
+        if (_coneLine != null)
+        {
+            _coneLine.loop = true;
+            _coneLine.positionCount = _coneSegments + 2; // origin + arc points
+            _coneLine.startColor = _coneColor;
+            _coneLine.endColor = _coneColor;
+        }
+
     }
 
     void Update()
     {
+        if(!_paddleHealth.IsPaddleDead())
+            IsSucking();
 
-        IsSucking();
+    }
+    void UpdateConeVisual()
+    {
+        if (_coneLine == null) return;
 
+        Vector2 forward = GetMouseForward();
+        Vector3 origin = transform.position;
+
+        float halfAngle = coneAngle * 0.5f;
+        float step = coneAngle / _coneSegments;
+
+        _coneLine.positionCount = _coneSegments + 2;
+
+        // first point = origin
+        _coneLine.SetPosition(0, origin);
+
+        for (int i = 0; i <= _coneSegments; i++)
+        {
+            float angle = -halfAngle + (step * i);
+            Vector3 dir = Quaternion.Euler(0f, 0f, angle) * (Vector3)forward;
+            Vector3 point = origin + dir * attractRadius;
+
+            _coneLine.SetPosition(i + 1, point);
+        }
     }
     void IsSucking()
     {
+        
         if (_isPaddleDisable)
             return;
 
         bool attracting = Input.GetKey(KeyCode.Space);
-        _paddleMovement.SetCursorState(attracting);
+        //_paddleMovement.SetCursorState(attracting);
+        _paddleMovement.DisblePaddleMovement(attracting);
+
+        _coneLine.enabled = attracting;
+
+        if (attracting)
+            UpdateConeVisual();
+
 
         if (attracting)
         {
@@ -103,22 +155,6 @@ public class PaddleVacoom : MonoBehaviour
 
                 continue; // skip ball handling if this collider is an essence
             }
-
-            //// Ball
-            //var ball = hits[i].GetComponent<Ball>();
-            //if (ball != null)
-            //{
-            //    if (attracting)
-            //    {
-            //        // pass the cap so Ball limits the pull applied to itself
-            //        ball.StartAttraction(transform, _pushPullStrength, attractRadius, ballAttractForceCap);
-            //        ball.UpdateAttractionTarget(transform.position);
-            //    }
-            //    else
-            //    {
-            //        ball.StopAttraction();
-            //    }
-            //}
         }
     }
     void PlaySuctionAudio()
@@ -165,7 +201,7 @@ public class PaddleVacoom : MonoBehaviour
         return toMouse.normalized;
     }
 
-    public void PaddleDisable(bool disable) => _isPaddleDisable = disable;
+    public void DisableVacoom(bool disable) => _isPaddleDisable = disable;
 
     void OnDrawGizmosSelected()
     {

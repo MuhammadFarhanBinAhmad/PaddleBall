@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BallDirectionArrow : MonoBehaviour
@@ -10,6 +11,8 @@ public class BallDirectionArrow : MonoBehaviour
 
     void Update()
     {
+        if(TimeManager.IsGamePause()) return;
+
         if (_target == null) return;
 
         if (_gameCamera == null)

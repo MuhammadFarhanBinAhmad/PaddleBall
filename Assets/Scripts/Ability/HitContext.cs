@@ -2,9 +2,10 @@
 using UnityEngine;
 public class HitContext
 {
+    public STATUSTYPE _status;
+
     public BrickBar _brick;
     public int _damageValue;
 
-    public bool _isCrit;
     public float _Time;
 }

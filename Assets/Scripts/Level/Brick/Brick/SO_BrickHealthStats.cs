@@ -3,11 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SO_BrickHealthStats", menuName = "Brick/Brick Health Stats")]
 public class SO_BrickHealthStats : ScriptableObject
 {
-    public BRICKLAYER e_Parent, e_Child;
+    public int _parentElementID, _childElementID;
+    public int _elementID;
+    public int _layerNumber;
     public int _health;
-    public int _dropSpeed;
+    public float _dropSpeed;
     public int _APValue;
     public int _daytoUnlock;
-    public int _layerNumber;
     public Color _color;
 }

@@ -13,27 +13,32 @@ MonoBehaviour:
   m_Name: ElectricityAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _abilityType: 1
   _statusType: 2
   _abilityPrefab: {fileID: 5742110064015748926, guid: 79ba605875907864b83b59e80f9ef184, type: 3}
-  _abilitiesChild: []
-  _abilityToRemove: {fileID: 0}
   _genericEffect: 0
   _applyStatus: 1
   _spawnEffect: 0
   _critEffect: 0
   _explosionEffect: 0
-  _baseValue: 0
-  _baseDamageValue: 0
+  _counterEffect: 0
+  _abilityBaseDamageValue: 0
+  _baseDamagePlus: 0
+  _baseDamageMinus: 0
   _baseDamageMultiplier: 0.2
+  _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
+  _timeRate: 0
+  _comboThreshold: 0
   _maxStacks: 1
   _stacksToAdd: 1
+  _maxStacksToAdd: 0
+  _increaseStacksToAdd: 0
   _damagePerStack: 10
   _stackLifeTime: 3
-  _timeBeforeEffectActivate: 3
-  _resetEffectTimer: 0
+  _timeBeforeEffectActivate: 2.9
+  _resetStackTimer: 0
+  _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
   _baseCritChance: 0

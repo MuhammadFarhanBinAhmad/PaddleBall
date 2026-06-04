@@ -30,6 +30,7 @@ public class TowerUIManager : MonoBehaviour
         _towerManager.OnEssenceCollect += UpdateTowerUI;
         _towerManager.OnEssenceCollect += UpdateEssenceUI;
         _towerManager.OnAddPureEssence += UpdateTowerUI;
+        _towerManager.OnHeightDecrease += UpdateTowerUI;
         _towerManager._OnGameOver += GameOverScreen;
         _towerManager.OnReceivingWarning += ShowWarningStamp;
         _towerManager.OnReceivingWarning += ShowWarningPopUp;
@@ -44,12 +45,13 @@ public class TowerUIManager : MonoBehaviour
         _towerManager.OnAddPureEssence -= UpdateTowerUI;
         _towerManager.OnReceivingWarning -= ShowWarningStamp;
         _towerManager.OnReceivingWarning -= ShowWarningPopUp;
+        _towerManager.OnHeightDecrease -= UpdateTowerUI;
+
     }
     public void GameOverScreen() => _gameOverScreen.SetActive(true);
     public void UpdateTowerUI()
     {
         _currentTowerHeightText.text = "Height: " + _towerManager._currentTowerHeight.ToString() + " M";
-
     }
     public void ShowWarningPopUp()
     {

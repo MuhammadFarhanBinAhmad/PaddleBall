@@ -1,107 +1,153 @@
 using System;
-using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+public class AbilityInfo
+{
+    public Sprite _icon;
+    public string _titleText;
+    public string _descriptionText;
+    public int _cost;
+    public int ability_Level;
+    public string ID;
+    public SOAbilityEffect ability_ToSpawn;
+
+    public AbilityInfo(
+    Sprite icon,
+    string title,
+    string description,
+    int cost,
+    int level,
+    string id,
+    SOAbilityEffect ability)
+    {
+        _icon = icon;
+        _titleText = title;
+        _descriptionText = description;
+        _cost = cost;
+        ability_Level = level;
+        ID = id;
+        ability_ToSpawn = ability;
+    }
+}
 
 public class BallAbilityButtonUI : BaseButtonInteraction
 {
-    AbilityManager _abilityManager;
-    AbilityStoreLayoutUI _abilityStoreUI;
-    TowerUIManager _towerUIManager;
-
+    private AbilityInfoPageUI _abilityInfoPageUI;
 
     private SOStoreAbilityContent _abilityData;
     private StoreAbilityManager _storeAbilityManager;
 
+    private AbilityInfo _abilityInfo;
+
     [Header("UI Detail")]
-    [SerializeField] private Image _icon;
-    [SerializeField] private TMP_Text _titleText;
-    [SerializeField] private TMP_Text _descriptionText;
-    [SerializeField] private TMP_Text _costText;
-    [SerializeField] private Button _purchaseButton;
+    [SerializeField] private Image _thumbnailIcon;
+    [SerializeField] private Button _viewAbilityButton;
     [SerializeField] private GameObject _lockedOverlay;
     [SerializeField] private GameObject _abilityDescription;
-    bool _abilityPurchased;
 
-    public Action OnAbilityPurchase;
+    private bool _abilityPurchased;
+
+    private void Awake()
+    {
+        _abilityInfoPageUI = FindAnyObjectByType<AbilityInfoPageUI>();
+    }
 
     private void Start()
     {
-        _abilityManager = FindAnyObjectByType<AbilityManager>();
-        _abilityStoreUI = FindAnyObjectByType<AbilityStoreLayoutUI>();
-        _towerUIManager = FindAnyObjectByType<TowerUIManager>();
-
-        OnAbilityPurchase += _abilityStoreUI.RefreshAll;
-        OnAbilityPurchase += _towerUIManager.UpdateEssenceUI;
+        _viewAbilityButton.onClick.AddListener(ViewAbility);
     }
-    private void OnDestroy()
+
+    private void OnEnable()
     {
-        OnAbilityPurchase -= _abilityStoreUI.RefreshAll;
-        OnAbilityPurchase -= _towerUIManager.UpdateEssenceUI;
-
+        if (_storeAbilityManager != null)
+        {
+            _storeAbilityManager.OnAbilityPurchased += HandleAbilityPurchased;
+        }
     }
-    public void Setup(SOStoreAbilityContent ability, StoreAbilityManager manager)
+
+    private void OnDisable()
+    {
+        if (_storeAbilityManager != null)
+        {
+            _storeAbilityManager.OnAbilityPurchased -= HandleAbilityPurchased;
+        }
+    }
+
+    public void Setup(
+        SOStoreAbilityContent ability,
+        StoreAbilityManager manager)
     {
         _abilityData = ability;
         _storeAbilityManager = manager;
-        _icon.sprite = _abilityData.icon;
-        _titleText.text = _abilityData.ability_Name;
-        _descriptionText.text = _abilityData.ability_Description;
-        _costText.text = _storeAbilityManager.GetAbilityCost(ability.ability_Level).ToString();
 
-        _purchaseButton.onClick.RemoveAllListeners();
-        _purchaseButton.onClick.AddListener(OnPurchaseClicked);
-        _purchaseButton.onClick.AddListener(base.OnButtonClick);
+        // Subscribe here if instantiated while active
+        _storeAbilityManager.OnAbilityPurchased += HandleAbilityPurchased;
 
+        _thumbnailIcon.sprite = _abilityData.icon;
+
+        _abilityInfo = new AbilityInfo(
+            _abilityData.icon,
+            _abilityData.ability_Name,
+            _abilityData.ability_Description,
+            _storeAbilityManager.GetAbilityCost(_abilityData.ability_Level),
+            _abilityData.ability_Level,
+            _abilityData.abilityID,
+            _abilityData.ability_ToSpawn
+        );
 
         Refresh();
+
+
     }
-    
-    private void OnEnable()
+
+    private void HandleAbilityPurchased(string purchasedID)
     {
-        Refresh();
-    }
-    public void Refresh()
-    {
-        if (_abilityPurchased)
+        if (_abilityData == null)
             return;
 
-        bool unlocked = _storeAbilityManager.IsUnlocked(_abilityData.abilityID);
-        bool AvailableToPurchase = _storeAbilityManager.IsAvailableToPurchase(_abilityData.abilityID);
-        bool canBuy = _storeAbilityManager.CanPurchase(_abilityData.abilityID);
+        if (_abilityData.abilityID == purchasedID)
+        {
+            _abilityPurchased = true;
+        }
 
+        Refresh();
+    }
 
-        _purchaseButton.interactable = canBuy;
-        _lockedOverlay.SetActive(!canBuy && !unlocked);
+    public void Refresh()
+    {
+        if (_storeAbilityManager == null || _abilityData == null)
+            return;
+
+        bool unlocked =
+            _storeAbilityManager.IsUnlocked(_abilityData.abilityID);
+
+        bool available =
+            _storeAbilityManager.IsAvailableToPurchase(_abilityData.abilityID);
+
+        bool canBuy =
+            _storeAbilityManager.CanPurchase(_abilityData.abilityID);
+
+        _abilityPurchased = unlocked;
+
+        _viewAbilityButton.interactable = available;
+
+        _lockedOverlay.SetActive(!available);
 
         if (unlocked)
         {
-            _costText.text = "Owned";
-        }
-        else
-        {
-            _costText.text = _storeAbilityManager.GetAbilityCost(_abilityData.ability_Level).ToString();
+            _viewAbilityButton.interactable = true;
         }
     }
 
-    private void OnPurchaseClicked()
+    private void ViewAbility()
     {
-        _abilityManager.AddAbility(_abilityData.ability_ToSpawn);
-        if (_storeAbilityManager.PurchaseAbility(_abilityData.abilityID))
-        {
-            OnAbilityPurchase?.Invoke();
-            _abilityPurchased = true;
-        }
+        if (_abilityInfoPageUI == null || _abilityInfo == null)
+            return;
+
+        _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo);
+        _abilityInfoPageUI.IsAbilityPurchased(!_abilityPurchased);
     }
-    public override void OnPointerEnter(PointerEventData eventData)
-    {
-        base.OnPointerEnter(eventData);
-        _abilityDescription.SetActive(true);
-    }
-    public override void OnPointerExit(PointerEventData eventData)
-    {
-        base.OnPointerExit(eventData);
-        _abilityDescription.SetActive(false);
-    }
+    public AbilityInfo GetAbilityInfo() => _abilityInfo;
 }

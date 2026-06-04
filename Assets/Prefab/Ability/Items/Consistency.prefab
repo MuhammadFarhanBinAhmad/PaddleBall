@@ -44,11 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 287291ff8f3141f4abe26015a9e39843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Consistency
-  _SOAbilityEffect: {fileID: 0}
-  _ABSAddOnAbilityList: []
-  _AbilityStatRuntime:
-  - definition: {fileID: 11400000, guid: 52ce7d71e8e4fdf4ebb9afa7d6f63c3b, type: 2}
-    level: 0
-  - definition: {fileID: 11400000, guid: 405c6718c0524354bb61061f87371305, type: 2}
-    level: 0
+  _SOAbilityEffect: {fileID: 11400000, guid: 7252181b9059bba4e9a14ad0f3b6c515, type: 2}
   _currentCombo: 0

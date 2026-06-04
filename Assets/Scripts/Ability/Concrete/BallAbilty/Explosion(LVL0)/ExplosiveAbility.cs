@@ -26,7 +26,7 @@ public class ExplosiveAbility : ABSAbility
             _position = ctx._brick.transform.position,
             _statusEffect = null
         };
-        ectx._Stats[STATID.BASE_DAMAGE] = _SOAbilityEffect._baseDamageValue;
+        ectx._Stats[STATID.BASE_DAMAGE] = _SOAbilityEffect._abilityBaseDamageValue;
         ectx._Stats[STATID.SCALE_MULTIPLIER] = _SOAbilityEffect._scaleSizeMultiplier;
 
         // Let other abilities modify the explosion data

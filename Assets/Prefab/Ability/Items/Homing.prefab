@@ -45,9 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomingTarget
   _SOAbilityEffect: {fileID: 0}
-  _ABSAddOnAbilityList: []
-  _AbilityStatRuntime:
-  - definition: {fileID: 11400000, guid: f1c720d8c4b76844d9dc3a41862d6c4f, type: 2}
-    level: 0
-  _increaseHomingValue: 0.1
-  _ball: {fileID: 0}
+  _homingStrength: 0.02

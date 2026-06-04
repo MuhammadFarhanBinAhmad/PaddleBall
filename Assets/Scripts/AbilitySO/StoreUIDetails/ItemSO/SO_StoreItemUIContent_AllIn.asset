@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5535de19f076534385c491fafb63443, type: 3}
+  m_Name: SO_StoreItemUIContent_AllIn
+  m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
+  ability_Name: AllIn
+  ability_Description: Increase 200% damage to all chance-related ability but reduce
+    all non crit attack by 50%
+  _itemRarity: 0
+  ability_ToSpawn: {fileID: 11400000, guid: 6a08e03975a902a46b90751f6c8fdfb6, type: 2}
+  icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

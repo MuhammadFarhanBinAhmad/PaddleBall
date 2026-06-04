@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 
@@ -10,11 +11,19 @@ public abstract class BaseOverLayInteraction : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_openOverlay, transform.position);
         _overlay.SetActive(true);
         TimeManager.StopTime();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
     }
-    public virtual void CloseOverlay(GameObject _overlay)
+    public virtual void CloseOverlay(GameObject _overlay , bool restartTime = true , bool cursorVisibility = false)
     {
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_closeOverlay, transform.position);
         _overlay.SetActive(false);
-        TimeManager.ResetTimeScale();
+
+        if (restartTime)
+            TimeManager.ResetTimeScale();
+
+        Cursor.visible = cursorVisibility;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }

@@ -273,11 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91967342cd6540645bd4297005827454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallAbilityButtonUI
-  _icon: {fileID: 2308513418712011978}
-  _titleText: {fileID: 4954121611245485545}
-  _descriptionText: {fileID: 3460592059985293548}
-  _costText: {fileID: 6718867371236305337}
-  _purchaseButton: {fileID: 5921906596688291001}
+  _thumbnailIcon: {fileID: 2308513418712011978}
+  _viewAbilityButton: {fileID: 5921906596688291001}
   _lockedOverlay: {fileID: 8896666765698604649}
   _abilityDescription: {fileID: 2626298015328387211}
 --- !u!1 &1287335977255980710

@@ -70,7 +70,7 @@ public class BallFeedbackManager : MonoBehaviour
         {
             if (combo >= _glowThreshold[i])
             {
-                _glowLight.intensity = _glowThreshold[i];
+                _glowLight.intensity = _glowIntensity[i];
                 return;
             }
         }

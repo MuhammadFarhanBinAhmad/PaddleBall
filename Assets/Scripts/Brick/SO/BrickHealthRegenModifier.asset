@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc7dabb84fdbd0e41a182bc81ac62706, type: 3}
+  m_Name: BrickHealthRegenModifier
+  m_EditorClassIdentifier: Assembly-CSharp::SOBrickModifier
+  _itemRarity: 0
+  _modifierCost: 2
+  _dayToUnlock: 5
+  _healthModifier: 1
+  _shieldModifier: 0
+  _speedModifier: 0
+  _aoeModifier: 0
+  _modifierPrefab: {fileID: 5611485643407494096, guid: b78dbee5781c6304da7aea8a36697e0d, type: 3}
+  _healthAddOn: 0
+  _healthMultiplier: 0
+  _regenRate: 3
+  _regenValue: 0
+  _shieldValue: 0
+  _speedAdd: 0
+  _speedMultiplier: 0
+  _modifier: 0
+  _aoeRadius: 0

@@ -11,7 +11,7 @@ public class PiercerAbility : ABSAbility
 
         if (isCrit)
         {
-            ctx._isCrit = true;
+            ctx._status = STATUSTYPE.CRIT;
             ctx._brick.OnDamageLayer(layerToDestroy);
         }
 

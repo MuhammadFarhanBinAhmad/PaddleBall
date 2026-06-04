@@ -107,6 +107,10 @@ public class TowerEssence : MonoBehaviour
                 {
                     _particleEffects.Stop();
                 }
+                if (_currentExpirationPhase == 3)
+                {
+                    ResetStats();
+                }
             }
         }
         float distance = Vector2.Distance(transform.position, _paddleVacoom.transform.position);
@@ -203,4 +207,12 @@ public class TowerEssence : MonoBehaviour
     }
     int GetNormalEssence() => UnityEngine.Random.Range(_essenceMinWorth, _essenceMaxWorth);
     int GetHalfEssence() => UnityEngine.Random.Range(_essenceMinWorth, _essenceMaxWorth) / 2;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Shield"))
+        {
+            ResetStats();
+        }
+    }
 }

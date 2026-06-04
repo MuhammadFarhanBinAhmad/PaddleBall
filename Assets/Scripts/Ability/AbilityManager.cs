@@ -123,7 +123,6 @@ public class AbilityManager : MonoBehaviour
         {
             _brick = brick,
             _damageValue = basedmg,
-            _isCrit = false,
         };
 
         // Phase 1: Modifier

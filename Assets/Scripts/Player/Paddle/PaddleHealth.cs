@@ -14,15 +14,18 @@ public class PaddleHealth : MonoBehaviour
     public Transform _spawnPos;
     public GameObject _deathVFX;
     public float _timeTillRespawn;
+    bool _isPaddleDead;
 
-         
     public Action OnPaddleDisable;
     public Action OnPaddleEnable;
+    public Action<bool> SetBoolOnPaddleDisable;
 
     [Header("Knockback")]
     [SerializeField] float _knockbackDistance = 0.6f;
     [SerializeField] float _knockbackDuration = 0.15f;
     bool _isKnockbacking;
+
+    public GameObject _hat;
 
     private void Awake()
     {
@@ -39,6 +42,11 @@ public class PaddleHealth : MonoBehaviour
         OnPaddleEnable += EnablePaddle;
         OnPaddleEnable += PlayPaddleEnableAudio;
 
+        SetBoolOnPaddleDisable += _paddleMovement.DisblePaddleMovement;
+        SetBoolOnPaddleDisable += _paddleMovement.DisblePaddleCollider;
+        SetBoolOnPaddleDisable += _paddleVacoom.DisableVacoom;
+
+
     }
     private void OnDisable()
     {
@@ -49,22 +57,28 @@ public class PaddleHealth : MonoBehaviour
         OnPaddleEnable -= EnablePaddle;
         OnPaddleEnable -= PlayPaddleEnableAudio;
 
+        SetBoolOnPaddleDisable -= _paddleMovement.DisblePaddleMovement;
+        SetBoolOnPaddleDisable -= _paddleMovement.DisblePaddleCollider;
+        SetBoolOnPaddleDisable -= _paddleVacoom.DisableVacoom;
+
     }
 
     void DisablePaddle()
     {
-        _paddleMovement.PaddleDisable(true);
-        _paddleVacoom.PaddleDisable(true);
+        SetBoolOnPaddleDisable?.Invoke(true);
+        _hat.SetActive(false);
         _spriteRenderer.enabled = false;
+        _isPaddleDead = true;
         _deathVFX.SetActive(true);
         _paddleFeedbackManager.OnBeingDestroyed.Invoke();
     }
 
     void EnablePaddle()
     {
-        _paddleMovement.PaddleDisable(false);
-        _paddleVacoom.PaddleDisable(false);
+        SetBoolOnPaddleDisable?.Invoke(false);
+        _hat.SetActive(true);
         _spriteRenderer.enabled = true;
+        _isPaddleDead = false;
         transform.parent.position = _spawnPos.position;
         _paddleFeedbackManager.OnRespawn?.Invoke();
     }
@@ -86,19 +100,18 @@ public class PaddleHealth : MonoBehaviour
         if (other.GetComponentInChildren<BrickBar>() !=null && _spriteRenderer.enabled)
         {
             _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
-            other.GetComponentInChildren<BrickBar>().OnDamage(999,DeathCause.PADDLE);
+            SetBoolOnPaddleDisable?.Invoke(true);
+            other.GetComponentInChildren<BrickBar>().OnDeathByBrick();
             StartCoroutine(Knockback());
         }
     }
     public void PlayPaddleDisableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleDestroy, transform.position);
     public void PlayPaddleEnableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleRespawn, transform.position);
-
+    public bool IsPaddleDead() => _isPaddleDead;
     IEnumerator Knockback()
     {
         _isKnockbacking = true;
 
-        _paddleMovement.PaddleDisable(true);
-        _paddleVacoom.PaddleDisable(true);
 
         Vector3 startPos = transform.parent.position;
         Vector3 targetPos = startPos + Vector3.down * _knockbackDistance;
@@ -112,8 +125,7 @@ public class PaddleHealth : MonoBehaviour
         }
 
         // re-enable control
-        _paddleMovement.PaddleDisable(false);
-        _paddleVacoom.PaddleDisable(false);
+        SetBoolOnPaddleDisable?.Invoke(false);
 
         _isKnockbacking = false;
     }

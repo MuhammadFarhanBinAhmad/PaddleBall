@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc7dabb84fdbd0e41a182bc81ac62706, type: 3}
+  m_Name: BrickShieldAOEModifier
+  m_EditorClassIdentifier: Assembly-CSharp::SOBrickModifier
+  _itemRarity: 0
+  _modifierCost: 1
+  _dayToUnlock: 6
+  _healthModifier: 0
+  _shieldModifier: 1
+  _speedModifier: 0
+  _aoeModifier: 1
+  _modifierPrefab: {fileID: 5932964977107608142, guid: 737a0e277a86d144f8728f31e9930e9d, type: 3}
+  _healthAddOn: 0
+  _healthMultiplier: 0
+  _regenRate: 3
+  _regenValue: 0
+  _shieldValue: 3
+  _speedAdd: 0
+  _speedMultiplier: 0
+  _modifier: 1
+  _aoeRadius: 6

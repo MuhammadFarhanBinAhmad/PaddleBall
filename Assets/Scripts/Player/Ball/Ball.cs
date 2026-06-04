@@ -7,12 +7,14 @@ public class Ball : MonoBehaviour
     internal Rigidbody2D _rigidbody;
     SpriteRenderer _spriteRenderer;
     CircleCollider2D _circleCollider;
-    [SerializeField]ParticleSystem _particleSystem;
+    [SerializeField]ParticleSystem _deathEffect;
     [SerializeField] TrailRenderer _trailRenderer;
     AbilityManager _abilityManager;
     BrickPool _brickPool;
     BallFeedbackManager _ballFeedbackManager;
     BallDirectionArrow _ballDirectionArrow;
+    PaddleHealth _paddleHealth;
+
 
     public float _gravityScale;
     public float _maxVelocity;
@@ -20,26 +22,14 @@ public class Ball : MonoBehaviour
     public Action OnBallHit;
     public Action OnBallReset;
     public Action OnBallDestroy;//For copy
-
     public Action OnBallRediect;
-
     public Action OnBrickHit;
 
-    public Action OnUpgradeBallBaseDamage;
-    public Action OnUpgradeBallReviveSpeed;
-
-
-    [Header("Respawn")]
-    public float _respawnTime;
-    public Transform _respawnPos;
-    [SerializeField] float _launchSpeed;
-    bool _awaitingLaunch = true;
     public bool IsAwaitingLaunch => _awaitingLaunch;
     [SerializeField] ParticleSystem _reviveParticle;
 
     [Header("Damage")]
     [SerializeField] int _baseDamage;
-    internal int _damageValueModifier;
     [SerializeField] float _camShakeStrength;
 
 
@@ -79,12 +69,19 @@ public class Ball : MonoBehaviour
     [SerializeField] float _currentManaAmount;
     [SerializeField] float _manaRegenRate;
 
+    [Header("Respawn")]
+    public float _respawnTime;
+    public float _currentRespawnTimer;
+    public Transform _respawnPos;
+    [SerializeField] float _launchSpeed;
+    bool _awaitingLaunch = true;
+    bool _isBallDead;
+
     [Header("RespawnAnimation")]
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
     [SerializeField] float _capscaleMultiplier;
     [SerializeField] Camera _gameCamera;
-    [SerializeField] bool _enableMouseRedirect = true;
     Vector3 _startingScale;
 
     // -------------------------
@@ -101,24 +98,31 @@ public class Ball : MonoBehaviour
         _brickPool = FindAnyObjectByType<BrickPool>();
         _ballFeedbackManager = FindAnyObjectByType<BallFeedbackManager>();
         _ballDirectionArrow = FindAnyObjectByType<BallDirectionArrow>();
+        _paddleHealth = FindAnyObjectByType<PaddleHealth>();
 
         OnBrickHit += IncreaseCombo;
         OnBrickHit += _ballFeedbackManager.UpdateGlowIntensity;
 
         OnBallReset += ResetCombo;
-        OnBallReset += ResetPosition;
+        OnBallReset += ResetBallRespawnTimer;
+        OnBallReset += PlayPaddleDeathEffect;
+        OnBallReset += DeactivateBall;
+        //OnBallReset += ResetPosition;
         OnBallReset += PlayBallDestroyAudio;
 
         OnBallDestroy += DestroyCopyBall;
         OnBallDestroy += PlayBallDestroyAudio;
 
         OnBallRediect += RedirectBallToMouse;
+        OnBallRediect += PlayBallRedirectEffect;
+        OnBallRediect += StartAnimateBallRespawn;
     }
     private void Start()
     {
         _startingScale = transform.localScale;
         _currentManaAmount = _maxManaAmount;
         _ballDirectionArrow.SetEnableArrow(true);
+        SetCursorState(false);
 
         PrepareForLaunch(_respawnPos.position);
         StartCoroutine(AnimateBallRespawn());
@@ -129,19 +133,60 @@ public class Ball : MonoBehaviour
         OnBrickHit -= _ballFeedbackManager.UpdateGlowIntensity;
 
         OnBallReset -= ResetCombo;
-        OnBallReset -= ResetPosition;
+        OnBallReset -= ResetBallRespawnTimer;
+        OnBallReset -= PlayPaddleDeathEffect;
+        OnBallReset -= DeactivateBall;
+        //OnBallReset -= ResetPosition;
         OnBallReset -= PlayBallDestroyAudio;
 
         OnBallDestroy -= DestroyCopyBall;
         OnBallDestroy -= PlayBallDestroyAudio;
 
         OnBallRediect -= RedirectBallToMouse;
+        OnBallRediect -= PlayBallRedirectEffect;
+        OnBallRediect -= StartAnimateBallRespawn;
+
+    }
+
+
+    private void Update()
+    {
+        if (_paddleHealth.IsPaddleDead())
+        {
+            TimeManager.ResetTimeScale();
+            _ballDirectionArrow.SetEnableArrow(false);
+            return;
+        }
+
+        if(!_isBallDead)
+            return;
+
+
+        if(_currentRespawnTimer >0)
+        {
+            _currentRespawnTimer -= Time.deltaTime;
+        }
+        else
+        {
+            ResettingBall();
+            _isBallDead = false;
+        }
     }
 
     private void FixedUpdate()
     {
+        if (_rigidbody.linearVelocity.magnitude > _maxVelocity)
+            _rigidbody.linearVelocity = Vector2.ClampMagnitude(_rigidbody.linearVelocity, _maxVelocity);
+        HandleManaRegen();
+
+
+        if (_paddleHealth.IsPaddleDead())
+            return;
+
         if (_awaitingLaunch)
             return;
+
+        HandleTimeScaleInput();
 
         if (pushLockTimer > 0f)
             pushLockTimer = Mathf.Max(0f, pushLockTimer - Time.fixedDeltaTime);
@@ -151,16 +196,14 @@ public class Ball : MonoBehaviour
         else
             _currentDelayTime -= Time.deltaTime;
 
-        if (_rigidbody.linearVelocity.magnitude > _maxVelocity)
-            _rigidbody.linearVelocity = Vector2.ClampMagnitude(_rigidbody.linearVelocity, _maxVelocity);
 
-        if (!_enableMouseRedirect) return;
-        HandleTimeScaleInput();
-        HandleManaRegen();
     }
 
     void HandleTimeScaleInput()
     {
+        if (TimeManager.IsGamePause())
+            return;
+
         if (Input.GetMouseButton(1) && _currentCoolDownPeriod >= _coolDownPeriod) // holding
         {
             if (!_onAimingState)
@@ -181,7 +224,7 @@ public class Ball : MonoBehaviour
             if (_currentCoolDownPeriod < _coolDownPeriod)
                 _currentCoolDownPeriod += Time.deltaTime;
         }
-        
+        SetCursorState(_onAimingState);
         _currentTimeScale = Mathf.Lerp(_currentTimeScale, _targetTimeScale, Time.unscaledDeltaTime * _lerpSpeed);
         TimeManager.SetCustomTimeScale(_currentTimeScale);
 
@@ -226,17 +269,19 @@ public class Ball : MonoBehaviour
         _rigidbody.linearVelocity = direction * speed;
         transform.up = -direction;
 
-        PlayBallRedirectEffect();
-
 
         _currentCoolDownPeriod = 0;
-        StartCoroutine(AnimateBallRespawn());
         MinusMana(_manaShootCost);
+        StartCoroutine(AnimateBallRespawn());
 
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallShoot, transform.position);
 
     }
-    void PlayBallRedirectEffect()
+    public void StartAnimateBallRespawn()
+    {
+        StartCoroutine(AnimateBallRespawn());
+    }
+    public void PlayBallRedirectEffect()
     {
         if (_shotParticle == null) return;
 
@@ -270,9 +315,6 @@ public class Ball : MonoBehaviour
         if (_awaitingLaunch) return;
         if (_brickPool == null) return;
 
-        // basic sanity checks
-        if (_brickPool == null) return;
-
         Vector2 vel = _rigidbody.linearVelocity;
         float speed = vel.magnitude;
         if (speed < 0.01f) return; // not moving
@@ -303,11 +345,8 @@ public class Ball : MonoBehaviour
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
         _circleCollider.enabled = false;
-        _particleSystem.gameObject.SetActive(true);
         _abilityManager.NotifyBallDestroyed(this);
-        ResetCombo();
-        StartCoroutine(ResettingBall());
-        _ballDirectionArrow.SetEnableArrow(true);
+        //StartCoroutine(ResettingBall());
     }
     public void PrepareForLaunch(Vector3 position)
     {
@@ -340,18 +379,17 @@ public class Ball : MonoBehaviour
         Destroy(gameObject);
 
     }
-    IEnumerator ResettingBall()
+    void ResettingBall()
     {
-        yield return new WaitForSeconds(_respawnTime);
-
+        //yield return new WaitForSeconds(_respawnTime);
+        ResetPosition();
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
 
-        _spriteRenderer.enabled = true;
-        _trailRenderer.Clear();
-        _trailRenderer.enabled = true;
-        _circleCollider.enabled = true;
+        ActivateBall();
         StartCoroutine(AnimateBallRespawn());
         PrepareForLaunch(_respawnPos.position);
+        ResetBallRespawnTimer();
+
     }
 
     IEnumerator AnimateBallRespawn()
@@ -390,6 +428,28 @@ public class Ball : MonoBehaviour
         _currentCombo = 0;
         _particleTrail.SetActive(false);
     }
+    public void ResetBallRespawnTimer()
+    {
+        _isBallDead = true;
+        _currentRespawnTimer = _respawnTime; 
+    }
+    public void DeactivateBall()
+    {
+        _ballDirectionArrow.SetEnableArrow(false);
+        _circleCollider.enabled = false;
+        _spriteRenderer.enabled = false;
+        _trailRenderer.enabled = false;
+    }
+    public void ActivateBall()
+    {
+        _ballDirectionArrow.SetEnableArrow(true);
+        _circleCollider.enabled = true;
+        _spriteRenderer.enabled = true;
+        _trailRenderer.Clear();
+        _trailRenderer.enabled = true;
+    }
+    public void PlayPaddleDeathEffect() => _deathEffect.gameObject.SetActive(true);
+
     void PlayBallDestroyAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallDestroy, transform.position);
     void PlayBallRespawnAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
 
@@ -398,7 +458,7 @@ public class Ball : MonoBehaviour
         if (_awaitingLaunch)
             return;
 
-        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Paddle") || other.gameObject.CompareTag("Brick"))
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Paddle") || other.gameObject.CompareTag("Brick") || other.gameObject.CompareTag("Shield"))
         {
             GlobalFeedbackManager.Instance.SetSizeCapForBall();
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
@@ -430,7 +490,7 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _abilityManager.NotifyBrickHit(other.gameObject.GetComponent<BrickBar>(), (_baseDamage + _damageValueModifier));
+                _abilityManager.NotifyBrickHit(other.gameObject.GetComponent<BrickBar>(), (_baseDamage));
             }
         }
     }
@@ -475,6 +535,17 @@ public class Ball : MonoBehaviour
     public void SetHomingValue(float value) => _homingStrength = value;
     public float GetCurrentManaAmount() => _currentManaAmount;
     public float GetMaxManaAmount() => _maxManaAmount;
+    public void IncreaseHomingStrength(float val) => _homingStrength += val;
 
+    public void SetCursorState(bool state)
+    {
+        Cursor.visible = state;
+
+        if (Cursor.visible)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Confined;
+
+    }
 
 }
