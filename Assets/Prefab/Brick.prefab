@@ -5316,6 +5316,7 @@ GameObject:
   - component: {fileID: 3370432073450436763}
   - component: {fileID: 9106042457657841286}
   - component: {fileID: 2700153125295761352}
+  - component: {fileID: 5719172591678964711}
   m_Layer: 8
   m_Name: Brick
   m_TagString: Brick
@@ -5398,7 +5399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e381dbdeabb1e44a794e361ff29cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BrickBar
-  _modifiers: []
   _brickHealthStats:
   - {fileID: 11400000, guid: ffdb5b5a6486dcc49874ebc393259758, type: 2}
   - {fileID: 11400000, guid: 7f8f26c4eb622534391670e9a9639ab9, type: 2}
@@ -5411,11 +5411,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c5475b467f015484986608bfe3a8152d, type: 2}
   - {fileID: 11400000, guid: 79d7dc3dd7eec50498e9ac03ef9958ba, type: 2}
   _destroyParticleEffect: {fileID: 5898855646081462555, guid: 3790ba9352a78ec46888c43db5de9e47, type: 3}
-  _startingHealth: 0
-  _health: 1
   _elementID: 0
   _layerNumber: 0
-  _shield: 0
   _tickTimer: 0
   _baseFallSpeed: 0
   _fallSpeed: 1
@@ -5459,6 +5456,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f287ed3e337d04497be04819313083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationCurveEffect
+--- !u!114 &5719172591678964711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5469620576531411634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e52889ed20ee4439d541ba9c0844c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BrickHealthComponent
+  _startingHealth: 0
+  _health: 0
+  _tickTimer: 0
+  _bossBrickStats: {fileID: 0}
 --- !u!1 &7558917431117315383
 GameObject:
   m_ObjectHideFlags: 0

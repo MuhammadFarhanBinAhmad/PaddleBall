@@ -458,7 +458,11 @@ public class Ball : MonoBehaviour
         if (_awaitingLaunch)
             return;
 
-        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Paddle") || other.gameObject.CompareTag("Brick") || other.gameObject.CompareTag("Shield"))
+        if (other.gameObject.CompareTag("Wall") || 
+            other.gameObject.CompareTag("Paddle") || 
+            other.gameObject.CompareTag("Brick") ||
+            other.gameObject.CompareTag("Boss") ||
+            other.gameObject.CompareTag("Shield"))
         {
             GlobalFeedbackManager.Instance.SetSizeCapForBall();
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
@@ -479,8 +483,10 @@ public class Ball : MonoBehaviour
 
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
-            if (other.gameObject.GetComponent<BrickBar>() != null)
+            if (other.gameObject.CompareTag("Brick"))
             {
+                BrickBar bb = other.gameObject.GetComponent<BrickBar>();
+
                 if (_copyBall)
                 {
                     _currentBounce++;
@@ -490,7 +496,23 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _abilityManager.NotifyBrickHit(other.gameObject.GetComponent<BrickBar>(), (_baseDamage));
+                _abilityManager.NotifyBrickHit(bb, (_baseDamage));
+            }
+            else if (other.gameObject.CompareTag("Boss"))
+            {
+                print("Hitboss");
+                BrickHealthComponent bh = other.gameObject.GetComponent<BrickHealthComponent>();
+
+                if (_copyBall)
+                {
+                    _currentBounce++;
+                    if (_currentBounce > _maxBounce)
+                        Destroy(gameObject);
+                }
+                _currentDelayTime = _delayTimeAfterHit;
+
+                OnBrickHit?.Invoke();
+                _abilityManager.NotifyBossHit(bh, (_baseDamage));
             }
         }
     }

@@ -18,18 +18,18 @@ public class RegrowthModifier : BrickModifierBase
 
         if (_timer > _modifier._regenRate)
         {
-            if (_brick._health < _brick._startingHealth)
+            if (_brick._brickHealthComponent.GetHealth() < _brick._brickHealthComponent.GetStartingHealth())
             {
-                _brick._health += _modifier._regenValue;
+                _brick._brickHealthComponent.ModifyHealth(_modifier._regenValue);
             }
 
             if (_otherBricksModifiersList.Count > 0)
             {
                 foreach (var bm in _otherBricksModifiersList)
                 {
-                    if(bm._brick._health < bm._brick._startingHealth)
+                    if(bm._brick._brickHealthComponent.GetHealth() < bm._brick._brickHealthComponent.GetStartingHealth())
                     {
-                        bm._brick._health += _modifier._regenValue;
+                        bm._brick._brickHealthComponent.ModifyHealth(_modifier._regenValue);
                     }
                 }
             }

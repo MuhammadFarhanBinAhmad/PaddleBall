@@ -28,8 +28,6 @@ public class WavePlan
     public int totalAPUsed;
 }
 
-
-
 [Serializable]
 public class BrickFormationEntry
 {
@@ -64,9 +62,6 @@ public class BrickGenerator : MonoBehaviour
     [SerializeField] float _capscaleMultiplier;
     Vector3 _startingScale = new Vector3(1,1,1);
 
-
-
-
     [Header("Level and Wave")]
     public List<int> _spawnedWaves = new List<int>();
     public GameObject _brickPrefab;
@@ -74,19 +69,22 @@ public class BrickGenerator : MonoBehaviour
     public int _brickCounter;
     public int _currentWave;
     int _currentWaveAP;
+    bool _stopWaveSpawn;
 
     [Header("Timer before next wave spawn")]
     [SerializeField] float _timerBeforeNextWaveSpawn;
     public Action _onSpawnNextWave;
+
+    [Header("Boss Spawner")]
+    [SerializeField] SO_BossBrickStats _starterBoss;
+    [SerializeField] List<SO_BossBrickStats> _BossList = new List<SO_BossBrickStats>();
+    public Action _onSpawnBoss;
 
     private void Awake()
     {
         _brickPool = GetComponent<BrickPool>();
         _timeManager = FindAnyObjectByType<TimeManager>();
         _brickModifierList = GetComponent<BrickModifierList>();
-
-
-
     }
 
     private void Start()
@@ -95,6 +93,8 @@ public class BrickGenerator : MonoBehaviour
         _timeManager._dayPass += _brickModifierList.CheckModifierToAdd;
         _timeManager._dayPass += SetAPOfTheDay;
 
+        _timeManager._onStartBossDay += StopWaveSpawning;
+
         _onSpawnNextWave += SpawnNextWave;
 
         SetAttributePointForEachPhase();
@@ -102,13 +102,14 @@ public class BrickGenerator : MonoBehaviour
         CheckBrickToAdd();
         _brickModifierList.CheckModifierToAdd();
         SetAPOfTheDay();
-        _onSpawnNextWave?.Invoke();
     }
     private void OnDisable()
     {
         _onSpawnNextWave -= SpawnNextWave;
         _timeManager._dayPass -= CheckBrickToAdd;
         _timeManager._dayPass -= SetAPOfTheDay;
+
+        _timeManager._onStartBossDay -= StopWaveSpawning;
     }
 
     public void OnBrickDestroyed()
@@ -116,6 +117,16 @@ public class BrickGenerator : MonoBehaviour
         _brickCounter--;
     }
 
+    public void StartFirstWaveOfEpisode()
+    {
+        _stopWaveSpawn = false;
+        _timeManager.StartDayTimer();
+        _onSpawnNextWave?.Invoke();
+    }
+    public void StopWaveSpawning()
+    {
+        _stopWaveSpawn = true;
+    }
     public SOBrickFormation GetBrickFormation()
     {
         var formations = _brickFormationList[0].formations;
@@ -219,6 +230,8 @@ public class BrickGenerator : MonoBehaviour
         }
 
         yield return new WaitForSeconds(_timerBeforeNextWaveSpawn);
+
+        if(!_stopWaveSpawn)
         _onSpawnNextWave?.Invoke();
     }
     WavePlan BuildWavePlan(SOBrickFormation formation)
@@ -290,6 +303,11 @@ public class BrickGenerator : MonoBehaviour
             }
         }
     }
+
+    public void SpawnBoss()
+    {
+    }
+
     IEnumerator AnimateBrickSpawn(Transform brickTransform)
     {
         Vector3 startScale = Vector3.zero;

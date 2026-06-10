@@ -97,11 +97,19 @@ public class PaddleHealth : MonoBehaviour
     {
         if (_isKnockbacking) return;
 
-        if (other.GetComponentInChildren<BrickBar>() !=null && _spriteRenderer.enabled)
+        if (other.CompareTag("Brick")&& _spriteRenderer.enabled)
         {
             _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
             SetBoolOnPaddleDisable?.Invoke(true);
             other.GetComponentInChildren<BrickBar>().OnDeathByBrick();
+            StartCoroutine(Knockback());
+        }
+        if (other.CompareTag("EnemyProjectile") && _spriteRenderer.enabled)
+        {
+            print("hit");
+            _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
+            SetBoolOnPaddleDisable?.Invoke(true);
+            other.GetComponent<EnemyProjectile>().HandleProjectileDeath();
             StartCoroutine(Knockback());
         }
     }

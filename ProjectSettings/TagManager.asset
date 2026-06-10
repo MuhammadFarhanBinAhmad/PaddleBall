@@ -11,11 +11,13 @@ TagManager:
   - Brick
   - Shield
   - DeathZone
+  - Boss
+  - EnemyProjectile
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Paddle
   - Water
   - UI
   - Ball
@@ -23,7 +25,7 @@ TagManager:
   - Brick
   - MineBomb
   - Shield
-  - 
+  - EnemyProjectile
   - 
   - 
   - 

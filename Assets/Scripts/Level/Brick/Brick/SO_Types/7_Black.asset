@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: 9_White
+  m_Name: 7_Black
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
-  _parentElementID: 7
-  _childElementID: 0
-  _elementID: 9
-  _layerNumber: 7
-  _health: 64
-  _dropSpeed: 4
+  _parentElementID: 5
+  _childElementID: 9
+  _elementID: 7
+  _layerNumber: 6
+  _health: 32
+  _dropSpeed: 3
   _APValue: 5
-  _daytoUnlock: 2
-  _color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  _daytoUnlock: 7
+  _color: {r: 0.1, g: 0.1, b: 0.1, a: 1}

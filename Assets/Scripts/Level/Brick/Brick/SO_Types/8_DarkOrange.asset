@@ -19,5 +19,5 @@ MonoBehaviour:
   _health: 256
   _dropSpeed: 1
   _APValue: 5
-  _daytoUnlock: 2
+  _daytoUnlock: 7
   _color: {r: 0.5450981, g: 0.2705882, b: 0.07450981, a: 1}

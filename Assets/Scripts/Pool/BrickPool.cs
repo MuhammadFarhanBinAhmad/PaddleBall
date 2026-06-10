@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BrickPool : MonoBehaviour
 {
+    BrickGenerator _brickGenerator;
+
     public GameObject _brickPrefab;
 
     public List<GameObject> _brickPool = new List<GameObject>();
@@ -12,6 +14,10 @@ public class BrickPool : MonoBehaviour
     [SerializeField]int _brickToSpawn;
 
     private void Awake()
+    {
+        _brickGenerator = FindAnyObjectByType<BrickGenerator>();
+    }
+    private void Start()
     {
         SpawnBrick();
     }
@@ -60,7 +66,14 @@ public class BrickPool : MonoBehaviour
         return nearest;
     }
     public void PlaceActiveBrickInList(GameObject brick) => _activeBrick.Add(brick);
-    public void RemoveActiveBrick(GameObject brick) => _activeBrick.Remove(brick);
+    public void RemoveActiveBrick(GameObject brick)
+    {
+        _activeBrick.Remove(brick);
+
+        if (IsAllBrickDestroyed())
+            _brickGenerator.SpawnBoss();
+    }
+    public bool IsAllBrickDestroyed() => _activeBrick.Count <= 0;
     public List<GameObject> GetListOfBrick() => _brickPool;
     public List<GameObject> GetListOfActiveBrick() => _activeBrick;
 
