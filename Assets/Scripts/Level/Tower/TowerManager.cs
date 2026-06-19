@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TowerManager : MonoBehaviour
 {
@@ -29,7 +30,6 @@ public class TowerManager : MonoBehaviour
     [SerializeField] int _brickToFloorConversionRate;
     [SerializeField] int _currentBrickCount;
 
-
     public Action OnBrickIncrease;
     public Action OnBrickDecrease;
     public Vector2 _posOffset;
@@ -48,6 +48,10 @@ public class TowerManager : MonoBehaviour
     [SerializeField] AnimationCurve _floorMoveCurve;
     Coroutine _moveRoutine;
 
+    [Header("Tower Health")]
+    [SerializeField]int _maxTowerHealth;
+    [SerializeField]int _towerHealth;
+
     [Header("Dailycheck")]
     public TWEENTYPE _towerTweenType = TWEENTYPE.LINEAR;
     public Action _OnGameOver;
@@ -57,7 +61,7 @@ public class TowerManager : MonoBehaviour
     bool _receiveWarning;
 
     public Action OnReceivingWarning;
-    public Action _onTowerTakingDamage;
+    public Action<int> _onTowerTakingDamage;
 
     //cheatcode
     public Action OnAddPureEssence;
@@ -89,6 +93,8 @@ public class TowerManager : MonoBehaviour
         OnReceivingWarning += WarningGiven;
 
         PopulateTowerHeightCheck();
+
+        _towerHealth = _maxTowerHealth;
     }
 #if UNITY_EDITOR
     private void OnValidate()
@@ -187,7 +193,7 @@ public class TowerManager : MonoBehaviour
         _moveRoutine = StartCoroutine(AnimateShiftDown());
     }
 
-    public void TowerTakeDamage()
+    public void TowerTakeDamage(int layer)
     {
         RemoveBrick();
         if (_currentBrickCount <= -1)
@@ -196,6 +202,11 @@ public class TowerManager : MonoBehaviour
             OnHeightDecrease?.Invoke();
         }
 
+        _towerHealth -= layer;
+        if (_towerHealth < 0)
+        {
+            print("GameOver");
+        }
     }
     void RemoveBrick()
     {

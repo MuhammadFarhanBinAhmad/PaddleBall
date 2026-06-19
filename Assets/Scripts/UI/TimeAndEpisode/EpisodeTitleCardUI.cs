@@ -1,33 +1,32 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class EpisodeTitleCardUI : MonoBehaviour
 {
-    BrickGenerator _brickGenerator;
+    SO_BossIntroText _BossIntroText;
 
     [SerializeField] GameObject _titleCardGameObject;
     [SerializeField] Image _titleCardImage;
     [Header("Curve")]
-    [SerializeField] private AnimationCurve _fadeInEffectLerp;
-    [SerializeField] private AnimationCurve _popOutEffectLerp;
+    [SerializeField] AnimationCurve _fadeInEffectLerp;
+    [SerializeField] AnimationCurve _popOutEffectLerp;
     [Header("EffectsValue")]
     [SerializeField] float _startAlpha = 0f;
     [SerializeField] float _endAlpha = 1f;
-    [SerializeField] private float _cardStartScaleMultiplier;
-    [SerializeField] private float _cardEndScaleMultiplier;
-    [SerializeField] private float _displayDuration;
-    [SerializeField] private float _animationFadeInDuration;
-    [SerializeField] private float _animationPopOutDuration;
+    [SerializeField] float _cardStartScaleMultiplier;
+    [SerializeField] float _cardEndScaleMultiplier;
+    [SerializeField] float _displayDuration;
+    [SerializeField] float _animationFadeInDuration;
+    [SerializeField] float _animationPopOutDuration;
+
+    [Header("Text")]
+    [SerializeField] TextMeshProUGUI _bossName;
+    [SerializeField] TextMeshProUGUI _bossTagLine;
 
     Vector3 _cardOriginalScale;
     Coroutine _titleCardRoutine;
 
-    private void Awake()
-    {
-        _brickGenerator = FindAnyObjectByType<BrickGenerator>();
-
-
-    }
     private void Start()
     {
         _cardOriginalScale = _titleCardGameObject.transform.localScale;
@@ -40,18 +39,21 @@ public class EpisodeTitleCardUI : MonoBehaviour
             _titleCardImage.color = c;
         }
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-            PlayTitleCardAnim();
-    }
+
     public void PlayTitleCardAnim()
     {
+
         if (_titleCardRoutine != null)
             StopCoroutine(_titleCardRoutine);
 
         TimeManager.StopTime();
+        SetTitleCard();
         _titleCardRoutine = StartCoroutine(TitleCardSequence());
+    }
+    void SetTitleCard()
+    {
+        _bossName.text = _BossIntroText._name;
+        _bossTagLine.text = _BossIntroText._tagline; 
     }
 
     IEnumerator TitleCardSequence()
@@ -115,8 +117,6 @@ public class EpisodeTitleCardUI : MonoBehaviour
         _titleCardGameObject.SetActive(false);
         _titleCardRoutine = null;
         TimeManager.ResetTimeScale();
-
-        _brickGenerator.StartFirstWaveOfEpisode();
     }
 
     void SetAlpha(float a)
@@ -127,4 +127,5 @@ public class EpisodeTitleCardUI : MonoBehaviour
         c.a = a;
         _titleCardImage.color = c;
     }
+    public void SetBossIntroText(SO_BossIntroText bit) => _BossIntroText = bit;
 }

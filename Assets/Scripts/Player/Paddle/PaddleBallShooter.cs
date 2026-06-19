@@ -7,6 +7,8 @@ public class PaddleBallShooter : MonoBehaviour
     [SerializeField] private Transform _launchPoint; // optional, can be the paddle child
     [SerializeField] private Camera _gameCamera;
 
+    bool _disableShoot;
+
     Action OnBallLaunch;
 
 
@@ -25,6 +27,9 @@ public class PaddleBallShooter : MonoBehaviour
 
     private void Update()
     {
+        if(_disableShoot)
+            return;
+
         if (TimeManager.IsGamePause())
             return;
 
@@ -66,4 +71,5 @@ public class PaddleBallShooter : MonoBehaviour
 
         OnBallLaunch?.Invoke();
     }
+    public void DisableShoot(bool status) => _disableShoot = status;
 }

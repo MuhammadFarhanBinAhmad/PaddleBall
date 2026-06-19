@@ -75,16 +75,15 @@ public class BrickGenerator : MonoBehaviour
     [SerializeField] float _timerBeforeNextWaveSpawn;
     public Action _onSpawnNextWave;
 
-    [Header("Boss Spawner")]
-    [SerializeField] SO_BossBrickStats _starterBoss;
-    [SerializeField] List<SO_BossBrickStats> _BossList = new List<SO_BossBrickStats>();
-    public Action _onSpawnBoss;
 
     private void Awake()
     {
         _brickPool = GetComponent<BrickPool>();
         _timeManager = FindAnyObjectByType<TimeManager>();
         _brickModifierList = GetComponent<BrickModifierList>();
+
+        if (_brickModifierList == null)
+            Debug.LogError("BrickModifierList component is missing from BrickGenerator object.");
     }
 
     private void Start()
@@ -102,6 +101,8 @@ public class BrickGenerator : MonoBehaviour
         CheckBrickToAdd();
         _brickModifierList.CheckModifierToAdd();
         SetAPOfTheDay();
+
+        StartFirstWaveOfEpisode();
     }
     private void OnDisable()
     {
@@ -126,6 +127,10 @@ public class BrickGenerator : MonoBehaviour
     public void StopWaveSpawning()
     {
         _stopWaveSpawn = true;
+    }
+    public void StartWaveSpawning()
+    {
+        _stopWaveSpawn = false;
     }
     public SOBrickFormation GetBrickFormation()
     {
@@ -203,27 +208,45 @@ public class BrickGenerator : MonoBehaviour
         foreach (var p in plan.bricks)
         {
             GameObject brick = _brickPool.GetBrick();
+            if (brick == null)
+            {
+                Debug.LogError("BrickPool returned null brick.");
+                continue;
+            }
+
             _brickPool.PlaceActiveBrickInList(brick);
 
             BrickBar bb = brick.GetComponent<BrickBar>();
+            if (bb == null)
+            {
+                Debug.LogError("Spawned brick is missing BrickBar component.");
+                continue;
+            }
+
+            if (p.stats == null)
+            {
+                Debug.LogError("PlannedBrick.stats is null.");
+                continue;
+            }
 
             brick.transform.position = p.position;
             brick.transform.localScale = _startingScale;
 
             bb.SetBrick(p.stats);
-            if(_timeManager.GetTotalDayPass() >= _brickModifierList._dayFirstModiferCheckUnlock)
+
+            if (_brickModifierList != null &&
+                _timeManager.GetTotalDayPass() >= _brickModifierList._dayFirstModiferCheckUnlock)
             {
                 if (_brickModifierList.RollForModifier(true))
                 {
                     _brickModifierList.TryAddRandomModifier(bb, _brickModifierList.RollRarity());
+
                     if (_brickModifierList.RollForModifier(false))
                         _brickModifierList.TryAddRandomModifier(bb, _brickModifierList.RollRarity());
                 }
             }
 
-
             _brickCounter++;
-
             StartCoroutine(AnimateBrickSpawn(brick.transform));
 
             yield return null;
@@ -231,8 +254,8 @@ public class BrickGenerator : MonoBehaviour
 
         yield return new WaitForSeconds(_timerBeforeNextWaveSpawn);
 
-        if(!_stopWaveSpawn)
-        _onSpawnNextWave?.Invoke();
+        if (!_stopWaveSpawn)
+            _onSpawnNextWave?.Invoke();
     }
     WavePlan BuildWavePlan(SOBrickFormation formation)
     {
@@ -303,11 +326,6 @@ public class BrickGenerator : MonoBehaviour
             }
         }
     }
-
-    public void SpawnBoss()
-    {
-    }
-
     IEnumerator AnimateBrickSpawn(Transform brickTransform)
     {
         Vector3 startScale = Vector3.zero;

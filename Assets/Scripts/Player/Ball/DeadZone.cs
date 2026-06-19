@@ -44,13 +44,14 @@ public class DeadZone : MonoBehaviour
             UpdateShieldVisual();
         }
     }
-    public void ShieldTakingDamage(int val)
+    public void ShieldTakingDamage(int val,int layer)
     {
         _currentShieldMana -= val;
         _currentCoolDownTime = _coolDownPeriod;
         _currentShieldMana = Mathf.Max(_currentShieldMana, 0);
+
         if(_currentShieldMana <=0)
-            _towerManager._onTowerTakingDamage?.Invoke();
+            _towerManager._onTowerTakingDamage?.Invoke(layer);
 
         UpdateShieldVisual();
     }
@@ -94,8 +95,15 @@ public class DeadZone : MonoBehaviour
         if (other.CompareTag("Brick"))
         {
             BrickBar _bb = other.GetComponent<BrickBar>();
-            ShieldTakingDamage(_bb.GetShieldDamageValue());
+            ShieldTakingDamage(_bb.GetShieldDamageValue(), _bb.GetLayer());
             _bb.GetComponent<BrickHealthComponent>().OnDamage(999,DeathCause.TOWER,true);
+        }
+        if(other.CompareTag("EnemyProjectile"))
+        {
+            EnemyProjectile ep = other.GetComponent<EnemyProjectile>();
+            ep.HandleProjectileDeath();
+            ShieldTakingDamage(ep.GetDamage(),1);//Need set value for enemy projectile
+
         }
     }
     public void AddShieldValue(int val) => _maxShieldMana += val;

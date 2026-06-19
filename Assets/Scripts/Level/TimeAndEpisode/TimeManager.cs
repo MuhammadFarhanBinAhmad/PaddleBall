@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
+    BrickPool _brickpool;
     StoreAbilityManager _storeAbilityManager;
-    EpisodeManager _episodeManager;
+    BossManager _bossManager;
 
     [Header("TimeKeeper")]
     [SerializeField] int _maxGameDuration;
@@ -16,6 +17,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] float _currentDayDuration;
     [SerializeField] int _bossDayInterval;
 
+    bool _isBossDay;
 
     public Action _onStartBossDay;
     public Action _onEndBossDay;
@@ -30,7 +32,8 @@ public class TimeManager : MonoBehaviour
     private void Awake()
     {
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
-        _episodeManager = FindAnyObjectByType<EpisodeManager>();
+        _bossManager = FindAnyObjectByType<BossManager>();
+        _brickpool = FindAnyObjectByType<BrickPool>();
     }
     private void Start()
     {
@@ -40,9 +43,9 @@ public class TimeManager : MonoBehaviour
 
         _onStartBossDay += SwitchBossDayDuration;
         _onStartBossDay += StopDayTimer;
+        _onStartBossDay += CheckToSpawnBoss;
 
         _onEndBossDay += SwitchRegularDayDuration;
-        _onEndBossDay += StopDayTimer;
 
         _daysDuration = _fullDayDuration;
         _currentDayDuration = _daysDuration;
@@ -52,9 +55,9 @@ public class TimeManager : MonoBehaviour
     {
         _onStartBossDay -= SwitchBossDayDuration;
         _onStartBossDay -= StopDayTimer;
+        _onStartBossDay -= CheckToSpawnBoss;
 
         _onEndBossDay -= SwitchRegularDayDuration;
-        _onEndBossDay -= StopDayTimer;
 
         _dayPass -= PlayDayPassAudio;
         _dayPass -= _storeAbilityManager.RerollItem;
@@ -99,9 +102,39 @@ public class TimeManager : MonoBehaviour
     {
         return 1f - (_currentDayDuration / _daysDuration);
     }
-    void SwitchBossDayDuration() => _daysDuration = _bossDayDuration;
-    void SwitchRegularDayDuration() => _daysDuration = _fullDayDuration;
+    void SwitchBossDayDuration()
+    {
+        float _timeLeftPercent = GetPercentDayTimeLeft();
+        _daysDuration = _bossDayDuration;
+        ReSyncTime(_timeLeftPercent);
+        _isBossDay = true;
 
+    }
+    void SwitchRegularDayDuration()
+    {
+        float _timeLeftPercent = GetPercentDayTimeLeft();
+        _daysDuration = _fullDayDuration;
+        ReSyncTime(_timeLeftPercent);
+        _isBossDay = false;
+
+    }
+    private float GetPercentDayTimeLeft()
+    {
+        return _currentDayDuration / _daysDuration;
+    }
+    void ReSyncTime(float percent)
+    {
+        float timeLeft = _daysDuration * percent;
+        _currentDayDuration = timeLeft;
+    }
+    public void CheckToSpawnBoss()
+    {
+        if (_isBossDay)
+            if (_brickpool.IsAllBrickDestroyed())
+                _bossManager.SpawnBoss();
+    }
+
+    public bool IsBossDay() => _isBossDay;
     public static void StopTime() => Time.timeScale = 0f;
     public static void ResetTimeScale() => Time.timeScale = 1f;
     public static void SetCustomTimeScale(float val) => Time.timeScale = val;

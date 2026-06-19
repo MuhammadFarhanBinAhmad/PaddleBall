@@ -7,7 +7,7 @@ public class PaddleMovement : MonoBehaviour
 
     public float _speed;
     public float _maxXPos;
-    bool _isPaddleMovementDisable;
+    [SerializeField]bool _disablePaddleMovement;
 
     private void Awake()
     {
@@ -16,9 +16,8 @@ public class PaddleMovement : MonoBehaviour
 
     void Update()
     {
-        if (_isPaddleMovementDisable)
+        if (_disablePaddleMovement)
             return;
-
 
         float mouseX = Input.GetAxis("Mouse X");
 
@@ -31,7 +30,7 @@ public class PaddleMovement : MonoBehaviour
 
     public void DisblePaddleMovement(bool disable)
     {
-        _isPaddleMovementDisable = disable;
+        _disablePaddleMovement = disable;
     }
     public void DisblePaddleCollider(bool disable)
     {

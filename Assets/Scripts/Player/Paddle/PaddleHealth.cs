@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PaddleHealth : MonoBehaviour
 {
+    Ball _ball;
     PaddleMovement _paddleMovement;
     PaddleVacoom _paddleVacoom;
     PaddleFeedbackManager _paddleFeedbackManager;
@@ -31,6 +32,7 @@ public class PaddleHealth : MonoBehaviour
     {
         _paddleMovement = FindAnyObjectByType<PaddleMovement>();
         _paddleVacoom = FindAnyObjectByType<PaddleVacoom>();
+        _ball = FindAnyObjectByType<Ball>();   
         _paddleFeedbackManager = FindAnyObjectByType<PaddleFeedbackManager>();
 
         _spriteRenderer = GetComponentInParent<SpriteRenderer>();
@@ -106,10 +108,10 @@ public class PaddleHealth : MonoBehaviour
         }
         if (other.CompareTag("EnemyProjectile") && _spriteRenderer.enabled)
         {
-            print("hit");
             _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
             SetBoolOnPaddleDisable?.Invoke(true);
             other.GetComponent<EnemyProjectile>().HandleProjectileDeath();
+            _ball.OnBallReset?.Invoke();
             StartCoroutine(Knockback());
         }
     }

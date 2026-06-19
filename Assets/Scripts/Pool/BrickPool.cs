@@ -5,6 +5,8 @@ using UnityEngine;
 public class BrickPool : MonoBehaviour
 {
     BrickGenerator _brickGenerator;
+    TimeManager _timeManager;
+    BossManager _bossManager;
 
     public GameObject _brickPrefab;
 
@@ -16,10 +18,11 @@ public class BrickPool : MonoBehaviour
     private void Awake()
     {
         _brickGenerator = FindAnyObjectByType<BrickGenerator>();
-    }
-    private void Start()
-    {
+        _timeManager = FindAnyObjectByType<TimeManager>();
+        _bossManager = FindAnyObjectByType<BossManager>();
+
         SpawnBrick();
+
     }
     void SpawnBrick()
     {
@@ -69,9 +72,8 @@ public class BrickPool : MonoBehaviour
     public void RemoveActiveBrick(GameObject brick)
     {
         _activeBrick.Remove(brick);
+        _timeManager.CheckToSpawnBoss();
 
-        if (IsAllBrickDestroyed())
-            _brickGenerator.SpawnBoss();
     }
     public bool IsAllBrickDestroyed() => _activeBrick.Count <= 0;
     public List<GameObject> GetListOfBrick() => _brickPool;

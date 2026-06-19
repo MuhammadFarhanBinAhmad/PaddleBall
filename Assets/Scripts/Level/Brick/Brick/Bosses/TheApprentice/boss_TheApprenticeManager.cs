@@ -1,22 +1,22 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class boss_TheApprenticeManager : BaseBossBrick
 {
-    boss_TheApprenticeAttackManager _theApprenticeAttackManager;
-    
+
     public ParticleSystem _hitEffect;
-
     public Action _onTakingDamage;
-    public Action _onDeath;
 
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         _onTakingDamage += DamageFeedback;
     }
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         _onTakingDamage -= DamageFeedback;
     }
 
@@ -25,6 +25,11 @@ public class boss_TheApprenticeManager : BaseBossBrick
         _brickHealthComponent.ModifyHealth(-damage);
         _onTakingDamage?.Invoke();
         DamageFeedback();
+
+        if (_brickHealthComponent.GetHealth() <= 0)
+        {
+            BossDeathEvent();
+        }
     }
     internal override void DamageFeedback()
     {
@@ -32,4 +37,9 @@ public class boss_TheApprenticeManager : BaseBossBrick
         _hitEffect.Play();
     }
 
+    internal override void BossDeathEvent()
+    {
+        onEndBossFight?.Invoke();
+        _bossManager.OnBossDeath(this);
+    }
 }

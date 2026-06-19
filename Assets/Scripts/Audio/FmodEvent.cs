@@ -49,13 +49,15 @@ public class FmodEvent : MonoBehaviour
     [field: SerializeField] public EventReference sfx_onDayEnd { get; private set; }
     [field: SerializeField] public EventReference sfx_onFirstWarning { get; private set; }
 
-
-
     [field: Header("UI")]
     [field: SerializeField] public EventReference sfx_onButtonPress { get; private set; }
     [field: SerializeField] public EventReference sfx_onButtonHover { get; private set; }
     [field: SerializeField] public EventReference sfx_closeOverlay { get; private set; }
     [field: SerializeField] public EventReference sfx_openOverlay { get; private set; }
+
+    [field: Header("Cutscene")]
+    [field: SerializeField] public EventReference sfx_paddleText { get; private set; }
+
 
     public static FmodEvent Instance { get; private set; }
 

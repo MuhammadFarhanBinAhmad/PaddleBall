@@ -1,105 +1,138 @@
 using UnityEngine;
 using Cinemachine;
+using System.Collections;
+using Unity.VisualScripting;
+using UnityEditor.Rendering.LookDev;
 
 public class CameraShake : MonoBehaviour
 {
+    [Header("Cinemachine")]
+    [SerializeField] private CinemachineVirtualCamera _vcam;
+
     [Header("Shake Settings")]
-    public float maxAmplitude = 1f;
-    public float maxRotationAngle = 10f;
-    public float traumaDecay = 1f;
+    [SerializeField] private float _transformShakeStrength = 0.5f;
+    [SerializeField] private float _maxAmplitude = 1f;
+    [SerializeField] private float _maxRotationAngle = 10f;
+    [SerializeField] private float _frequency = 10f;
 
-    [Range(1f, 3f)]
-    public float traumaPower = 2f;
+    [Header("Deterministic")]
+    [SerializeField] private int _shakeSeed = 1337;
 
-    public float frequency = 2f;
+    [SerializeField] AnimationCurve _shakeFalloff;
 
-    [Header("Transform Shake")]
-    [Tooltip("Maximum transform position offset")]
-    public float transformShakeStrength = 0.5f;
+    private CinemachineBasicMultiChannelPerlin _noise;
+    private Vector3 _originalLocalPos;
 
-    [Tooltip("Seed for deterministic shake")]
-    public int shakeSeed = 1337;
+    private Coroutine _shakeRoutine;
 
-    private float trauma;
-
-    private CinemachineVirtualCamera vcam;
-    private CinemachineBasicMultiChannelPerlin noise;
-
-    private Vector3 originalLocalPos;
-
-    // Seeded offsets
-    private float seedX;
-    private float seedY;
+    private float _seedX;
+    private float _seedY;
+    private float _seedRot;
 
     private void Awake()
     {
-        vcam = GetComponent<CinemachineVirtualCamera>();
-        noise = vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if (_vcam == null)
+            _vcam = GetComponent<CinemachineVirtualCamera>();
 
-        originalLocalPos = transform.localPosition;
+        _noise = _vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
-        // Deterministic seeds
-        seedX = shakeSeed * 0.37f;
-        seedY = shakeSeed * 0.73f;
+        _originalLocalPos = transform.localPosition;
+
+        // Fixed deterministic seeds
+        _seedX = _shakeSeed * 0.37f;
+        _seedY = _shakeSeed * 0.73f;
+        _seedRot = _shakeSeed * 1.17f;
+
     }
 
+    public void StartShake(float duration, float intensity = 1f)
+    {
+        if (_shakeRoutine != null)
+            StopCoroutine(_shakeRoutine);
+
+        _shakeRoutine = StartCoroutine(ShakeRoutine(duration, intensity));
+    }
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.A))
+            StartShake(1f, 1f);
 
-        if (trauma <= 0f)
+        if (Input.GetKeyDown(KeyCode.S))
+            StartShake(3f, 1.5f);
+
+        if (Input.GetKeyDown(KeyCode.D))
+            StartShake(5f, 0.5f);
+
+
+    }
+
+    IEnumerator ShakeRoutine(float duration, float intensity)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            ResetShake();
-            return;
+            float normalized = elapsed / duration;
+
+            // Optional fade out
+            float strength = intensity * _shakeFalloff.Evaluate(normalized);
+
+            float sampleTime = elapsed * _frequency;
+
+            //--------------------------
+            // Cinemachine noise
+            //--------------------------
+            if (_noise != null)
+            {
+                _noise.m_AmplitudeGain = _maxAmplitude * strength;
+                _noise.m_FrequencyGain = _frequency;
+            }
+
+            //--------------------------
+            // Rotation shake
+            //--------------------------
+            float rotNoise =
+                (Mathf.PerlinNoise(_seedRot, sampleTime) - 0.5f) * 2f;
+
+            _vcam.m_Lens.Dutch =
+                rotNoise * _maxRotationAngle * strength;
+
+            //--------------------------
+            // Position shake
+            //--------------------------
+            float x =
+                (Mathf.PerlinNoise(_seedX, sampleTime) - 0.5f) * 2f;
+
+            float y =
+                (Mathf.PerlinNoise(_seedY, sampleTime) - 0.5f) * 2f;
+
+            Vector3 offset =
+                new Vector3(x, y, 0f)
+                * _transformShakeStrength
+                * strength;
+
+            transform.localPosition = _originalLocalPos + offset;
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        float shake = Mathf.Pow(trauma, traumaPower);
-        float time = Time.time * frequency;
+        ResetShake();
 
-        // -------- Cinemachine Noise --------
-        noise.m_AmplitudeGain = maxAmplitude * shake;
-        noise.m_FrequencyGain = frequency;
-
-        // Deterministic Dutch rotation
-        float rotNoise =
-            (Mathf.PerlinNoise(seedX, time) - 0.5f) * 2f;
-
-        vcam.m_Lens.Dutch = maxRotationAngle * shake * rotNoise;
-
-        // -------- Transform Position Shake --------
-        float x =
-            (Mathf.PerlinNoise(seedX, time) - 0.5f) * 2f;
-        float y =
-            (Mathf.PerlinNoise(seedY, time) - 0.5f) * 2f;
-
-        Vector3 offset = new Vector3(x, y, 0f)
-                         * transformShakeStrength
-                         * shake;
-
-        transform.localPosition = originalLocalPos + offset;
-
-        // Decay trauma
-        trauma = Mathf.Clamp01(trauma - traumaDecay * Time.deltaTime);
+        _shakeRoutine = null;
     }
 
-    private void ResetShake()
+    void ResetShake()
     {
-        if (noise != null)
+        if (_noise != null)
         {
-            noise.m_AmplitudeGain = 0f;
-            noise.m_FrequencyGain = 0f;
+            _noise.m_AmplitudeGain = 0f;
+            _noise.m_FrequencyGain = 0f;
         }
 
-        if (vcam != null)
-            vcam.m_Lens.Dutch = 0f;
+        if (_vcam != null)
+            _vcam.m_Lens.Dutch = 0f;
 
-        transform.localPosition = originalLocalPos;
+        transform.localPosition = _originalLocalPos;
     }
-
-    // -------- Public API --------
-    public void AddTrauma(float amount)
-    {
-        trauma = Mathf.Clamp01(trauma + Mathf.Abs(amount));
-    }
-
-    public float GetTrauma() => trauma;
 }

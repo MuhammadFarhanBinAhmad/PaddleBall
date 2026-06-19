@@ -20,7 +20,7 @@ public class PaddleVacoom : MonoBehaviour
     [SerializeField] Color _coneColor = new Color(1f, 1f, 1f, 0.35f);
 
 
-    bool _isPaddleDisable;
+    bool _disableVacoom;
 
     EventInstance _paddleInhale;
     float inhalePower = 0;
@@ -79,7 +79,7 @@ public class PaddleVacoom : MonoBehaviour
     void IsSucking()
     {
         
-        if (_isPaddleDisable)
+        if (_disableVacoom)
             return;
 
         bool attracting = Input.GetKey(KeyCode.Space);
@@ -201,7 +201,7 @@ public class PaddleVacoom : MonoBehaviour
         return toMouse.normalized;
     }
 
-    public void DisableVacoom(bool disable) => _isPaddleDisable = disable;
+    public void DisableVacoom(bool disable) => _disableVacoom = disable;
 
     void OnDrawGizmosSelected()
     {
@@ -256,4 +256,6 @@ public class PaddleVacoom : MonoBehaviour
 
         return transform.up.normalized;
     }
+
+
 }

@@ -43,6 +43,6 @@ public class BallDirectionArrow : MonoBehaviour
         float angle = Mathf.Atan2(dirToMouse.y, dirToMouse.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle + _rotationOffset);
     }
-    public void SetEnableArrow(bool enable) => gameObject.SetActive(enable);
+    public void DisableArrow(bool enable) => gameObject.SetActive(!enable);
 
 }

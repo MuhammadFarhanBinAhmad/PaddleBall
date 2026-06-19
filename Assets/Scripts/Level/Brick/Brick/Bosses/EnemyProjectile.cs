@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
-    [SerializeField]SO_EnemyProjectile _soEnemyProjectile;
+    [SerializeField]internal SO_EnemyProjectile _soEnemyProjectile;
 
     Rigidbody2D _rigidbody2D;
 
     float _shootSpeed;
-    float _damage;
+    int _damage;
+
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
-    void SetUpProjectile()
+    public virtual void SetUpProjectile()
     {
         _shootSpeed = _soEnemyProjectile._shootSpeed;
         _damage = _soEnemyProjectile._damage;
@@ -44,6 +45,7 @@ public class EnemyProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Wall"))
@@ -64,5 +66,11 @@ public class EnemyProjectile : MonoBehaviour
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
         }
+        if(other.gameObject.CompareTag("Ball"))
+        {
+            HandleProjectileDeath();
+        }
     }
+
+    public int GetDamage() => _damage;
 }

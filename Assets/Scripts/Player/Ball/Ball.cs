@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     BallFeedbackManager _ballFeedbackManager;
     BallDirectionArrow _ballDirectionArrow;
     PaddleHealth _paddleHealth;
-
+    CircleCollider2D _collider;
 
     public float _gravityScale;
     public float _maxVelocity;
@@ -75,7 +75,7 @@ public class Ball : MonoBehaviour
     public Transform _respawnPos;
     [SerializeField] float _launchSpeed;
     bool _awaitingLaunch = true;
-    bool _isBallDead;
+    [SerializeField]bool _isBallDead;
 
     [Header("RespawnAnimation")]
     [SerializeField] AnimationCurve easeOutElastic;
@@ -121,11 +121,11 @@ public class Ball : MonoBehaviour
     {
         _startingScale = transform.localScale;
         _currentManaAmount = _maxManaAmount;
-        _ballDirectionArrow.SetEnableArrow(true);
+        _ballDirectionArrow.DisableArrow(false);
         SetCursorState(false);
 
-        PrepareForLaunch(_respawnPos.position);
         StartCoroutine(AnimateBallRespawn());
+
     }
     private void OnDisable()
     {
@@ -154,13 +154,12 @@ public class Ball : MonoBehaviour
         if (_paddleHealth.IsPaddleDead())
         {
             TimeManager.ResetTimeScale();
-            _ballDirectionArrow.SetEnableArrow(false);
+            _ballDirectionArrow.DisableArrow(true);
             return;
         }
 
         if(!_isBallDead)
             return;
-
 
         if(_currentRespawnTimer >0)
         {
@@ -211,7 +210,7 @@ public class Ball : MonoBehaviour
 
             _onAimingState = true;
             _targetTimeScale = _slowMotionTimeValue;
-            _ballDirectionArrow.SetEnableArrow(_onAimingState);
+            _ballDirectionArrow.DisableArrow(false);
 
             if (_onAimingState && Input.GetMouseButton(0))
                 OnBallRediect?.Invoke();
@@ -220,7 +219,7 @@ public class Ball : MonoBehaviour
         {
             _onAimingState = false;
             _targetTimeScale = 1f;
-            _ballDirectionArrow.SetEnableArrow(_onAimingState);
+            _ballDirectionArrow.DisableArrow(true);
             if (_currentCoolDownPeriod < _coolDownPeriod)
                 _currentCoolDownPeriod += Time.deltaTime;
         }
@@ -359,6 +358,9 @@ public class Ball : MonoBehaviour
 
     public void Launch(Vector2 direction)
     {
+
+        _circleCollider.enabled = true;
+
         if (direction.sqrMagnitude < 0.0001f)
             return;
 
@@ -369,7 +371,7 @@ public class Ball : MonoBehaviour
         transform.up = -direction;
 
         _awaitingLaunch = false;
-        _ballDirectionArrow.SetEnableArrow(false);
+        _ballDirectionArrow.DisableArrow(true);
 
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallShoot, transform.position);
     }
@@ -379,16 +381,15 @@ public class Ball : MonoBehaviour
         Destroy(gameObject);
 
     }
-    void ResettingBall()
+    public void ResettingBall()
     {
-        //yield return new WaitForSeconds(_respawnTime);
+        print("reset");
         ResetPosition();
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
-
         ActivateBall();
         StartCoroutine(AnimateBallRespawn());
         PrepareForLaunch(_respawnPos.position);
-        ResetBallRespawnTimer();
+        //ResetBallRespawnTimer();
 
     }
 
@@ -435,15 +436,14 @@ public class Ball : MonoBehaviour
     }
     public void DeactivateBall()
     {
-        _ballDirectionArrow.SetEnableArrow(false);
+        _ballDirectionArrow.DisableArrow(true);
         _circleCollider.enabled = false;
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
     }
     public void ActivateBall()
     {
-        _ballDirectionArrow.SetEnableArrow(true);
-        _circleCollider.enabled = true;
+        _ballDirectionArrow.DisableArrow(false);
         _spriteRenderer.enabled = true;
         _trailRenderer.Clear();
         _trailRenderer.enabled = true;
@@ -462,7 +462,8 @@ public class Ball : MonoBehaviour
             other.gameObject.CompareTag("Paddle") || 
             other.gameObject.CompareTag("Brick") ||
             other.gameObject.CompareTag("Boss") ||
-            other.gameObject.CompareTag("Shield"))
+            other.gameObject.CompareTag("Shield") ||
+            other.gameObject.CompareTag("EnemyProjectile"))
         {
             GlobalFeedbackManager.Instance.SetSizeCapForBall();
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();

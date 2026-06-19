@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SO_BossBrickStats
   m_EditorClassIdentifier: Assembly-CSharp::SO_BossBrickStats
   _bossPrefab: {fileID: 0}
-  _health: 100
+  _health: 2
   _moveSpeed: 0

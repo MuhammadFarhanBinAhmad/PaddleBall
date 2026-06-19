@@ -4,5 +4,9 @@ using UnityEngine;
 public class SO_EnemyProjectile : ScriptableObject
 {
     public float _shootSpeed;
-    public float _damage;
+    public int _damage;
+
+    public bool _canTakeDownShield;
+    public bool _canBeDeflected;
+
 }

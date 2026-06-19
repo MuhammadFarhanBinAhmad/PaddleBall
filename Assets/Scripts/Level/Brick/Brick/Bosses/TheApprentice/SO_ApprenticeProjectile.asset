@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239c0992e8bf91d42a7316a4dbbc8810, type: 3}
   m_Name: SO_ApprenticeProjectile
   m_EditorClassIdentifier: Assembly-CSharp::SO_EnemyProjectile
-  _shootSpeed: 15
+  _shootSpeed: 20
   _damage: 5
+  _canTakeDownShield: 0
+  _canBeDeflected: 0

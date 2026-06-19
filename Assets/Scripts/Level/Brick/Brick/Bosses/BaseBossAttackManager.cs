@@ -16,14 +16,26 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         None,
         HitCount,
         Duration,
+        Point,
         Manual
     }
 
+
     [Header("Boss Attack Flow")]
-    [SerializeField] private float _restDuration = 1.5f;
+    [SerializeField] private float _restDuration;
 
     [Header("Stun")]
-    [SerializeField] private float _stunDuration = 2f;
+    [SerializeField] private float _stunDuration;
+
+    [Header("Ping Pong Movement")]
+    [SerializeField] private List<Transform> _movementPoints = new List<Transform>();
+    [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _arrivalThreshold;
+
+    private Coroutine _movementRoutine;
+    private int _currentMovementTargetIndex;
+    private int _movementDirection = 1;
+    private Transform _currentPointTarget;
 
     private bool _stopAttacking;
     private bool _isStunned;
@@ -36,9 +48,11 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     protected bool IsAttackActive => !_attackComplete;
 
     private Coroutine _bossRoutine;
+
     private readonly List<AttackType> _attackOrder = new List<AttackType>();
 
-    protected virtual void Start()
+
+    public virtual void StartBossFight()
     {
         _bossRoutine = StartCoroutine(BossAttackLoop());
     }
@@ -97,10 +111,40 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
     private IEnumerator RestSequence()
     {
+        StopPingPongMovement();
         RestToNeutral();
         yield return new WaitForSeconds(_restDuration);
     }
+    private IEnumerator PointMovementRoutine()
+    {
+        _currentPointTarget = _movementPoints[_currentMovementTargetIndex];
 
+        while (!_stopAttacking && !_isStunned && !_attackComplete)
+        {
+            if (_currentPointTarget == null)
+            {
+                CompleteCurrentAttack();
+                yield break;
+            }
+
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                _currentPointTarget.position,
+                _movementSpeed * Time.deltaTime
+            );
+
+            if (Vector3.Distance(transform.position, _currentPointTarget.position) <= _arrivalThreshold)
+            {
+                AdvanceMovementPoint();
+                CompleteCurrentAttack();
+                break;
+            }
+
+            yield return null;
+        }
+
+        _movementRoutine = null;
+    }
     private IEnumerator ExecuteAttack(AttackType attack)
     {
         ResetCurrentAttackState();
@@ -136,8 +180,24 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
             yield return null;
         }
-    }
 
+        StopPingPongMovement();
+    }
+    private void AdvanceMovementPoint()
+    {
+        _currentMovementTargetIndex += _movementDirection;
+
+        if (_currentMovementTargetIndex >= _movementPoints.Count)
+        {
+            _movementDirection = -1;
+            _currentMovementTargetIndex = _movementPoints.Count - 2;
+        }
+        else if (_currentMovementTargetIndex < 0)
+        {
+            _movementDirection = 1;
+            _currentMovementTargetIndex = 1;
+        }
+    }
     protected void BeginHitCountAttack(int hitsNeeded)
     {
         _currentAttackEndMode = AttackEndMode.HitCount;
@@ -152,7 +212,20 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         _attackEndTime = Time.time + Mathf.Max(0f, duration);
         _attackComplete = false;
     }
+    protected void BeginPointAttack()
+    {
+        _currentAttackEndMode = AttackEndMode.Point;
+        _attackComplete = false;
+        if (_movementPoints == null || _movementPoints.Count < 2)
+        {
+            Debug.LogWarning($"{name}: Not enough movement points for point attack.");
+            CompleteCurrentAttack();
+            return;
+        }
 
+        StopPingPongMovement();
+        _movementRoutine = StartCoroutine(PointMovementRoutine());
+    }
     protected void BeginManualAttack()
     {
         _currentAttackEndMode = AttackEndMode.Manual;
@@ -183,8 +256,80 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         _attackComplete = false;
     }
 
-    public void StunBoss()
+    protected void BeginPingPongMovement(bool snapToFirstPoint = true)
     {
+        if (_movementPoints == null || _movementPoints.Count < 2)
+        {
+            Debug.LogWarning($"{name}: Not enough movement points for ping-pong movement.");
+            return;
+        }
+
+        StopPingPongMovement();
+
+        //if (snapToFirstPoint)
+        //{
+        //    transform.position = _movementPoints[0].position;
+        //    _currentMovementTargetIndex = 1;
+        //    _movementDirection = 1;
+        //}
+        //else
+        //{
+        //    _currentMovementTargetIndex = Mathf.Clamp(_currentMovementTargetIndex, 0, _movementPoints.Count - 1);
+        //}
+
+
+        _movementRoutine = StartCoroutine(PingPongMovementRoutine());
+    }
+
+    protected void StopPingPongMovement()
+    {
+        if (_movementRoutine != null)
+        {
+            StopCoroutine(_movementRoutine);
+            _movementRoutine = null;
+        }
+    }
+
+    private IEnumerator PingPongMovementRoutine()
+    {
+        while (!_stopAttacking && !_isStunned && !_attackComplete)
+        {
+            if (_movementPoints == null || _movementPoints.Count < 2)
+                yield break;
+
+            Transform target = _movementPoints[_currentMovementTargetIndex];
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                target.position,
+                _movementSpeed * Time.deltaTime
+            );
+
+            if (Vector3.Distance(transform.position, target.position) <= _arrivalThreshold)
+            {
+                _currentMovementTargetIndex += _movementDirection;
+
+                if (_currentMovementTargetIndex >= _movementPoints.Count)
+                {
+                    _movementDirection = -1;
+                    _currentMovementTargetIndex = _movementPoints.Count - 2;
+                }
+                else if (_currentMovementTargetIndex < 0)
+                {
+                    _movementDirection = 1;
+                    _currentMovementTargetIndex = 1;
+                }
+            }
+
+            yield return null;
+        }
+
+        _movementRoutine = null;
+    }
+
+    public void StunBoss(float duration)
+    {
+
+        _stunDuration = duration;
         if (_stopAttacking || _isStunned)
             return;
 
@@ -197,7 +342,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     private IEnumerator StunRoutine()
     {
         _isStunned = true;
-        CompleteCurrentAttack();   // end the current attack immediately
+        CompleteCurrentAttack();
+        StopPingPongMovement();
         RestToNeutral();
 
         Debug.Log("IsStun");
@@ -212,16 +358,13 @@ public abstract class BaseBossAttackManager : MonoBehaviour
             _bossRoutine = StartCoroutine(BossAttackLoop());
     }
 
-    public void StopBoss()
+
+    public virtual void StopBossAttack()
     {
         _stopAttacking = true;
-
-        if (_bossRoutine != null)
-            StopCoroutine(_bossRoutine);
-
+        _bossRoutine = null;
         StopAllCoroutines();
     }
-
     public abstract void AttackPatternOne();
     public abstract void AttackPatternTwo();
     public abstract void AttackPatternThree();

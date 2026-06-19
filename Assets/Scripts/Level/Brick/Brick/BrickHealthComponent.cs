@@ -19,17 +19,12 @@ public class BrickHealthComponent : MonoBehaviour
     [SerializeField] int _health;
     [SerializeField] float _tickTimer;
 
+    bool _vulnerableToDamage = true;
+
     public Action _onDeath;
     bool pendingDeath;
 
-    [Header("Test")]
-    [SerializeField] SO_BossBrickStats _bossBrickStats;
 
-
-    private void Start()
-    {
-        SetHealth(_bossBrickStats);
-    }
     private void Update()
     {
         if (_health > 0)
@@ -112,8 +107,12 @@ public class BrickHealthComponent : MonoBehaviour
     }
     public void OnDamage(int dmg, DeathCause deathcause = DeathCause.NORMAL, bool isInstantKill = false)
     {
+        if(!_vulnerableToDamage)
+            return;
+
         if(!isInstantKill)
         {
+            print("hit2");
             if (dmg == 0) dmg = 1;
 
             int modified = dmg;
@@ -132,12 +131,12 @@ public class BrickHealthComponent : MonoBehaviour
 
             if (transform.CompareTag("Brick"))
             {
-                BrickBar bb = GetComponent<BrickBar>();
+                BrickBar bb = GetComponentInParent<BrickBar>();
                 bb.UpdateBrickAfterDamage(deathcause);
             }
             else if (transform.CompareTag("Boss"))
             {
-                BaseBossBrick bbb = GetComponent<BaseBossBrick>();
+                BaseBossBrick bbb = GetComponentInParent<BaseBossBrick>();
                 bbb.HandleDamage(dmg);
             }
         }
@@ -149,7 +148,6 @@ public class BrickHealthComponent : MonoBehaviour
                 bb.HandleInstantKill(deathcause);
             }
         }
-
     }
     public void ApplyStatus(AbilityContext _statusEffect)
     {
@@ -207,8 +205,7 @@ public class BrickHealthComponent : MonoBehaviour
     public void ModifyHealth(int amount)
     {
         _health += amount;
-
         _health = Mathf.Clamp(_health, 0, _startingHealth);
     }
-
+    public void SetVulnerableToAttack(bool status) => _vulnerableToDamage = status;
 }
