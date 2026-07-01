@@ -8,7 +8,6 @@ public class CamShakeCutSceneEvent : BaseCutsceneEvent
     float _duration;
     float _trauma;
 
-
     public override void EndEvent()
     {
         NotifyFinished();

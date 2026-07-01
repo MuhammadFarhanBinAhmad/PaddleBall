@@ -56,6 +56,7 @@ public class Ball : MonoBehaviour
     [SerializeField] float _slowMotionTimeValue;
     [SerializeField] float _coolDownPeriod;
     [SerializeField] int _manaShootCost;
+    [SerializeField] float _launchSpeed;
     float _currentTimeScale = 1f;
     float _targetTimeScale = 1f;
     float _currentTargetTimeScale;
@@ -73,7 +74,6 @@ public class Ball : MonoBehaviour
     public float _respawnTime;
     public float _currentRespawnTimer;
     public Transform _respawnPos;
-    [SerializeField] float _launchSpeed;
     bool _awaitingLaunch = true;
     [SerializeField]bool _isBallDead;
 
@@ -122,7 +122,6 @@ public class Ball : MonoBehaviour
         _startingScale = transform.localScale;
         _currentManaAmount = _maxManaAmount;
         _ballDirectionArrow.DisableArrow(false);
-        SetCursorState(false);
 
         StartCoroutine(AnimateBallRespawn());
 
@@ -212,7 +211,7 @@ public class Ball : MonoBehaviour
             _targetTimeScale = _slowMotionTimeValue;
             _ballDirectionArrow.DisableArrow(false);
 
-            if (_onAimingState && Input.GetMouseButton(0))
+            if (_onAimingState && Input.GetMouseButton(0) && _currentManaAmount  >= _manaShootCost)
                 OnBallRediect?.Invoke();
         }
         else // released
@@ -223,7 +222,6 @@ public class Ball : MonoBehaviour
             if (_currentCoolDownPeriod < _coolDownPeriod)
                 _currentCoolDownPeriod += Time.deltaTime;
         }
-        SetCursorState(_onAimingState);
         _currentTimeScale = Mathf.Lerp(_currentTimeScale, _targetTimeScale, Time.unscaledDeltaTime * _lerpSpeed);
         TimeManager.SetCustomTimeScale(_currentTimeScale);
 
@@ -238,11 +236,6 @@ public class Ball : MonoBehaviour
 
     void RedirectBallToMouse()
     {
-        if (_currentManaAmount < _manaShootCost)
-        {
-            //UI pop message
-            return;
-        }
 
         if (_gameCamera == null)
             _gameCamera = Camera.main;
@@ -383,7 +376,6 @@ public class Ball : MonoBehaviour
     }
     public void ResettingBall()
     {
-        print("reset");
         ResetPosition();
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
         ActivateBall();
@@ -465,7 +457,7 @@ public class Ball : MonoBehaviour
             other.gameObject.CompareTag("Shield") ||
             other.gameObject.CompareTag("EnemyProjectile"))
         {
-            GlobalFeedbackManager.Instance.SetSizeCapForBall();
+            GlobalFeedbackManager.Instance.SetFeedbackValueForOnBallHit();
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
             OnBallHit?.Invoke();
 
@@ -560,15 +552,5 @@ public class Ball : MonoBehaviour
     public float GetMaxManaAmount() => _maxManaAmount;
     public void IncreaseHomingStrength(float val) => _homingStrength += val;
 
-    public void SetCursorState(bool state)
-    {
-        Cursor.visible = state;
-
-        if (Cursor.visible)
-            Cursor.lockState = CursorLockMode.None;
-        else
-            Cursor.lockState = CursorLockMode.Confined;
-
-    }
 
 }

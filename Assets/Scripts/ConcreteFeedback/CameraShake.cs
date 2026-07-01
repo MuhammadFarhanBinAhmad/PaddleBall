@@ -44,26 +44,23 @@ public class CameraShake : MonoBehaviour
         _seedRot = _shakeSeed * 1.17f;
 
     }
-
+    private void Start()
+    {
+        if (_shakeRoutine != null)
+            StopCoroutine(_shakeRoutine);
+        _shakeRoutine = null;
+    }
+    private void OnDestroy()
+    {
+        if (_shakeRoutine != null)
+            StopCoroutine(_shakeRoutine);
+    }
     public void StartShake(float duration, float intensity = 1f)
     {
         if (_shakeRoutine != null)
             StopCoroutine(_shakeRoutine);
 
         _shakeRoutine = StartCoroutine(ShakeRoutine(duration, intensity));
-    }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-            StartShake(1f, 1f);
-
-        if (Input.GetKeyDown(KeyCode.S))
-            StartShake(3f, 1.5f);
-
-        if (Input.GetKeyDown(KeyCode.D))
-            StartShake(5f, 0.5f);
-
-
     }
 
     IEnumerator ShakeRoutine(float duration, float intensity)

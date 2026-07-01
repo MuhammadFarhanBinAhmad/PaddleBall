@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -7,6 +8,7 @@ public class DeadZone : MonoBehaviour
     TowerManager _towerManager;
 
     public Action OnShieldDamage;
+    public Action OnShieldRecharging;
 
     public GameObject _deathVFX;
 
@@ -25,8 +27,14 @@ public class DeadZone : MonoBehaviour
         shieldColour = _spriteRenderer.color;
         _currentShieldMana = _maxShieldMana;
 
-        UpdateShieldVisual();
+        OnShieldDamage += UpdateShieldVisual;
+        OnShieldRecharging += UpdateShieldVisual;
+    }
 
+    private void OnDestroy()
+    {
+        OnShieldDamage -= UpdateShieldVisual;
+        OnShieldRecharging -= UpdateShieldVisual;
     }
     private void Update()
     {
@@ -40,8 +48,7 @@ public class DeadZone : MonoBehaviour
                 _currentShieldMana += _shieldRegenRate * Time.deltaTime;
 
             _currentShieldMana = Mathf.Clamp(_currentShieldMana, 0, _maxShieldMana);
-
-            UpdateShieldVisual();
+            OnShieldRecharging?.Invoke();
         }
     }
     public void ShieldTakingDamage(int val,int layer)
@@ -53,7 +60,7 @@ public class DeadZone : MonoBehaviour
         if(_currentShieldMana <=0)
             _towerManager._onTowerTakingDamage?.Invoke(layer);
 
-        UpdateShieldVisual();
+        OnShieldDamage?.Invoke();
     }
     void UpdateShieldVisual()
     {
@@ -106,6 +113,7 @@ public class DeadZone : MonoBehaviour
 
         }
     }
+    public float GetShieldPercentage() => _currentShieldMana/_maxShieldMana;
     public void AddShieldValue(int val) => _maxShieldMana += val;
     public void MinusShieldValue(int val) => _maxShieldMana -= val;
     public void MultipleMinusShieldValue(float val) => _maxShieldMana *= val;

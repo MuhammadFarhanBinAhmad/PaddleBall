@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class boss_TheApprenticeManager : BaseBossBrick
 {
-
     public ParticleSystem _hitEffect;
     public Action _onTakingDamage;
-
 
     public override void Start()
     {
@@ -41,5 +39,10 @@ public class boss_TheApprenticeManager : BaseBossBrick
     {
         onEndBossFight?.Invoke();
         _bossManager.OnBossDeath(this);
+    }
+    internal override void GameOverBossEvent()
+    {
+        onGameOverBossFight?.Invoke();
+        _bossManager.OnGameOver(this);
     }
 }

@@ -11,9 +11,14 @@ public enum CUTSCENETYPE
     PARTICLE_EFFECT = 1 << 3,
     CAMSHAKE = 1 << 4,
     DESTROY_BOSS = 1 << 5,
+    FADE_IN_CANVAS_RING = 1 << 6,
+    REMOVE_CANVAS_RING = 1 << 7,
+    DELAY = 1 << 8,
+    FADE_IN_OUT = 1 << 9,
+
 }
 
-[CreateAssetMenu(fileName = "SO_TalkingBubbleContent", menuName = "Cutscene/SO_TalkingBubbleContent")]
+[CreateAssetMenu(fileName = "SO_CutSceneEvent", menuName = "Cutscene/SO_CutSceneEvent")]
 public class SO_CutSceneEventContent : ScriptableObject
 {
 
@@ -37,7 +42,18 @@ public class SO_CutSceneEventContent : ScriptableObject
     public float _duration;
     public float _trauma;
 
+    [Header("RING_CANVAS")]
+    public AnimationCurve _ringAnim;
+    public float _animationFadeInDuration;
+    public float _startAlpha;
+    public float _endAlpha;
+
     [Header("MISC")]
     public float _timeDelay;
 
+    [Header("FADE_TO_BLACK")]
+    public AnimationCurve _FadeAnim;
+    public float _Fadetime;
+    public float _startFadeAlpha;
+    public float _endFadeAlpha;
 }

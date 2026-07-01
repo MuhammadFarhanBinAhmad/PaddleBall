@@ -38,7 +38,6 @@ public class BrickModifierList : MonoBehaviour
     public void CheckModifierToAdd()
     {
         int day = _timeManager.GetTotalDayPass();
-        print(day);
         for (int i = 0; i < _brickCommonModifier.Count; i++)
         {
             if (_brickAvailableCommonModifierToSpawn.Contains(_brickCommonModifier[i]))

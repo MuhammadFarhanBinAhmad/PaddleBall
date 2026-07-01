@@ -2,7 +2,10 @@ using FMOD.Studio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Splines;
+using UnityEngine.U2D;
 
 [System.Flags]
 public enum STATUSTYPE
@@ -47,12 +50,13 @@ public class StatusInstance
 public class BrickBar : MonoBehaviour
 {
     BrickUI _brickUI;
-
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
     List<STATUSTYPE> toRemove = new List<STATUSTYPE>();
 
     List<BrickModifierBase> _modifiers = new List<BrickModifierBase>();
     List <GameObject> _abilityEffects = new List<GameObject>();
+
+    public List<Transform> _waypoints = new List<Transform>();
 
     public SO_BrickHealthStats []_brickHealthStats = new SO_BrickHealthStats[5];
     
@@ -74,6 +78,8 @@ public class BrickBar : MonoBehaviour
     [SerializeField] internal float _baseFallSpeed;
     [SerializeField] internal float _fallSpeed;
     [SerializeField] internal int _baseDamage;
+    [SerializeField] internal SplineContainer _brickPath;
+    float progress;
     bool _speedDirty;
 
 
@@ -148,6 +154,7 @@ public class BrickBar : MonoBehaviour
 
     }
 
+
     private void Update()
     {
         float dt = Time.deltaTime;
@@ -191,77 +198,78 @@ public class BrickBar : MonoBehaviour
 
     }
 
-    void ExecuteStatusEffect()
-    {
-        float dt = Time.deltaTime;
-        toRemove.Clear();
+    public void SetWayPoint(List<Transform> points) => _waypoints = points;
+    //void ExecuteStatusEffect()
+    //{
+    //    float dt = Time.deltaTime;
+    //    toRemove.Clear();
 
-        if (pendingDeath)
-            return;
+    //    if (pendingDeath)
+    //        return;
 
-        foreach (var kvp in _statuses)
-        {
-            var status = kvp.Value;
-            //Damage effect timer
-            //if (status.type == STATUSTYPE.STUN)
-            //{
-            //    _fallSpeed = 0;
-            //}
-            //else
-            //{
-            //    // DOT tick
-            //    status.remainingEffectTime -= dt;
-            //    if (status.remainingEffectTime <= 0)
-            //    {
-            //        status.remainingEffectTime = status.timeBeforeEffect;
-            //        OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
-            //    }
-            //}
+    //    foreach (var kvp in _statuses)
+    //    {
+    //        var status = kvp.Value;
+    //        //Damage effect timer
+    //        //if (status.type == STATUSTYPE.STUN)
+    //        //{
+    //        //    _fallSpeed = 0;
+    //        //}
+    //        //else
+    //        //{
+    //        //    // DOT tick
+    //        //    status.remainingEffectTime -= dt;
+    //        //    if (status.remainingEffectTime <= 0)
+    //        //    {
+    //        //        status.remainingEffectTime = status.timeBeforeEffect;
+    //        //        OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
+    //        //    }
+    //        //}
 
-            // Stack timer
-            status.remainingStackTime -= dt;
-            if (status.remainingStackTime <= 0f)
-            {
-                status.stacks--;
-                if (status.affectsSpeed)
-                    MarkSpeedDirty();
+    //        // Stack timer
+    //        status.remainingStackTime -= dt;
+    //        if (status.remainingStackTime <= 0f)
+    //        {
+    //            status.stacks--;
+    //            if (status.affectsSpeed)
+    //                MarkSpeedDirty();
 
-                if (status.stacks <= 0)
-                {
-                    toRemove.Add(kvp.Key);
-                }
-                else
-                {
-                    // Restart decay timer for next stack
-                    status.remainingStackTime = status.stackLifeTime;
-                }
+    //            if (status.stacks <= 0)
+    //            {
+    //                toRemove.Add(kvp.Key);
+    //            }
+    //            else
+    //            {
+    //                // Restart decay timer for next stack
+    //                status.remainingStackTime = status.stackLifeTime;
+    //            }
 
-                status._ability.ActivateAbility();
-            }
-            if(status.stacks >0)
-            {
-                //Effect timer
-                status.remainingEffectTime -= dt;
-                if (status.remainingEffectTime <= 0)
-                {
-                    status.remainingEffectTime = status.timeBeforeEffect;
-                    print("TotalDmg via stack" + status.stacks * status.damagePerStack);
-                    OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
-                }
-            }
+    //            status._ability.ActivateAbility();
+    //        }
+    //        if(status.stacks >0)
+    //        {
+    //            //Effect timer
+    //            status.remainingEffectTime -= dt;
+    //            if (status.remainingEffectTime <= 0)
+    //            {
+    //                status.remainingEffectTime = status.timeBeforeEffect;
+    //                print("TotalDmg via stack" + status.stacks * status.damagePerStack);
+    //                OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
+    //            }
+    //        }
             
-        }
+    //    }
 
-        //remove all completed status effect
-        foreach (var key in toRemove)
-        {
-            //if (key == STATUSTYPE.STUN)
-            //{
-            //    _fallSpeed = _startFallSpeed;
-            //}
-            _statuses.Remove(key);
-        }
-    }
+    //    //remove all completed status effect
+    //    foreach (var key in toRemove)
+    //    {
+    //        //if (key == STATUSTYPE.STUN)
+    //        //{
+    //        //    _fallSpeed = _startFallSpeed;
+    //        //}
+    //        _statuses.Remove(key);
+    //    }
+    //}
     public void OnDamage(int dmg,DeathCause deathcause = DeathCause.NORMAL)
     {
     }
@@ -334,9 +342,9 @@ public class BrickBar : MonoBehaviour
 
     void HandleDeath()
     {
-       GlobalFeedbackManager.Instance.SetSizeCapForBrickDestroy();
+       GlobalFeedbackManager.Instance.SetFeedbackValueForBrickDestroy();
        GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-
+        GlobalFeedbackManager.Instance.PlayFreezeFrame();
        abilityManager.NotifyBrickDestroyed(this);
        _brickPool.RemoveActiveBrick(this.gameObject);
        Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
@@ -423,12 +431,25 @@ public class BrickBar : MonoBehaviour
         _brickUI.PrepBrickLayerColour(_stats._layerNumber);
         _brickHealthComponent.SetHealth(_stats);
     }
+    public void SetBrickPath(SplineContainer _path)
+    {
+        print(_path);
+        _brickPath = _path;
+        progress = 0f;
 
+        transform.position =
+            _brickPath.EvaluatePosition(progress);
+    }
     void MarkSpeedDirty() => _speedDirty = true;
 
     void HandleMovement()
     {
-        transform.Translate(Vector3.down * _fallSpeed * Time.deltaTime);
+        progress += _fallSpeed * Time.deltaTime;
+
+        if (progress > 1f)
+            progress = 1f;
+        transform.position =
+            _brickPath.EvaluatePosition(progress);
     }
     public void RecalculateSpeed()
     {

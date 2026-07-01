@@ -17,7 +17,7 @@ MonoBehaviour:
   _elementID: 3
   _layerNumber: 3
   _health: 16
-  _dropSpeed: 1
+  _dropSpeed: 0.01
   _APValue: 4
   _daytoUnlock: 4
   _color: {r: 1, g: 0.5490196, b: 0, a: 1}

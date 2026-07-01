@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1ed05982d3fe7e4ba5cb6305d09a547, type: 3}
+  m_Name: EP_TheApprentice
+  m_EditorClassIdentifier: Assembly-CSharp::SO_EpisodeDetails
+  _levelLayout: {fileID: 3329870842362445520, guid: a4a5d5f37ea02794e92258449e695014, type: 3}
+  _bossPrefab: {fileID: 7761645908735138843, guid: 66b6a60e63f93e84b9f63d231be23798, type: 3}

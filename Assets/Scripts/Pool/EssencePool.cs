@@ -7,10 +7,15 @@ public class EssencePool : MonoBehaviour
     [SerializeField] int _essenceToSpawn;
 
     public List<GameObject> _essencePool = new List<GameObject>();
+    bool _hasSpawned;
 
-    private void OnEnable()
+    private void Start()
     {
-        SpawnEssence();
+        if (!_hasSpawned)
+        {
+            SpawnEssence();
+            _hasSpawned = true;
+        }
     }
 
     void SpawnEssence()
@@ -18,11 +23,11 @@ public class EssencePool : MonoBehaviour
         for (int i = 0; i < _essenceToSpawn; i++)
         {
             GameObject _b = Instantiate(_essencePrefab, transform);
-            _b.transform.parent = transform;
             _essencePool.Add(_b);
             _b.SetActive(false);
         }
     }
+
     public GameObject GetEssence()
     {
         foreach (var e in _essencePool)

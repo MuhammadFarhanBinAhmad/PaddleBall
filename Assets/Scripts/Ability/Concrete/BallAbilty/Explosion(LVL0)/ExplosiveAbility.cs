@@ -17,13 +17,29 @@ public class ExplosiveAbility : ABSAbility
 
         GameObject explosionGO = _explosionPool.GetExplosion();
         explosionGO.transform.position = transform.position;
+
+        Vector3 explosionPos;
+
+        if (ctx._brick != null)
+        {
+            explosionPos = ctx._brick.transform.position;
+        }
+        else if (ctx._bossHealth != null)
+        {
+            explosionPos = ctx._bossHealth.transform.position;
+        }
+        else
+        {
+            explosionPos = transform.position;
+        }
+
         var ed = explosionGO.GetComponent<ExplosionDamage>();
         if (ed == null) return;
 
         ExplosionContext ectx = new ExplosionContext
         {
             _source = gameObject,
-            _position = ctx._brick.transform.position,
+            _position = explosionPos,
             _statusEffect = null
         };
         ectx._Stats[STATID.BASE_DAMAGE] = _SOAbilityEffect._abilityBaseDamageValue;

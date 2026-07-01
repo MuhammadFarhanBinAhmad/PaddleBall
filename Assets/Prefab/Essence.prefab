@@ -126,9 +126,12 @@ MonoBehaviour:
   normalDrag: 1
   minImpulse: 3
   maxImpulse: 5
-  _collectDistance: 1
+  _collectDistance: 3
   suctionDrag: 0.1
   suctionReleaseImpulseMultiplier: 1
+  _autoAttractStrength: 100
+  _autoAttractRadius: 999
+  _autoAttract: 0
 --- !u!50 &1406779819643894296
 Rigidbody2D:
   serializedVersion: 5

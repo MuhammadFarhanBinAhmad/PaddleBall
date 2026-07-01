@@ -5,4 +5,5 @@ public class SO_BossIntroText : ScriptableObject
 {
     public string _name;
     public string _tagline;
+    public string _defeatTagline;
 }

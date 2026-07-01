@@ -41,7 +41,7 @@ public class BallFeedbackManager : MonoBehaviour
 
         _ballManager.OnBallReset -= ResetGlow;
     }
-    void ActivateHitVFX() => _hitEffectVFX.SetActive(true);
+    void ActivateHitVFX() => Instantiate(_hitEffectVFX,transform.position,Quaternion.identity);
     public void ChangeSpriteOnHit()
     {
         if(_changeSpriteCoroutine != null) 

@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BOSSCUTSCENETOPLAY
+{
+    INTRO,
+    DEFEATBOSS,
+    GAMEOVER
+}
 public  class CutSceneManager : MonoBehaviour
 {
     EpisodeTitleCardUI _episodeTitleCardUI;
@@ -23,21 +29,25 @@ public  class CutSceneManager : MonoBehaviour
     [SerializeField] ParticleEffectCutsceneEvent _particleEffectCutsceneEvent;
     [SerializeField] CamShakeCutSceneEvent _camshakeCutSceneEvent;
     [SerializeField] DestroyBossCutsceneEvent _destryoBossCutSceneEvent;
+    [SerializeField] FadeInCanvasBlackRingEventCutScene _FadeInCanvasBlackRingEventCutScene;
+    [SerializeField] FadeInOutScreenEventCutScene _FadeInOutScreenEventCutScene;
 
     BaseCutsceneEvent _currentEvent;
     [SerializeField] int _cutSceneIndex;
 
-    public bool _isStartOfBossFight;
 
     public Action<bool> _setBoolOnStartCutScene;
     public Action<bool> _setBoolOnEndCutScene;
     private bool _cutSceneBatchResolved;
     private bool _advancingCutscene;
+    private bool _skipRequested;
 
     public Action _onStartCutScene;
     public Action _onEndBossCutScene;
 
     int _activeCutsceneEventCount;
+
+    BOSSCUTSCENETOPLAY _cutsceneToPlay;
 
     private void Awake()
     {
@@ -63,8 +73,7 @@ public  class CutSceneManager : MonoBehaviour
         _setBoolOnEndCutScene += _ballDirectionArrow.DisableArrow;
         _setBoolOnEndCutScene += _paddleVacoom.DisableVacoom;
 
-        _onEndBossCutScene += _brickGenerator.StartFirstWaveOfEpisode;
-
+        _onEndBossCutScene += _episodeTitleCardUI.PlayBossDefeatTitleCardAnim;
     }
     private void OnDestroy()
     {
@@ -80,11 +89,17 @@ public  class CutSceneManager : MonoBehaviour
         _setBoolOnEndCutScene -= _ballDirectionArrow.DisableArrow;
         _setBoolOnEndCutScene -= _paddleVacoom.DisableVacoom;
 
-        _onEndBossCutScene -= _brickGenerator.StartFirstWaveOfEpisode;
+        _onEndBossCutScene -= _episodeTitleCardUI.PlayBossDefeatTitleCardAnim;
+    }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SkipCutscene();
     }
     public void StartCutScene()
     {
+        _skipRequested = false;
         SetUpEvent();
         _setBoolOnStartCutScene?.Invoke(true);
         _onStartCutScene?.Invoke();
@@ -98,36 +113,47 @@ public  class CutSceneManager : MonoBehaviour
         }
         else
         {
-            if (_isStartOfBossFight)
+            switch (_cutsceneToPlay)
             {
-                //Start boss fight
-                _cutSceneIndex = 0;
-                _setBoolOnEndCutScene?.Invoke(false);
-                BaseBossBrick bb = _currentBossObject.GetComponent<BaseBossBrick>();
-                _episodeTitleCardUI.SetBossIntroText(bb._bossIntroText);
-                bb.onStartBossFight?.Invoke();
-                _isStartOfBossFight = false;
-                
+                case BOSSCUTSCENETOPLAY.INTRO:
+                    {
+                        //Start boss fight
+                        _cutSceneIndex = 0;
+                        _setBoolOnEndCutScene?.Invoke(false);
+                        BaseBossBrick bb = _currentBossObject.GetComponent<BaseBossBrick>();
+                        _episodeTitleCardUI.SetBossIntroText(bb._bossIntroText);
+                        bb.onStartBossFight?.Invoke();
+                        break;
+                    }
+                case BOSSCUTSCENETOPLAY.DEFEATBOSS:
+                    {
+                        //End of boss fight(win)
+                        ResetBoosFightCondition();
+                        _setBoolOnEndCutScene?.Invoke(false);
+                        _onEndBossCutScene?.Invoke();
+                        _timeManager._onBossDefeated?.Invoke();
+                        break;
+                    }
+                case BOSSCUTSCENETOPLAY.GAMEOVER:
+                    {
+                        ResetBoosFightCondition();
+                        _setBoolOnEndCutScene?.Invoke(false);
+                        break;
+                    }
             }
-            else
-            {
-                //End of boss fight
-                ResetBoosFightCondition();
-                _setBoolOnEndCutScene?.Invoke(false);
-                _onEndBossCutScene?.Invoke();
-                _timeManager?._onEndBossDay.Invoke();
-            }
-
         }
     }
     private void ResetBoosFightCondition()
     {
         _cutSceneIndex = 0;
-        _isStartOfBossFight = true;
+        _cutsceneToPlay = BOSSCUTSCENETOPLAY.INTRO;
         _cutSceneEvent.Clear();
     }
+    //Setting up and start playing cutscene event
     public void SetUpEvent()
     {
+        _skipRequested = false;
+
         var content = _cutSceneEvent[_cutSceneIndex];
         var type = content.type;
 
@@ -172,10 +198,22 @@ public  class CutSceneManager : MonoBehaviour
         {
             _destryoBossCutSceneEvent.SetUpContent(content);
             _destryoBossCutSceneEvent.SetTarget(_currentBossObject);
+            _currentBossObject = null;
             _destryoBossCutSceneEvent.OnEventFinished = HandleCutsceneEventFinished;
             _destryoBossCutSceneEvent.ExecuteEvent();
         }
-
+        if ((type & CUTSCENETYPE.FADE_IN_CANVAS_RING) != 0)
+        {
+            _FadeInCanvasBlackRingEventCutScene.SetUpContent(content);
+            _FadeInCanvasBlackRingEventCutScene.OnEventFinished = HandleCutsceneEventFinished;
+            _FadeInCanvasBlackRingEventCutScene.ExecuteEvent();
+        }
+        if ((type & CUTSCENETYPE.FADE_IN_OUT) != 0)
+        {
+            _FadeInOutScreenEventCutScene.SetUpContent(content);
+            _FadeInOutScreenEventCutScene.OnEventFinished = HandleCutsceneEventFinished;
+            _FadeInOutScreenEventCutScene.ExecuteEvent();
+        }
         if (_activeCutsceneEventCount == 0)
         {
             EventEnded();
@@ -186,6 +224,9 @@ public  class CutSceneManager : MonoBehaviour
 
     private void HandleCutsceneEventFinished()
     {
+        if (_skipRequested)
+            return;
+
         _activeCutsceneEventCount--;
 
         if (_activeCutsceneEventCount <= 0)
@@ -203,7 +244,48 @@ public  class CutSceneManager : MonoBehaviour
         if ((type & CUTSCENETYPE.PARTICLE_EFFECT) != 0) count++;
         if ((type & CUTSCENETYPE.CAMSHAKE) != 0) count++;
         if ((type & CUTSCENETYPE.DESTROY_BOSS) != 0) count++;
+        if ((type & CUTSCENETYPE.FADE_IN_CANVAS_RING) != 0) count++;
+        if ((type & CUTSCENETYPE.FADE_IN_OUT) != 0) count++;
+
 
         return count;
     }
+    public void SkipCutscene()
+    {
+        if (_cutSceneEvent == null || _cutSceneEvent.Count == 0)
+            return;
+
+        _skipRequested = true;
+        _activeCutsceneEventCount = 0;
+
+        // Stop/cleanup every event type you use.
+        _dialougeEvent?.EndEvent();
+        _popInCutSceneEvent?.EndEvent();
+        _particleEffectCutsceneEvent?.EndEvent();
+        _camshakeCutSceneEvent?.EndEvent();
+        _destryoBossCutSceneEvent?.EndEvent();
+        _FadeInCanvasBlackRingEventCutScene?.EndEvent();
+        _FadeInOutScreenEventCutScene?.EndEvent();
+
+        switch(_cutsceneToPlay)
+        {
+            case BOSSCUTSCENETOPLAY.INTRO:
+                {
+                    _currentBossObject.transform.localScale = Vector3.one;
+                    break;
+                }
+            case BOSSCUTSCENETOPLAY.DEFEATBOSS:
+                {
+                    GameObject boss = _currentBossObject;
+                    Destroy(boss);
+                    _currentBossObject = null;
+                    break;
+                }
+        }
+
+        // Fast-forward to the end branch in EventEnded()
+        _cutSceneIndex = Mathf.Max(0, _cutSceneEvent.Count - 1);
+        EventEnded();
+    }
+    public void SetBossCutsceneToPlay(BOSSCUTSCENETOPLAY ct) => _cutsceneToPlay = ct;
 }

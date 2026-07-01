@@ -74,7 +74,6 @@ public class TowerManager : MonoBehaviour
     }
     private void Start()
     {
-        // subscribe to month pass if TimeManager exposes this
         if (_timeManager != null)
         {
             _timeManager._dayPass += EndOfDayCheck;
@@ -366,7 +365,8 @@ public class TowerManager : MonoBehaviour
     }
     public void EndOfGame()
     {
-        TimeManager.StopTime();
+        print("end game");
+        //TimeManager.StopTime();
     }
     void PopulateTowerHeightCheck()
     {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Splines;
 public enum BRICKLAYER
 {
     NONE,
@@ -20,7 +21,7 @@ public enum BRICKLAYER
 public class PlannedBrick
 {
     public SO_BrickHealthStats stats;
-    public Vector3 position;
+    public int index;
 }
 public class WavePlan
 {
@@ -39,11 +40,14 @@ public class BrickGenerator : MonoBehaviour
     BrickPool _brickPool;
     TimeManager _timeManager;
     BrickModifierList _brickModifierList;
+    [SerializeField]LevelManager _levelManager;
 
-    public List<BrickFormationEntry> _brickFormationList = new List<BrickFormationEntry>();
+    public List<SOBrickFormation> _brickFormationList = new List<SOBrickFormation>();
 
     public List<SO_BrickHealthStats> _brickTypesList;
     public List<SO_BrickHealthStats> _brickAvailableToSpawn = new List<SO_BrickHealthStats>();
+
+    [SerializeField]List<SplineContainer>_brickPathList = new List<SplineContainer>();
 
     [Header("AttributePoints")]
     TWEENTYPE _APTweenType;
@@ -53,14 +57,13 @@ public class BrickGenerator : MonoBehaviour
     int _APPerWaveForTheDay;
 
     [Header("Brick position")]
-    public Vector2Int _size;
     public Vector2 _offset;
 
     [Header("BrickSpawn")]
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
     [SerializeField] float _capscaleMultiplier;
-    Vector3 _startingScale = new Vector3(1,1,1);
+    Vector3 _startingScale;
 
     [Header("Level and Wave")]
     public List<int> _spawnedWaves = new List<int>();
@@ -94,6 +97,10 @@ public class BrickGenerator : MonoBehaviour
 
         _timeManager._onStartBossDay += StopWaveSpawning;
 
+        _timeManager._onEndBossDay += DelayBeforeStartWave;
+
+        _timeManager._endGame += StopWaveSpawning;
+
         _onSpawnNextWave += SpawnNextWave;
 
         SetAttributePointForEachPhase();
@@ -101,8 +108,19 @@ public class BrickGenerator : MonoBehaviour
         CheckBrickToAdd();
         _brickModifierList.CheckModifierToAdd();
         SetAPOfTheDay();
+        DelayBeforeStartWave();
+        _timeManager.StartDayTimer();
+    }
 
+    void DelayBeforeStartWave()
+    {
+        StartCoroutine(SpawnFirstWave());
+    }
+    IEnumerator SpawnFirstWave()
+    {
+        yield return new WaitForSeconds(3);
         StartFirstWaveOfEpisode();
+
     }
     private void OnDisable()
     {
@@ -111,6 +129,11 @@ public class BrickGenerator : MonoBehaviour
         _timeManager._dayPass -= SetAPOfTheDay;
 
         _timeManager._onStartBossDay -= StopWaveSpawning;
+
+        _timeManager._onEndBossDay -= DelayBeforeStartWave;
+
+        _timeManager._endGame -= StopWaveSpawning;
+
     }
 
     public void OnBrickDestroyed()
@@ -118,27 +141,21 @@ public class BrickGenerator : MonoBehaviour
         _brickCounter--;
     }
 
+    //Continue/Start spawning bricks
     public void StartFirstWaveOfEpisode()
     {
         _stopWaveSpawn = false;
-        _timeManager.StartDayTimer();
         _onSpawnNextWave?.Invoke();
     }
     public void StopWaveSpawning()
     {
         _stopWaveSpawn = true;
     }
-    public void StartWaveSpawning()
-    {
-        _stopWaveSpawn = false;
-    }
     public SOBrickFormation GetBrickFormation()
     {
-        var formations = _brickFormationList[0].formations;
-
-        if (formations == null || formations.Count == 0)
+        if (_brickFormationList == null || _brickFormationList.Count == 0)
         {
-            Debug.LogWarning($"Brick formation list is empty for level {0}");
+            Debug.LogWarning("Brick formation list is empty.");
             return null;
         }
 
@@ -146,18 +163,24 @@ public class BrickGenerator : MonoBehaviour
         var used = new HashSet<int>(_spawnedWaves);
 
         // Build list of available indices
-        var available = new List<int>(formations.Count);
-        for (int i = 0; i < formations.Count; i++)
+        var available = new List<int>(_brickFormationList.Count);
+
+        for (int i = 0; i < _brickFormationList.Count; i++)
         {
             if (!used.Contains(i))
                 available.Add(i);
         }
 
-        // Pick a random index from the remaining ones
+        if (available.Count == 0)
+        {
+            Debug.LogWarning("No available formations remaining.");
+            return null;
+        }
+
         int pick = available[UnityEngine.Random.Range(0, available.Count)];
         _spawnedWaves.Add(pick);
 
-        return formations[pick];
+        return _brickFormationList[pick];
     }
 
     void SetAttributePointForEachPhase()
@@ -189,10 +212,15 @@ public class BrickGenerator : MonoBehaviour
     }
     void SpawnNextWave()
     {
-        WavePlan plan = BuildWavePlan(GetBrickFormation());
+        SOBrickFormation formation = GetBrickFormation();
+
+        if (formation == null)
+            return;
+
+        WavePlan plan = BuildWavePlan(formation);
         StartCoroutine(ExecuteWavePlan(plan));
 
-        if (_currentWave >= _brickFormationList[0].formations.Count - 1)
+        if (_currentWave >= _brickFormationList.Count - 1)
         {
             _currentWave = 0;
             _spawnedWaves.Clear();
@@ -228,11 +256,9 @@ public class BrickGenerator : MonoBehaviour
                 Debug.LogError("PlannedBrick.stats is null.");
                 continue;
             }
-
-            brick.transform.position = p.position;
-            brick.transform.localScale = _startingScale;
-
             bb.SetBrick(p.stats);
+            print(p.index);
+            bb.SetBrickPath(_brickPathList[p.index]);
 
             if (_brickModifierList != null &&
                 _timeManager.GetTotalDayPass() >= _brickModifierList._dayFirstModiferCheckUnlock)
@@ -253,7 +279,6 @@ public class BrickGenerator : MonoBehaviour
         }
 
         yield return new WaitForSeconds(_timerBeforeNextWaveSpawn);
-
         if (!_stopWaveSpawn)
             _onSpawnNextWave?.Invoke();
     }
@@ -282,7 +307,6 @@ public class BrickGenerator : MonoBehaviour
 
             if (c == '1')
             {
-                x++;
 
                 var available = GetAffordableBricks(ap);
 
@@ -298,10 +322,12 @@ public class BrickGenerator : MonoBehaviour
                 plan.bricks.Add(new PlannedBrick
                 {
                     stats = stats,
-                    position = pos
+                    index = x,
                 });
-
                 ap -= stats._APValue;
+
+                x++;
+
             }
         }
 
@@ -328,8 +354,9 @@ public class BrickGenerator : MonoBehaviour
     }
     IEnumerator AnimateBrickSpawn(Transform brickTransform)
     {
+        _startingScale = brickTransform.localScale;
         Vector3 startScale = Vector3.zero;
-        Vector3 targetScale = _startingScale * _capscaleMultiplier;
+        Vector3 targetScale = _startingScale;
 
         float time = 0f;
 
@@ -345,7 +372,6 @@ public class BrickGenerator : MonoBehaviour
             yield return null;
         }
 
-        brickTransform.localScale = _startingScale;
     }
 
     List<SO_BrickHealthStats> GetAffordableBricks(int ap)
@@ -360,5 +386,10 @@ public class BrickGenerator : MonoBehaviour
 
         return result;
     }
-   
+    public void SetLevelManager(LevelManager manager) => _levelManager = manager;
+    public void SetBrickPath(List<SplineContainer> container)
+    {
+        _brickPathList = container;
+    }
+    public void SetFormation(List<SOBrickFormation> container) => _brickFormationList = container;
 }

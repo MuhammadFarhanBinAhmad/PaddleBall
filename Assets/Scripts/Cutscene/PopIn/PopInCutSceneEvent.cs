@@ -35,8 +35,8 @@ public class PopInCutSceneEvent : BaseCutsceneEvent
 
         _targetObject.SetActive(true);
 
-        Vector3 startScale = _originalScale * _content._startScaleMultiplier;
-        Vector3 endScale = _originalScale * _content._endScaleMultiplier;
+        Vector3 startScale = new Vector3(_content._startScaleMultiplier, _content._startScaleMultiplier, _content._startScaleMultiplier);
+        Vector3 endScale = new Vector3(_content._endScaleMultiplier, _content._endScaleMultiplier, _content._endScaleMultiplier);
 
         _targetObject.transform.localScale = startScale;
 

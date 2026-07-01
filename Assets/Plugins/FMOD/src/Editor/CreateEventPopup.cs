@@ -28,7 +28,7 @@ namespace FMODUnity
         private string eventName = "";
         private string currentFilter = "";
         private int selectedBank = 0;
-        private bool resetCursor = true;
+        //private bool resetCursor = true;
         private Vector2 scrollPos = new Vector2();
         private Rect scrollRect = new Rect();
         private bool isConnected = false;
@@ -233,16 +233,16 @@ namespace FMODUnity
                 }
             }
 
-            if (resetCursor)
-            {
-                resetCursor = false;
+            //if (resetCursor)
+            //{
+            //    resetCursor = false;
 
-                var textEditor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
-                if (textEditor != null)
-                {
-                    textEditor.MoveCursorToPosition(new Vector2(9999, 9999));
-                }
-            }
+            //    var textEditor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+            //    if (textEditor != null)
+            //    {
+            //        textEditor.MoveCursorToPosition(new Vector2(9999, 9999));
+            //    }
+            //}
 
             // Draw the current folder as a title bar, click to go back one level
             {
@@ -395,7 +395,7 @@ namespace FMODUnity
             }
 
             eventFolder = "/" + path;
-            resetCursor = true;
+            //resetCursor = true;
             currentFilter = "";
         }
     }

@@ -10,7 +10,8 @@ public abstract class BaseBossBrick : MonoBehaviour
 
     public SO_BossIntroText _bossIntroText;
     public List<SO_CutSceneEventContent> _startCutsceneEvents;
-    public List<SO_CutSceneEventContent> _defeatCutsceneEvents;
+    public List<SO_CutSceneEventContent> _defeatBossCutsceneEvents;
+    public List<SO_CutSceneEventContent> _gameoverCutsceneEvents;
 
     [SerializeField] internal BrickHealthComponent _brickHealthComponent;
     [SerializeField] internal BaseBossAttackManager _baseBossAttackManager;
@@ -19,6 +20,7 @@ public abstract class BaseBossBrick : MonoBehaviour
 
     public Action onStartBossFight;
     public Action onEndBossFight;
+    public Action onGameOverBossFight;
 
     public virtual void Awake()
     {
@@ -36,6 +38,8 @@ public abstract class BaseBossBrick : MonoBehaviour
         onEndBossFight += _baseBossAttackManager.StopBossAttack;
         onEndBossFight += _timeManager.StopDayTimer;
 
+        onGameOverBossFight += _baseBossAttackManager.StopBossAttack;
+        onGameOverBossFight += _timeManager.StopDayTimer;
     }
     public virtual void OnDestroy()
     {
@@ -46,11 +50,16 @@ public abstract class BaseBossBrick : MonoBehaviour
         onEndBossFight -= _baseBossAttackManager.StopBossAttack;
         onEndBossFight -= _timeManager.StopDayTimer;
 
+        onGameOverBossFight -= _baseBossAttackManager.StopBossAttack;
+        onGameOverBossFight -= _timeManager.StopDayTimer;
+
     }
     public List<SO_CutSceneEventContent> GetStartCutSceneEvents() => new List<SO_CutSceneEventContent>(_startCutsceneEvents);
-    public List<SO_CutSceneEventContent> GetDefeatCutSceneEvents() => new List<SO_CutSceneEventContent>(_defeatCutsceneEvents);
+    public List<SO_CutSceneEventContent> GetDefeatCutSceneEvents() => new List<SO_CutSceneEventContent>(_defeatBossCutsceneEvents);
+    public List<SO_CutSceneEventContent> GetGameOverCutSceneEvents() => new List<SO_CutSceneEventContent>(_gameoverCutsceneEvents);
 
     internal abstract void HandleDamage(int damage);
     internal abstract void DamageFeedback();
     internal abstract void BossDeathEvent();
+    internal abstract void GameOverBossEvent();
 }

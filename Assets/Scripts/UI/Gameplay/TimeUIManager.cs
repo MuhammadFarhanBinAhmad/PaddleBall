@@ -29,12 +29,17 @@ public class TimeUIManager : MonoBehaviour
     void Start()
     {
         _timeManager._dayPass += UpdateTimeUI;
+        _timeManager._onStartBossDay+= UpdateTimeUI;
+        _timeManager._onEndBossDay += UpdateTimeUI;
 
         UpdateTimeUI();
     }
     private void OnDestroy()
     {
         _timeManager._dayPass -= UpdateTimeUI;
+        _timeManager._onStartBossDay -= UpdateTimeUI;
+        _timeManager._onEndBossDay -= UpdateTimeUI;
+
     }
 
     void UpdateInGameClock()
@@ -63,6 +68,6 @@ public class TimeUIManager : MonoBehaviour
     }
     void UpdateTimeUI()
     {
-        text_dayLeft.text = "Days Left: " + (_timeManager.GetMaxGameDuration() - _timeManager.GetTotalDayPass()).ToString();
+        text_dayLeft.text = _timeManager.GetTotalDayPass().ToString("D2");
     }
 }

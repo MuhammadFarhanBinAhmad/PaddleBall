@@ -10,6 +10,7 @@ public class TowerUIManager : MonoBehaviour
     [Header("TowerUI")]
     [SerializeField] TextMeshProUGUI _currentTowerHeightText;
     [SerializeField] Image _brickFillImage;
+    [SerializeField] Image _brickToTowerFillImage;
 
 
     [Header("EssenceUI")]
@@ -51,7 +52,7 @@ public class TowerUIManager : MonoBehaviour
     public void GameOverScreen() => _gameOverScreen.SetActive(true);
     public void UpdateTowerUI()
     {
-        _currentTowerHeightText.text = "Height: " + _towerManager._currentTowerHeight.ToString() + " M";
+        _currentTowerHeightText.text =  _towerManager._currentTowerHeight.ToString() + " m";
     }
     public void ShowWarningPopUp()
     {
@@ -62,6 +63,7 @@ public class TowerUIManager : MonoBehaviour
     public void UpdateEssenceUI()
     {
         _brickFillImage.fillAmount = (float)_towerManager.GetCurrentEssence() / (float)_towerManager.GetEssencePureEssenceConversionRate();
-        _currentPureEssenceText.text = ": " + _towerManager._currentPureEssence.ToString();
+        _currentPureEssenceText.text = _towerManager._currentPureEssence.ToString();
+        _brickToTowerFillImage.fillAmount = (float)_towerManager.GetCurrentBrickCount() / (float)_towerManager.GetBrickFloorConversionRate();
     }
 }
