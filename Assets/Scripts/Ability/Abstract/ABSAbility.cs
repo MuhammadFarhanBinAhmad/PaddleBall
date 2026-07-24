@@ -41,5 +41,5 @@ public abstract class ABSAbility : MonoBehaviour
     // Time-based hook
     public virtual void OnTick(float deltaTime) { }
 
-    public virtual void ActivateAbility() { }
+    public virtual void ActivateAbility(GameObject brick = null) { }
 }

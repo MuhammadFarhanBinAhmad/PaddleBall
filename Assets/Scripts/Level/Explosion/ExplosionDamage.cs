@@ -35,14 +35,14 @@ public class ExplosionDamage : MonoBehaviour
         _hasExploded = true;
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBombExplosion,transform.position);
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
-        Invoke("DisableSelf", .1f);
+        Invoke("DisableSelf", .5f);
     }
     void DisableSelf() => gameObject.SetActive(false);
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_ctx == null) return;
 
-        var brick = other.GetComponent<BrickBar>();
+        var brick = other.GetComponent<BrickHealthComponent>();
         if (brick != null)
         {
             brick.OnDamage(_damage);

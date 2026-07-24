@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ElectricAbility : ABSAbility
 {
+    public GameObject _vfxBuildPrefab, _vfxPopPrefab;
     public override void OnHitResolved(HitContext ctx)
     {
-
         var statusCtx = new AbilityContext
         {
             _abililty = this,
@@ -20,8 +20,9 @@ public class ElectricAbility : ABSAbility
         statusCtx._Stats[STATID.SPEED_MULTIPLIER] = _SOAbilityEffect._speedMultiplier;
         _abilityManager.ApplyDischargeModifiers(ctx, statusCtx);
 
-        ctx._brick.ApplyStatus(
+        ctx._health.ApplyStatus(
             statusCtx
         );
+        ctx._health.SpawnStatusVFX(STATUSTYPE.DISCHARGE, _vfxBuildPrefab, _vfxPopPrefab);
     }
 }

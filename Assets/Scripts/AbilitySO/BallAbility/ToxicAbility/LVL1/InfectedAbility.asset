@@ -13,33 +13,43 @@ MonoBehaviour:
   m_Name: InfectedAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _abilityType: 0
   _statusType: 8
   _abilityPrefab: {fileID: 4204484623954558288, guid: 3ca7c03d8ccedf94998c4cd515d7eb40, type: 3}
-  _abilitiesChild: []
-  _abilityToRemove: {fileID: 0}
   _genericEffect: 1
   _applyStatus: 1
   _spawnEffect: 0
   _critEffect: 0
   _explosionEffect: 0
-  _baseValue: 0
-  _baseDamageValue: 0
-  _baseDamageMultiplier: 1.25
-  _speedMultiplier: 0.1
+  _counterEffect: 0
+  _shieldEffect: 0
+  _abilityBaseDamageValue: 0
+  _baseDamagePlus: 0
+  _baseDamageMinus: 0
+  _baseDamageMultiplier: 5
+  _speedMultiplier: 1
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
+  _timeRate: 0
+  _comboThreshold: 0
   _maxStacks: 0
   _stacksToAdd: 0
+  _maxStacksToAdd: 0
+  _increaseStacksToAdd: 0
   _damagePerStack: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
+  _modifyTimeBeforeEffectActivate: 0
   _resetStackTimer: 0
   _affectSpeed: 1
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
   _baseCritChance: 0
   _critMultiplier: 0
+  _modiftCritMultiplier: 0
   _layerToDestroy: 0
   _explosionDamageMultiplier: 0
   _explosionSizeMultiplier: 0
+  _shieldMultiplier: 0
+  _shieldAdd: 0
+  _shieldModifyShieldRegenRate: 0
+  _shieldModifyCooldown: 0

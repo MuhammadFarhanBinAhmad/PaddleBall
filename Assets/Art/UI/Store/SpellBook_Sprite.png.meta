@@ -1,0 +1,655 @@
+fileFormatVersion: 2
+guid: 28db6b7fe558ab541a617d89ce535cd6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7863969038293869534
+    second: SpellBook_Sprite_0
+  - first:
+      213: -1607668267396719356
+    second: SpellBook_Sprite_1
+  - first:
+      213: 2410241515446612433
+    second: SpellBook_Sprite_2
+  - first:
+      213: -2620796241356015887
+    second: SpellBook_Sprite_3
+  - first:
+      213: 6266042222289805982
+    second: SpellBook_Sprite_4
+  - first:
+      213: 4465844697819863618
+    second: SpellBook_Sprite_5
+  - first:
+      213: 5689523489500981976
+    second: SpellBook_Sprite_6
+  - first:
+      213: 9131198873277908383
+    second: SpellBook_Sprite_7
+  - first:
+      213: 6447032722154956142
+    second: SpellBook_Sprite_8
+  - first:
+      213: -1942082773786398155
+    second: SpellBook_Sprite_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SpellBook_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 1292
+        width: 1602
+        height: 902
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22cd2d323d19dd290800000000000000
+      internalID: -7863969038293869534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 1684
+        y: 2069
+        width: 105
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40d96258a3a60b9e0800000000000000
+      internalID: -1607668267396719356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 1672
+        y: 1915
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d1381763e5e27120800000000000000
+      internalID: 2410241515446612433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 1684
+        y: 1786
+        width: 105
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f6bb4d34bf01abd0800000000000000
+      internalID: -2620796241356015887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 1672
+        y: 1632
+        width: 130
+        height: 131
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e92ee27c33475f650800000000000000
+      internalID: 6266042222289805982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 1449
+        width: 164
+        height: 164
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24a5d93771ed9fd30800000000000000
+      internalID: 4465844697819863618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_6
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1286
+        width: 148
+        height: 155
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8da62f4287f35fe40800000000000000
+      internalID: 5689523489500981976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 351
+        width: 802
+        height: 902
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f954d2ffef888be70800000000000000
+      internalID: 9131198873277908383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 1151
+        width: 452
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e65ad5b5a16787950800000000000000
+      internalID: 6447032722154956142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 1649
+        y: 1090
+        width: 177
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5327e00c1065c05e0800000000000000
+      internalID: -1942082773786398155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 1010
+        width: 452
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88bd904830e6064418a7db9d47b0a8d4
+      internalID: -398313118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 868
+        width: 452
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5497eaf98470e474a94bc2238fde71fe
+      internalID: 1363573403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 720
+        width: 452
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5af9c62d7a56c45409ccf07e07301378
+      internalID: 864694006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 340
+        width: 776
+        height: 360
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0ee4bde578ac95449c0681cb72257f7
+      internalID: 1960722197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 1674
+        y: 593
+        width: 104
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d08031c20d1bb1740b0deaffbd8205b7
+      internalID: 1333251786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 1674
+        y: 485
+        width: 104
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 276a31a91def592458a6ea2562d469ea
+      internalID: -1676419148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 1674
+        y: 378
+        width: 104
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 648d56c90124f7d4eabf4398534ba47c
+      internalID: 1981974717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 170
+        width: 565
+        height: 160
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fea55326f1c736d4b8fef8e149997720
+      internalID: 988829519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 189
+        width: 403
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ce43d66faeab3e4886a2c603e0e9b43
+      internalID: -627035479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 189
+        width: 402
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b123cae42a097f041bb6ae7075ed57af
+      internalID: 1976628767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 1476
+        y: 189
+        width: 403
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e220c524f7d810d4d998708aec202b63
+      internalID: -699853658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellBook_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 61
+        width: 252
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdd225b8b8dc1b04ca4f339655320ccc
+      internalID: -931312450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: a21fee3ae2330c344bc3a07c7d184be1
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      SpellBook_Sprite_0: -7863969038293869534
+      SpellBook_Sprite_1: -1607668267396719356
+      SpellBook_Sprite_10: -398313118
+      SpellBook_Sprite_11: 1363573403
+      SpellBook_Sprite_12: 864694006
+      SpellBook_Sprite_13: 1960722197
+      SpellBook_Sprite_14: 1333251786
+      SpellBook_Sprite_15: -1676419148
+      SpellBook_Sprite_16: 1981974717
+      SpellBook_Sprite_17: 988829519
+      SpellBook_Sprite_18: -627035479
+      SpellBook_Sprite_19: 1976628767
+      SpellBook_Sprite_2: 2410241515446612433
+      SpellBook_Sprite_20: -699853658
+      SpellBook_Sprite_21: -931312450
+      SpellBook_Sprite_3: -2620796241356015887
+      SpellBook_Sprite_4: 6266042222289805982
+      SpellBook_Sprite_5: 4465844697819863618
+      SpellBook_Sprite_6: 5689523489500981976
+      SpellBook_Sprite_7: 9131198873277908383
+      SpellBook_Sprite_8: 6447032722154956142
+      SpellBook_Sprite_9: -1942082773786398155
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

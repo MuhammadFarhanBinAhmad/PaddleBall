@@ -15,6 +15,5 @@ public class OffensiveShield : ABSAbility
     {
         float dmg = (float)ctx._damageValue;
         ctx._damageValue *= Mathf.CeilToInt(dmg * _SOAbilityEffect._baseDamageMultiplier);
-        print(ctx._damageValue);
     }
 }

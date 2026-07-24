@@ -12,8 +12,8 @@ public class TimeManager : MonoBehaviour
     [Header("TimeKeeper")]
     [SerializeField] int _maxGameDuration;
     int _totalDayPass;
-    [SerializeField] float _fullDayDuration = 60f;
-    [SerializeField] float _bossDayDuration = 30f;
+    [SerializeField] float _fullDayDuration;
+    [SerializeField] float _bossDayDuration;
     float _daysDuration;
     [SerializeField] float _currentDayDuration;
     [SerializeField] int _bossDayInterval;
@@ -204,4 +204,5 @@ public class TimeManager : MonoBehaviour
     {
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onNewDay, transform.position);
     }
+    public void SkipDay() => _currentDayDuration = 1f;
 }

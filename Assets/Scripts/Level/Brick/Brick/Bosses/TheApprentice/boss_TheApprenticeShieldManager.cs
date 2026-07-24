@@ -7,6 +7,7 @@ public class boss_TheApprenticeShieldManager : MonoBehaviour
     [SerializeField] BrickHealthComponent _brickHealthComponent;
 
     BoxCollider2D _boxCollider;
+    [SerializeField] GameObject _shieldRenderer;
 
     bool _isShieldUp;
 
@@ -54,13 +55,15 @@ public class boss_TheApprenticeShieldManager : MonoBehaviour
         _isShieldUp = false;
         _currentStunTime = 0;
         _brickHealthComponent.SetVulnerableToAttack(true);
-        _boxCollider.enabled = false;
+        _boxCollider.enabled = _isShieldUp;
+        _shieldRenderer.SetActive(_isShieldUp);
     }
     void ResetShield()
     {
         _isShieldUp = true;
         _brickHealthComponent.SetVulnerableToAttack(false);
-        _boxCollider.enabled = true;
+        _boxCollider.enabled = _isShieldUp;
+        _shieldRenderer.SetActive(_isShieldUp);
     }
 
 }

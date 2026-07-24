@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class SharpnelBits : MonoBehaviour
 {
+    BrickHealthComponent _ignoredBrick;
+
     [SerializeField]Ball _ball;
     [SerializeField]Rigidbody2D _rb;
 
@@ -12,6 +14,8 @@ public class SharpnelBits : MonoBehaviour
     [SerializeField] float minImpulse;
     [SerializeField] float maxImpulse;
 
+    bool _canDamage;
+    [SerializeField] float _collisionDelay = 0.05f;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -19,22 +23,48 @@ public class SharpnelBits : MonoBehaviour
     }
     public void SetStats()
     {
-        Vector3 dir = Random.onUnitSphere; // uniform random direction
+        CancelInvoke();
+
+        _canDamage = false;
+
+        _rb.linearVelocity = Vector2.zero;
+        _rb.angularVelocity = 0f;
+
+        Vector2 dir = Random.insideUnitCircle.normalized;
         float mag = Random.Range(minImpulse, maxImpulse);
+
         _rb.AddForce(dir * mag, ForceMode2D.Impulse);
-        _damage = Mathf.FloorToInt((float)_ball.GetBallBaseDamage() * _damageMultiplier);
-        Invoke("KillObject", _lifetime);
+
+        _damage = Mathf.FloorToInt(_ball.GetBallBaseDamage() * _damageMultiplier);
+
+        Invoke(nameof(EnableDamage), _collisionDelay);
+        Invoke(nameof(KillObject), _lifetime);
+    }
+    void EnableDamage()
+    {
+        _canDamage = true;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        BrickBar bb = other.GetComponent<BrickBar>();
-        if (bb != null)
-        {
-            print("Hit brick");
-            bb.OnDamage(_damage);
-            CancelInvoke();
-            KillObject();
-        }
+        if (!_canDamage)
+            return;
+
+        BrickHealthComponent bb = other.GetComponent<BrickHealthComponent>();
+
+        if (bb == null)
+            return;
+
+        bb.OnDamage(_damage);
+
+        CancelInvoke();
+
+        KillObject();
     }
-    void KillObject() => gameObject.SetActive(false);
+    void KillObject()
+    {
+        CancelInvoke();
+        Debug.Log("Killed by Invoke at " + Time.time);
+
+        gameObject.SetActive(false);
+    }
 }

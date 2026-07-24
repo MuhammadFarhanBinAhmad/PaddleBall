@@ -10,7 +10,7 @@ public class CritAbility : ABSAbility
     {
 
         AbilityContext cctx = new AbilityContext { };
-        cctx._Stats[STATID.BASE_DAMAGE] = ctx._damageValue;
+        cctx._Stats[STATID.BASE_DAMAGE] = ctx._damageValue + _SOAbilityEffect._baseDamagePlus;
         cctx._Stats[STATID.CRIT_CHANCE] = _SOAbilityEffect._baseCritChance;
         cctx._Stats[STATID.CRIT_MULTIPLIER] = _SOAbilityEffect._critMultiplier;
         _abilityManager.ApplyCriticalModifiers(ctx, cctx);

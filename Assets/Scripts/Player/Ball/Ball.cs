@@ -476,8 +476,9 @@ public class Ball : MonoBehaviour
 
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
-            if (other.gameObject.CompareTag("Brick"))
+            if (other.gameObject.CompareTag("Brick") || other.gameObject.CompareTag("Boss"))
             {
+                BrickHealthComponent bh = other.gameObject.GetComponent<BrickHealthComponent>();
                 BrickBar bb = other.gameObject.GetComponent<BrickBar>();
 
                 if (_copyBall)
@@ -489,23 +490,7 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _abilityManager.NotifyBrickHit(bb, (_baseDamage));
-            }
-            else if (other.gameObject.CompareTag("Boss"))
-            {
-                print("Hitboss");
-                BrickHealthComponent bh = other.gameObject.GetComponent<BrickHealthComponent>();
-
-                if (_copyBall)
-                {
-                    _currentBounce++;
-                    if (_currentBounce > _maxBounce)
-                        Destroy(gameObject);
-                }
-                _currentDelayTime = _delayTimeAfterHit;
-
-                OnBrickHit?.Invoke();
-                _abilityManager.NotifyBossHit(bh, (_baseDamage));
+                _abilityManager.NotifyBrickHit(bb,bh, (_baseDamage));
             }
         }
     }

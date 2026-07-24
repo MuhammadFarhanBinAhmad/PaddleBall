@@ -103,7 +103,7 @@ public class PaddleHealth : MonoBehaviour
         {
             _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
             SetBoolOnPaddleDisable?.Invoke(true);
-            other.GetComponentInChildren<BrickBar>().OnDeathByBrick();
+            other.GetComponentInChildren<BrickHealthComponent>().OnDeathByBrick();
             StartCoroutine(Knockback());
         }
         if (other.CompareTag("EnemyProjectile") && _spriteRenderer.enabled)

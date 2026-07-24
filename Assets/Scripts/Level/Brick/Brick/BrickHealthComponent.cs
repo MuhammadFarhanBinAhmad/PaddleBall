@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-
+[System.Serializable]
+public class ActiveStatusVFX
+{
+    public GameObject buildup;
+    public GameObject pop;
+}
 public class BrickHealthComponent : MonoBehaviour
 {
     EssencePool _essencePool;
@@ -18,10 +24,16 @@ public class BrickHealthComponent : MonoBehaviour
     [SerializeField] int _startingHealth;
     [SerializeField] int _health;
     [SerializeField] float _tickTimer;
+    [SerializeField] GameObject _damageText;
+    Dictionary<STATUSTYPE, ActiveStatusVFX> _activeVFX =
+    new Dictionary<STATUSTYPE, ActiveStatusVFX>();
 
     bool _vulnerableToDamage = true;
 
+    public Action _onDeathByPaddle;
+    public Action _onDeathByTower;
     public Action _onDeath;
+    DeathCause pendingDeathCause;
     bool pendingDeath;
 
 
@@ -34,8 +46,7 @@ public class BrickHealthComponent : MonoBehaviour
         {
             if (transform.CompareTag("Brick"))
             {
-                BrickBar bb = GetComponent<BrickBar>();
-                bb.ResolveDeath();
+                ResolveDeath();
             }
         }
     }
@@ -75,6 +86,7 @@ public class BrickHealthComponent : MonoBehaviour
 
                 if (status.stacks <= 0)
                 {
+                    RemoveStatusVFX(status.type);
                     toRemove.Add(kvp.Key);
                 }
                 else
@@ -83,7 +95,7 @@ public class BrickHealthComponent : MonoBehaviour
                     status.remainingStackTime = status.stackLifeTime;
                 }
 
-                status._ability.ActivateAbility();
+                status._ability.ActivateAbility(this.gameObject);
             }
             if (status.stacks > 0)
             {
@@ -92,8 +104,8 @@ public class BrickHealthComponent : MonoBehaviour
                 if (status.remainingEffectTime <= 0)
                 {
                     status.remainingEffectTime = status.timeBeforeEffect;
-                    print("TotalDmg via stack" + status.stacks * status.damagePerStack);
                     OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
+                    PlayPopVFX(status.type);
                 }
             }
 
@@ -112,7 +124,6 @@ public class BrickHealthComponent : MonoBehaviour
 
         if(!isInstantKill)
         {
-            print("hit2");
             if (dmg == 0) dmg = 1;
 
             int modified = dmg;
@@ -126,6 +137,8 @@ public class BrickHealthComponent : MonoBehaviour
                 return;
 
             _health -= modified;
+            GameObject dmgText = Instantiate(_damageText, transform.position, Quaternion.identity);
+            dmgText.GetComponent<DamageTextFeedback>().SetValue(modified);
             for (int i = 0; i < _modifiers.Count; i++)
                 _modifiers[i]?.OnDamageApplied(modified);
 
@@ -184,21 +197,112 @@ public class BrickHealthComponent : MonoBehaviour
                 spawnPrefab = _statusEffect._spawnPrefab,
                 affectsSpeed = _statusEffect._Statsbool[STATID.AFFECTS_SPEED],
                 speedMultiplier = _statusEffect._Stats[STATID.SPEED_MULTIPLIER]
-
             };
 
             _statuses.Add(_statusEffect._statusType, sinst);
         }
     }
-    public void SetHealth(SO_BossBrickStats _stats)
+    public void SpawnStatusVFX(
+        STATUSTYPE type,
+        GameObject buildupPrefab,
+        GameObject popPrefab)
     {
-        _startingHealth = _stats._health;
+        if (_activeVFX.ContainsKey(type))
+            return;
+
+        ActiveStatusVFX vfx = new ActiveStatusVFX();
+
+        if (buildupPrefab != null)
+        {
+            vfx.buildup =
+                Instantiate(buildupPrefab, transform);
+        }
+        vfx.pop = popPrefab;
+        print(vfx.buildup);
+        print(vfx.pop);
+
+        _activeVFX.Add(type, vfx);
+    }
+    void RemoveStatusVFX(STATUSTYPE type)
+    {
+        if (!_activeVFX.TryGetValue(type, out var vfx))
+            return;
+
+
+        if (vfx.buildup != null)
+        {
+            Destroy(vfx.buildup);
+
+        }
+
+        _activeVFX.Remove(type);
+    }
+    void PlayPopVFX(STATUSTYPE type)
+    {
+        if (!_activeVFX.TryGetValue(type, out var vfx))
+            return;
+
+        if (vfx.pop != null)
+        {
+            Instantiate(
+                vfx.pop,
+                transform.position,
+                Quaternion.identity);
+        }
+    }
+    public void SetHealth(int value)
+    {
+        _startingHealth = value;
         _health = _startingHealth;
     }
-    public void SetHealth(SO_BrickHealthStats _stats)
+
+    public void ResolveDeath()
     {
-        _startingHealth = _stats._health;
-        _health = _startingHealth;
+        switch (pendingDeathCause)
+        {
+            case DeathCause.NORMAL:
+                {
+                    _onDeath?.Invoke();
+                    break;
+                }
+            case DeathCause.TOWER:
+                {
+                    _onDeathByTower?.Invoke();
+                    break;
+                }
+            case DeathCause.PADDLE:
+                {
+                    _onDeathByPaddle?.Invoke();
+                    break;
+                }
+        }
+        RemoveAllStatus();
+
+    }
+    void RemoveAllStatus()
+    {
+        pendingDeathCause = DeathCause.NONE;
+        pendingDeath = false;
+        foreach (var kvp in _statuses)
+        {
+            var status = kvp.Value;
+            status.stacks = 0;
+            RemoveStatusVFX(kvp.Key);
+            toRemove.Add(kvp.Key);
+        }
+        toRemove.Clear();
+    }
+
+
+    public void OnDeathByBrick()
+    {
+        pendingDeathCause = DeathCause.PADDLE;
+        pendingDeath = true;
+    }
+    public void PendingDeath(DeathCause cause, bool state)
+    {
+        pendingDeathCause = cause;
+        pendingDeath = state;
     }
     public int GetHealth() => _health;
     public int GetStartingHealth() => _startingHealth;

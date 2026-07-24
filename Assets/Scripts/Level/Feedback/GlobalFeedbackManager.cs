@@ -149,8 +149,6 @@ public class GlobalFeedbackManager : MonoBehaviour
 
     IEnumerator AnimateSizeLerpWorld()
     {
-
-        print("AnimateSizeLerpWorld");
         float time = 0f;
 
         // precompute targets

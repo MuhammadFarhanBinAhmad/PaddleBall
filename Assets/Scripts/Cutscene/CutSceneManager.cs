@@ -252,7 +252,7 @@ public  class CutSceneManager : MonoBehaviour
     }
     public void SkipCutscene()
     {
-        if (_cutSceneEvent == null || _cutSceneEvent.Count == 0)
+        if (_cutSceneEvent == null || _cutSceneEvent.Count == 0 || _skipRequested == true)
             return;
 
         _skipRequested = true;

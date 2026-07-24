@@ -38,7 +38,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 0.125
+  animationDuration: 0.1
   _startscaleMultiplier: 1
   _endscaleMultiplier: 1.1
   _vfxEffect: {fileID: 0}

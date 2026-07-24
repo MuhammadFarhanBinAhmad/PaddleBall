@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,4 +15,13 @@ public class AbilityContext
     public Dictionary<STATID, float> _Stats = new Dictionary<STATID, float>();
     public Dictionary<STATID, bool> _Statsbool = new Dictionary<STATID, bool>();
     public GameObject _spawnPrefab;
+
+    public AbilityContext()
+    {
+        foreach (STATID id in Enum.GetValues(typeof(STATID)))
+        {
+            _Stats[id] = 0f;
+            _Statsbool[id] = false;
+        }
+    }
 }

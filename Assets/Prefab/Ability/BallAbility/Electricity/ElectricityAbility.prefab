@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11fd52d99a552146909a7faa2cbe9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElectricAbility
-  _abilityManager: {fileID: 0}
   _SOAbilityEffect: {fileID: 11400000, guid: 2deeb38661cb26843bdfc6b0443a3e7e, type: 2}
-  _SOStatusEffect: {fileID: 11400000, guid: 359f1fce57b4be74fa406dbbe9cb5950, type: 2}
+  _vfxBuildPrefab: {fileID: 7857503364302934976, guid: 9e7a0794fb60fde4385450ff6dea085c, type: 3}
+  _vfxPopPrefab: {fileID: 2021498435083084119, guid: 92b2c05e9ea292242a090c1ad6179c0e, type: 3}

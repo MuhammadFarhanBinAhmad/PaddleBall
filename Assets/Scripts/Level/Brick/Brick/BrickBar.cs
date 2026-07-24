@@ -1,11 +1,8 @@
-using FMOD.Studio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
-using UnityEngine.U2D;
 
 [System.Flags]
 public enum STATUSTYPE
@@ -21,6 +18,7 @@ public enum STATUSTYPE
 }
 public enum DeathCause
 {
+    NONE,
     NORMAL,
     PADDLE,
     TOWER
@@ -37,6 +35,9 @@ public class StatusInstance
     public int maxStacks;
 
     public int damagePerStack;
+
+    public GameObject buildupVFX;
+    public GameObject activeVFX;
 
     public float remainingStackTime,stackLifeTime;
     public float remainingEffectTime, timeBeforeEffect;
@@ -95,12 +96,6 @@ public class BrickBar : MonoBehaviour
     public int _essenceMaxAmountToSpawn;
 
 
-    bool pendingDeath;
-    DeathCause pendingDeathCause;
-
-    public Action _onDeath;
-    public Action _onDeathByPaddle;
-    public Action _onDeathByTower;
 
     private void Awake()
     {
@@ -117,40 +112,40 @@ public class BrickBar : MonoBehaviour
 
         _AnimCurveEffect = GetComponent<AnimationCurveEffect>();
 
-        _onDeath += HandleDeath;
-        _onDeath += SpawnEssence;
-        _onDeath += _brickGenerator.OnBrickDestroyed;
-        _onDeath += _statuses.Clear;
-        _onDeath += RemoveAllModifiers;
+        _brickHealthComponent._onDeath += HandleDeath;
+        _brickHealthComponent._onDeath += SpawnEssence;
+        _brickHealthComponent._onDeath += _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeath += _statuses.Clear;
+        _brickHealthComponent._onDeath += RemoveAllModifiers;
 
 
-        _onDeathByPaddle += HandleDeathByPaddle;
-        _onDeathByPaddle += _statuses.Clear;
-        _onDeathByPaddle += RemoveAllModifiers;
-        _onDeathByPaddle += _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByPaddle += HandleDeathByPaddle;
+        _brickHealthComponent._onDeathByPaddle += _statuses.Clear;
+        _brickHealthComponent._onDeathByPaddle += RemoveAllModifiers;
+        _brickHealthComponent._onDeathByPaddle += _brickGenerator.OnBrickDestroyed;
 
-        _onDeathByTower += HandleDeathByPaddle;
-        _onDeathByTower += _statuses.Clear;
-        _onDeathByTower += RemoveAllModifiers;
-        _onDeathByTower += _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByTower += HandleDeathByPaddle;
+        _brickHealthComponent._onDeathByTower += _statuses.Clear;
+        _brickHealthComponent._onDeathByTower += RemoveAllModifiers;
+        _brickHealthComponent._onDeathByTower += _brickGenerator.OnBrickDestroyed;
     }
     private void OnDestroy()
     {
-        _onDeath -= HandleDeath;
-        _onDeath -= SpawnEssence;
-        _onDeath -= _brickGenerator.OnBrickDestroyed;
-        _onDeath -= _statuses.Clear;
-        _onDeath -= RemoveAllModifiers;
+        _brickHealthComponent._onDeath -= HandleDeath;
+        _brickHealthComponent._onDeath -= SpawnEssence;
+        _brickHealthComponent._onDeath -= _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeath -= _statuses.Clear;
+        _brickHealthComponent._onDeath -= RemoveAllModifiers;
 
-        _onDeathByPaddle -= HandleDeathByPaddle;
-        _onDeathByPaddle -= _statuses.Clear;
-        _onDeathByPaddle -= RemoveAllModifiers;
-        _onDeathByPaddle -= _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByPaddle -= HandleDeathByPaddle;
+        _brickHealthComponent._onDeathByPaddle -= _statuses.Clear;
+        _brickHealthComponent._onDeathByPaddle -= RemoveAllModifiers;
+        _brickHealthComponent._onDeathByPaddle -= _brickGenerator.OnBrickDestroyed;
 
-        _onDeathByTower -= HandleDeathByPaddle;
-        _onDeathByTower -= _statuses.Clear;
-        _onDeathByTower -= RemoveAllModifiers;
-        _onDeathByTower -= _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByTower -= HandleDeathByPaddle;
+        _brickHealthComponent._onDeathByTower -= _statuses.Clear;
+        _brickHealthComponent._onDeathByTower -= RemoveAllModifiers;
+        _brickHealthComponent._onDeathByTower -= _brickGenerator.OnBrickDestroyed;
 
     }
 
@@ -158,10 +153,7 @@ public class BrickBar : MonoBehaviour
     private void Update()
     {
         float dt = Time.deltaTime;
-        
-        //need move this to health component
-        if (pendingDeath)
-            ResolveDeath();
+       
 
         TickModifiers(dt);
 
@@ -174,110 +166,14 @@ public class BrickBar : MonoBehaviour
         HandleMovement();
 
     }
-    public void ResolveDeath()
-    {
-        switch (pendingDeathCause)
-        {
-            case DeathCause.NORMAL:
-                {
-                    print("dead");
-                    _onDeath?.Invoke();
-                    break;
-                }
-            case DeathCause.TOWER:
-                {
-                    _onDeathByTower?.Invoke();
-                    break;
-                }
-            case DeathCause.PADDLE:
-                {
-                    _onDeathByPaddle?.Invoke();
-                    break;
-                }
-        }
 
-    }
 
     public void SetWayPoint(List<Transform> points) => _waypoints = points;
-    //void ExecuteStatusEffect()
-    //{
-    //    float dt = Time.deltaTime;
-    //    toRemove.Clear();
 
-    //    if (pendingDeath)
-    //        return;
-
-    //    foreach (var kvp in _statuses)
-    //    {
-    //        var status = kvp.Value;
-    //        //Damage effect timer
-    //        //if (status.type == STATUSTYPE.STUN)
-    //        //{
-    //        //    _fallSpeed = 0;
-    //        //}
-    //        //else
-    //        //{
-    //        //    // DOT tick
-    //        //    status.remainingEffectTime -= dt;
-    //        //    if (status.remainingEffectTime <= 0)
-    //        //    {
-    //        //        status.remainingEffectTime = status.timeBeforeEffect;
-    //        //        OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
-    //        //    }
-    //        //}
-
-    //        // Stack timer
-    //        status.remainingStackTime -= dt;
-    //        if (status.remainingStackTime <= 0f)
-    //        {
-    //            status.stacks--;
-    //            if (status.affectsSpeed)
-    //                MarkSpeedDirty();
-
-    //            if (status.stacks <= 0)
-    //            {
-    //                toRemove.Add(kvp.Key);
-    //            }
-    //            else
-    //            {
-    //                // Restart decay timer for next stack
-    //                status.remainingStackTime = status.stackLifeTime;
-    //            }
-
-    //            status._ability.ActivateAbility();
-    //        }
-    //        if(status.stacks >0)
-    //        {
-    //            //Effect timer
-    //            status.remainingEffectTime -= dt;
-    //            if (status.remainingEffectTime <= 0)
-    //            {
-    //                status.remainingEffectTime = status.timeBeforeEffect;
-    //                print("TotalDmg via stack" + status.stacks * status.damagePerStack);
-    //                OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
-    //            }
-    //        }
-            
-    //    }
-
-    //    //remove all completed status effect
-    //    foreach (var key in toRemove)
-    //    {
-    //        //if (key == STATUSTYPE.STUN)
-    //        //{
-    //        //    _fallSpeed = _startFallSpeed;
-    //        //}
-    //        _statuses.Remove(key);
-    //    }
-    //}
     public void OnDamage(int dmg,DeathCause deathcause = DeathCause.NORMAL)
     {
     }
-    public void OnDeathByBrick()
-    {
-        pendingDeathCause = DeathCause.PADDLE;
-        pendingDeath = true;
-    }
+
     public void OnDamageLayer(int amount, DeathCause deathcause = DeathCause.NORMAL)
     {
         //Need resolve branching brick issue on this one
@@ -296,8 +192,7 @@ public class BrickBar : MonoBehaviour
         }
         else
         {
-            pendingDeathCause = deathcause;
-            pendingDeath = true;
+            _brickHealthComponent.PendingDeath(deathcause, true);
         }
     }
 
@@ -317,8 +212,7 @@ public class BrickBar : MonoBehaviour
                         }
                         else
                         {
-                            pendingDeathCause = deathcause;
-                            pendingDeath = true;
+                            _brickHealthComponent.PendingDeath(deathcause, true);
                         }
                     }
                     else
@@ -336,22 +230,21 @@ public class BrickBar : MonoBehaviour
     }
     public void HandleInstantKill(DeathCause deathcause = DeathCause.NORMAL)
     {
-        pendingDeathCause = deathcause;
-        pendingDeath = true;
+        _brickHealthComponent.PendingDeath(deathcause, true);
     }
 
     void HandleDeath()
     {
        GlobalFeedbackManager.Instance.SetFeedbackValueForBrickDestroy();
        GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-        GlobalFeedbackManager.Instance.PlayFreezeFrame();
+       GlobalFeedbackManager.Instance.PlayFreezeFrame();
+
        abilityManager.NotifyBrickDestroyed(this);
        _brickPool.RemoveActiveBrick(this.gameObject);
        Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
 
-       pendingDeath = false;
-       gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
     void HandleDeathByPaddle()
     {
@@ -360,7 +253,6 @@ public class BrickBar : MonoBehaviour
         Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
         
-        pendingDeath = false;
         gameObject.SetActive(false);
     }
     void SpawnEssence()
@@ -429,11 +321,10 @@ public class BrickBar : MonoBehaviour
         _layerNumber = _stats._layerNumber;
         _brickUI.SetCurrentLayer(_stats._layerNumber,_stats._color);
         _brickUI.PrepBrickLayerColour(_stats._layerNumber);
-        _brickHealthComponent.SetHealth(_stats);
+        _brickHealthComponent.SetHealth(_stats._health);
     }
     public void SetBrickPath(SplineContainer _path)
     {
-        print(_path);
         _brickPath = _path;
         progress = 0f;
 

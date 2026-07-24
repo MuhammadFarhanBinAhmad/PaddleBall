@@ -257,7 +257,6 @@ public class BrickGenerator : MonoBehaviour
                 continue;
             }
             bb.SetBrick(p.stats);
-            print(p.index);
             bb.SetBrickPath(_brickPathList[p.index]);
 
             if (_brickModifierList != null &&

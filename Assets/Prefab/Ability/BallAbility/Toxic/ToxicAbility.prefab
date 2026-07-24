@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToxicAbility
   _SOAbilityEffect: {fileID: 11400000, guid: f65daf66424ba794990788b035820f0e, type: 2}
+  _vfxBuildPrefab: {fileID: 7857503364302934976, guid: c287de16725413a4786f2eaf3fb3e523, type: 3}
+  _vfxPopPrefab: {fileID: 2021498435083084119, guid: c27e23e4f460ab242ac2c86306728d64, type: 3}

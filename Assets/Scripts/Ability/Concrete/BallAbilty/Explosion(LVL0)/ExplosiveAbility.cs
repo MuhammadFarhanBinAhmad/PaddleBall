@@ -19,14 +19,9 @@ public class ExplosiveAbility : ABSAbility
         explosionGO.transform.position = transform.position;
 
         Vector3 explosionPos;
-
-        if (ctx._brick != null)
+        if (ctx._health != null)
         {
-            explosionPos = ctx._brick.transform.position;
-        }
-        else if (ctx._bossHealth != null)
-        {
-            explosionPos = ctx._bossHealth.transform.position;
+            explosionPos = ctx._health.transform.position;
         }
         else
         {

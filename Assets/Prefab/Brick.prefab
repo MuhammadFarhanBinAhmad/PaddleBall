@@ -5418,11 +5418,12 @@ MonoBehaviour:
   _baseFallSpeed: 0
   _fallSpeed: 1
   _baseDamage: 5
+  _brickPath: {fileID: 0}
   _onDamageAnimEffect: {fileID: 11400000, guid: 3f05282951564bf4588e34e29fdd91b7, type: 2}
-  _onDeathAnimEffect: {fileID: 11400000, guid: 3f05282951564bf4588e34e29fdd91b7, type: 2}
+  _onDeathAnimEffect: {fileID: 11400000, guid: 15899b26e3d4795419603351b4e00b62, type: 2}
   _damageParticle: {fileID: 8576968875537360257}
-  _essenceMinAmountToSpawn: 1
-  _essenceMaxAmountToSpawn: 3
+  _essenceMinAmountToSpawn: 2
+  _essenceMaxAmountToSpawn: 5
 --- !u!114 &9106042457657841286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5472,6 +5473,7 @@ MonoBehaviour:
   _startingHealth: 0
   _health: 0
   _tickTimer: 0
+  _damageText: {fileID: 4269139500996097731, guid: 49ac76b83082ab64781a2799ec10c319, type: 3}
 --- !u!1 &7558917431117315383
 GameObject:
   m_ObjectHideFlags: 0

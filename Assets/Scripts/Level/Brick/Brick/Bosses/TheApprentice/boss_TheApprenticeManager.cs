@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class boss_TheApprenticeManager : BaseBossBrick
 {
-    public ParticleSystem _hitEffect;
-    public Action _onTakingDamage;
 
     public override void Start()
     {
@@ -28,11 +26,6 @@ public class boss_TheApprenticeManager : BaseBossBrick
         {
             BossDeathEvent();
         }
-    }
-    internal override void DamageFeedback()
-    {
-        GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-        _hitEffect.Play();
     }
 
     internal override void BossDeathEvent()

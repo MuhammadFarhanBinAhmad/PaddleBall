@@ -7,6 +7,7 @@ using UnityEngine;
 public enum ITEMRARITY
 {
     COMMON,
+    UNCOMMON,
     RARE,
     LEGENDARY,
     ODDITIES
@@ -52,6 +53,8 @@ public class StoreAbilityManager : MonoBehaviour
     [Header("Store Open")]
     public Action OnStoreOpen, OnStoreClose;
     public bool _storeIsOpen;
+
+
 
     public event Action<string> OnAbilityPurchased;
 
@@ -113,23 +116,22 @@ public class StoreAbilityManager : MonoBehaviour
                 }
 
         }
-
-
-
     }
     public bool CanPurchase(string abilityID)
     {
         if (!abilityLookup.ContainsKey(abilityID))
             return false;
-
+        print("Contain");
         if (unlockedAbilities.Contains(abilityID))
             return false;
+        print("unlocked");
 
         SOStoreAbilityContent ability = abilityLookup[abilityID];
         int abilityLevel = ability.ability_Level;
 
         if (abilityLevel < 0 || abilityLevel >= _abilityLevelAndCostState.Length)
             return false;
+        print("Correct level");
 
         int price = _abilityLevelAndCostState[abilityLevel].GetPrice();
 
@@ -152,6 +154,7 @@ public class StoreAbilityManager : MonoBehaviour
     {
         if (!CanPurchase(abilityID))
             return false;
+
 
         SOStoreAbilityContent ability = abilityLookup[abilityID];
         int abilityLevel = ability.ability_Level;
@@ -263,14 +266,17 @@ public class StoreAbilityManager : MonoBehaviour
             case ITEMRARITY.COMMON:
                 cost = _itemCostByLevel[0];
                 break;
-            case ITEMRARITY.RARE:
+            case ITEMRARITY.UNCOMMON:
                 cost = _itemCostByLevel[1];
                 break;
-            case ITEMRARITY.LEGENDARY:
+            case ITEMRARITY.RARE:
                 cost = _itemCostByLevel[2];
                 break;
-            case ITEMRARITY.ODDITIES:
+            case ITEMRARITY.LEGENDARY:
                 cost = _itemCostByLevel[3];
+                break;
+            case ITEMRARITY.ODDITIES:
+                cost = _itemCostByLevel[4];
                 break;
         }
         return cost;
@@ -284,5 +290,6 @@ public class StoreAbilityManager : MonoBehaviour
             _numberOfReroll--;
         }
     }
+    public int GetNumberOfReroll() => _numberOfReroll;
     public void ResetRoroll() => _numberOfReroll = _maxReroll;
 }

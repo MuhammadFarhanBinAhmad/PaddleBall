@@ -4,6 +4,7 @@ using UnityEngine;
 public class ToxicAbility : ABSAbility
 {
     ToxicEffectPool _toxicEffectPool;
+    public GameObject _vfxBuildPrefab, _vfxPopPrefab;
 
     private void Start() => _toxicEffectPool = FindAnyObjectByType<ToxicEffectPool>();
 
@@ -26,10 +27,11 @@ public class ToxicAbility : ABSAbility
         statusCtx._Statsbool[STATID.AFFECTS_SPEED] = _SOAbilityEffect._affectSpeed;
 
         _abilityManager.ApplyToxicModifiers(statusCtx);
-
-        ctx._brick.ApplyStatus(
+        ctx._brick.ApplyStatus(statusCtx);
+        ctx._health.ApplyStatus(
             statusCtx
         );
+        ctx._health.SpawnStatusVFX(STATUSTYPE.TOXIC, _vfxBuildPrefab, _vfxPopPrefab);
 
         //GameObject effect = _toxicEffectPool.GetObject();
 

@@ -11,10 +11,10 @@ public class AbilityInfoPageUI : MonoBehaviour
     StoreAbilityManager _storeAbilityManager;
 
     [SerializeField] private Image _icon;
+    [SerializeField] Button _button;
     [SerializeField] private TMP_Text _titleText;
     [SerializeField] private TMP_Text _descriptionText;
     [SerializeField] private TMP_Text _costText;
-    [SerializeField] private Button _purchaseButton;
     [SerializeField] private GameObject _lockedOverlay;
 
     string ID;
@@ -34,8 +34,6 @@ public class AbilityInfoPageUI : MonoBehaviour
     {
         OnAbilityPurchase += _abilityStoreUI.RefreshAll;
         OnAbilityPurchase += _towerUIManager.UpdateEssenceUI;
-
-        _purchaseButton.onClick.AddListener(PurchaseAbility);
     }
     private void OnDestroy()
     {
@@ -43,19 +41,34 @@ public class AbilityInfoPageUI : MonoBehaviour
         OnAbilityPurchase -= _towerUIManager.UpdateEssenceUI;
 
     }
-    public void SetUpAbilityDescription(AbilityInfo abilityInfo)
+    public void SetUpAbilityDescription(AbilityInfo abilityInfo, Button button)
     {
         _icon.sprite = abilityInfo._icon;
         _titleText.text = abilityInfo._titleText;
         _descriptionText.text = abilityInfo._descriptionText;
-        _costText.text = "Cost : " + abilityInfo._cost.ToString();
+        _costText.text = abilityInfo._cost.ToString();
         ID = abilityInfo.ID;
         ability_ToSpawn = abilityInfo.ability_ToSpawn;
+        if (_button != null)
+            _button.onClick.RemoveListener(PurchaseAbility);
+        _button = button;
+        _button.onClick.AddListener(PurchaseAbility);
+    }
+    public void ClearDescription()
+    {
+        _icon.sprite = null;
+        _titleText.text = null;
+        _descriptionText.text = null;
+        _costText.text = null;
+        ID = null;
+        ability_ToSpawn = null;
     }
     public void PurchaseAbility()
     {
+        print("hit");
         if (_storeAbilityManager.PurchaseAbility(ID))
         {
+            print("hi2");
             _abilityManager.AddAbility(ability_ToSpawn);
             IsAbilityPurchased(false);
             OnAbilityPurchase?.Invoke();
@@ -63,7 +76,7 @@ public class AbilityInfoPageUI : MonoBehaviour
     }
     public void IsAbilityPurchased(bool purchased)
     {
-        _purchaseButton.interactable = purchased;
+        _button.interactable = purchased;
     }
 
 }

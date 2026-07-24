@@ -48,7 +48,71 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     {
         Debug.Log("Boss is resting / resetting to neutral");
     }
+    protected void BeginTimedAttack(float duration)
+    {
+        _currentAttackEndMode = AttackEndMode.Duration;
+        _attackEndTime = Time.time + Mathf.Max(0f, duration);
+        _attackComplete = false;
+    }
+    protected void BeginPointAttack()
+    {
+        _currentAttackEndMode = AttackEndMode.Point;
+        _attackComplete = false;
+        if (_movementPoints == null || _movementPoints.Count < 2)
+        {
+            Debug.LogWarning($"{name}: Not enough movement points for point attack.");
+            CompleteCurrentAttack();
+            return;
+        }
 
+        StopPingPongMovement();
+        _movementRoutine = StartCoroutine(PointMovementRoutine());
+    }
+    private void AdvanceMovementPoint()
+    {
+        _currentMovementTargetIndex += _movementDirection;
+
+        if (_currentMovementTargetIndex >= _movementPoints.Count)
+        {
+            _movementDirection = -1;
+            _currentMovementTargetIndex = _movementPoints.Count - 2;
+        }
+        else if (_currentMovementTargetIndex < 0)
+        {
+            _movementDirection = 1;
+            _currentMovementTargetIndex = 1;
+        }
+    }
+    private IEnumerator PointMovementRoutine()
+    {
+        _currentPointTarget = _movementPoints[_currentMovementTargetIndex];
+
+        while (!_stopAttacking && !_isStunned && !_attackComplete)
+        {
+            if (_currentPointTarget == null)
+            {
+                CompleteCurrentAttack();
+                yield break;
+            }
+
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                _currentPointTarget.position,
+                _movementSpeed * Time.deltaTime
+            );
+
+            if (Vector3.Distance(transform.position, _currentPointTarget.position) <= _arrivalThreshold)
+            {
+                AdvanceMovementPoint();
+                CompleteCurrentAttack();
+                break;
+            }
+
+            yield return null;
+        }
+
+        _movementRoutine = null;
+    }
     IEnumerator ShootNormalProjectile()
     {
         while (IsAttackActive)

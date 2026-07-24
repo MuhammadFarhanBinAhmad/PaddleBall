@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class AbilityInfo
@@ -37,26 +38,22 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     private AbilityInfoPageUI _abilityInfoPageUI;
 
     private SOStoreAbilityContent _abilityData;
-    private StoreAbilityManager _storeAbilityManager;
+    [SerializeField]private StoreAbilityManager _storeAbilityManager;
 
     private AbilityInfo _abilityInfo;
 
     [Header("UI Detail")]
     [SerializeField] private Image _thumbnailIcon;
-    [SerializeField] private Button _viewAbilityButton;
     [SerializeField] private GameObject _lockedOverlay;
     [SerializeField] private GameObject _abilityDescription;
+    Button _button;
 
     private bool _abilityPurchased;
 
     private void Awake()
     {
         _abilityInfoPageUI = FindAnyObjectByType<AbilityInfoPageUI>();
-    }
-
-    private void Start()
-    {
-        _viewAbilityButton.onClick.AddListener(ViewAbility);
+        _button = GetComponent<Button>();
     }
 
     private void OnEnable()
@@ -76,11 +73,9 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     }
 
     public void Setup(
-        SOStoreAbilityContent ability,
-        StoreAbilityManager manager)
+        SOStoreAbilityContent ability)
     {
         _abilityData = ability;
-        _storeAbilityManager = manager;
 
         // Subscribe here if instantiated while active
         _storeAbilityManager.OnAbilityPurchased += HandleAbilityPurchased;
@@ -96,11 +91,9 @@ public class BallAbilityButtonUI : BaseButtonInteraction
             _abilityData.abilityID,
             _abilityData.ability_ToSpawn
         );
-
         Refresh();
-
-
     }
+
 
     private void HandleAbilityPurchased(string purchasedID)
     {
@@ -131,23 +124,25 @@ public class BallAbilityButtonUI : BaseButtonInteraction
 
         _abilityPurchased = unlocked;
 
-        _viewAbilityButton.interactable = available;
 
         _lockedOverlay.SetActive(!available);
 
         if (unlocked)
         {
-            _viewAbilityButton.interactable = true;
+            //_viewAbilityButton.interactable = true;
         }
     }
-
-    private void ViewAbility()
+    public override void OnPointerEnter(PointerEventData eventData)
     {
-        if (_abilityInfoPageUI == null || _abilityInfo == null)
-            return;
+        base.OnPointerEnter(eventData);
+        _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
+        //_abilityInfoPageUI.IsAbilityPurchased(!_abilityPurchased);
 
-        _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo);
-        _abilityInfoPageUI.IsAbilityPurchased(!_abilityPurchased);
     }
-    public AbilityInfo GetAbilityInfo() => _abilityInfo;
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        base.OnPointerExit(eventData);
+        _abilityInfoPageUI.ClearDescription();
+    }
 }
