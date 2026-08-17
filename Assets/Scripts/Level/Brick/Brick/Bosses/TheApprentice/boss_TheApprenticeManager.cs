@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class boss_TheApprenticeManager : BaseBossBrick
 {
-
     public override void Start()
     {
         base.Start();
@@ -20,10 +19,11 @@ public class boss_TheApprenticeManager : BaseBossBrick
     {
         _brickHealthComponent.ModifyHealth(-damage);
         _onTakingDamage?.Invoke();
-        DamageFeedback();
+        GlobalEffects.Instance.PlayLerpObject(_bossBody.gameObject, _damageAnim);
 
         if (_brickHealthComponent.GetHealth() <= 0)
         {
+            print(_brickHealthComponent.GetHealth());
             BossDeathEvent();
         }
     }

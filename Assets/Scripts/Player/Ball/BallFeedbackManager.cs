@@ -27,7 +27,6 @@ public class BallFeedbackManager : MonoBehaviour
         _ballManager = FindAnyObjectByType<Ball>();
 
         _ballManager.OnBallHit += ChangeSpriteOnHit;
-        _ballManager.OnBallHit += ActivateHitVFX;
         _ballManager.OnBallHit += PlayHitWallAudio;
 
         _ballManager.OnBallReset += ResetGlow;
@@ -36,12 +35,10 @@ public class BallFeedbackManager : MonoBehaviour
     private void OnDestroy()
     {
         _ballManager.OnBallHit -= ChangeSpriteOnHit;
-        _ballManager.OnBallHit -= ActivateHitVFX;
         _ballManager.OnBallHit -= PlayHitWallAudio;
 
         _ballManager.OnBallReset -= ResetGlow;
     }
-    void ActivateHitVFX() => Instantiate(_hitEffectVFX,transform.position,Quaternion.identity);
     public void ChangeSpriteOnHit()
     {
         if(_changeSpriteCoroutine != null) 

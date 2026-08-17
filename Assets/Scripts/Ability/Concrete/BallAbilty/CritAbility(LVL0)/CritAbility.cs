@@ -23,6 +23,9 @@ public class CritAbility : ABSAbility
             ctx._damageValue = Mathf.CeilToInt(cctx._Stats[STATID.BASE_DAMAGE] * cctx._Stats[STATID.CRIT_MULTIPLIER]
             );
         }
+        else
+            ctx._damageValue = (int)cctx._Stats[STATID.BASE_DAMAGE];
+
 
         return; // only one crit owner
 

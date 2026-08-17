@@ -479,7 +479,7 @@ public class Ball : MonoBehaviour
             if (other.gameObject.CompareTag("Brick") || other.gameObject.CompareTag("Boss"))
             {
                 BrickHealthComponent bh = other.gameObject.GetComponent<BrickHealthComponent>();
-                BrickBar bb = other.gameObject.GetComponent<BrickBar>();
+                //BrickBar bb = other.gameObject.GetComponent<BrickBar>();
 
                 if (_copyBall)
                 {
@@ -490,7 +490,7 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _abilityManager.NotifyBrickHit(bb,bh, (_baseDamage));
+                _abilityManager.NotifyBrickHit(bh, (_baseDamage));
             }
         }
     }

@@ -3,11 +3,12 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemAbilityButtonUI : MonoBehaviour
+public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     TowerManager _towerManager;
     TowerUIManager _towerUIManager;
     AbilityManager _abilityManager;
+    StoreOverlayUI _storeOverlayUI;
     //ViewItemAbilityButtonUI _viewItemAbilityButtonUI;
     [SerializeField]StoreAbilityManager _storeAbilityManager;
     internal SOItemAbilityContentUI _itemAbilityContent { get;private set; }
@@ -29,10 +30,10 @@ public class ItemAbilityButtonUI : MonoBehaviour
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
         _towerUIManager = FindAnyObjectByType<TowerUIManager>();
+        _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
     }
     private void Start()
     {
-        
         _selectButton.onClick.AddListener(PurchaseItem);
     }
     public void SetItemAbilityContent(SOItemAbilityContentUI content)
@@ -79,5 +80,16 @@ public class ItemAbilityButtonUI : MonoBehaviour
         {
             print("insufficnet");
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _storeOverlayUI.CalculatePriceCalculation(_storeAbilityManager.GetItemCost(_itemAbilityContent._itemRarity),
+                                                  _towerManager._currentPureEssence);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _storeOverlayUI.ResetPriceCalculation();
     }
 }

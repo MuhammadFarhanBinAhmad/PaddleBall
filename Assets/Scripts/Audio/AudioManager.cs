@@ -3,10 +3,18 @@ using FMODUnity;
 using FMOD.Studio;
 using System.Collections.Generic;
 
+public enum MUSIC_TRANSISTION
+{
+    DAY = 0,
+    NIGHT = 1,
+}
+
 public class AudioManager : MonoBehaviour
 {
     List<EventInstance> _eventInstance = new List<EventInstance>();
     List<StudioEventEmitter> _studioEventEmitter = new List<StudioEventEmitter>();
+
+    EventInstance _musicEventInstance;
 
     public static AudioManager Instance { get; private set; }
 
@@ -16,6 +24,10 @@ public class AudioManager : MonoBehaviour
             print("more than one audio manager exist in scene");
 
         Instance = this;
+    }
+    private void Start()
+    {
+        InitializeMusic(FmodEvent.Instance.music_PlayScenes);
     }
 
     public void PlayOneShot(EventReference sound, Vector3 worldpos)
@@ -38,6 +50,12 @@ public class AudioManager : MonoBehaviour
         return emitter;
 
     }
+
+    void InitializeMusic(EventReference musicEventRef)
+    {
+        _musicEventInstance = CreateEventInstance(musicEventRef);
+        _musicEventInstance.start();
+    }
     void CleanUp()
     {
         //stop all created instance
@@ -52,7 +70,10 @@ public class AudioManager : MonoBehaviour
             emitter.Stop();
         }
     }
-
+    public void SetMusicArea(MUSIC_TRANSISTION area)
+    {
+        _musicEventInstance.setParameterByName("MusicChange", (float)area);
+    }
     private void OnDestroy()
     {
         CleanUp();

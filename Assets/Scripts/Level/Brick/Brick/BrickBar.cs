@@ -63,12 +63,11 @@ public class BrickBar : MonoBehaviour
     
     BrickPool _brickPool;
     EssencePool _essencePool;
+    HitBrickDeathPool _hitBrickDeathPool;
 
     BrickGenerator _brickGenerator;
     TowerManager _towerManager;
     AbilityManager abilityManager;
-
-    public GameObject _destroyParticleEffect;
 
     internal BrickHealthComponent _brickHealthComponent;
 
@@ -112,6 +111,8 @@ public class BrickBar : MonoBehaviour
 
         _AnimCurveEffect = GetComponent<AnimationCurveEffect>();
 
+        _hitBrickDeathPool = FindAnyObjectByType<HitBrickDeathPool>();
+
         _brickHealthComponent._onDeath += HandleDeath;
         _brickHealthComponent._onDeath += SpawnEssence;
         _brickHealthComponent._onDeath += _brickGenerator.OnBrickDestroyed;
@@ -128,6 +129,8 @@ public class BrickBar : MonoBehaviour
         _brickHealthComponent._onDeathByTower += _statuses.Clear;
         _brickHealthComponent._onDeathByTower += RemoveAllModifiers;
         _brickHealthComponent._onDeathByTower += _brickGenerator.OnBrickDestroyed;
+
+        _brickHealthComponent.SetBrickBar(this);
     }
     private void OnDestroy()
     {
@@ -148,8 +151,6 @@ public class BrickBar : MonoBehaviour
         _brickHealthComponent._onDeathByTower -= _brickGenerator.OnBrickDestroyed;
 
     }
-
-
     private void Update()
     {
         float dt = Time.deltaTime;
@@ -157,19 +158,9 @@ public class BrickBar : MonoBehaviour
 
         TickModifiers(dt);
 
-        if (_speedDirty)
-        {
-            RecalculateSpeed();
-            _speedDirty = false;
-        }
-
         HandleMovement();
 
     }
-
-
-    public void SetWayPoint(List<Transform> points) => _waypoints = points;
-
     public void OnDamage(int dmg,DeathCause deathcause = DeathCause.NORMAL)
     {
     }
@@ -225,7 +216,7 @@ public class BrickBar : MonoBehaviour
 
         }
         
-        _brickUI.SetLayerHealthFillAmount(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
+        _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickHit, transform.position);
     }
     public void HandleInstantKill(DeathCause deathcause = DeathCause.NORMAL)
@@ -235,14 +226,16 @@ public class BrickBar : MonoBehaviour
 
     void HandleDeath()
     {
-       GlobalFeedbackManager.Instance.SetFeedbackValueForBrickDestroy();
-       GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-       GlobalFeedbackManager.Instance.PlayFreezeFrame();
+        GlobalFeedbackManager.Instance.SetFeedbackValueForBrickDestroy();
+        GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
+        GlobalFeedbackManager.Instance.PlayFreezeFrame();
+        abilityManager.NotifyBrickDestroyed(this);
+        _brickPool.RemoveActiveBrick(this.gameObject);
+        GameObject _vfx = _hitBrickDeathPool.GetObject();
+        _vfx.transform.position = transform.position;
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
 
-       abilityManager.NotifyBrickDestroyed(this);
-       _brickPool.RemoveActiveBrick(this.gameObject);
-       Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
-       AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
+        ResetToDefault();
 
         gameObject.SetActive(false);
     }
@@ -250,7 +243,8 @@ public class BrickBar : MonoBehaviour
     {
         abilityManager.NotifyBrickDestroyed(this);
         _brickPool.RemoveActiveBrick(this.gameObject);
-        Instantiate(_destroyParticleEffect, transform.position, Quaternion.identity);
+        GameObject _vfx = _hitBrickDeathPool.GetObject();
+        _vfx.transform.position = transform.position;
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
         
         gameObject.SetActive(false);
@@ -283,7 +277,6 @@ public class BrickBar : MonoBehaviour
 
             if (existing.affectsSpeed)
                 MarkSpeedDirty();
-
 
             return;
         }
@@ -335,29 +328,19 @@ public class BrickBar : MonoBehaviour
 
     void HandleMovement()
     {
-        progress += _fallSpeed * Time.deltaTime;
-
-        if (progress > 1f)
-            progress = 1f;
-        transform.position =
-            _brickPath.EvaluatePosition(progress);
-    }
-    public void RecalculateSpeed()
-    {
-        float speedMultiplier = 0;
-
-        foreach (var kvp in _statuses)
+        if (_brickPath != null)
         {
-            var status = kvp.Value;
+            progress += _fallSpeed * Time.deltaTime;
 
-            if (!status.affectsSpeed)
-                continue;
-
-            for (int i = 0; i < status.stacks; i++)
-            {
-                speedMultiplier += status.speedMultiplier;
-            }
+            if (progress > 1f)
+                progress = 1f;
+            transform.position =
+                _brickPath.EvaluatePosition(progress);
         }
+
+    }
+    public void RecalculateSpeed(float speedMultiplier = 0)
+    {
         _fallSpeed = _baseFallSpeed * (1 - speedMultiplier);
     }
     //MODIFIERS
@@ -395,6 +378,20 @@ public class BrickBar : MonoBehaviour
             var m = _modifiers[i];
             if (m != null) m.Tick(dt);
         }
+    }
+
+    void ResetToDefault()
+    {
+        _elementID = 0;
+        _layerNumber = 0;
+        _tickTimer = 0;
+        _baseFallSpeed = 0;
+        _fallSpeed = 0;
+        _baseDamage = 0;
+        _brickPath = null;
+        progress = 0;
+        _speedDirty = false;
+        transform.parent = _brickPool.transform;
     }
     public int GetLayer() => _layerNumber;
     public int GetShieldDamageValue () => _layerNumber * _baseDamage;

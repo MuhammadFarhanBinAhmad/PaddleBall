@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class BrickHealthComponent : MonoBehaviour
     TowerManager _towerManager;
     AbilityManager abilityManager;
 
+    BrickBar _brickBar;
+
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
     List<STATUSTYPE> toRemove = new List<STATUSTYPE>();
     List<BrickModifierBase> _modifiers = new List<BrickModifierBase>();
@@ -25,6 +28,8 @@ public class BrickHealthComponent : MonoBehaviour
     [SerializeField] int _health;
     [SerializeField] float _tickTimer;
     [SerializeField] GameObject _damageText;
+    [SerializeField] GameObject _hitFlash;
+    [SerializeField] float _flashPeriod;
     Dictionary<STATUSTYPE, ActiveStatusVFX> _activeVFX =
     new Dictionary<STATUSTYPE, ActiveStatusVFX>();
 
@@ -36,7 +41,10 @@ public class BrickHealthComponent : MonoBehaviour
     DeathCause pendingDeathCause;
     bool pendingDeath;
 
-
+    internal void SetBrickBar(BrickBar _bb)
+    {
+        _brickBar = _bb;
+    }
     private void Update()
     {
         if (_health > 0)
@@ -83,6 +91,7 @@ public class BrickHealthComponent : MonoBehaviour
             if (status.remainingStackTime <= 0f)
             {
                 status.stacks--;
+                SetSpeedMultiplier();
 
                 if (status.stacks <= 0)
                 {
@@ -117,6 +126,29 @@ public class BrickHealthComponent : MonoBehaviour
             _statuses.Remove(key);
         }
     }
+    public void SetSpeedMultiplier()
+    {
+        float speedMultiplier = 0;
+
+        foreach (var kvp in _statuses)
+        {
+            var status = kvp.Value;
+
+            if (!status.affectsSpeed)
+                continue;
+
+            for (int i = status.stacks; i > 0; i--)
+            {
+                speedMultiplier += status.speedMultiplier;
+            }
+        }
+
+        if (_brickBar != null)
+        {
+            _brickBar.RecalculateSpeed(speedMultiplier);
+
+        }
+    }
     public void OnDamage(int dmg, DeathCause deathcause = DeathCause.NORMAL, bool isInstantKill = false)
     {
         if(!_vulnerableToDamage)
@@ -137,8 +169,6 @@ public class BrickHealthComponent : MonoBehaviour
                 return;
 
             _health -= modified;
-            GameObject dmgText = Instantiate(_damageText, transform.position, Quaternion.identity);
-            dmgText.GetComponent<DamageTextFeedback>().SetValue(modified);
             for (int i = 0; i < _modifiers.Count; i++)
                 _modifiers[i]?.OnDamageApplied(modified);
 
@@ -152,6 +182,8 @@ public class BrickHealthComponent : MonoBehaviour
                 BaseBossBrick bbb = GetComponentInParent<BaseBossBrick>();
                 bbb.HandleDamage(dmg);
             }
+
+            HitFeedbackJuice(modified);
         }
         else
         {
@@ -177,7 +209,7 @@ public class BrickHealthComponent : MonoBehaviour
             {
                 existing.remainingStackTime = existing.stackLifeTime;
             }
-
+            SetSpeedMultiplier();
             return;
         }
         else
@@ -200,6 +232,7 @@ public class BrickHealthComponent : MonoBehaviour
             };
 
             _statuses.Add(_statusEffect._statusType, sinst);
+            SetSpeedMultiplier();
         }
     }
     public void SpawnStatusVFX(
@@ -218,8 +251,6 @@ public class BrickHealthComponent : MonoBehaviour
                 Instantiate(buildupPrefab, transform);
         }
         vfx.pop = popPrefab;
-        print(vfx.buildup);
-        print(vfx.pop);
 
         _activeVFX.Add(type, vfx);
     }
@@ -277,6 +308,7 @@ public class BrickHealthComponent : MonoBehaviour
                 }
         }
         RemoveAllStatus();
+        _hitFlash.SetActive(false);
 
     }
     void RemoveAllStatus()
@@ -311,5 +343,32 @@ public class BrickHealthComponent : MonoBehaviour
         _health += amount;
         _health = Mathf.Clamp(_health, 0, _startingHealth);
     }
+    public void HitFeedbackJuice(int dmg)
+    {
+        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
+
+        Vector3 spawnPosition = transform.position + new Vector3(
+            randomOffset.x,
+            randomOffset.y,
+            0f
+        );
+
+        GameObject dmgText = Instantiate(
+            _damageText,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg);
+
+        StartCoroutine(HitFlash());
+    }
+    IEnumerator HitFlash()
+    {
+        _hitFlash.SetActive(true);
+        yield return new WaitForSeconds(_flashPeriod);
+        _hitFlash.SetActive(false);
+    }
+
     public void SetVulnerableToAttack(bool status) => _vulnerableToDamage = status;
 }

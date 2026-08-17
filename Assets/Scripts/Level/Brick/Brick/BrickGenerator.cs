@@ -72,7 +72,7 @@ public class BrickGenerator : MonoBehaviour
     public int _brickCounter;
     public int _currentWave;
     int _currentWaveAP;
-    bool _stopWaveSpawn;
+    [SerializeField] bool _stopWaveSpawn;
 
     [Header("Timer before next wave spawn")]
     [SerializeField] float _timerBeforeNextWaveSpawn;
@@ -278,6 +278,7 @@ public class BrickGenerator : MonoBehaviour
         }
 
         yield return new WaitForSeconds(_timerBeforeNextWaveSpawn);
+
         if (!_stopWaveSpawn)
             _onSpawnNextWave?.Invoke();
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,10 +33,22 @@ public class TimeManager : MonoBehaviour
     public Action _dayPass;
     public Action _endGame;
 
+    [Header("Game Clock")]
+    //[SerializeField] float _currentGameTime;
+
     [Header("RealTime")]
     [SerializeField] float _currentRealTimePass;
 
+    [Header("BackGround")]
+    [SerializeField] float _backgroundFadeDuration = 1f;
+    [SerializeField] SpriteRenderer _dayBG;
+    [SerializeField] SpriteRenderer _nightBG;
+    [SerializeField] SpriteRenderer _frontCloud,_backCloud;
+    [SerializeField] Color _dayFrontCloudShade, _nightFrontCloudShade;
+    [SerializeField] Color _dayBackCloudShade, _nightBackCloudShade;
+
     bool _startDayTimer;
+    bool _wasDayTime;
 
     private void Awake()
     {
@@ -63,6 +76,10 @@ public class TimeManager : MonoBehaviour
 
         _daysDuration = _fullDayDuration;
         _currentDayDuration = _daysDuration;
+
+        //_currentGameTime = 0f;
+        _wasDayTime = IsDayTime();
+        AudioManager.Instance.SetMusicArea(MUSIC_TRANSISTION.NIGHT);
     }
 
     private void OnDisable()
@@ -88,6 +105,13 @@ public class TimeManager : MonoBehaviour
             return;
 
         CountDayTime();
+
+        // Always progresses according to the regular 24-hour cycle
+        //_currentGameTime += Time.deltaTime * _daySpeedMultiplier;
+
+        //if (_currentGameTime >= _fullDayDuration)
+        //    _currentGameTime -= _fullDayDuration;
+
         _currentRealTimePass += Time.deltaTime;
     }
 
@@ -95,10 +119,41 @@ public class TimeManager : MonoBehaviour
     {
         if (_currentDayDuration > 0f)
         {
-            _currentDayDuration -= Time.deltaTime * _daySpeedMultiplier;
+            _currentDayDuration -=
+                Time.deltaTime * _daySpeedMultiplier;
 
             if (_currentDayDuration < 0f)
                 _currentDayDuration = 0f;
+
+            // -------------------------
+            // DAY / NIGHT
+            // -------------------------
+
+            bool currentDayTime = IsDayTime();
+
+            if (currentDayTime != _wasDayTime)
+            {
+                if (currentDayTime)
+                {
+                    Debug.Log("06:00 - DAY TIME");
+
+                    FadeSpriteAlpha(_nightBG, 0f);
+                    FadeSpriteColor(_frontCloud, _dayFrontCloudShade);
+                    FadeSpriteColor(_backCloud, _dayBackCloudShade);
+                    AudioManager.Instance.SetMusicArea(MUSIC_TRANSISTION.DAY);
+                }
+                else
+                {
+                    Debug.Log("18:00 - NIGHT TIME");
+
+                    FadeSpriteAlpha(_nightBG, 1f);
+                    FadeSpriteColor(_frontCloud, _nightFrontCloudShade);
+                    FadeSpriteColor(_backCloud, _nightBackCloudShade);
+                    AudioManager.Instance.SetMusicArea(MUSIC_TRANSISTION.NIGHT);
+                }
+
+                _wasDayTime = currentDayTime;
+            }
         }
         else
         {
@@ -112,6 +167,7 @@ public class TimeManager : MonoBehaviour
                 }
 
                 _onEndBossDay?.Invoke();
+
                 _bossFightEnded = false;
                 _daySpeedMultiplier = 1f;
             }
@@ -129,11 +185,29 @@ public class TimeManager : MonoBehaviour
                 }
 
                 _currentDayDuration = _daysDuration;
+
                 _dayPass?.Invoke();
             }
         }
     }
+    public float GetCurrentGameHour()
+    {
+        float elapsedTime = _daysDuration - _currentDayDuration;
 
+        return (elapsedTime / _daysDuration) * 24f;
+    }
+
+    public bool IsDayTime()
+    {
+        float hour = GetCurrentGameHour();
+
+        return hour >= 6f && hour < 18f;
+    }
+
+    public bool IsNightTime()
+    {
+        return !IsDayTime();
+    }
     public void StartDayTimer() => _startDayTimer = true;
     public void StopDayTimer() => _startDayTimer = false;
 
@@ -176,6 +250,7 @@ public class TimeManager : MonoBehaviour
 
     public void CheckToSpawnBoss()
     {
+        print("HIT");
         if (_isBossDay)
             if (_brickpool.IsAllBrickDestroyed())
                 _bossManager.SpawnBoss();
@@ -205,4 +280,79 @@ public class TimeManager : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onNewDay, transform.position);
     }
     public void SkipDay() => _currentDayDuration = 1f;
+
+
+    public void FadeSpriteAlpha(SpriteRenderer sprite, float targetAlpha)
+    {
+        StartCoroutine(FadeSpriteAlphaRoutine(sprite, targetAlpha));
+    }
+    public void FadeSpriteColor(SpriteRenderer sprite, Color _target)
+    {
+        StartCoroutine(FadeSpriteColourRoutine(sprite, _target));
+    }
+
+    private IEnumerator FadeSpriteAlphaRoutine(
+        SpriteRenderer sprite,
+        float targetAlpha)
+    {
+        if (sprite == null)
+            yield break;
+
+        Color startColor = sprite.color;
+        float startAlpha = startColor.a;
+
+        float timer = 0f;
+
+        while (timer < _backgroundFadeDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(
+                timer / _backgroundFadeDuration);
+
+            float alpha = Mathf.Lerp(
+                startAlpha,
+                targetAlpha,
+                t);
+
+            Color newColor = sprite.color;
+            newColor.a = alpha;
+            sprite.color = newColor;
+
+            yield return null;
+        }
+
+        // Ensure final value is exact
+        Color finalColor = sprite.color;
+        finalColor.a = targetAlpha;
+        sprite.color = finalColor;
+    }
+    private IEnumerator FadeSpriteColourRoutine(
+        SpriteRenderer sprite,
+        Color target)
+    {
+        if (sprite == null)
+            yield break;
+
+        Color startColor = sprite.color;
+        float timer = 0f;
+
+        while (timer < _backgroundFadeDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(
+                timer / _backgroundFadeDuration);
+
+            sprite.color = Color.Lerp(
+                startColor,
+                target,
+                t);
+
+            yield return null;
+        }
+
+        // Ensure final colour is exact
+        sprite.color = target;
+    }
 }

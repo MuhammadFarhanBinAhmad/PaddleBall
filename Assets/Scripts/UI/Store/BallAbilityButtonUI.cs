@@ -36,8 +36,9 @@ public class AbilityInfo
 public class BallAbilityButtonUI : BaseButtonInteraction
 {
     private AbilityInfoPageUI _abilityInfoPageUI;
-
+    StoreOverlayUI _storeOverlayUI;
     private SOStoreAbilityContent _abilityData;
+    TowerManager _towerManager;
     [SerializeField]private StoreAbilityManager _storeAbilityManager;
 
     private AbilityInfo _abilityInfo;
@@ -54,6 +55,8 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     {
         _abilityInfoPageUI = FindAnyObjectByType<AbilityInfoPageUI>();
         _button = GetComponent<Button>();
+        _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
+        _towerManager = FindAnyObjectByType<TowerManager>();
     }
 
     private void OnEnable()
@@ -76,9 +79,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         SOStoreAbilityContent ability)
     {
         _abilityData = ability;
-
-        // Subscribe here if instantiated while active
-        _storeAbilityManager.OnAbilityPurchased += HandleAbilityPurchased;
 
         _thumbnailIcon.sprite = _abilityData.icon;
 
@@ -129,13 +129,15 @@ public class BallAbilityButtonUI : BaseButtonInteraction
 
         if (unlocked)
         {
-            //_viewAbilityButton.interactable = true;
+            _button.interactable = true;
         }
     }
     public override void OnPointerEnter(PointerEventData eventData)
     {
         base.OnPointerEnter(eventData);
         _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
+        _storeOverlayUI.CalculatePriceCalculation(_abilityInfo._cost,
+                                                    _towerManager._currentPureEssence);
         //_abilityInfoPageUI.IsAbilityPurchased(!_abilityPurchased);
 
     }
@@ -144,5 +146,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     {
         base.OnPointerExit(eventData);
         _abilityInfoPageUI.ClearDescription();
+        _storeOverlayUI.ResetPriceCalculation();
     }
 }

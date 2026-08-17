@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1538f18f7b279be41b62407f55044702, type: 3}
   m_Name: SO_StoreAbilityUIContent_MegaExplosion
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
-  abilityID: Level1_0_1
+  abilityID: Level1_2_0
   ability_Name: MegaExplosion
   ability_Description: Increase explosion size and damage
   ability_Level: 1
@@ -20,4 +20,4 @@ MonoBehaviour:
   icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
-  - Level0_0
+  - Level0_2_0

@@ -71,7 +71,6 @@ public class StoreAbilityManager : MonoBehaviour
     {
         ResetRoroll();
         SetItemAvailableToPurchase();
-        SetUpAbility();
     }
     internal void SetUpAbility(STATUSTYPE _type = STATUSTYPE.EXPLOSION)
     {
@@ -88,6 +87,7 @@ public class StoreAbilityManager : MonoBehaviour
         {
             case STATUSTYPE.EXPLOSION:
                 {
+                    print("EXPLOSION");
                     abilityLookup = explosiveAbilities
                     .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
                     .ToDictionary(a => a.abilityID, a => a);
@@ -95,6 +95,7 @@ public class StoreAbilityManager : MonoBehaviour
                 }
             case STATUSTYPE.CRIT:
                 {
+                    print("CRIT");
                     abilityLookup = criticalAbilities
                     .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
                     .ToDictionary(a => a.abilityID, a => a);
@@ -121,17 +122,14 @@ public class StoreAbilityManager : MonoBehaviour
     {
         if (!abilityLookup.ContainsKey(abilityID))
             return false;
-        print("Contain");
         if (unlockedAbilities.Contains(abilityID))
             return false;
-        print("unlocked");
 
         SOStoreAbilityContent ability = abilityLookup[abilityID];
         int abilityLevel = ability.ability_Level;
 
         if (abilityLevel < 0 || abilityLevel >= _abilityLevelAndCostState.Length)
             return false;
-        print("Correct level");
 
         int price = _abilityLevelAndCostState[abilityLevel].GetPrice();
 

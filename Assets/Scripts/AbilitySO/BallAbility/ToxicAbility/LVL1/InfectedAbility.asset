@@ -26,7 +26,7 @@ MonoBehaviour:
   _baseDamagePlus: 0
   _baseDamageMinus: 0
   _baseDamageMultiplier: 5
-  _speedMultiplier: 1
+  _speedMultiplier: 0.1
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
   _timeRate: 0

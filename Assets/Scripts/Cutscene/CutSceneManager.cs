@@ -276,8 +276,7 @@ public  class CutSceneManager : MonoBehaviour
                 }
             case BOSSCUTSCENETOPLAY.DEFEATBOSS:
                 {
-                    GameObject boss = _currentBossObject;
-                    Destroy(boss);
+                    Destroy(_currentBossObject);
                     _currentBossObject = null;
                     break;
                 }

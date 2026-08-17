@@ -20,4 +20,5 @@ MonoBehaviour:
   _dropSpeed: 0.2
   _APValue: 5
   _daytoUnlock: 8
-  _color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  _color: {r: 1, g: 1, b: 1, a: 1}
+  _brickSprite: []

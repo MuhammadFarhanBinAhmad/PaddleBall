@@ -24,6 +24,10 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [Header("AbilityPage")]
     [SerializeField] Button _closePurchaseAbilityOverlay;
     [SerializeField] GameObject _abilityOverlay;
+    [SerializeField] Animator _purchaseAbilityAnimator;
+    [SerializeField] TextMeshProUGUI _apCardCostText;
+    [SerializeField] TextMeshProUGUI _apCurrentPointText;
+    [SerializeField] TextMeshProUGUI _apLeftOverPointText;
 
     [Header("ItemPage")]
     [SerializeField] Button _openCardPage;
@@ -31,6 +35,11 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] Button _rerollItem;
     [SerializeField] GameObject _cardOverlay;
     [SerializeField] Animator _cardStoreAnimator;
+    [SerializeField] TextMeshProUGUI _cardCostText;
+    [SerializeField] TextMeshProUGUI _currentPointText;
+    [SerializeField] TextMeshProUGUI _leftOverPointText;
+    [SerializeField] TextMeshProUGUI _rerollLeftText;
+
     public List<ItemAbilityButtonUI> _itemButton = new List<ItemAbilityButtonUI>();
 
     bool _pageOpen;
@@ -56,6 +65,8 @@ public class StoreOverlayUI : BaseOverLayInteraction
         _openCardPage.onClick.AddListener(ToggleCardPage);
         _closeItem.onClick.AddListener(PlayCloseCardStoreAnim);
         _rerollItem.onClick.AddListener(StartRerollCardAnim);
+
+        _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
 
     }
     private void Update()
@@ -96,30 +107,47 @@ public class StoreOverlayUI : BaseOverLayInteraction
     IEnumerator PlayOpenPurchaseAbilityAnim()
     {
         _abilitySelectAbilityAnimator.SetTrigger("SelectedAbility");
-
         yield return null;
 
         AnimatorStateInfo state =
             _abilitySelectAbilityAnimator.GetCurrentAnimatorStateInfo(0);
 
-        yield return new WaitForSecondsRealtime(state.length);
-        // must open select first
-        if (!_selectAbilityOverlay.activeSelf)
-        {
-            OpenOverlay(_selectAbilityOverlay);
-        }
-
+        yield return new WaitForSecondsRealtime(state.length - .2f);
         OpenOverlay(_abilityOverlay);
+        _purchaseAbilityAnimator.SetTrigger("OpenAbilityPage");
+        state =
+        _purchaseAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+
+        yield return new WaitForSecondsRealtime(state.length - .2f);
+        //// must open select first
+        //if (!_selectAbilityOverlay.activeSelf)
+        //{
+        //    OpenOverlay(_selectAbilityOverlay);
+        //}
+
     }
-    void ClosePurchaseAbilityPage()
+    IEnumerator PlayClosePurchaseAbilityAnim()
     {
+        _purchaseAbilityAnimator.SetTrigger("CloseAbilityPage");
+
+        yield return null;
+
+        AnimatorStateInfo state =
+            _purchaseAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+
         // must open select first
         if (_selectAbilityOverlay.activeSelf)
         {
             OpenOverlay(_selectAbilityOverlay);
         }
+        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStore");
 
-        CloseOverlay(_abilityOverlay, false , true);
+        yield return new WaitForSecondsRealtime(state.length);
+        CloseOverlay(_abilityOverlay, false, true);
+    }
+    void ClosePurchaseAbilityPage()
+    {
+        StartCoroutine(PlayClosePurchaseAbilityAnim());
     }
     void ToggleCardPage()
     {
@@ -166,22 +194,42 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     public void StartRerollCardAnim()
     {
-        if(_storeAbilityManager.GetNumberOfReroll() > 0)
+        if (_storeAbilityManager.GetNumberOfReroll() > 0)
         {
             StartCoroutine(RerollCardAnim());
         }
     }
     IEnumerator RerollCardAnim()
     {
-        _cardStoreAnimator.SetTrigger("RerollCard");
 
+        _cardStoreAnimator.SetTrigger("RerollCard");
         AnimatorStateInfo state =
         _cardStoreAnimator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSecondsRealtime(state.length + .5f);
-
         _storeAbilityManager.RerollItem();
+        _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
         ResetItems();
 
+    }
+    public void CalculatePriceCalculation(int cost, int totalpoint)
+    {
+        _cardCostText.text = cost.ToString();
+        _currentPointText.text = "- " + totalpoint.ToString();
+        _leftOverPointText.text = (totalpoint - cost).ToString();
+
+        _apCardCostText.text = cost.ToString();
+        _apCurrentPointText.text = "- " + totalpoint.ToString();
+        _apLeftOverPointText.text = (totalpoint - cost).ToString();
+    }
+    public void ResetPriceCalculation()
+    {
+        _cardCostText.text = "";
+        _currentPointText.text = "";
+        _leftOverPointText.text = "";
+
+        _apCardCostText.text = "";
+        _apCurrentPointText.text = "";
+        _apLeftOverPointText.text = "";
     }
     public void ResetItems()
     {

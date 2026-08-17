@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using FMOD.Studio;
+using System.Collections.Generic;
 
 public class PaddleVacoom : MonoBehaviour
 {
@@ -18,7 +19,13 @@ public class PaddleVacoom : MonoBehaviour
     [SerializeField] LineRenderer _coneLine;
     [SerializeField] int _coneSegments = 24;
     [SerializeField] Color _coneColor = new Color(1f, 1f, 1f, 0.35f);
-
+    
+    Camera _mainCamera;
+    Vector2 _mouseForward;
+    
+    [SerializeField] int _maxSuctionTargets = 64;
+    List<Collider2D> _suctionResults = new List<Collider2D>();
+    ContactFilter2D _suctionFilter;
 
     bool _disableVacoom;
 
@@ -30,6 +37,15 @@ public class PaddleVacoom : MonoBehaviour
     {
         _paddleHealth = FindAnyObjectByType<PaddleHealth>();
         _paddleMovement = GetComponentInParent<PaddleMovement>();
+
+        _mainCamera = Camera.main;
+
+        _suctionResults.Capacity = _maxSuctionTargets;
+
+        _suctionFilter = new ContactFilter2D();
+        _suctionFilter.SetLayerMask(collectibleLayer);
+        _suctionFilter.useTriggers = true;
+
 
     }
     private void Start()
@@ -48,15 +64,32 @@ public class PaddleVacoom : MonoBehaviour
 
     void Update()
     {
-        if(!_paddleHealth.IsPaddleDead())
-            IsSucking();
+        if (_paddleHealth.IsPaddleDead())
+            return;
 
+        _mouseForward = GetMouseForward();
+
+        IsSucking();
+
+    }
+    private void FixedUpdate()
+    {
+        if (_paddleHealth.IsPaddleDead())
+            return;
+
+        if (_disableVacoom)
+            return;
+
+        if (!Input.GetKey(KeyCode.Space))
+            return;
+
+        SuctionObject();
     }
     void UpdateConeVisual()
     {
         if (_coneLine == null) return;
 
-        Vector2 forward = GetMouseForward();
+        Vector2 forward = _mouseForward;
         Vector3 origin = transform.position;
 
         float halfAngle = coneAngle * 0.5f;
@@ -78,82 +111,86 @@ public class PaddleVacoom : MonoBehaviour
     }
     void IsSucking()
     {
-        
+
         if (_disableVacoom)
             return;
 
         bool attracting = Input.GetKey(KeyCode.Space);
-        //_paddleMovement.SetCursorState(attracting);
-        _paddleMovement.DisblePaddleMovement(attracting);
 
+        _paddleMovement.DisblePaddleMovement(attracting);
         _coneLine.enabled = attracting;
 
-        if (attracting)
-            UpdateConeVisual();
-
-
-        if (attracting)
+        if(attracting)
         {
             inhalePower += increaseSpeed * Time.deltaTime;
+
+
         }
         else
         {
-            inhalePower -= decreaseSpeed * Time.deltaTime;
+            inhalePower -= increaseSpeed * Time.deltaTime;
         }
-
         inhalePower = Mathf.Clamp01(inhalePower);
-        PlaySuctionAudio();
-        SuctionObject(attracting);
 
+        PlaySuctionAudio();
+        UpdateConeVisual();
+
+        //if (!attracting)
+        //    return;
     }
 
-    void SuctionObject(bool attracting)
+    void SuctionObject()
     {
-        // Get all colliders in radius on the collectible layer
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attractRadius, collectibleLayer);
 
-        if (hits == null || hits.Length == 0) return;
+        Vector2 paddlePosition = transform.position;
 
-        // compute forward direction toward mouse in worldspace (2D)
-        Vector2 forward = GetMouseForward();
+        int hitCount = Physics2D.OverlapCircle(
+            paddlePosition,
+            attractRadius,
+            _suctionFilter,
+            _suctionResults
+        );
 
-        // Precompute dot threshold for angle test (faster than Angle())
+        if (hitCount == 0)
+            return;
+
+        Vector2 forward = _mouseForward;
+
         float halfAngleRad = (coneAngle * 0.5f) * Mathf.Deg2Rad;
         float cosThreshold = Mathf.Cos(halfAngleRad);
 
-        for (int i = 0; i < hits.Length; i++)
+        for (int i = 0; i < hitCount; i++)
         {
-            if (hits[i] == null) continue;
+            Collider2D collider = _suctionResults[i];
 
-            // Vector from paddle to candidate
-            Vector2 toTarget = (Vector2)hits[i].transform.position - (Vector2)transform.position;
-            float dist = toTarget.magnitude;
+            if (collider == null)
+                continue;
 
-            if (dist <= Mathf.Epsilon) continue; // ignore exact overlap
+            Vector2 toTarget =
+                (Vector2)collider.transform.position - paddlePosition;
 
-            Vector2 dir = toTarget / dist; // normalized direction to target
+            float sqrDistance = toTarget.sqrMagnitude;
 
-            // Angle test: dot(forward, dir) >= cos(halfAngle)
-            if (Vector2.Dot(forward, dir) < cosThreshold)
-                continue; // outside cone
+            if (sqrDistance <= 0.0001f)
+                continue;
 
-            // within cone AND within radius -> handle pickup
-            // TowerEssence (existing)
-            var ess = hits[i].GetComponent<TowerEssence>();
-            if (ess != null)
+            Vector2 direction = toTarget.normalized;
+
+            if (Vector2.Dot(forward, direction) < cosThreshold)
+                continue;
+
+            TowerEssence essence =
+                collider.GetComponent<TowerEssence>();
+
+            if (essence != null)
             {
-                if (attracting)
-                {
-                    ess.StartAttraction(transform, _pushPullStrength, attractRadius);
-                    ess.UpdateAttractionTarget(transform.position);
-                }
-                else
-                {
-                    ess.StopAttraction();
+                essence.StartAttraction(
+                    transform,
+                    _pushPullStrength,
+                    attractRadius
+                );
 
-                }
-
-                continue; // skip ball handling if this collider is an essence
+                essence.UpdateAttractionTarget(paddlePosition);
             }
         }
     }
@@ -180,23 +217,17 @@ public class PaddleVacoom : MonoBehaviour
     /// </summary>
     Vector2 GetMouseForward()
     {
-        Camera cam = Camera.main;
-        if (cam == null)
-        {
-            // fallback to transform.up if no camera found
-            return transform.up;
-        }
-
-        Vector3 mouseScreen = Input.mousePosition;
-        Vector3 mouseWorld3 = cam.ScreenToWorldPoint(mouseScreen);
-        Vector2 mouseWorld = new Vector2(mouseWorld3.x, mouseWorld3.y);
-
-        Vector2 toMouse = mouseWorld - (Vector2)transform.position;
-        if (toMouse.sqrMagnitude < 0.0001f)
-        {
-            // mouse is on top of object — use transform.up as reasonable default
+        if (_mainCamera == null)
             return transform.up.normalized;
-        }
+
+        Vector3 mouseWorld3 =
+            _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector2 toMouse =
+            (Vector2)mouseWorld3 - (Vector2)transform.position;
+
+        if (toMouse.sqrMagnitude < 0.0001f)
+            return transform.up.normalized;
 
         return toMouse.normalized;
     }

@@ -65,10 +65,8 @@ public class AbilityInfoPageUI : MonoBehaviour
     }
     public void PurchaseAbility()
     {
-        print("hit");
         if (_storeAbilityManager.PurchaseAbility(ID))
         {
-            print("hi2");
             _abilityManager.AddAbility(ability_ToSpawn);
             IsAbilityPurchased(false);
             OnAbilityPurchase?.Invoke();

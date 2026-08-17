@@ -484,6 +484,7 @@ MonoBehaviour:
   - Bricks
   - CutScene
   - Essence
+  - Music
   - Paddle
   - Time
   - UI

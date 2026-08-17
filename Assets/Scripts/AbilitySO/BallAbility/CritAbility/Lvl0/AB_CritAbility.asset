@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
   m_Name: AB_CritAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: Crit
   _statusType: 0
   _abilityPrefab: {fileID: 5621834340312411328, guid: a67b1dbdb1991f541b6b02cc51811e69, type: 3}
   _genericEffect: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
   _counterEffect: 0
   _shieldEffect: 0
   _abilityBaseDamageValue: 0
-  _baseDamagePlus: 0
+  _baseDamagePlus: 3
   _baseDamageMinus: 0
   _baseDamageMultiplier: 0
   _speedMultiplier: 0

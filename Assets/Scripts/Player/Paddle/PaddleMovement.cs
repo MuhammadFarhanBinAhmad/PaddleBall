@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,13 +6,22 @@ public class PaddleMovement : MonoBehaviour
 {
     PolygonCollider2D _polygonCollider;
 
-    public float _speed;
+    [Header("Speed")]
+    [SerializeField] float _originalSpeed;
+    [SerializeField] float _cursedSpeed;
+    float _speed;
+
+
     public float _maxXPos;
     [SerializeField]bool _disablePaddleMovement;
 
     private void Awake()
     {
         _polygonCollider = GetComponent<PolygonCollider2D>();
+    }
+    private void Start()
+    {
+        _speed = _originalSpeed;
     }
 
     void Update()
@@ -36,5 +46,18 @@ public class PaddleMovement : MonoBehaviour
     {
         _polygonCollider.enabled = !disable;
     }
+
+    public void IsCursed(float duration)
+    {
+        StartCoroutine(SlowSpeed(duration));
+    }
+
+    IEnumerator SlowSpeed(float duration)
+    {
+        _speed = _cursedSpeed;
+        yield return new WaitForSeconds(duration);
+        _speed = _originalSpeed;
+    }
+
 
 }

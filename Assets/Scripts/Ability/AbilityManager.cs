@@ -116,12 +116,12 @@ public class AbilityManager : MonoBehaviour
 
     // „Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ Brick Events „Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 
-    public void NotifyBrickHit(BrickBar brick, BrickHealthComponent health, int basedmg)
+    public void NotifyBrickHit(BrickHealthComponent health, int basedmg)
     {
         //create basic hit context
         HitContext ctx = new HitContext
         {
-            _brick = brick,
+            _brick = null,
             _health = health,
             _damageValue = basedmg,
         };
@@ -135,7 +135,7 @@ public class AbilityManager : MonoBehaviour
             ability.OnHit(ctx);
 
         // Phase 3: Apply damage
-        brick._brickHealthComponent.OnDamage(ctx._damageValue);
+        ctx._health.OnDamage(ctx._damageValue);
 
         // Phase 4: Notify abilities of outcome
         foreach (var ability in _brickAbilities)

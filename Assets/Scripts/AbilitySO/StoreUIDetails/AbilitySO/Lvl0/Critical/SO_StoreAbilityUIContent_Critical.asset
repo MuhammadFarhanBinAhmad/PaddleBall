@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1538f18f7b279be41b62407f55044702, type: 3}
   m_Name: SO_StoreAbilityUIContent_Critical
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
-  abilityID: Level0_1
+  abilityID: Level0_0_0
   ability_Name: Critical
   ability_Description: Introduce chance to deal critical damage(x2 of base damage)
   ability_Level: 0

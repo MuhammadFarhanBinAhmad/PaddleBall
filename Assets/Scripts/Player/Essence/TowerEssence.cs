@@ -9,6 +9,8 @@ public class TowerEssence : MonoBehaviour
     TowerManager _towerManager;
     PaddleVacoom _paddleVacoom;
 
+
+
     [Header("EssenseStas")]
     Action _OnCollectionEvent;
     [SerializeField] int _essenceMinWorth;
@@ -75,9 +77,8 @@ public class TowerEssence : MonoBehaviour
     }
     private void OnEnable()
     {
-        Vector3 dir = UnityEngine.Random.onUnitSphere; // uniform random direction
-        float mag = UnityEngine.Random.Range(minImpulse, maxImpulse);
-        rb.AddForce(dir * mag, ForceMode2D.Impulse);
+        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
+        transform.position = new Vector2(randomOffset.x, randomOffset.y);
         intensityTimer = 0f;
         intensityDone = false;
         _light2D.intensity = _startIntensity;
@@ -119,9 +120,14 @@ public class TowerEssence : MonoBehaviour
                 }
             }
         }
+        if (!isAttracted) return;
 
-        float distance = Vector2.Distance(transform.position, _paddleVacoom.transform.position);
-        if (distance < _collectDistance)
+        Vector2 delta =
+            (Vector2)transform.position -
+            (Vector2)_paddleVacoom.transform.position;
+
+        if (delta.sqrMagnitude <
+            _collectDistance * _collectDistance)
         {
             HandleCollection();
             return;
@@ -139,8 +145,6 @@ public class TowerEssence : MonoBehaviour
                 UpdateAttractionTarget(_paddleVacoom.transform.position);
             }
         }
-
-        if (!isAttracted) return;
 
         Vector2 to = (Vector2)attractorPos - rb.position;
         float dist = to.magnitude;

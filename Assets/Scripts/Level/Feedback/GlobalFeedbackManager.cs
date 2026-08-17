@@ -34,8 +34,6 @@ public class GlobalFeedbackManager : MonoBehaviour
     [SerializeField] float _freezeRealtimeDuration;
     Coroutine _freezeRoutine;
 
-
-
     [Header("OnHitBallAnimation")]
     [SerializeField] SO_FeedbackEffect so_OnBallHit;
 
@@ -303,6 +301,5 @@ public class GlobalFeedbackManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(_flashDuration);
         _flashScreen.SetActive(false);
-
     }
 }

@@ -1,8 +1,28 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+public enum EMOTION
+{
+    NORMAL,
+    PLEASE,
+    JOY,
+    EXCITED,
+    ESTATIC,
+}
+[System.Serializable]
+public struct EyePerformance
+{
+    public int comboThreshold;
+    public Sprite _pupil;
+}
+
 
 public class PaddleEyeManager : MonoBehaviour
 {
+
+    Ball _ballManager;
+
+
     public GameObject [] _paddleEyes = new GameObject [2];
 
     [Header("Blink Settings")]
@@ -14,9 +34,28 @@ public class PaddleEyeManager : MonoBehaviour
     Coroutine _blinkRoutine;
     Coroutine _forcedBlinkRoutine;
 
+    [Header("Eye Emotion")]
+    [SerializeField] SpriteRenderer[] _paddlePupil = new SpriteRenderer[2];
+    [SerializeField] EyePerformance[] _emotionPerformance;
+    EMOTION _currentEmotion;
+
+    private void Awake()
+    {
+        _ballManager = FindAnyObjectByType<Ball>();
+    }
+
     void Start()
     {
+        _ballManager.OnBrickHit += ChangePupil;
+        _ballManager.OnBallReset += ChangePupil;
+
         _blinkRoutine = StartCoroutine(BlinkRoutine());
+        ChangePupil();
+    }
+    private void OnDestroy()
+    {
+        _ballManager.OnBrickHit -= ChangePupil;
+        _ballManager.OnBallReset -= ChangePupil;
     }
 
     IEnumerator BlinkRoutine()
@@ -87,4 +126,21 @@ public class PaddleEyeManager : MonoBehaviour
                 eye.SetActive(isActive);
         }
     }
+
+    public void ChangePupil()
+    {
+
+        int combo = _ballManager._currentCombo;
+
+        for (int i = _emotionPerformance.Length - 1; i >= 0; i--)
+        {
+            if (combo >= _emotionPerformance[i].comboThreshold)
+            {
+                _paddlePupil[0].sprite = _emotionPerformance[i]._pupil;
+                _paddlePupil[1].sprite = _emotionPerformance[i]._pupil;
+                return;
+            }
+        }
+    }
+
 }

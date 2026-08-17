@@ -20,25 +20,43 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 6.7710786
-      outSlope: 6.7710786
+      inSlope: 3.6856587
+      outSlope: 3.6856587
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.050675668
+      outWeight: 0.1302903
     - serializedVersion: 3
-      time: 1.001831
-      value: 0
-      inSlope: 1.0163506
-      outSlope: 1.0163506
+      time: 0.25
+      value: 0.5
+      inSlope: 0.45454544
+      outSlope: 0.45454544
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8
+      value: -0.1
+      inSlope: -0.04685227
+      outSlope: -0.04685227
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.0595881
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0007019
+      value: -0.0064291954
+      inSlope: -0.42658767
+      outSlope: -0.42658767
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.88288677
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 0.1
+  animationDuration: 0.25
   _startscaleMultiplier: 1
   _endscaleMultiplier: 1.1
   _vfxEffect: {fileID: 0}

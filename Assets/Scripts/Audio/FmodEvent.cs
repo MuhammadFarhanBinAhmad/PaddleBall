@@ -58,6 +58,10 @@ public class FmodEvent : MonoBehaviour
     [field: Header("Cutscene")]
     [field: SerializeField] public EventReference sfx_paddleText { get; private set; }
 
+    [field: Header("Music")]
+    [field: SerializeField] public EventReference music_PlayScenes { get; private set; }
+
+
 
     public static FmodEvent Instance { get; private set; }
 

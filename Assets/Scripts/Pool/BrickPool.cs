@@ -70,6 +70,9 @@ public class BrickPool : MonoBehaviour
     public void PlaceActiveBrickInList(GameObject brick) => _activeBrick.Add(brick);
     public void RemoveActiveBrick(GameObject brick)
     {
+        if (!_activeBrick.Contains(brick))
+            return;
+
         _activeBrick.Remove(brick);
         _timeManager.CheckToSpawnBoss();
 

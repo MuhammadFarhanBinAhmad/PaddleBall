@@ -36,6 +36,7 @@ public class BallUIManager : MonoBehaviour
     void Start()
     {
         _ballManager = FindAnyObjectByType<Ball>();
+
         _ballManager.OnBrickHit += UpdateComboUI;
         _ballManager.OnBallReset+= UpdateComboUI;
     }

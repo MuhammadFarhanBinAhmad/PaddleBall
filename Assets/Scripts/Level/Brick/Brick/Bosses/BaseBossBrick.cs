@@ -26,11 +26,12 @@ public abstract class BaseBossBrick : MonoBehaviour
     public Action onGameOverBossFight;
 
     public ParticleSystem _hitEffect;
+    [SerializeField] internal SO_BrickSpecialEffect _damageAnim;
+    [SerializeField] internal Transform _bossBody;
     public Action _onTakingDamage;
 
     public virtual void Awake()
     {
-        _brickHealthComponent = FindAnyObjectByType<BrickHealthComponent>();
         _episodeTitleCardUI = FindAnyObjectByType<EpisodeTitleCardUI>();
         _bossManager = FindAnyObjectByType<BossManager>();
         _bossUIManager = FindAnyObjectByType<BossUIManager>();
@@ -87,7 +88,6 @@ public abstract class BaseBossBrick : MonoBehaviour
     internal virtual void DamageFeedback()
     {
         GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-        _bossFeedbackManager.OnBallHit();
         _hitEffect.Play();
         _bossUIManager.UpdateBossHealthUI(_brickHealthComponent.GetHealth());
     }

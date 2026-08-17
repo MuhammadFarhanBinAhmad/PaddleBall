@@ -27,10 +27,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     [Header("Stun")]
     [SerializeField] private float _stunDuration;
 
-    [Header("Ping Pong Movement")]
-    [SerializeField] internal List<Transform> _movementPoints = new List<Transform>();
+    [Header("Movement")]
     [SerializeField] internal float _movementSpeed;
-    [SerializeField] internal float _arrivalThreshold;
 
     internal Coroutine _movementRoutine;
     internal int _currentMovementTargetIndex;
@@ -112,7 +110,6 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     private IEnumerator RestSequence()
     {
         StopPingPongMovement();
-        RestToNeutral();
         yield return new WaitForSeconds(_restDuration);
     }
     

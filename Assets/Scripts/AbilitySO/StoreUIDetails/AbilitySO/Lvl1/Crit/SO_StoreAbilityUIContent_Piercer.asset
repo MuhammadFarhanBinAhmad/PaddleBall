@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1538f18f7b279be41b62407f55044702, type: 3}
   m_Name: SO_StoreAbilityUIContent_Piercer
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
-  abilityID: Level2_1
+  abilityID: Level1_0_1
   ability_Name: Piercer
   ability_Description: Gain a 25% chance to destroy 1 brick layer
   ability_Level: 1
   ability_ToSpawn: {fileID: 11400000, guid: 92f5eb662a7acd849bc8fc83199cb67b, type: 2}
   icon: {fileID: 2162073879907501594, guid: 68fde1cb982beaf4d8edbfa5974d32e9, type: 3}
   _availableToPurchaseAtStart: 0
-  requiredAbilityIDs: []
+  requiredAbilityIDs:
+  - Level0_0_0

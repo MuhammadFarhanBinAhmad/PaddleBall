@@ -21,26 +21,33 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
     [SerializeField] BallAbilityButtonUI _abilityButtonPrefab;
 
     [Header("Data")]
+    [SerializeField] AbilityButtonLevel[] abilityData = new AbilityButtonLevel[4];
     List<SOStoreAbilityContent> abilityList = new List<SOStoreAbilityContent>();
-    [SerializeField]
-    AbilityButtonLevel[] levelButtons = new AbilityButtonLevel[4];
 
-    List<BallAbilityButtonUI>[] spawnedButtonsLevels = new List<BallAbilityButtonUI>[4];
+    [Header("Buttons")]
     public GameObject _lvl0AbilityButton;
     public List<GameObject> _lvl1AbilityButton = new List<GameObject>();
     public List<GameObject> _lvl2AbilityButton = new List<GameObject>();
     public List<GameObject> _lvl3AbilityButton = new List<GameObject>();
 
+    public List<BallAbilityButtonUI> _ballAbilityButtonUI;
+
 
     private void Awake()
     {
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
-
+        //_ballAbilityButtonUI.Add(_lvl0AbilityButton.GetComponent<BallAbilityButtonUI>());
+        //for (int i = 0; i < _lvl1AbilityButton.Count; i++)
+        //{
+        //    _ballAbilityButtonUI.Add(_lvl1AbilityButton[i].GetComponent<BallAbilityButtonUI>());
+        //}
     }
 
 
     public void BuildStore(STATUSTYPE _type)
     {
+        foreach (AbilityButtonLevel i in abilityData)
+            i.buttons.Clear();
 
         // Get abilities
         abilityList = _storeAbilityManager.GetAbilityList(_type);
@@ -49,17 +56,19 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
         foreach (SOStoreAbilityContent ability in abilityList)
         {
             int level = ability.ability_Level;
-            levelButtons[level].buttons.Add(ability);
+            abilityData[level].buttons.Add(ability);
         }
 
         PopulateLevel0();
-        PopulateLevel(_lvl1AbilityButton, levelButtons[1].buttons);
+        PopulateLevel(_lvl1AbilityButton, abilityData[1].buttons);
+        RefreshAll();
+
         //PopulateLevel(_lvl2AbilityButton, levelButtons[2].buttons);
         //PopulateLevel(_lvl3AbilityButton, levelButtons[3].buttons);
     }
     void PopulateLevel0()
     {
-        if (levelButtons[0].buttons.Count == 0)
+        if (abilityData[0].buttons.Count == 0)
         {
             _lvl0AbilityButton.SetActive(false);
             return;
@@ -70,7 +79,7 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
         BallAbilityButtonUI ui =
             _lvl0AbilityButton.GetComponent<BallAbilityButtonUI>();
 
-        ui.Setup(levelButtons[0].buttons[0]);
+        ui.Setup(abilityData[0].buttons[0]);
     }
     void PopulateLevel(List<GameObject> buttons,
                    List<SOStoreAbilityContent> abilities)
@@ -90,12 +99,7 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
 
     public void RefreshAll()
     {
-        for (int level = 0; level < 4; level++)
-        {
-            foreach (BallAbilityButtonUI button in spawnedButtonsLevels[level])
-            {
-                button.Refresh();
-            }
-        }
+        foreach (BallAbilityButtonUI i in _ballAbilityButtonUI)
+            i.Refresh();
     }
 }

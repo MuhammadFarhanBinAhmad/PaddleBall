@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
   m_Name: AB_ToxicAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: Toxic
   _statusType: 8
   _abilityPrefab: {fileID: 4502716267654733104, guid: 52f4e2a7b927a8e4688cf3f05f8743a4, type: 3}
   _genericEffect: 1
