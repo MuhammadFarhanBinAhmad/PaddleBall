@@ -202,14 +202,13 @@ public class StoreOverlayUI : BaseOverLayInteraction
     IEnumerator RerollCardAnim()
     {
 
-        _cardStoreAnimator.SetTrigger("RerollCard");
+        //_cardStoreAnimator.SetTrigger("RerollCard");
         AnimatorStateInfo state =
         _cardStoreAnimator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSecondsRealtime(state.length + .5f);
         _storeAbilityManager.RerollItem();
-        _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
+        UpdateRerollText();
         ResetItems();
-
     }
     public void CalculatePriceCalculation(int cost, int totalpoint)
     {
@@ -238,4 +237,6 @@ public class StoreOverlayUI : BaseOverLayInteraction
             _itemButton[i].ResetButton();
         }
     }
+    public void UpdateRerollText() => _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
+
 }

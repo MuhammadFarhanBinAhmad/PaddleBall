@@ -3,7 +3,7 @@ using UnityEngine;
 public class Consolation : ABSAbility
 {
 
-    public override void ModifyHit(HitContext ctx)
+    public override void OnHitAdd(HitContext ctx)
     {
         if(!ctx._status.HasFlag(STATUSTYPE.CRIT))
         {

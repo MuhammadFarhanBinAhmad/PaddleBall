@@ -288,6 +288,8 @@ public class StoreAbilityManager : MonoBehaviour
             _numberOfReroll--;
         }
     }
+    public List<ItemAbilityButtonUI> GetAllCards() => _itemButtonsList;
+    public void ChangeRerollValue(int val) => _numberOfReroll += val;
     public int GetNumberOfReroll() => _numberOfReroll;
     public void ResetRoroll() => _numberOfReroll = _maxReroll;
 }

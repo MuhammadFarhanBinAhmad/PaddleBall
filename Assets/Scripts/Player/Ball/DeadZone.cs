@@ -113,6 +113,8 @@ public class DeadZone : MonoBehaviour
 
         }
     }
+    public float GetCurrentShield() => _currentShieldMana;
+    public float GetMaxShield() => _maxShieldMana;
     public float GetShieldPercentage() => _currentShieldMana/_maxShieldMana;
     public void AddShieldValue(int val) => _maxShieldMana += val;
     public void MinusShieldValue(int val) => _maxShieldMana -= val;

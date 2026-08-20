@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PiercerAbility : ABSAbility
 {
-    public override void ModifyHit(HitContext ctx)
+    public override void OnHit(HitContext ctx)
     {
         //Increase base damage
         var critChance = _SOAbilityEffect._baseCritChance;

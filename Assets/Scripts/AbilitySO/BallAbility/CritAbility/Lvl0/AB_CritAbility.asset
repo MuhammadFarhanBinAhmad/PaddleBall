@@ -43,7 +43,7 @@ MonoBehaviour:
   _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
-  _baseCritChance: 0.2
+  _baseCritChance: 1
   _critMultiplier: 3
   _modiftCritMultiplier: 0
   _layerToDestroy: 0

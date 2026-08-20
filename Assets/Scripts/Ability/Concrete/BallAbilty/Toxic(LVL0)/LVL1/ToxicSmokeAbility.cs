@@ -9,7 +9,7 @@ public class ToxicSmokeAbility : ABSAbility
         _toxicPool = FindAnyObjectByType<ToxicEffectPool>();
     }
 
-    public override void OnHit(HitContext ctx)
+    public override void OnHitResolved(HitContext ctx)
     {
         if (_toxicPool == null) return;
 

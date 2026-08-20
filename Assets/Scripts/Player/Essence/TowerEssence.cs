@@ -1,7 +1,5 @@
-using Cinemachine.Utility;
 using System;
 using UnityEngine;
-using UnityEngine.Jobs;
 using UnityEngine.Rendering.Universal;
 
 public class TowerEssence : MonoBehaviour
@@ -9,149 +7,198 @@ public class TowerEssence : MonoBehaviour
     TowerManager _towerManager;
     PaddleVacoom _paddleVacoom;
 
-
-
-    [Header("EssenseStas")]
+    [Header("Essence Stats")]
     Action _OnCollectionEvent;
+
     [SerializeField] int _essenceMinWorth;
     [SerializeField] int _essenceMaxWorth;
     [SerializeField] float _essenceBonusMultiplier;
+
     int _currentExpirationPhase;
+
     [SerializeField] float[] _essenceExpirationTime;
     [SerializeField] float _essenceCurrentLiveTime;
+
     [Header("Light")]
     [SerializeField] Light2D _light2D;
-    [SerializeField] float _startIntensity, _endIntensity;
-    float intensityTimer = 0f;
-    bool intensityDone = false;
+    [SerializeField] float _startIntensity;
+    [SerializeField] float _endIntensity;
+
+    float intensityTimer;
+    bool intensityDone;
+
     [SerializeField] float intensityDuration = 3f;
-    [Header("ParticleEffects")]
+
+    [Header("Particle Effects")]
     [SerializeField] ParticleSystem _particleEffects;
-        
-    [Header("Physics / Movement")]
-    public float maxSpeed;
-    Rigidbody2D rb;
-    [Tooltip("Use this to smooth motion while being attracted (lower = more drag).")]
-    public float attractedDrag;
-    [Tooltip("Normal drag when not being attracted.")]
-    public float normalDrag;
-    [Tooltip("Starting Impluse")]
+
+    [Header("Movement")]
+    [Tooltip("Maximum movement speed.")]
+    public float maxSpeed = 10f;
+
+    [Tooltip("Movement drag while being attracted.")]
+    public float attractedDrag = 5f;
+
+    [Tooltip("Normal movement drag.")]
+    public float normalDrag = 1f;
+
+    [Tooltip("Starting movement impulse.")]
     public float minImpulse;
+
     public float maxImpulse;
-    
+
+    Vector2 _velocity;
+
     [Header("Suction / Collection")]
     public float _collectDistance;
 
     [Header("Suction Tuning")]
-    [Tooltip("Reduced drag while being sucked (so suction is smooth).")]
-    public float suctionDrag;
-    [Tooltip("How strongly we add an impulse in the last pull direction when suction stops.")]
-    [Range(0f, 2f)]
-    public float suctionReleaseImpulseMultiplier;
+    [Tooltip("How strongly the Essence accelerates toward the vacuum.")]
+    [SerializeField] float _attractStrength;
+    [SerializeField]float _attractRadius = 1f;
 
-    // internal
-    bool isAttracted = false;
-    Vector2 attractorPos;
-    Transform attractorTransform;
-    float attractRadius = 1f;
-    float attractStrength = 0f;
-    // store last pull applied while being sucked (world-space force vector)
-    Vector2 lastPullApplied = Vector2.zero;
+    [Tooltip("How much velocity is retained while being sucked.")]
+    [Range(0f, 1f)]
+    public float suctionDragMultiplier = 0.9f;
 
-    [Header("AutoAttract")]
+    // Attraction state
+    bool _isAttracted;
+    Vector2 _attractorPos;
+    Transform _attractorTransform;
+
+
+
+    [Header("Auto Attract")]
     [SerializeField] float _autoAttractStrength = 8f;
     [SerializeField] float _autoAttractRadius = 999f;
     [SerializeField] bool _autoAttract;
 
-
     void Awake()
     {
-        rb = rb ? rb : GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0f;
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.linearDamping = normalDrag;
-
         _towerManager = FindAnyObjectByType<TowerManager>();
         _paddleVacoom = FindAnyObjectByType<PaddleVacoom>();
     }
+
     private void OnEnable()
     {
-        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
-        transform.position = new Vector2(randomOffset.x, randomOffset.y);
+        // Reset movement state.
+        _velocity = Vector2.zero;
+
+        // Reproduce the old initial Rigidbody impulse
+        // using our own velocity instead.
+        Vector2 direction = UnityEngine.Random.insideUnitCircle;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            direction = Vector2.up;
+
+        direction.Normalize();
+
+        float magnitude =
+            UnityEngine.Random.Range(minImpulse, maxImpulse);
+
+        _velocity = direction * magnitude;
+
+        // Reset visual state.
         intensityTimer = 0f;
         intensityDone = false;
+
         _light2D.intensity = _startIntensity;
     }
+
     private void OnDisable()
     {
         _OnCollectionEvent = null;
     }
 
-    public void SetToAutoAttract() => _autoAttract = true;
-    void FixedUpdate()
+    public void SetToAutoAttract()
     {
-        if (gameObject.activeSelf)
+        _autoAttract = true;
+    }
+
+    private void Update()
+    {
+        UpdateLifetime();
+        UpdateLight();
+
+        if (_isAttracted)
         {
-            if (!intensityDone)
-            {
-                intensityTimer += Time.fixedDeltaTime;
-                float time = Mathf.Clamp01(intensityTimer / intensityDuration);
-
-                _light2D.intensity = Mathf.Lerp(_startIntensity, _endIntensity, time);
-
-                if (time >= 1f)
-                {
-                    intensityDone = true;
-                }
-            }
-
-            _essenceCurrentLiveTime += Time.deltaTime;
-            if (_essenceCurrentLiveTime > _essenceExpirationTime[_currentExpirationPhase] && _currentExpirationPhase < _essenceExpirationTime.Length - 1)
-            {
-                _currentExpirationPhase++;
-                if (_currentExpirationPhase == 1)
-                {
-                    _particleEffects.Stop();
-                }
-                if (_currentExpirationPhase == 3)
-                {
-                    ResetStats();
-                }
-            }
+            UpdateAttraction();
         }
-        if (!isAttracted) return;
 
-        Vector2 delta =
-            (Vector2)transform.position -
-            (Vector2)_paddleVacoom.transform.position;
+        Move();
 
-        if (delta.sqrMagnitude <
-            _collectDistance * _collectDistance)
-        {
-            HandleCollection();
+        CheckCollectionDistance();
+    }
+
+    void UpdateLifetime()
+    {
+        _essenceCurrentLiveTime += Time.deltaTime;
+
+        if (_currentExpirationPhase >= _essenceExpirationTime.Length)
             return;
-        }
 
-        // Auto-attract override
+        if (_essenceCurrentLiveTime >
+            _essenceExpirationTime[_currentExpirationPhase])
+        {
+            _currentExpirationPhase++;
+
+            if (_currentExpirationPhase == 1)
+            {
+                _particleEffects.Stop();
+            }
+
+            if (_currentExpirationPhase == 3)
+            {
+                ResetStats();
+            }
+        }
+    }
+
+    void UpdateLight()
+    {
+        if (intensityDone)
+            return;
+
+        intensityTimer += Time.deltaTime;
+
+        float time =
+            Mathf.Clamp01(intensityTimer / intensityDuration);
+
+        _light2D.intensity =
+            Mathf.Lerp(_startIntensity, _endIntensity, time);
+
+        if (time >= 1f)
+        {
+            intensityDone = true;
+        }
+    }
+
+    void UpdateAttraction()
+    {
+        // Auto-attract override.
         if (_autoAttract)
         {
-            if (!isAttracted)
-            {
-                StartAttraction(_paddleVacoom.transform, _autoAttractStrength, _autoAttractRadius);
-            }
-            else
-            {
-                UpdateAttractionTarget(_paddleVacoom.transform.position);
-            }
+            _attractorPos = _paddleVacoom.transform.position;
+            _attractStrength = _autoAttractStrength;
+            _attractRadius = _autoAttractRadius;
+        }
+        else if (_attractorTransform != null)
+        {
+            _attractorPos = _attractorTransform.position;
         }
 
-        Vector2 to = (Vector2)attractorPos - rb.position;
-        float dist = to.magnitude;
+        Vector2 toTarget =
+            _attractorPos - (Vector2)transform.position;
 
-        if (dist > attractRadius)
+        float distanceSqr = toTarget.sqrMagnitude;
+
+        if (distanceSqr <= 0.0001f)
+            return;
+
+        float distance = Mathf.Sqrt(distanceSqr);
+
+        if (distance > _attractRadius)
         {
-            // Don't cancel auto-attract
             if (!_autoAttract)
             {
                 StopAttraction();
@@ -159,86 +206,189 @@ public class TowerEssence : MonoBehaviour
             }
         }
 
-        float t = Mathf.Clamp01(1f - (dist / attractRadius));
-        float pull = attractStrength * (t * 0.9f + 0.1f);
+        float t =
+            Mathf.Clamp01(
+                1f - (distance / _attractRadius)
+            );
 
-        Vector2 force = to.normalized * pull;
-        rb.AddForce(force, ForceMode2D.Force);
+        float pull =
+            _attractStrength *
+            (t * 0.9f + 0.1f);
 
-        if (rb.linearVelocity.magnitude > maxSpeed)
-            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        Vector2 direction =
+            toTarget / distance;
 
-        if (attractorTransform != null)
-            attractorPos = attractorTransform.position;
+        // Accelerate toward the target.
+        _velocity +=
+            direction *
+            pull *
+            Time.deltaTime;
+
+        // Apply suction drag.
+        _velocity *=
+            Mathf.Pow(
+                suctionDragMultiplier,
+                Time.deltaTime * 60f
+            );
+
+        // Limit velocity.
+        if (_velocity.sqrMagnitude >
+            maxSpeed * maxSpeed)
+        {
+            _velocity =
+                _velocity.normalized * maxSpeed;
+        }
     }
 
-    // Suction API (player uses this)
-    public void StartAttraction(Transform targetTransform, float strength, float radius)
+    void Move()
     {
-        attractorTransform = targetTransform;
-        attractorPos = targetTransform.position;
-        attractRadius = Mathf.Max(0.01f, radius);
-        attractStrength = strength;
-        isAttracted = true;
-        rb.linearDamping = attractedDrag;
+        if (_velocity.sqrMagnitude <= 0.000001f)
+            return;
+
+        // Apply normal drag when not being sucked.
+        if (!_isAttracted)
+        {
+            _velocity *=
+                Mathf.Pow(
+                    normalDrag,
+                    Time.deltaTime
+                );
+        }
+
+        transform.position +=
+            (Vector3)(_velocity * Time.deltaTime);
     }
 
-    public void UpdateAttractionTarget(Vector2 targetPosition)
+    void CheckCollectionDistance()
     {
-        attractorPos = targetPosition;
+        if (_paddleVacoom == null)
+            return;
+
+        Vector2 delta =
+            (Vector2)transform.position -
+            (Vector2)_paddleVacoom.transform.position;
+
+        if (delta.sqrMagnitude <=
+            _collectDistance * _collectDistance)
+        {
+            HandleCollection();
+        }
+    }
+
+    // -------------------------
+    // Suction API
+    // -------------------------
+
+    public void StartAttraction(
+        Transform targetTransform,
+        float strength,
+        float radius)
+    {
+        _attractorTransform = targetTransform;
+        _attractorPos = targetTransform.position;
+
+        _attractRadius =
+            Mathf.Max(0.01f, radius);
+
+        _attractStrength = strength;
+
+        _isAttracted = true;
+    }
+
+    public void UpdateAttractionTarget(
+        Vector2 targetPosition)
+    {
+        _attractorPos = targetPosition;
     }
 
     public void StopAttraction()
     {
-        isAttracted = false;
-        attractorTransform = null;
-        rb.linearDamping = normalDrag; // restore drag so it slowly slows naturally
+        _isAttracted = false;
+        _attractorTransform = null;
     }
+
+    // -------------------------
+    // Collection
+    // -------------------------
 
     public void HandleCollection()
     {
-        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_essenceCollect, transform.position);
+        AudioManager.Instance.PlayOneShot(
+            FmodEvent.Instance.sfx_essenceCollect,
+            transform.position
+        );
 
         switch (_currentExpirationPhase)
         {
             case 0:
-                _towerManager.IncreaseEssenceCount(GetBonusEssence());
+                _towerManager.IncreaseEssenceCount(
+                    GetBonusEssence()
+                );
                 break;
+
             case 1:
-                _towerManager.IncreaseEssenceCount(GetNormalEssence());
+                _towerManager.IncreaseEssenceCount(
+                    GetNormalEssence()
+                );
                 break;
+
             case 2:
-                _towerManager.IncreaseEssenceCount(GetHalfEssence());
+                _towerManager.IncreaseEssenceCount(
+                    GetHalfEssence()
+                );
                 break;
-
         }
-        ResetStats();
 
+        ResetStats();
     }
+
     void ResetStats()
     {
-        rb.linearVelocity = Vector3.zero;
+        _velocity = Vector2.zero;
+
         _currentExpirationPhase = 0;
-        _essenceCurrentLiveTime = 0;
+        _essenceCurrentLiveTime = 0f;
+
         _particleEffects.Play();
+
         _autoAttract = false;
+
         StopAttraction();
+
         gameObject.SetActive(false);
     }
 
+    // -------------------------
+    // Essence Value
+    // -------------------------
+
     int GetBonusEssence()
     {
-        int essence = UnityEngine.Random.Range(_essenceMinWorth, _essenceMaxWorth);
-        return (int)(essence * _essenceBonusMultiplier);
-    }
-    int GetNormalEssence() => UnityEngine.Random.Range(_essenceMinWorth, _essenceMaxWorth);
-    int GetHalfEssence() => UnityEngine.Random.Range(_essenceMinWorth, _essenceMaxWorth) / 2;
+        int essence =
+            UnityEngine.Random.Range(
+                _essenceMinWorth,
+                _essenceMaxWorth
+            );
 
-    private void OnTriggerEnter2D(Collider2D other)
+        return (int)(
+            essence *
+            _essenceBonusMultiplier
+        );
+    }
+
+    int GetNormalEssence()
     {
-        if(other.CompareTag("Shield"))
-        {
-            ResetStats();
-        }
+        return UnityEngine.Random.Range(
+            _essenceMinWorth,
+            _essenceMaxWorth
+        );
+    }
+
+    int GetHalfEssence()
+    {
+        return UnityEngine.Random.Range(
+            _essenceMinWorth,
+            _essenceMaxWorth
+        ) / 2;
     }
 }

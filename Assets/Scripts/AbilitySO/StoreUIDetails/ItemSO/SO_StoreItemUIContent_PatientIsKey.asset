@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5535de19f076534385c491fafb63443, type: 3}
   m_Name: SO_StoreItemUIContent_PatientIsKey
   m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
-  ability_Name: PatientIsKey
+  ability_Name: Patient Is Key
   ability_Description: Increase all time-based ability by damage 50% but increase
     effect rate by 1 second
-  _itemRarity: 0
+  _itemRarity: 1
   ability_ToSpawn: {fileID: 11400000, guid: a66720731dbaa3a47a803e580b78ce48, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

@@ -7,6 +7,8 @@ public class PaddleVacoom : MonoBehaviour
     PaddleMovement _paddleMovement;
     PaddleHealth _paddleHealth;
 
+
+
     [Header("Vacuum Settings")]
     public float attractRadius = 3f;
     [Tooltip("Cone angle in degrees (total). 60 means ±30° from forward.")]

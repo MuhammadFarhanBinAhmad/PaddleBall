@@ -4,12 +4,11 @@ using UnityEngine;
 public class FirstStrike : ABSAbility
 {
     bool _firstStike = true;
-    public override void OnHit(HitContext ctx)
+    public override void OnHitMultiply(HitContext ctx)
     {
         if(_firstStike)
         {
-            float dmg = (float)ctx._damageValue;
-            ctx._damageValue = (int)(_SOAbilityEffect._baseDamageMultiplier * dmg);
+            ctx._damageValue = (int)(_SOAbilityEffect._baseDamageMultiplier * (float)ctx._damageValue);
             _firstStike = false;
         }
     }

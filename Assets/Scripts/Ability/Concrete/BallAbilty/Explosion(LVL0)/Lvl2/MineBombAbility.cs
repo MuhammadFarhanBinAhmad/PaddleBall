@@ -10,7 +10,7 @@ public class MineBombAbility : ABSAbility
         _mineBombPool = FindAnyObjectByType<MineBombPool>();
     }
 
-    public override void OnHit(HitContext ctx)
+    public override void OnHitResolved(HitContext ctx)
     {
         for (int i = 0; i < _SOAbilityEffect._amountToSpawn; i++)
         {

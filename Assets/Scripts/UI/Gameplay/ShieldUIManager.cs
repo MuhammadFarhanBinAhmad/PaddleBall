@@ -24,8 +24,9 @@ public class ShieldUIManager : MonoBehaviour
         _deadZone.OnShieldRecharging -= UpdateShieldUI;
 
     }
-    void UpdateShieldUI()
+    public void UpdateShieldUI()
     {
         _manaImage.fillAmount = _deadZone.GetShieldPercentage();
+        _health.text = _deadZone.GetCurrentShield().ToString() + '+' + _deadZone.GetMaxShield().ToString();
     }
 }

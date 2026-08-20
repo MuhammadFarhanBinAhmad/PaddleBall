@@ -7,6 +7,7 @@ public class TimeManager : MonoBehaviour
 {
     BrickPool _brickpool;
     StoreAbilityManager _storeAbilityManager;
+    StoreOverlayUI _overlayUI;
     BossManager _bossManager;
     EpisodeManager _episodeManager;
 
@@ -56,13 +57,16 @@ public class TimeManager : MonoBehaviour
         _bossManager = FindAnyObjectByType<BossManager>();
         _brickpool = FindAnyObjectByType<BrickPool>();
         _episodeManager = FindAnyObjectByType<EpisodeManager>();
+        _overlayUI = FindAnyObjectByType<StoreOverlayUI>();
     }
 
     private void Start()
     {
         _dayPass += PlayDayPassAudio;
-        _dayPass += _storeAbilityManager.RerollItem;
+        _dayPass += _storeAbilityManager.SetItemAvailableToPurchase;
         _dayPass += _storeAbilityManager.ResetRoroll;
+        _dayPass += _overlayUI.ResetItems;
+        _dayPass += _overlayUI.UpdateRerollText;
 
         _onStartBossDay += SwitchBossDayDuration;
         _onStartBossDay += StopDayTimer;
@@ -95,8 +99,10 @@ public class TimeManager : MonoBehaviour
         _onBossDefeated -= StartDayTimer;
 
         _dayPass -= PlayDayPassAudio;
-        _dayPass -= _storeAbilityManager.RerollItem;
+        _dayPass -= _storeAbilityManager.SetItemAvailableToPurchase;
         _dayPass -= _storeAbilityManager.ResetRoroll;
+        _dayPass -= _overlayUI.ResetItems;
+        _dayPass -= _overlayUI.UpdateRerollText;
     }
 
     private void Update()

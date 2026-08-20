@@ -3,7 +3,7 @@ using UnityEngine;
 public class ElectricAbility : ABSAbility
 {
     public GameObject _vfxBuildPrefab, _vfxPopPrefab;
-    public override void OnHitResolved(HitContext ctx)
+    public override void OnHit(HitContext ctx)
     {
         var statusCtx = new AbilityContext
         {

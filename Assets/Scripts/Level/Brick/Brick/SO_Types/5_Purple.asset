@@ -16,7 +16,7 @@ MonoBehaviour:
   _childElementID: 7
   _elementID: 5
   _layerNumber: 5
-  _health: 64
+  _health: 400
   _dropSpeed: 0.01
   _APValue: 5
   _daytoUnlock: 6

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5535de19f076534385c491fafb63443, type: 3}
   m_Name: SO_StoreItemUIContent_AllIn
   m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
-  ability_Name: AllIn
+  ability_Name: All In
   ability_Description: Increase 200% damage to all chance-related ability but reduce
-    all non crit attack by 50%
+    base attack by 50%
   _itemRarity: 0
   ability_ToSpawn: {fileID: 11400000, guid: 6a08e03975a902a46b90751f6c8fdfb6, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

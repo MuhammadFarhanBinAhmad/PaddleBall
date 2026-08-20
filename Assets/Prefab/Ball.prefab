@@ -183,7 +183,7 @@ MonoBehaviour:
   _gravityScale: 50
   _maxVelocity: 50
   _reviveParticle: {fileID: 7747516998161419209}
-  _baseDamage: 1
+  _baseDamage: 10
   _camShakeStrength: 5
   _feverThreshold: 10
   _particleTrail: {fileID: 6917882963362471459}

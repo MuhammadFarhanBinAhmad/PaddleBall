@@ -5,25 +5,38 @@ using UnityEngine;
 public class Consistency : ABSAbility
 {
 
-    public int _currentCombo;
-    int _baseDamageIncrease;
+    int _currentThreshold;
 
-    public override void ModifyHit(HitContext ctx)
+    //public override void OnHit(HitContext ctx)
+    //{
+    //    //if (_ball._currentCombo % _SOAbilityEffect._comboThreshold == 0)
+    //    //{
+    //    //    int threshold = _SOAbilityEffect._comboThreshold;
+    //    //    _currentThreshold = _ball._currentCombo / threshold;
+
+    //    //    if (threshold <= 0)
+    //    //        return;
+    //    //}
+    //    //int _baseDamageIncrease = _currentThreshold * (int)_SOAbilityEffect._baseDamagePlus;
+
+    //    //ctx._damageValue += _baseDamageIncrease;
+    //}
+    public override void OnHitMultiply(HitContext ctx)
     {
-        ctx._damageValue += _baseDamageIncrease;
-    }
-    public override void OnHit(HitContext ctx)
-    {
-        _currentCombo++;
-        if (_currentCombo >= _SOAbilityEffect._comboThreshold)
+        if (_ball._currentCombo % _SOAbilityEffect._comboThreshold == 0)
         {
-            _baseDamageIncrease += (int)_SOAbilityEffect._baseDamagePlus;
-            _currentCombo = 0;
+            int threshold = _SOAbilityEffect._comboThreshold;
+            _currentThreshold = _ball._currentCombo / threshold;
+
+            if (threshold <= 0)
+                return;
         }
+        int _baseDamageIncrease = _currentThreshold * (int)_SOAbilityEffect._baseDamagePlus;
+
+        ctx._damageValue += _baseDamageIncrease;
     }
     public override void OnBallDestroy(Ball ball)
     {
-        _currentCombo = 0;
-        _baseDamageIncrease = 0;
+        _currentThreshold = 0;
     }
 }

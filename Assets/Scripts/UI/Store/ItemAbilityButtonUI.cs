@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,6 +10,7 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     TowerUIManager _towerUIManager;
     AbilityManager _abilityManager;
     StoreOverlayUI _storeOverlayUI;
+    OnTheHouse _onTheHouse;
     //ViewItemAbilityButtonUI _viewItemAbilityButtonUI;
     [SerializeField]StoreAbilityManager _storeAbilityManager;
     internal SOItemAbilityContentUI _itemAbilityContent { get;private set; }
@@ -18,7 +20,7 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private TMP_Text _nameText;
     [SerializeField] private TMP_Text _descriptionText;
     [SerializeField] private TMP_Text _costText;
-
+    [SerializeField] GameObject _backCard;
     [SerializeField] private Button _selectButton;
     internal int _purchaseCost { get; private set; }
     bool _isPurchase = false;
@@ -55,6 +57,7 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         _selectButton.interactable = true;
         _isPurchase = false;
+        _backCard.SetActive(false);
     }
     public void DeactiveButton()
     {
@@ -66,21 +69,43 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
         if(_isPurchase)
             return;
 
+        if(_onTheHouse != null)
+        {
+            if (!_onTheHouse._itemPurchase)
+            {
+                PurchaseCard();
+                _onTheHouse._itemPurchase = true;
+                return; 
+            }
+        }
 
         if (_towerManager._currentPureEssence >= _purchaseCost)
         {
-            _towerManager.DeductPureEssence(_purchaseCost);
-            _abilityManager.AddAbility(GetAbilityToSpawn());
-            DeactiveButton();
-            //_viewItemAbilityButtonUI.SetContentToNull();
-            _isPurchase = true;
-            _towerUIManager.UpdateEssenceUI();
+            PurchaseCard();
         }
         else
         {
             print("insufficnet");
         }
     }
+    void PurchaseCard()
+    {
+        if (_onTheHouse != null)
+        {
+            if (!_onTheHouse._itemPurchase)
+            {
+                _towerManager.DeductPureEssence(_purchaseCost);
+            }
+        }
+
+
+        _abilityManager.AddAbility(GetAbilityToSpawn());
+        DeactiveButton();
+        //_viewItemAbilityButtonUI.SetContentToNull();
+        _isPurchase = true;
+        _towerUIManager.UpdateEssenceUI();
+    }    
+    public void SetOnTheHouse(OnTheHouse oth) => _onTheHouse = oth;
 
     public void OnPointerEnter(PointerEventData eventData)
     {

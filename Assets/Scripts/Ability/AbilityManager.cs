@@ -127,15 +127,28 @@ public class AbilityManager : MonoBehaviour
         };
 
         // Phase 1: Modifier
-        foreach (var ability in _brickAbilities)
-            ability.ModifyHit(ctx);
+        //foreach (var ability in _brickAbilities)
+        //    ability.ModifyHit(ctx);
 
-        // Phase 2: On hit
+        // Phase 2: On hit(Add->Subtract->Multiply->Division)
         foreach (var ability in _brickAbilities)
-            ability.OnHit(ctx);
+            ability.OnHit(ctx);//For base abilities
 
-        // Phase 3: Apply damage
-        ctx._health.OnDamage(ctx._damageValue);
+        //For modifiying existing ability
+        foreach (var ability in _brickAbilities)
+            ability.OnHitAdd(ctx);
+
+        foreach (var ability in _brickAbilities)
+            ability.OnHitSubtract(ctx);
+
+        foreach (var ability in _brickAbilities)
+            ability.OnHitMultiply(ctx);
+
+        foreach (var ability in _brickAbilities)
+            ability.OnHitDivide(ctx);
+
+            // Phase 3: Apply damage
+            ctx._health.OnDamage(ctx._damageValue);
 
         // Phase 4: Notify abilities of outcome
         foreach (var ability in _brickAbilities)
@@ -188,7 +201,11 @@ public class AbilityManager : MonoBehaviour
         {
             if (ability is IDischargeContextModifier modifier)
             {
-                modifier.ModifyDischargeContext(hitCtx, dischargeCtx);
+                modifier.ModifyDischargeAdd(hitCtx, dischargeCtx);
+                modifier.ModifyDischargeSubtract(hitCtx, dischargeCtx);
+                modifier.ModifyDischargeMultiple(hitCtx, dischargeCtx);
+                modifier.ModifyDischargeDivide(hitCtx, dischargeCtx);
+
             }
         }
     }
@@ -198,7 +215,11 @@ public class AbilityManager : MonoBehaviour
         {
             if (ability is IExplosionContextModifier modifier)
             {
-                modifier.ModifyExplosionContext(hitCtx, explosionCtx);
+                modifier.ModifyExplosionContextAdd(hitCtx, explosionCtx);
+                modifier.ModifyExplosionContextSubtract(hitCtx, explosionCtx);
+                modifier.ModifyExplosionContextMultiply(hitCtx, explosionCtx);
+                modifier.ModifyExplosionContextDivide(hitCtx, explosionCtx);
+
             }
         }
     }
@@ -208,7 +229,11 @@ public class AbilityManager : MonoBehaviour
         {
             if (ability is IToxicContextModifier modifier)
             {
-                modifier.ModifyToxicContext(dischargeCtx);
+                modifier.ModifyToxicContextAdd(dischargeCtx);
+                modifier.ModifyToxicContextSubtract(dischargeCtx);
+                modifier.ModifyToxicContextMultiple(dischargeCtx);
+                modifier.ModifyToxicContextDivide(dischargeCtx);
+
             }
         }
     }
@@ -218,7 +243,11 @@ public class AbilityManager : MonoBehaviour
         {
             if (ability is ICriticalContextModifier modifier)
             {
-                modifier.ModifyCriticalContext(hitCtx, CriticalCtx);
+                modifier.ModifyCriticalContextAdd(hitCtx, CriticalCtx);
+                modifier.ModifyCriticalContextSubtract(hitCtx, CriticalCtx);
+                modifier.ModifyCriticalContextMultiply(hitCtx, CriticalCtx);
+                modifier.ModifyCriticalContextDivide(hitCtx, CriticalCtx);
+
             }
         }
     }

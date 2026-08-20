@@ -13,7 +13,7 @@ public class Spliter : ABSAbility
     {
         currentChance = baseChance;
     }
-    public override void OnHit(HitContext ctx)
+    public override void OnHitResolved(HitContext ctx)
     {
         float roll = Random.Range(0f, 100f);
 

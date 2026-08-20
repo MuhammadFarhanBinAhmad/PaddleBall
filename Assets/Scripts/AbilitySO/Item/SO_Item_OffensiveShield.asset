@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
   m_Name: SO_Item_OffensiveShield
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: Offensive Shield
   _statusType: 0
   _abilityPrefab: {fileID: 2108239684774029596, guid: 03fe54ed5293680409d3a08fd185f72c, type: 3}
   _genericEffect: 1

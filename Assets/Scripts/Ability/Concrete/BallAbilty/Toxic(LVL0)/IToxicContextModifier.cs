@@ -2,6 +2,9 @@ using UnityEngine;
 
 public interface IToxicContextModifier
 {
-    void ModifyToxicContext(AbilityContext toxicContext);
+    void ModifyToxicContextAdd(AbilityContext toxicContext);
+    void ModifyToxicContextSubtract(AbilityContext toxicContext);
+    void ModifyToxicContextMultiple(AbilityContext toxicContext);
+    void ModifyToxicContextDivide(AbilityContext toxicContext);
 
 }

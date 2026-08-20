@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
   m_Name: SO_Item_Homing
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
-  _abilityName: 
+  _abilityName: Let It RIde
   _statusType: 0
   _abilityPrefab: {fileID: 3044345491608124495, guid: a8eed37b1b5c010449e9c80eb4f028ee, type: 3}
   _genericEffect: 1
@@ -21,6 +21,7 @@ MonoBehaviour:
   _critEffect: 0
   _explosionEffect: 0
   _counterEffect: 0
+  _shieldEffect: 0
   _abilityBaseDamageValue: 0
   _baseDamagePlus: 0
   _baseDamageMinus: 0
@@ -37,12 +38,18 @@ MonoBehaviour:
   _damagePerStack: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
+  _modifyTimeBeforeEffectActivate: 0
   _resetStackTimer: 0
   _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
   _baseCritChance: 0
   _critMultiplier: 0
+  _modiftCritMultiplier: 0
   _layerToDestroy: 0
   _explosionDamageMultiplier: 0
   _explosionSizeMultiplier: 0
+  _shieldMultiplier: 0
+  _shieldAdd: 0
+  _shieldModifyShieldRegenRate: 0
+  _shieldModifyCooldown: 0

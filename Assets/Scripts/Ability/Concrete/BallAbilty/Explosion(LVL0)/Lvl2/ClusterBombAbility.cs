@@ -11,7 +11,7 @@ public class ClusterBombAbility : ABSAbility
 
     }
 
-    public override void OnHit(HitContext ctx)
+    public override void OnHitResolved(HitContext ctx)
     {
         for (int i = 0; i < _SOAbilityEffect._amountToSpawn; i++)
         {

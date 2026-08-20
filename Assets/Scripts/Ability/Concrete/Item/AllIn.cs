@@ -1,17 +1,22 @@
 using UnityEngine;
 
-public class AllIn : ABSAbility, ICriticalContextModifier
+public class AllIn : ABSAbility
 {
-    public void ModifyCriticalContext(HitContext hitCtx, AbilityContext critContext)
+
+    public override void OnHitMultiply(HitContext ctx)
     {
-        critContext._Stats[STATID.CRIT_MULTIPLIER] += _SOAbilityEffect._modiftCritMultiplier;
+        if (ctx._status.HasFlag(STATUSTYPE.CRIT))
+        {
+            float damage = ctx._damageValue;
+            ctx._damageValue = (int)(damage * _SOAbilityEffect._critMultiplier);
+        }
     }
-    public override void ModifyHit(HitContext ctx)
+    public override void OnHitDivide(HitContext ctx)
     {
         if (!ctx._status.HasFlag(STATUSTYPE.CRIT))
         {
             float damage = ctx._damageValue;
-            ctx._damageValue *= (int)(damage * _SOAbilityEffect._baseDamageMultiplier);
+            ctx._damageValue = (int)(damage * _SOAbilityEffect._baseDamageMultiplier);
         }
     }
 }

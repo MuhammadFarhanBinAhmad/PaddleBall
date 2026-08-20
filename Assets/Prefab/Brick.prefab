@@ -5422,8 +5422,8 @@ MonoBehaviour:
   _onDamageAnimEffect: {fileID: 11400000, guid: 3f05282951564bf4588e34e29fdd91b7, type: 2}
   _onDeathAnimEffect: {fileID: 11400000, guid: 15899b26e3d4795419603351b4e00b62, type: 2}
   _damageParticle: {fileID: 8576968875537360257}
-  _essenceMinAmountToSpawn: 10
-  _essenceMaxAmountToSpawn: 15
+  _essenceMinAmountToSpawn: 1
+  _essenceMaxAmountToSpawn: 2
 --- !u!114 &9106042457657841286
 MonoBehaviour:
   m_ObjectHideFlags: 0

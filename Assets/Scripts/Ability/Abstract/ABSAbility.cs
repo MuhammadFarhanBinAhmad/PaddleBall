@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum MODIFIEROPERATION
+{
+    ADD,
+    MULTIPLY,
+    DIVISION
+}
 
 public abstract class ABSAbility : MonoBehaviour
 {
     protected Ball _ball;
-    protected AbilityManager _abilityManager;
+    internal AbilityManager _abilityManager;
 
     public SOAbilityEffect _SOAbilityEffect;
 
@@ -26,12 +32,18 @@ public abstract class ABSAbility : MonoBehaviour
 
     // Brick-related hooks
     // Modify phase: abilities & their addons can modify the context.All damage calculation to be done here
-    public virtual void ModifyHit(HitContext ctx) { }
+    //public virtual void ModifyHit(HitContext ctx) { }
 
     // Resolve/execute phase: the concrete ability may roll/apply damage,
     // and addons can react via OnHitResolved (called after resolve).
+
+    //Order of calculation => 
     public virtual void OnHit(HitContext ctx) { }
-    // After a hit on enemy has been resolved
+    public virtual void OnHitAdd(HitContext ctx) { }
+    public virtual void OnHitSubtract(HitContext ctx) { }
+    public virtual void OnHitMultiply(HitContext ctx) { }
+    public virtual void OnHitDivide(HitContext ctx) { }
+    // After a hit on enemy has been resolved(Best to be for spawning object)
     public virtual void OnHitResolved(HitContext ctx) { }
     // When a brick is destroyed upon hit
     public virtual void OnBrickDestroy(BrickBar bar) { }

@@ -9,7 +9,7 @@ public class HotZoneAbility : ABSAbility
         _hotZonePool = FindAnyObjectByType<HotZonePool>();
     }
 
-    public override void OnHit(HitContext ctx)
+    public override void OnHitResolved(HitContext ctx)
     {
         if (_hotZonePool == null) return;
 
