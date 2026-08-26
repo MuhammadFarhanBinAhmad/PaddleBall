@@ -124,9 +124,9 @@ public class AbilityManager : MonoBehaviour
             _damageValue = basedmg,
         };
 
-        // Phase 1: Modifier
-        //foreach (var ability in _brickAbilities)
-        //    ability.ModifyHit(ctx);
+        //Phase 1: Modifier
+        foreach (var ability in _brickAbilities)
+            ability.ModifyBaseValue(ctx);
 
         // Phase 2: On hit(Add->Subtract->Multiply->Division)
         foreach (var ability in _brickAbilities)

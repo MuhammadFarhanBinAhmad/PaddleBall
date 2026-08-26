@@ -18,6 +18,9 @@ public class TowerManager : MonoBehaviour
     public int _essenceToPureEssenceConversionRate;
     public int _currentEssenceCount;
     internal int _currentPureEssence { get; private set; }
+    internal int _totalPureEssenceEarn {  get; private set; }
+    internal int _totalPureEssenceSpent { get; private set; }
+
     [SerializeField] ParticleSystem _onEssenceCollectParticle;
     public Action OnEssenceCollect;
 
@@ -132,6 +135,7 @@ public class TowerManager : MonoBehaviour
             _currentEssenceCount = 0;
             _currentBrickCount++;
             _currentPureEssence++;
+            _totalPureEssenceEarn++;
             GameObject brick = Instantiate(_collectedBrick);
             Vector3 pos = new Vector2((transform.position.x + _startPosOffset.x) + (transform.position.x / 2) + (_posOffset.x * _currentBrickCount), transform.position.y);
             brick.transform.position = pos;
@@ -396,7 +400,11 @@ public class TowerManager : MonoBehaviour
     }
 
     public int GetCurrentEssence() => _currentEssenceCount;
-    public void DeductPureEssence(int value) => _currentPureEssence -= value;
+    public void DeductPureEssence(int value)
+    {
+        _currentPureEssence -= value;
+        _totalPureEssenceSpent += value;
+    }
     public int GetTotalPureEssenceCount() => _currentPureEssence;
     public int GetCurrentBrickCount() => _currentBrickCount;
     public int GetBrickFloorConversionRate() => _brickToFloorConversionRate;

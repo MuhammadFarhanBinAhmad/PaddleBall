@@ -39,6 +39,8 @@ public abstract class ABSAbility : MonoBehaviour
     // and addons can react via OnHitResolved (called after resolve).
 
     //Order of calculation => 
+
+    public virtual void ModifyBaseValue(HitContext ctx) { }
     public virtual void OnHit(HitContext ctx) { }
     public virtual void OnHitAdd(HitContext ctx) { }
     public virtual void OnHitSubtract(HitContext ctx) { }

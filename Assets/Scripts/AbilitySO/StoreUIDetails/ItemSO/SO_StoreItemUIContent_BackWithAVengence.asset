@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5535de19f076534385c491fafb63443, type: 3}
-  m_Name: SO_StoreItemUIContent_Consolation
+  m_Name: SO_StoreItemUIContent_BackWithAVengence
   m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
-  ability_Name: Consolation
-  ability_Description: plus 5 final damage to all non-crit attacks
+  ability_Name: Back With A Vengence
+  ability_Description: Upon respawning, +25% base and skill damage for 10 seconds
   _itemRarity: 0
-  ability_ToSpawn: {fileID: 11400000, guid: ad63ed1a6599f5d4a8b97a0a99b7e06f, type: 2}
+  ability_ToSpawn: {fileID: 11400000, guid: 135cf6f4187858c4390b5bb481fa12db, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

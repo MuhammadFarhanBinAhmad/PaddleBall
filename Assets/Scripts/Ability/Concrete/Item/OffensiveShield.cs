@@ -11,7 +11,7 @@ public class OffensiveShield : ABSAbility
         _deadZone.ResetShield();
         FindAnyObjectByType<ShieldUIManager>().UpdateShieldUI();
     }
-    public override void OnHitMultiply (HitContext ctx)
+    public override void ModifyBaseValue(HitContext ctx)
     {
         float dmg = (float)ctx._damageValue;
         ctx._damageValue = Mathf.CeilToInt(dmg * _SOAbilityEffect._baseDamageMultiplier);

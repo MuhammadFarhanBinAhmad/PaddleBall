@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModifier, IExplosionContextModifier, ICriticalContextModifier
 {
-    public override void OnHitAdd(HitContext ctx)
+    public override void ModifyBaseValue(HitContext ctx)
     {
         ctx._damageValue += _SOAbilityEffect._baseDamagePlus;
     }

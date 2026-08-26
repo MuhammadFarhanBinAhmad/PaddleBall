@@ -34,6 +34,10 @@ public class SOAbilityEffect : ScriptableObject
     public float _bonusPerFail;
     [GroupUnder(nameof(_genericEffect))]
     public float _scaleSizeMultiplier;
+    [GroupUnder(nameof(_genericEffect))]
+    public float _timer;
+    [GroupUnder(nameof(_genericEffect))]
+    public int _threshold;
     //-----------------Counter-----------------//
     [GroupUnder(nameof(_counterEffect))]
     public float _timeRate;
@@ -83,7 +87,7 @@ public class SOAbilityEffect : ScriptableObject
     [GroupUnder(nameof(_shieldEffect))]
     public float _shieldMultiplier;
     [GroupUnder(nameof(_shieldEffect))]
-    public float _shieldAdd;
+    public int _shieldAdd;
     [GroupUnder(nameof(_shieldEffect))]
     public float _shieldModifyShieldRegenRate;
     [GroupUnder(nameof(_shieldEffect))]

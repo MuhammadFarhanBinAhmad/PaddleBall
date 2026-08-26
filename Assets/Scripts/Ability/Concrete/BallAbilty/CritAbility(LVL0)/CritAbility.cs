@@ -8,7 +8,6 @@ public class CritAbility : ABSAbility
 
     public override void OnHit(HitContext ctx)
     {
-
         AbilityContext cctx = new AbilityContext { };
         cctx._Stats[STATID.BASE_DAMAGE] = ctx._damageValue + _SOAbilityEffect._baseDamagePlus;
         cctx._Stats[STATID.CRIT_CHANCE] = _SOAbilityEffect._baseCritChance;
@@ -20,7 +19,6 @@ public class CritAbility : ABSAbility
 
         if (isCrit)
         {
-            print("crit");
             ctx._status = STATUSTYPE.CRIT;
             ctx._damageValue = Mathf.CeilToInt(cctx._Stats[STATID.BASE_DAMAGE] * cctx._Stats[STATID.CRIT_MULTIPLIER]
             );
