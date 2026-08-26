@@ -86,6 +86,7 @@ public class BrickBar : MonoBehaviour
     [Header("BrickDamageEffect")]
     [SerializeField] SOLerpAnimationEffect _onDamageAnimEffect;
     [SerializeField] SOLerpAnimationEffect _onDeathAnimEffect;
+    [SerializeField] SO_FeedbackEffect so_OnBrickDestroy;
     [SerializeField] ParticleSystem _damageParticle;
     AnimationCurveEffect _AnimCurveEffect;
 
@@ -226,7 +227,7 @@ public class BrickBar : MonoBehaviour
 
     void HandleDeath()
     {
-        GlobalFeedbackManager.Instance.SetFeedbackValueForBrickDestroy();
+        GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBrickDestroy);
         GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
         GlobalFeedbackManager.Instance.PlayFreezeFrame();
         abilityManager.NotifyBrickDestroyed(this);

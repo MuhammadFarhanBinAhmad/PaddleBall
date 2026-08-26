@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using FMOD.Studio;
 
 [System.Serializable]
 public struct ComboPerformance
@@ -17,7 +18,6 @@ public class BallUIManager : MonoBehaviour
     [Header("ComboUI")]
     [SerializeField] TextMeshProUGUI _currentComboText;
     [SerializeField] int _comboParticleThreshold;
-    [SerializeField] GameObject _comboParticleEffect;
     [SerializeField] TextMeshProUGUI _comboPerformanceText;
     [SerializeField] ComboPerformance[] _comboPerformances;
     [SerializeField] int _rankLetterSize, _wordTextSize;
@@ -30,20 +30,33 @@ public class BallUIManager : MonoBehaviour
     [SerializeField] float _currentscaleMultiplier;
     [SerializeField] float _capscaleMultiplier;
 
+    bool _audioPlayed;
+    EventInstance _paddleHitCombo;
 
     Coroutine comboAnim;
 
-    void Start()
+    private void Awake()
     {
         _ballManager = FindAnyObjectByType<Ball>();
 
+    }
+    void Start()
+    {
+
+        _paddleHitCombo = AudioManager.Instance.CreateEventInstance(FmodEvent.Instance.sfx_onPaddleComboHit);
+
+
         _ballManager.OnBrickHit += UpdateComboUI;
+        _ballManager.OnBrickHit += PlayComboAudio;
+
         _ballManager.OnBallReset+= UpdateComboUI;
     }
 
     private void OnDisable()
     {
         _ballManager.OnBrickHit -= UpdateComboUI;
+        _ballManager.OnBallHit -= PlayComboAudio;
+
         _ballManager.OnBallReset -= UpdateComboUI;
     }
 
@@ -92,11 +105,23 @@ public class BallUIManager : MonoBehaviour
             }
         }
     }
+    void PlayComboAudio()
+    {
+        //int combo = _ballManager._currentCombo;
+
+        //for (int i = 1; i < _comboPerformances.Length-1; i++)
+        //{
+        //    if (combo == _comboPerformances[i].comboThreshold)
+        //    {
+        //        // Play audio for this performance tier
+        //        _paddleHitCombo.setParameterByName("ComboPitch", i);
+        //        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleComboHit, transform.position);
+        //        return;
+        //    }
+        //}
+    }
     IEnumerator AnimateCombo()
     {
-        if(_ballManager._currentCombo >= _comboParticleThreshold)
-            _comboParticleEffect.SetActive(true);
-
         Transform n = _currentComboText.transform;
         Transform t = _comboPerformanceText.transform;
         Vector3 startScale = Vector3.one;

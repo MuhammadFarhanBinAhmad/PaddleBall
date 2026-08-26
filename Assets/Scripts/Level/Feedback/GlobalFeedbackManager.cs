@@ -34,11 +34,6 @@ public class GlobalFeedbackManager : MonoBehaviour
     [SerializeField] float _freezeRealtimeDuration;
     Coroutine _freezeRoutine;
 
-    [Header("OnHitBallAnimation")]
-    [SerializeField] SO_FeedbackEffect so_OnBallHit;
-
-    [Header("BrickDestroy")]
-    [SerializeField] SO_FeedbackEffect so_OnBrickDestroy;
 
     //CamShakeValue
     float _duration;
@@ -224,44 +219,24 @@ public class GlobalFeedbackManager : MonoBehaviour
 
         _shakeWorldRoutine = null;
     }
-    public void SetFeedbackValueForOnBallHit()
+    public void SetFeedbackValue(SO_FeedbackEffect _fe)
     {
-        _feedbackAnimCurve = so_OnBallHit._animCurve;
+        _feedbackAnimCurve = _fe._animCurve;
 
-        _duration = so_OnBallHit._duration;
-        _trauma = so_OnBallHit._trauma;
+        _duration = _fe._duration;
+        _trauma = _fe._trauma;
 
-        _animationDuration = so_OnBallHit.animationDuration;
+        _animationDuration = _fe.animationDuration;
 
-        _paddleStartScaleMultiplier = so_OnBallHit._startscaleMultiplier;
-        //_ballStartScaleMultiplier = so_OnBallHit._startscaleMultiplier;
-        _wallStartScaleMultipler = so_OnBallHit._startscaleMultiplier;
-        _brickStartScaleMultipler = so_OnBallHit._startscaleMultiplier;
-
-        _paddleEndScaleMultiplier = so_OnBallHit._endscaleMultiplier;
-        //_ballEndScaleMultiplier = so_OnBallHit._endscaleMultiplier;
-        _wallEndScaleMultipler = so_OnBallHit._endscaleMultiplier;
-        _brickEndScaleMultipler = so_OnBallHit._endscaleMultiplier;
-    }
-    public void SetFeedbackValueForBrickDestroy()
-    {
-
-        _feedbackAnimCurve = so_OnBrickDestroy._animCurve;
-
-        _duration = so_OnBrickDestroy._duration;
-        _trauma = so_OnBrickDestroy._trauma;
-
-        _animationDuration = so_OnBrickDestroy.animationDuration;
-
-        _paddleStartScaleMultiplier = so_OnBrickDestroy._startscaleMultiplier;
+        _paddleStartScaleMultiplier = _fe._startscaleMultiplier;
         //_ballStartScaleMultiplier = so_OnBrickDestroy._startscaleMultiplier;
-        _wallStartScaleMultipler = so_OnBrickDestroy._startscaleMultiplier;
-        _brickStartScaleMultipler = so_OnBrickDestroy._startscaleMultiplier;
+        _wallStartScaleMultipler = _fe._startscaleMultiplier;
+        _brickStartScaleMultipler = _fe._startscaleMultiplier;
 
         //_ballEndScaleMultiplier = so_OnBrickDestroy._endscaleMultiplier;
-        _paddleEndScaleMultiplier = so_OnBrickDestroy._endscaleMultiplier;
-        _wallEndScaleMultipler = so_OnBrickDestroy._endscaleMultiplier;
-        _brickEndScaleMultipler = so_OnBrickDestroy._endscaleMultiplier;
+        _paddleEndScaleMultiplier = _fe._endscaleMultiplier;
+        _wallEndScaleMultipler = _fe._endscaleMultiplier;
+        _brickEndScaleMultipler = _fe._endscaleMultiplier;
     }
     public void PlayFreezeFrame()
     {

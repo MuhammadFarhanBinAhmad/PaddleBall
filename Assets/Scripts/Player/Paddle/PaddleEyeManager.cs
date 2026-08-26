@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using FMOD.Studio;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 public enum EMOTION
@@ -13,7 +14,11 @@ public enum EMOTION
 public struct EyePerformance
 {
     public int comboThreshold;
-    public Sprite _pupil;
+    public Sprite _eyeBackLeft;
+    public Sprite _eyeBackRight;
+    public Sprite _leftPupil;
+    public Sprite _rightPupil;
+    public Sprite _mouth;
 }
 
 
@@ -35,9 +40,14 @@ public class PaddleEyeManager : MonoBehaviour
     Coroutine _forcedBlinkRoutine;
 
     [Header("Eye Emotion")]
-    [SerializeField] SpriteRenderer[] _paddlePupil = new SpriteRenderer[2];
+    [SerializeField] SpriteRenderer _paddleLeftPupil;
+    [SerializeField] SpriteRenderer _paddleRightPupil;
+    [SerializeField] SpriteRenderer _paddleLeftEyeBack;
+    [SerializeField] SpriteRenderer _paddleRightEyeBack;
     [SerializeField] EyePerformance[] _emotionPerformance;
+    [SerializeField] SpriteRenderer _mouth;
     EMOTION _currentEmotion;
+
 
     private void Awake()
     {
@@ -46,6 +56,8 @@ public class PaddleEyeManager : MonoBehaviour
 
     void Start()
     {
+
+
         _ballManager.OnBrickHit += ChangePupil;
         _ballManager.OnBallReset += ChangePupil;
 
@@ -136,8 +148,12 @@ public class PaddleEyeManager : MonoBehaviour
         {
             if (combo >= _emotionPerformance[i].comboThreshold)
             {
-                _paddlePupil[0].sprite = _emotionPerformance[i]._pupil;
-                _paddlePupil[1].sprite = _emotionPerformance[i]._pupil;
+                _paddleLeftPupil.sprite = _emotionPerformance[i]._leftPupil;
+                _paddleRightPupil.sprite = _emotionPerformance[i]._rightPupil;
+                _paddleLeftEyeBack.sprite = _emotionPerformance[i]._eyeBackLeft;
+                _paddleRightEyeBack.sprite = _emotionPerformance[i]._eyeBackRight;
+                _mouth.sprite = _emotionPerformance[i]._mouth;
+                
                 return;
             }
         }

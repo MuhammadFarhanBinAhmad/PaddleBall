@@ -13,22 +13,43 @@ MonoBehaviour:
   m_Name: SO_Item_OneUp
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _abilityType: 0
+  _statusType: 0
   _abilityPrefab: {fileID: 152845715585999439, guid: e3d27a9dbd96df24fb3c1ff4c7652a63, type: 3}
-  _abilitiesChild: []
-  _abilityToRemove: {fileID: 0}
   _genericEffect: 1
   _applyStatus: 0
   _spawnEffect: 0
   _critEffect: 0
-  _baseValue: 1
-  _baseDamageValue: 0
+  _explosionEffect: 0
+  _counterEffect: 0
+  _shieldEffect: 0
+  _abilityBaseDamageValue: 0
+  _baseDamagePlus: 1
+  _baseDamageMinus: 0
   _baseDamageMultiplier: 0
+  _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
-  _effectDuration: 0
-  _statusDamage: 0
-  _maxStack: 0
+  _timeRate: 0
+  _comboThreshold: 0
+  _maxStacks: 0
+  _stacksToAdd: 0
+  _maxStacksToAdd: 0
+  _increaseStacksToAdd: 0
+  _damagePerStack: 0
+  _stackLifeTime: 0
+  _timeBeforeEffectActivate: 0
+  _modifyTimeBeforeEffectActivate: 0
+  _resetStackTimer: 0
+  _affectSpeed: 0
   _amountToSpawn: 0
+  _itemToSpawn: {fileID: 0}
   _baseCritChance: 0
   _critMultiplier: 0
+  _modiftCritMultiplier: 0
+  _layerToDestroy: 0
+  _explosionDamageMultiplier: 0
+  _explosionSizeMultiplier: 0
+  _shieldMultiplier: 0
+  _shieldAdd: 0
+  _shieldModifyShieldRegenRate: 0
+  _shieldModifyCooldown: 0

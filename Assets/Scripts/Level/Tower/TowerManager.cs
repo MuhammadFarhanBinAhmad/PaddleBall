@@ -47,6 +47,9 @@ public class TowerManager : MonoBehaviour
     [SerializeField] float _floorMoveDuration = 0.3f;
     [SerializeField] AnimationCurve _floorMoveCurve;
     Coroutine _moveRoutine;
+    [Header("Feedback")]
+    [SerializeField] SO_FeedbackEffect so_OnTowerHit;
+    [SerializeField] SO_FeedbackEffect so_OnFloorLost;
 
     [Header("Tower Health")]
     [SerializeField]int _maxTowerHealth;
@@ -195,17 +198,14 @@ public class TowerManager : MonoBehaviour
     public void TowerTakeDamage(int layer)
     {
         RemoveBrick();
+        GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnTowerHit);
         if (_currentBrickCount <= -1)
         {
             RemoveFloor();
             OnHeightDecrease?.Invoke();
+            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnFloorLost);
         }
-
-        _towerHealth -= layer;
-        if (_towerHealth < 0)
-        {
-            print("GameOver");
-        }
+        GlobalFeedbackManager.Instance.PlayGlobalFeedback();
     }
     void RemoveBrick()
     {

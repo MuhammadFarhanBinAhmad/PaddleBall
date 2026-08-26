@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum MODIFIEROPERATION
+public enum ABILITYTYPE
 {
-    ADD,
-    MULTIPLY,
-    DIVISION
+    SPELL,
+    CARD
 }
 
 public abstract class ABSAbility : MonoBehaviour
@@ -17,6 +16,8 @@ public abstract class ABSAbility : MonoBehaviour
     internal AbilityManager _abilityManager;
 
     public SOAbilityEffect _SOAbilityEffect;
+
+    public ABILITYTYPE _abilityType;
 
     public bool IsUnlocked { get; private set; }
 

@@ -90,20 +90,29 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     }
     void PurchaseCard()
     {
-        if (_onTheHouse != null)
+
+        if(_onTheHouse == null)
         {
+            _towerManager.DeductPureEssence(_purchaseCost);
+            _abilityManager.AddAbility(GetAbilityToSpawn());
+            DeactiveButton();
+            _isPurchase = true;
+            _towerUIManager.UpdateEssenceUI();
+        }
+        else
+        {
+            print("Got house");
             if (!_onTheHouse._itemPurchase)
             {
-                _towerManager.DeductPureEssence(_purchaseCost);
+                _abilityManager.AddAbility(GetAbilityToSpawn());
+                DeactiveButton();
+                _isPurchase = true;
+                _onTheHouse._itemPurchase=_isPurchase;
             }
         }
 
-
-        _abilityManager.AddAbility(GetAbilityToSpawn());
-        DeactiveButton();
-        //_viewItemAbilityButtonUI.SetContentToNull();
-        _isPurchase = true;
-        _towerUIManager.UpdateEssenceUI();
+        _storeAbilityManager.MoveAbility(_itemAbilityContent);
+        _itemAbilityContent = null;
     }    
     public void SetOnTheHouse(OnTheHouse oth) => _onTheHouse = oth;
 

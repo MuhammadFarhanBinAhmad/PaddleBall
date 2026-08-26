@@ -138,5 +138,7 @@ public class PaddleHealth : MonoBehaviour
         SetBoolOnPaddleDisable?.Invoke(false);
 
         _isKnockbacking = false;
+
+        OnPaddleDisable?.Invoke();
     }
 }

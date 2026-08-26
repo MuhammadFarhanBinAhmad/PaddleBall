@@ -19,6 +19,15 @@ MonoBehaviour:
   _health: 100
   _dropSpeed: 0.01
   _APValue: 4
-  _daytoUnlock: 4
+  _daytoUnlock: 3
   _color: {r: 1, g: 1, b: 1, a: 1}
-  _brickSprite: []
+  _brickSprite:
+  - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: 1148709287045872691, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: 9034449238214913990, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: 1114784262, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: 68800044, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - {fileID: -297607996, guid: b4f54150f5781d543be68b79249f6a14, type: 3}

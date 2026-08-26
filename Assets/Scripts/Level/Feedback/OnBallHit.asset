@@ -58,7 +58,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   animationDuration: 0.25
   _startscaleMultiplier: 1
-  _endscaleMultiplier: 1.1
+  _endscaleMultiplier: 1.05
   _vfxEffect: {fileID: 0}
   <sfx_feedback>k__BackingField:
     Guid:

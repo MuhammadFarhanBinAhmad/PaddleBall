@@ -19,7 +19,6 @@ public class OnTheHouse : ABSAbility
 
         _timeManager._dayPass += ResetPurchase;
 
-        print("hit");
     }
     private void OnDestroy()
     {

@@ -6,9 +6,9 @@ public class PaddleEyeFollow : MonoBehaviour
     public Transform target; // the ball
 
     [Header("Behaviour")]
-    public Vector2 maxOffset = new Vector2(0.12f, 0.08f); // how far the pupil can move locally (x,y)
-    public Vector2 minRange = new Vector2(0.0f, 0.0f);    // distances inside this -> no offset (close)
-    public Vector2 maxRange = new Vector2(1.0f, 1.0f);    // distances >= this -> full offset (far)
+    public Vector2 maxOffset; // how far the pupil can move locally (x,y)
+    public Vector2 minRange;    // distances inside this -> no offset (close)
+    public Vector2 maxRange;    // distances >= this -> full offset (far)
     [Range(0f, 30f)] public float smoothSpeed = 12f;      // how quickly the pupil moves
 
     [Header("Options")]

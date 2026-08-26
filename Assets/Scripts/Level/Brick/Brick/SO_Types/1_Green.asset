@@ -19,7 +19,7 @@ MonoBehaviour:
   _health: 20
   _dropSpeed: 0.01
   _APValue: 2
-  _daytoUnlock: 2
+  _daytoUnlock: 1
   _color: {r: 1, g: 1, b: 1, a: 1}
   _brickSprite:
   - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}

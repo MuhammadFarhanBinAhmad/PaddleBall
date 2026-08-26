@@ -1,37 +1,79 @@
 fileFormatVersion: 2
-guid: 28db6b7fe558ab541a617d89ce535cd6
+guid: 6f2b232dcd2cd9846b1ca9decee48af6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7863969038293869534
-    second: SpellBook_Sprite_0
+      213: 1194757123223590818
+    second: Paddles's_Eye_0
   - first:
-      213: -1607668267396719356
-    second: SpellBook_Sprite_1
+      213: 9049469422912232641
+    second: Paddles's_Eye_1
   - first:
-      213: 2410241515446612433
-    second: SpellBook_Sprite_2
+      213: 6354570225660100101
+    second: Paddles's_Eye_2
   - first:
-      213: -2620796241356015887
-    second: SpellBook_Sprite_3
+      213: 8237294567003519437
+    second: Paddles's_Eye_3
   - first:
-      213: 6266042222289805982
-    second: SpellBook_Sprite_4
+      213: 4552669020676883674
+    second: Paddles's_Eye_4
   - first:
-      213: 4465844697819863618
-    second: SpellBook_Sprite_5
+      213: 3446191869607406064
+    second: Paddles's_Eye_5
   - first:
-      213: 5689523489500981976
-    second: SpellBook_Sprite_6
+      213: -5794842209784523969
+    second: Paddles's_Eye_6
   - first:
-      213: 9131198873277908383
-    second: SpellBook_Sprite_7
+      213: 7452468514923555872
+    second: Paddles's_Eye_7
   - first:
-      213: 6447032722154956142
-    second: SpellBook_Sprite_8
+      213: 5592718866576235983
+    second: Paddles's_Eye_8
   - first:
-      213: -1942082773786398155
-    second: SpellBook_Sprite_9
+      213: -3653523531977975780
+    second: Paddles's_Eye_9
+  - first:
+      213: -1207896430750926379
+    second: Paddles's_Eye_10
+  - first:
+      213: -5687563497111559123
+    second: Paddles's_Eye_11
+  - first:
+      213: -9112113026161604917
+    second: Paddles's_Eye_12
+  - first:
+      213: 3328316964238951169
+    second: Paddles's_Eye_13
+  - first:
+      213: -6659161991678880939
+    second: Paddles's_Eye_14
+  - first:
+      213: 6223039020625558221
+    second: Paddles's_Eye_15
+  - first:
+      213: -4410212802618935178
+    second: Paddles's_Eye_16
+  - first:
+      213: -1719314753796496065
+    second: Paddles's_Eye_17
+  - first:
+      213: 8829284102922891174
+    second: Paddles's_Eye_18
+  - first:
+      213: -6555548155761630028
+    second: Paddles's_Eye_19
+  - first:
+      213: 342329144744219562
+    second: Paddles's_Eye_20
+  - first:
+      213: -2171006184679712306
+    second: Paddles's_Eye_21
+  - first:
+      213: -3444433531270241445
+    second: Paddles's_Eye_22
+  - first:
+      213: -8364075568883882632
+    second: Paddles's_Eye_23
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -127,13 +169,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpellBook_Sprite_0
+      name: Paddles's_Eye_0
       rect:
         serializedVersion: 2
-        x: 46
-        y: 1588
-        width: 1602
-        height: 903
+        x: 54
+        y: 403
+        width: 157
+        height: 130
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 22cd2d323d19dd290800000000000000
-      internalID: -7863969038293869534
+      spriteID: 2a71c920641a49010800000000000000
+      internalID: 1194757123223590818
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpellBook_Sprite_1
+      name: Paddles's_Eye_1
       rect:
         serializedVersion: 2
-        x: 1684
-        y: 2365
-        width: 106
-        height: 106
+        x: 272
+        y: 404
+        width: 156
+        height: 129
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,85 +206,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40d96258a3a60b9e0800000000000000
-      internalID: -1607668267396719356
+      spriteID: 1cc51767e7c269d70800000000000000
+      internalID: 9049469422912232641
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpellBook_Sprite_2
+      name: Paddles's_Eye_2
       rect:
         serializedVersion: 2
-        x: 1672
-        y: 2211
-        width: 131
-        height: 131
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1d1381763e5e27120800000000000000
-      internalID: 2410241515446612433
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_3
-      rect:
-        serializedVersion: 2
-        x: 1684
-        y: 2082
-        width: 106
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f6bb4d34bf01abd0800000000000000
-      internalID: -2620796241356015887
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_4
-      rect:
-        serializedVersion: 2
-        x: 1672
-        y: 1928
-        width: 131
-        height: 131
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e92ee27c33475f650800000000000000
-      internalID: 6266042222289805982
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_5
-      rect:
-        serializedVersion: 2
-        x: 1658
-        y: 1745
-        width: 164
+        x: 467
+        y: 386
+        width: 160
         height: 164
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -252,20 +228,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 24a5d93771ed9fd30800000000000000
-      internalID: 4465844697819863618
+      spriteID: 50e7eb8c3f7ff2850800000000000000
+      internalID: 6354570225660100101
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpellBook_Sprite_6
+      name: Paddles's_Eye_3
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 1582
-        width: 148
-        height: 155
+        x: 677
+        y: 411
+        width: 161
+        height: 139
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -274,327 +250,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8da62f4287f35fe40800000000000000
-      internalID: 5689523489500981976
+      spriteID: dc9ff7004cfb05270800000000000000
+      internalID: 8237294567003519437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpellBook_Sprite_7
+      name: Paddles's_Eye_4
       rect:
         serializedVersion: 2
-        x: 46
-        y: 647
-        width: 803
-        height: 903
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f954d2ffef888be70800000000000000
-      internalID: 9131198873277908383
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_8
-      rect:
-        serializedVersion: 2
-        x: 871
-        y: 1447
-        width: 452
-        height: 103
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e65ad5b5a16787950800000000000000
-      internalID: 6447032722154956142
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_9
-      rect:
-        serializedVersion: 2
-        x: 1650
-        y: 1386
-        width: 176
-        height: 185
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5327e00c1065c05e0800000000000000
-      internalID: -1942082773786398155
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_10
-      rect:
-        serializedVersion: 2
-        x: 871
-        y: 1305
-        width: 452
-        height: 104
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 88bd904830e6064418a7db9d47b0a8d4
-      internalID: -398313118
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_11
-      rect:
-        serializedVersion: 2
-        x: 871
-        y: 1163
-        width: 452
-        height: 104
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5497eaf98470e474a94bc2238fde71fe
-      internalID: 1363573403
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_12
-      rect:
-        serializedVersion: 2
-        x: 871
-        y: 1016
-        width: 452
-        height: 103
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5af9c62d7a56c45409ccf07e07301378
-      internalID: 864694006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_13
-      rect:
-        serializedVersion: 2
-        x: 868
-        y: 636
-        width: 776
-        height: 359
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b0ee4bde578ac95449c0681cb72257f7
-      internalID: 1960722197
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_14
-      rect:
-        serializedVersion: 2
-        x: 1674
-        y: 888
-        width: 105
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d08031c20d1bb1740b0deaffbd8205b7
-      internalID: 1333251786
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_15
-      rect:
-        serializedVersion: 2
-        x: 1674
-        y: 781
-        width: 105
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 276a31a91def592458a6ea2562d469ea
-      internalID: -1676419148
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_16
-      rect:
-        serializedVersion: 2
-        x: 1674
-        y: 674
-        width: 105
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 648d56c90124f7d4eabf4398534ba47c
-      internalID: 1981974717
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_17
-      rect:
-        serializedVersion: 2
-        x: 43
-        y: 466
-        width: 564
-        height: 160
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fea55326f1c736d4b8fef8e149997720
-      internalID: 988829519
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_18
-      rect:
-        serializedVersion: 2
-        x: 635
-        y: 485
-        width: 402
-        height: 124
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ce43d66faeab3e4886a2c603e0e9b43
-      internalID: -627035479
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_19
-      rect:
-        serializedVersion: 2
-        x: 1050
-        y: 485
-        width: 402
-        height: 124
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b123cae42a097f041bb6ae7075ed57af
-      internalID: 1976628767
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_20
-      rect:
-        serializedVersion: 2
-        x: 1475
-        y: 485
-        width: 403
-        height: 124
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e220c524f7d810d4d998708aec202b63
-      internalID: -699853658
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_21
-      rect:
-        serializedVersion: 2
-        x: 46
-        y: 357
-        width: 252
+        x: 877
+        y: 439
+        width: 175
         height: 94
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -602,22 +270,440 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: cdd225b8b8dc1b04ca4f339655320ccc
-      internalID: -931312450
+      spriteID: ad40f5d6a545e2f30800000000000000
+      internalID: 4552669020676883674
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpellBook_Sprite_22
+      name: Paddles's_Eye_5
       rect:
         serializedVersion: 2
-        x: 334
-        y: 351
-        width: 303
-        height: 106
+        x: 1087
+        y: 439
+        width: 175
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f9e9c72f3553df20800000000000000
+      internalID: 3446191869607406064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_6
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 296
+        width: 68
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f339a5c66b5949fa0800000000000000
+      internalID: -5794842209784523969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_7
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 297
+        width: 68
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02c2dc321ac7c6760800000000000000
+      internalID: 7452468514923555872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_8
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 271
+        width: 97
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcdd6ea7d245d9d40800000000000000
+      internalID: 5592718866576235983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_9
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 271
+        width: 96
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c181ce174b31c4dc0800000000000000
+      internalID: -3653523531977975780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_10
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 306
+        width: 67
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d9f0af8890bc3fe0800000000000000
+      internalID: -1207896430750926379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_11
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 306
+        width: 67
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d24ef252227b111b0800000000000000
+      internalID: -5687563497111559123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_12
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 165
+        width: 71
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc68d621b754b8180800000000000000
+      internalID: -9112113026161604917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_13
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 167
+        width: 71
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1038e5115ae803e20800000000000000
+      internalID: 3328316964238951169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_14
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 163
+        width: 77
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55392384377e593a0800000000000000
+      internalID: -6659161991678880939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_15
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 154
+        width: 77
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcaf7c7a40dac5650800000000000000
+      internalID: 6223039020625558221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_16
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 158
+        width: 76
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 678b40482d6cbc2c0800000000000000
+      internalID: -4410212802618935178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_17
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 158
+        width: 77
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f352fda3754c328e0800000000000000
+      internalID: -1719314753796496065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_18
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 57
+        width: 76
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6afe8bfac1be78a70800000000000000
+      internalID: 8829284102922891174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_19
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 48
+        width: 77
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b46cd36fa30605a0800000000000000
+      internalID: -6555548155761630028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_20
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 73
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa31ebc1b8230c400800000000000000
+      internalID: 342329144744219562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_21
+      rect:
+        serializedVersion: 2
+        x: 618
+        y: 65
+        width: 71
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec95df4a0690fd1e0800000000000000
+      internalID: -2171006184679712306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_22
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 74
+        width: 39
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b536134e3f9e230d0800000000000000
+      internalID: -3444433531270241445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_23
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 71
+        width: 32
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 875272ab595dceb80800000000000000
+      internalID: -8364075568883882632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paddles's_Eye_24
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 79
+        width: 62
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -626,52 +712,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7939bcc34bd97124fb3d39f70bd7e7a8
-      internalID: -1982767988
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_23
-      rect:
-        serializedVersion: 2
-        x: 696
-        y: 351
-        width: 305
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d1ef5a5fc67285d4b838f5121f8cdbc5
-      internalID: 1184859427
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpellBook_Sprite_24
-      rect:
-        serializedVersion: 2
-        x: 1040
-        y: 351
-        width: 303
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6bf3d1cba33aa00429f8870fe5e1824d
-      internalID: -856070608
+      spriteID: 5ee17bccdb8355546ad3beba4521207c
+      internalID: -1573610602
       vertices: []
       indices: 
       edges: []
@@ -680,7 +722,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a21fee3ae2330c344bc3a07c7d184be1
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -692,31 +734,31 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      SpellBook_Sprite_0: -7863969038293869534
-      SpellBook_Sprite_1: -1607668267396719356
-      SpellBook_Sprite_10: -398313118
-      SpellBook_Sprite_11: 1363573403
-      SpellBook_Sprite_12: 864694006
-      SpellBook_Sprite_13: 1960722197
-      SpellBook_Sprite_14: 1333251786
-      SpellBook_Sprite_15: -1676419148
-      SpellBook_Sprite_16: 1981974717
-      SpellBook_Sprite_17: 988829519
-      SpellBook_Sprite_18: -627035479
-      SpellBook_Sprite_19: 1976628767
-      SpellBook_Sprite_2: 2410241515446612433
-      SpellBook_Sprite_20: -699853658
-      SpellBook_Sprite_21: -931312450
-      SpellBook_Sprite_22: -1982767988
-      SpellBook_Sprite_23: 1184859427
-      SpellBook_Sprite_24: -856070608
-      SpellBook_Sprite_3: -2620796241356015887
-      SpellBook_Sprite_4: 6266042222289805982
-      SpellBook_Sprite_5: 4465844697819863618
-      SpellBook_Sprite_6: 5689523489500981976
-      SpellBook_Sprite_7: 9131198873277908383
-      SpellBook_Sprite_8: 6447032722154956142
-      SpellBook_Sprite_9: -1942082773786398155
+      Paddles's_Eye_0: 1194757123223590818
+      Paddles's_Eye_1: 9049469422912232641
+      Paddles's_Eye_10: -1207896430750926379
+      Paddles's_Eye_11: -5687563497111559123
+      Paddles's_Eye_12: -9112113026161604917
+      Paddles's_Eye_13: 3328316964238951169
+      Paddles's_Eye_14: -6659161991678880939
+      Paddles's_Eye_15: 6223039020625558221
+      Paddles's_Eye_16: -4410212802618935178
+      Paddles's_Eye_17: -1719314753796496065
+      Paddles's_Eye_18: 8829284102922891174
+      Paddles's_Eye_19: -6555548155761630028
+      Paddles's_Eye_2: 6354570225660100101
+      Paddles's_Eye_20: 342329144744219562
+      Paddles's_Eye_21: -2171006184679712306
+      Paddles's_Eye_22: -3444433531270241445
+      Paddles's_Eye_23: -8364075568883882632
+      Paddles's_Eye_24: -1573610602
+      Paddles's_Eye_3: 8237294567003519437
+      Paddles's_Eye_4: 4552669020676883674
+      Paddles's_Eye_5: 3446191869607406064
+      Paddles's_Eye_6: -5794842209784523969
+      Paddles's_Eye_7: 7452468514923555872
+      Paddles's_Eye_8: 5592718866576235983
+      Paddles's_Eye_9: -3653523531977975780
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -16,12 +16,10 @@ public class MiniBombAbility : ABSAbility
     }
     private void OnEnable()
     {
-        GlobalGameplayEventManager.OnClusterBombExplode += OnExplosion;
     }
 
     private void OnDisable()
     {
-        GlobalGameplayEventManager.OnClusterBombExplode -= OnExplosion;
     }
 
     //spawn first wave of mini bomb

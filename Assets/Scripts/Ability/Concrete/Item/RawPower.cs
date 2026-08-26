@@ -24,12 +24,12 @@ public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModi
 
     public void ModifyDischargeAdd(HitContext hitCtx, AbilityContext dischargeCtx)
     {
+
     }
 
     public void ModifyDischargeSubtract(HitContext hitCtx, AbilityContext dischargeCtx)
     {
         dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] -= (dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] / 2);
-
     }
 
     public void ModifyDischargeMultiple(HitContext hitCtx, AbilityContext dischargeCtx)

@@ -123,8 +123,8 @@ MonoBehaviour:
   maxSpeed: 25
   attractedDrag: 0.2
   normalDrag: 1
-  minImpulse: 3
-  maxImpulse: 5
+  minImpulse: 1
+  maxImpulse: 2
   _collectDistance: 3
   _attractStrength: 10
   _attractRadius: 1

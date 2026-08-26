@@ -6,7 +6,6 @@ public class Ball : MonoBehaviour
 {
     internal Rigidbody2D _rigidbody;
     SpriteRenderer _spriteRenderer;
-    CircleCollider2D _circleCollider;
     [SerializeField]ParticleSystem _deathEffect;
     [SerializeField] TrailRenderer _trailRenderer;
     AbilityManager _abilityManager;
@@ -29,8 +28,9 @@ public class Ball : MonoBehaviour
     [SerializeField] ParticleSystem _reviveParticle;
 
     [Header("Damage")]
-    [SerializeField] int _baseDamage;
-    [SerializeField] float _camShakeStrength;
+    [SerializeField] int _minDamage;
+    [SerializeField] int _maxDamage;
+    int _damage;
 
 
     [Header("Combo")]
@@ -84,6 +84,9 @@ public class Ball : MonoBehaviour
     [SerializeField] Camera _gameCamera;
     Vector3 _startingScale;
 
+
+    [Header("Ball Feedback")]
+    [SerializeField] SO_FeedbackEffect so_OnBallHit;
     // -------------------------
     // Push lock (prevents immediate re-attraction)
     // -------------------------
@@ -93,7 +96,7 @@ public class Ball : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _circleCollider = GetComponent<CircleCollider2D>();
+        _collider = GetComponent<CircleCollider2D>();
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _brickPool = FindAnyObjectByType<BrickPool>();
         _ballFeedbackManager = FindAnyObjectByType<BallFeedbackManager>();
@@ -336,7 +339,7 @@ public class Ball : MonoBehaviour
     {
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
-        _circleCollider.enabled = false;
+        _collider.enabled = false;
         _abilityManager.NotifyBallDestroyed(this);
         //StartCoroutine(ResettingBall());
     }
@@ -352,7 +355,7 @@ public class Ball : MonoBehaviour
     public void Launch(Vector2 direction)
     {
 
-        _circleCollider.enabled = true;
+        _collider.enabled = true;
 
         if (direction.sqrMagnitude < 0.0001f)
             return;
@@ -429,7 +432,7 @@ public class Ball : MonoBehaviour
     public void DeactivateBall()
     {
         _ballDirectionArrow.DisableArrow(true);
-        _circleCollider.enabled = false;
+        _collider.enabled = false;
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
     }
@@ -457,7 +460,7 @@ public class Ball : MonoBehaviour
             other.gameObject.CompareTag("Shield") ||
             other.gameObject.CompareTag("EnemyProjectile"))
         {
-            GlobalFeedbackManager.Instance.SetFeedbackValueForOnBallHit();
+            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
             OnBallHit?.Invoke();
 
@@ -490,12 +493,13 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _abilityManager.NotifyBrickHit(bh, (_baseDamage));
+                _damage = UnityEngine.Random.Range(_minDamage,_maxDamage);
+                _abilityManager.NotifyBrickHit(bh, (_damage));
             }
         }
     }
     //HELPER
-    public int GetBallBaseDamage() => _baseDamage;
+    public int GetBallBaseDamage() => _damage;
     public void SetTimeScaleSmooth(float target, float duration)
     {
         if (Mathf.Approximately(_currentTargetTimeScale, target))

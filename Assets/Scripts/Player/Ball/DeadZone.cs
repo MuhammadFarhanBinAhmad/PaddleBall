@@ -19,16 +19,27 @@ public class DeadZone : MonoBehaviour
     [SerializeField] float _coolDownPeriod;
     [SerializeField] float _currentCoolDownTime;
     [SerializeField] float _shieldRegenRate;
+    [Header("Feedback")]
+    [SerializeField] SO_FeedbackEffect so_OnBallHit;
+    [SerializeField] SO_FeedbackEffect so_OnShieldHit;
+    [SerializeField] SO_FeedbackEffect so_OnShieldDown;
+
+
 
     Color shieldColour;
-    private void Start()
+
+    private void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
-        shieldColour = _spriteRenderer.color;
-        _currentShieldMana = _maxShieldMana;
 
+    }
+    private void Start()
+    {
         OnShieldDamage += UpdateShieldVisual;
         OnShieldRecharging += UpdateShieldVisual;
+
+        shieldColour = _spriteRenderer.color;
+        _currentShieldMana = _maxShieldMana;
     }
 
     private void OnDestroy()
@@ -57,9 +68,15 @@ public class DeadZone : MonoBehaviour
         _currentCoolDownTime = _coolDownPeriod;
         _currentShieldMana = Mathf.Max(_currentShieldMana, 0);
 
-        if(_currentShieldMana <=0)
-            _towerManager._onTowerTakingDamage?.Invoke(layer);
+        GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnShieldHit);
 
+        if (_currentShieldMana <=0)
+        {
+            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnShieldDown);
+            _towerManager._onTowerTakingDamage?.Invoke(layer);
+        }
+
+        GlobalFeedbackManager.Instance.PlayGlobalFeedback();
         OnShieldDamage?.Invoke();
     }
     void UpdateShieldVisual()
@@ -78,6 +95,7 @@ public class DeadZone : MonoBehaviour
         {
             Ball ball = other.GetComponent<Ball>();
             _deathVFX.SetActive(true);
+            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
             GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
             if (!ball._copyBall)
             {
@@ -88,11 +106,11 @@ public class DeadZone : MonoBehaviour
                 ball.OnBallDestroy?.Invoke();
             }
         }
-        if(other.GetComponent<PaddleHealth>() != null)
-        {
-            PaddleHealth ph = other.GetComponent<PaddleHealth>();
-            ph.OnPaddleDisable?.Invoke();
-        }
+        //if(other.GetComponent<PaddleHealth>() != null)
+        //{
+        //    PaddleHealth ph = other.GetComponent<PaddleHealth>();
+        //    ph.OnPaddleDisable?.Invoke();
+        //}
         if( other.GetComponent<TowerEssence>() != null)
         {
             TowerEssence te = other.GetComponent<TowerEssence>();

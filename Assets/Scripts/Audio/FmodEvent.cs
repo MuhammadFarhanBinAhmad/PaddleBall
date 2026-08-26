@@ -22,6 +22,7 @@ public class FmodEvent : MonoBehaviour
     [field: SerializeField] public EventReference sfx_onPaddleRespawning { get; private set; }
     [field: SerializeField] public EventReference sfx_onPaddleRespawn { get; private set; }
     [field: SerializeField] public EventReference sfx_onPaddleSucking { get; private set; }
+    [field: SerializeField] public EventReference sfx_onPaddleComboHit { get; private set; }
 
     [field: Header("Ball")]
     [field: SerializeField] public EventReference sfx_onBallDestroy { get; private set; }

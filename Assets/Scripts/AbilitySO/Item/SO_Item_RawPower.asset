@@ -24,7 +24,7 @@ MonoBehaviour:
   _shieldEffect: 0
   _abilityBaseDamageValue: 0
   _baseDamagePlus: 25
-  _baseDamageMinus: 5
+  _baseDamageMinus: 0
   _baseDamageMultiplier: 0
   _speedMultiplier: 0
   _bonusPerFail: 0

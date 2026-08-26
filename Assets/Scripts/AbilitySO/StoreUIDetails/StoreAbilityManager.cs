@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,7 @@ public class StoreAbilityManager : MonoBehaviour
     [Header("Item Ability Database")]
     //2 list
     [SerializeField] List<SOItemAbilityContentUI> _itemAvailableList = new List<SOItemAbilityContentUI>();
-    [SerializeField] List<SOItemAbilityContentUI> _itemPurchaseList = new List<SOItemAbilityContentUI>();
+    [SerializeField] List<SOItemAbilityContentUI> _itemPurchasedList = new List<SOItemAbilityContentUI>();
     [SerializeField] List<ItemAbilityButtonUI> _itemButtonsList = new List<ItemAbilityButtonUI>();
     [SerializeField] int[] _itemCostByLevel = new int[4];
 
@@ -279,7 +278,11 @@ public class StoreAbilityManager : MonoBehaviour
         }
         return cost;
     }
-
+    public void MoveAbility(SOItemAbilityContentUI item)
+    {
+        _itemPurchasedList.Add(item);
+        _itemAvailableList.Remove(item);
+    }
     public void RerollItem()
     {
         if(_numberOfReroll > 0)

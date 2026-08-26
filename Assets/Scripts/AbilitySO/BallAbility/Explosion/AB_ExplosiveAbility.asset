@@ -22,7 +22,7 @@ MonoBehaviour:
   _explosionEffect: 1
   _counterEffect: 0
   _shieldEffect: 0
-  _abilityBaseDamageValue: 10
+  _abilityBaseDamageValue: 2
   _baseDamagePlus: 0
   _baseDamageMinus: 0
   _baseDamageMultiplier: 0

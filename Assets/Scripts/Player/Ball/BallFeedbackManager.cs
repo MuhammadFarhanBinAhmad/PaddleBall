@@ -1,13 +1,10 @@
-using System;
 using System.Collections;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class BallFeedbackManager : MonoBehaviour
 {
     Ball _ballManager;
-
 
     [Header("Hit")]
     [SerializeField] GameObject _hitEffectVFX;

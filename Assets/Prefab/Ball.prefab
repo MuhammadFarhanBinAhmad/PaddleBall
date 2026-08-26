@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3755539963139666191}
   - component: {fileID: 6695683514087060544}
-  - component: {fileID: 1088803527587155119}
   - component: {fileID: 2786265995609757064}
   - component: {fileID: 5209257556626525879}
   - component: {fileID: 3762535270675772051}
+  - component: {fileID: 9056840504469732405}
   m_Layer: 6
   m_Name: Ball
   m_TagString: Ball
@@ -93,7 +93,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.4669811, g: 0.86113745, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -103,42 +103,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &1088803527587155119
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101297386544171107}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.7
 --- !u!50 &2786265995609757064
 Rigidbody2D:
   serializedVersion: 5
@@ -183,8 +147,8 @@ MonoBehaviour:
   _gravityScale: 50
   _maxVelocity: 50
   _reviveParticle: {fileID: 7747516998161419209}
-  _baseDamage: 10
-  _camShakeStrength: 5
+  _minDamage: 8
+  _maxDamage: 12
   _feverThreshold: 10
   _particleTrail: {fileID: 6917882963362471459}
   _maxBounce: 3
@@ -252,6 +216,7 @@ MonoBehaviour:
   animationDuration: 0.5
   _capscaleMultiplier: 3
   _gameCamera: {fileID: 0}
+  so_OnBallHit: {fileID: 11400000, guid: f31a311adb73fe2478ac6882ddb40fe7, type: 2}
 --- !u!114 &3762535270675772051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +250,42 @@ MonoBehaviour:
   - 1.5
   - 2
   - 3
+--- !u!58 &9056840504469732405
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101297386544171107}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: be2bc0cf5ff8d584092c3739fabf1c34, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.6
 --- !u!1 &718977683263401180
 GameObject:
   m_ObjectHideFlags: 0

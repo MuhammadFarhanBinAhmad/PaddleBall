@@ -202,10 +202,10 @@ public class StoreOverlayUI : BaseOverLayInteraction
     IEnumerator RerollCardAnim()
     {
 
-        //_cardStoreAnimator.SetTrigger("RerollCard");
+        _cardStoreAnimator.SetTrigger("RerollCard");
         AnimatorStateInfo state =
         _cardStoreAnimator.GetCurrentAnimatorStateInfo(0);
-        yield return new WaitForSecondsRealtime(state.length + .5f);
+        yield return new WaitForSecondsRealtime(state.length - .25f);
         _storeAbilityManager.RerollItem();
         UpdateRerollText();
         ResetItems();
