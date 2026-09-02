@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OnTheHouse
   _SOAbilityEffect: {fileID: 11400000, guid: 691a3ce10fd9f73488678a4b82255adb, type: 2}
+  _abilityType: 1
   _itemPurchase: 0

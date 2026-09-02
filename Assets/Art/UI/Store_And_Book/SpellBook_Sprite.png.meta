@@ -130,10 +130,10 @@ TextureImporter:
       name: SpellBook_Sprite_0
       rect:
         serializedVersion: 2
-        x: 46
-        y: 1251
-        width: 1602
-        height: 903
+        x: 21
+        y: 1256
+        width: 1618
+        height: 902
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

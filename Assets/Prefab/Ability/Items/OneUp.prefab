@@ -44,6 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9e405945548104986d42ab9c670a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OneUp
-  _abilityManager: {fileID: 0}
   _SOAbilityEffect: {fileID: 11400000, guid: 36c95c864e5c0894795462228344a71e, type: 2}
-  _SOStatusEffect: {fileID: 0}
+  _abilityType: 1

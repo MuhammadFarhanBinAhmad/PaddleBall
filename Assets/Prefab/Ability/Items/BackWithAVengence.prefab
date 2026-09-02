@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackWithAVengence
   _SOAbilityEffect: {fileID: 11400000, guid: 135cf6f4187858c4390b5bb481fa12db, type: 2}
-  _abilityType: 0
+  _abilityType: 1

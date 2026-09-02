@@ -13,12 +13,7 @@ public class AbilityButtonLevel
 
 public class AbilityStoreLayoutUI : AbstractStoreUI
 {
-    [SerializeField]AbilityInfoPageUI _abilityInfoPageUI;
     StoreAbilityManager _storeAbilityManager;
-
-    [Header("UI")]
-    [SerializeField] Transform _contentParent;
-    [SerializeField] BallAbilityButtonUI _abilityButtonPrefab;
 
     [Header("Data")]
     [SerializeField] AbilityButtonLevel[] abilityData = new AbilityButtonLevel[4];
@@ -36,11 +31,6 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
     private void Awake()
     {
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
-        //_ballAbilityButtonUI.Add(_lvl0AbilityButton.GetComponent<BallAbilityButtonUI>());
-        //for (int i = 0; i < _lvl1AbilityButton.Count; i++)
-        //{
-        //    _ballAbilityButtonUI.Add(_lvl1AbilityButton[i].GetComponent<BallAbilityButtonUI>());
-        //}
     }
 
 

@@ -25,11 +25,12 @@ MonoBehaviour:
   _abilityBaseDamageValue: 0
   _baseDamagePlus: 0
   _baseDamageMinus: 0
-  _baseDamageMultiplier: 0
+  _baseDamageMultiplier: 2
   _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
   _timer: 10
+  _threshold: 0
   _timeRate: 0
   _comboThreshold: 0
   _maxStacks: 0

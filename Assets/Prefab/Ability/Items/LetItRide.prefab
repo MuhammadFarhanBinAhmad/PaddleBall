@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LetItRide
   _SOAbilityEffect: {fileID: 11400000, guid: 34e0458f75980d145bf939fe38aebcea, type: 2}
+  _abilityType: 1

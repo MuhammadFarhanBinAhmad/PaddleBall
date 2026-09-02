@@ -16,12 +16,14 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     internal SOItemAbilityContentUI _itemAbilityContent { get;private set; }
 
     [Header("UI Detail")]
-    [SerializeField] private Image _icon;
-    [SerializeField] private TMP_Text _nameText;
-    [SerializeField] private TMP_Text _descriptionText;
-    [SerializeField] private TMP_Text _costText;
+    [SerializeField] Image _icon;
+    [SerializeField] TMP_Text _nameText;
+    [SerializeField] TMP_Text _descriptionText;
+    [SerializeField] TMP_Text _costText;
     [SerializeField] GameObject _backCard;
-    [SerializeField] private Button _selectButton;
+    [SerializeField] Button _selectButton;
+    [SerializeField] Image _rarityEmblem;
+    [SerializeField] Sprite[] _emblem;
     internal int _purchaseCost { get; private set; }
     bool _isPurchase = false;
 
@@ -51,6 +53,29 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
         _descriptionText.text = _itemAbilityContent.ability_Description.ToString();
         _purchaseCost = _storeAbilityManager.GetItemCost(_itemAbilityContent._itemRarity);
         _costText.text = _purchaseCost.ToString();
+        switch (_itemAbilityContent._itemRarity)
+        {
+            case ITEMRARITY.COMMON:
+                {
+                    _rarityEmblem.sprite = _emblem[0];
+                    break;
+                }
+            case ITEMRARITY.UNCOMMON:
+                {
+                    _rarityEmblem.sprite = _emblem[1];
+                    break;
+                }
+            case ITEMRARITY.RARE:
+                {
+                    _rarityEmblem.sprite = _emblem[2];
+                    break;
+                }
+            case ITEMRARITY.LEGENDARY:
+                {
+                    _rarityEmblem.sprite = _emblem[3];
+                    break;
+                }
+        }
     }
 
     public void ResetButton()

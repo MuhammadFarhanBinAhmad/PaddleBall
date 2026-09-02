@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
   ability_Name: Offensive Shield
   ability_Description: Decrease shield health by 50%. Increase Base damage by 50%
-  _itemRarity: 0
+  _itemRarity: 1
   ability_ToSpawn: {fileID: 11400000, guid: 1cb879b4a33724a40a4051203aac4df3, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

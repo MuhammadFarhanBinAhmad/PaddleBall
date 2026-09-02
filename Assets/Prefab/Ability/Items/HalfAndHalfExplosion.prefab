@@ -44,6 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac89227e0fa6eda41b81ad9f045d9ae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HalfAndHalfExplosion
-  _abilityManager: {fileID: 0}
   _SOAbilityEffect: {fileID: 11400000, guid: 1d1ad3d92dc18674491efec49749fadb, type: 2}
-  _SOStatusEffect: {fileID: 0}
+  _abilityType: 1

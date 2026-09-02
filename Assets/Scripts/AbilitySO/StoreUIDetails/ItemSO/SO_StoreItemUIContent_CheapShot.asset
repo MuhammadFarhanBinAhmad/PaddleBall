@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOItemAbilityContentUI
   ability_Name: CheapShot
   ability_Description: Deal +50% final damage to enemies above 90% health
-  _itemRarity: 3
+  _itemRarity: 1
   ability_ToSpawn: {fileID: 11400000, guid: 5d6bb3fed1ab6674fb940ab9dc69faa4, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

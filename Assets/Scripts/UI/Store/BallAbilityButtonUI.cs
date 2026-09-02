@@ -1,5 +1,3 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -46,7 +44,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     [Header("UI Detail")]
     [SerializeField] private Image _thumbnailIcon;
     [SerializeField] private GameObject _lockedOverlay;
-    [SerializeField] private GameObject _abilityDescription;
     Button _button;
 
     private bool _abilityPurchased;
@@ -78,6 +75,10 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     public void Setup(
         SOStoreAbilityContent ability)
     {
+
+        if (ability == null)
+            return;
+
         _abilityData = ability;
 
         _thumbnailIcon.sprite = _abilityData.icon;
@@ -119,9 +120,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         bool available =
             _storeAbilityManager.IsAvailableToPurchase(_abilityData.abilityID);
 
-        bool canBuy =
-            _storeAbilityManager.CanPurchase(_abilityData.abilityID);
-
         _abilityPurchased = unlocked;
 
 
@@ -134,16 +132,22 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     }
     public override void OnPointerEnter(PointerEventData eventData)
     {
+        if (_abilityInfo == null)
+            return;
+
         base.OnPointerEnter(eventData);
+        print(_abilityInfo._cost);
         _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
         _storeOverlayUI.CalculatePriceCalculation(_abilityInfo._cost,
                                                     _towerManager._currentPureEssence);
-        //_abilityInfoPageUI.IsAbilityPurchased(!_abilityPurchased);
 
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
+        if (_abilityInfo == null)
+            return;
+
         base.OnPointerExit(eventData);
         _abilityInfoPageUI.ClearDescription();
         _storeOverlayUI.ResetPriceCalculation();

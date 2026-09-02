@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OffensiveShield
   _SOAbilityEffect: {fileID: 11400000, guid: 1cb879b4a33724a40a4051203aac4df3, type: 2}
+  _abilityType: 1

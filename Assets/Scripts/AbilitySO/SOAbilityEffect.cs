@@ -38,6 +38,8 @@ public class SOAbilityEffect : ScriptableObject
     public float _timer;
     [GroupUnder(nameof(_genericEffect))]
     public int _threshold;
+    [GroupUnder(nameof(_genericEffect))]
+    public float _essenceValueAdd;
     //-----------------Counter-----------------//
     [GroupUnder(nameof(_counterEffect))]
     public float _timeRate;

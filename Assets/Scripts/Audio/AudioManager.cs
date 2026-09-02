@@ -8,9 +8,28 @@ public enum MUSIC_TRANSISTION
     DAY = 0,
     NIGHT = 1,
 }
-
+public enum VOLUMETYPE
+{
+    MASTER,
+    MUSIC,
+    SFX
+}
 public class AudioManager : MonoBehaviour
 {
+
+
+    [Header("Volume")]
+    [Range(0,1)]
+    public float _masterVolume=1;
+    [Range(0, 1)]
+    public float _musicVolume =1;
+    [Range(0, 1)]
+    public float _sfxvolume = 1;
+
+    Bus _masterBus;
+    Bus _musicBus;
+    Bus _sfxBus;
+
     List<EventInstance> _eventInstance = new List<EventInstance>();
     List<StudioEventEmitter> _studioEventEmitter = new List<StudioEventEmitter>();
 
@@ -24,12 +43,22 @@ public class AudioManager : MonoBehaviour
             print("more than one audio manager exist in scene");
 
         Instance = this;
+
+        _masterBus = RuntimeManager.GetBus("bus:/");
+        _musicBus = RuntimeManager.GetBus("bus:/Music");
+        _sfxBus = RuntimeManager.GetBus("bus:/SFX");
+
     }
     private void Start()
     {
         InitializeMusic(FmodEvent.Instance.music_PlayScenes);
     }
-
+    private void Update()
+    {
+        _masterBus.setVolume( _masterVolume );
+        _musicBus.setVolume( _musicVolume );
+        _sfxBus.setVolume(_sfxvolume );
+    }
     public void PlayOneShot(EventReference sound, Vector3 worldpos)
     {
         RuntimeManager.PlayOneShot(sound, worldpos);

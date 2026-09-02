@@ -44,9 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d16a40ff5217343823a4874833feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spliter
-  _abilityManager: {fileID: 0}
   _SOAbilityEffect: {fileID: 11400000, guid: c2ff2639035d8df4c9cb8d43e09207da, type: 2}
-  _SOStatusEffect: {fileID: 0}
+  _abilityType: 1
   baseChance: 10
   chanceIncrease: 1
   maxChance: 100

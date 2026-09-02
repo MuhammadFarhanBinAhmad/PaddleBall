@@ -48,7 +48,6 @@ public class StoreAbilityManager : MonoBehaviour
     [SerializeField] List<SOItemAbilityContentUI> _itemPurchasedList = new List<SOItemAbilityContentUI>();
     [SerializeField] List<ItemAbilityButtonUI> _itemButtonsList = new List<ItemAbilityButtonUI>();
     [SerializeField] int[] _itemCostByLevel = new int[4];
-
     [Header("Store Open")]
     public Action OnStoreOpen, OnStoreClose;
     public bool _storeIsOpen;
@@ -170,15 +169,19 @@ public class StoreAbilityManager : MonoBehaviour
 
     public bool IsUnlocked(string abilityID)
     {
+        if (unlockedAbilities == null)
+            return false;
+
         return unlockedAbilities.Contains(abilityID);
     }
 
     public bool IsAvailableToPurchase(string abilityID)
     {
-        if (!abilityLookup.ContainsKey(abilityID))
+        if (abilityLookup == null)
             return false;
 
-        SOStoreAbilityContent ability = abilityLookup[abilityID];
+        if (!abilityLookup.TryGetValue(abilityID, out SOStoreAbilityContent ability))
+            return false;
 
         if (ability._availableToPurchaseAtStart)
             return true;
@@ -291,6 +294,7 @@ public class StoreAbilityManager : MonoBehaviour
             _numberOfReroll--;
         }
     }
+    public List<SOItemAbilityContentUI> GetPurchaseItem() => _itemPurchasedList;
     public List<ItemAbilityButtonUI> GetAllCards() => _itemButtonsList;
     public void ChangeRerollValue(int val) => _numberOfReroll += val;
     public int GetNumberOfReroll() => _numberOfReroll;

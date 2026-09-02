@@ -13,6 +13,7 @@ public class TowerManager : MonoBehaviour
 
     [Header("Essence")]
     [Tooltip("Starting threshold of essence required to trigger an OnEssenceCollect.")]
+    [SerializeField] float _cardBonusMultiplier = 1;
     public int _initialEssenceThreshold;
     [Tooltip("Current threshold; starts at initial and is increased on milestones.")]
     public int _essenceToPureEssenceConversionRate;
@@ -128,7 +129,8 @@ public class TowerManager : MonoBehaviour
 
     public void IncreaseEssenceCount(int amt)
     {
-        _currentEssenceCount += amt;
+        float val = (float)amt * _cardBonusMultiplier;
+        _currentEssenceCount += (int)val;
         _onEssenceCollectParticle.Play();
         if (_currentEssenceCount >= _essenceToPureEssenceConversionRate)
         {
@@ -410,5 +412,6 @@ public class TowerManager : MonoBehaviour
     public int GetBrickFloorConversionRate() => _brickToFloorConversionRate;
     public int GetEssencePureEssenceConversionRate() => _essenceToPureEssenceConversionRate;
     public void AddPureEssence() => _currentPureEssence++;
+    public void AddEssenceCardBonus(float val) => _cardBonusMultiplier += val;
 
 }

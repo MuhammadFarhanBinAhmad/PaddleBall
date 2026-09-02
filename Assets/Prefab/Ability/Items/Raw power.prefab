@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RawPower
   _SOAbilityEffect: {fileID: 11400000, guid: bb06659ce0b078c4cbb54f042f8692b9, type: 2}
+  _abilityType: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
   _statusType: 0
-  _abilityPrefab: {fileID: 2048833327841860164, guid: 265b2b3ee2739e849b6e9e5f2ccbb661, type: 3}
+  _abilityPrefab: {fileID: 631671157725992135, guid: 97ac5507a49ae0746b2b962c4e329670, type: 3}
   _genericEffect: 1
   _applyStatus: 0
   _spawnEffect: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   _abilityBaseDamageValue: 0
   _baseDamagePlus: 0
   _baseDamageMinus: 0
-  _baseDamageMultiplier: 150
+  _baseDamageMultiplier: 2
   _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0

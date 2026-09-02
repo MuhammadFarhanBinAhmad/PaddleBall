@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BackWithAVengence : ABSAbility
+public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischargeContextModifier, ICriticalContextModifier, IToxicContextModifier
 {
 
     PaddleHealth _paddleHealth;
@@ -39,9 +39,84 @@ public class BackWithAVengence : ABSAbility
     {
         if (_vengenceInEffect)
         {
-            float dmg = ctx._damageValue;
-            ctx._damageValue = (int)(_SOAbilityEffect._baseDamageMultiplier * dmg);
+            float dmg = ctx._damageValue * _SOAbilityEffect._baseDamageMultiplier;
+            ctx._damageValue = (int)(dmg);
         }
 
+    }
+
+    public void ModifyExplosionContextAdd(HitContext hitCtx, ExplosionContext explosionCtx)
+    {
+    }
+
+    public void ModifyExplosionContextSubtract(HitContext hitCtx, ExplosionContext explosionCtx)
+    {
+    }
+
+    public void ModifyExplosionContextMultiply(HitContext hitCtx, ExplosionContext explosionCtx)
+    {
+        if (_vengenceInEffect)
+            explosionCtx._Stats[STATID.BASE_DAMAGE] = (int)(explosionCtx._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+    }
+
+    public void ModifyExplosionContextDivide(HitContext hitCtx, ExplosionContext explosionCtx)
+    {
+    }
+
+    public void ModifyDischargeAdd(HitContext hitCtx, AbilityContext dischargeCtx)
+    {
+    }
+
+    public void ModifyDischargeSubtract(HitContext hitCtx, AbilityContext dischargeCtx)
+    {
+    }
+
+    public void ModifyDischargeMultiple(HitContext hitCtx, AbilityContext dischargeCtx)
+    {
+        if (_vengenceInEffect)
+            dischargeCtx._Stats[STATID.BASE_DAMAGE] = (int)(dischargeCtx._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+
+    }
+
+    public void ModifyDischargeDivide(HitContext hitCtx, AbilityContext dischargeCtx)
+    {
+    }
+
+    public void ModifyCriticalContextAdd(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyCriticalContextSubtract(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyCriticalContextMultiply(HitContext hitCtx, AbilityContext critContext)
+    {
+        if (_vengenceInEffect)
+            critContext._Stats[STATID.BASE_DAMAGE] = (int)(critContext._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+
+    }
+
+    public void ModifyCriticalContextDivide(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyToxicContextAdd(AbilityContext toxicContext)
+    {
+    }
+
+    public void ModifyToxicContextSubtract(AbilityContext toxicContext)
+    {
+    }
+
+    public void ModifyToxicContextMultiple(AbilityContext toxicContext)
+    {
+        if (_vengenceInEffect)
+            toxicContext._Stats[STATID.BASE_DAMAGE] = (int)(toxicContext._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+
+    }
+
+    public void ModifyToxicContextDivide(AbilityContext toxicContext)
+    {
     }
 }

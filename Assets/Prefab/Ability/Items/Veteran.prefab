@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Veteran
   _SOAbilityEffect: {fileID: 11400000, guid: 08b558e094a759942820104086b1ac09, type: 2}
-  _abilityType: 0
+  _abilityType: 1

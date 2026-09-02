@@ -8,16 +8,13 @@ public class TowerEssence : MonoBehaviour
     PaddleVacoom _paddleVacoom;
 
     [Header("Essence Stats")]
-    Action _OnCollectionEvent;
-
     [SerializeField] int _essenceMinWorth;
     [SerializeField] int _essenceMaxWorth;
     [SerializeField] float _essenceBonusMultiplier;
-
-    int _currentExpirationPhase;
-
     [SerializeField] float[] _essenceExpirationTime;
     [SerializeField] float _essenceCurrentLiveTime;
+    int _currentExpirationPhase;
+    Action _OnCollectionEvent;
 
     [Header("Light")]
     [SerializeField] Light2D _light2D;
@@ -378,17 +375,26 @@ public class TowerEssence : MonoBehaviour
 
     int GetNormalEssence()
     {
-        return UnityEngine.Random.Range(
-            _essenceMinWorth,
-            _essenceMaxWorth
-        );
+        int essence =
+                    UnityEngine.Random.Range(
+                        _essenceMinWorth,
+                        _essenceMaxWorth
+                    );
+
+        return 
+            essence
+        ;
     }
 
     int GetHalfEssence()
     {
-        return UnityEngine.Random.Range(
-            _essenceMinWorth,
-            _essenceMaxWorth
-        ) / 2;
+        int essence =
+                    UnityEngine.Random.Range(
+                        _essenceMinWorth,
+                        _essenceMaxWorth
+                    );
+
+        return (int)(
+            essence * .5f);
     }
 }

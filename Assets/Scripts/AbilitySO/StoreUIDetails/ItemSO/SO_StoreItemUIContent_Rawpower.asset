@@ -15,6 +15,6 @@ MonoBehaviour:
   ability_Name: Raw Power
   ability_Description: Increase base damage 3 but reduce all Element base damage
     by 1
-  _itemRarity: 0
+  _itemRarity: 1
   ability_ToSpawn: {fileID: 11400000, guid: bb06659ce0b078c4cbb54f042f8692b9, type: 2}
   icon: {fileID: 3306089611212802227, guid: 315d7f37492914244a635347663f2dce, type: 3}

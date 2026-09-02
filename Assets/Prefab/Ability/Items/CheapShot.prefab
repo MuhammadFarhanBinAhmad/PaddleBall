@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheapShot
   _SOAbilityEffect: {fileID: 11400000, guid: 5d6bb3fed1ab6674fb940ab9dc69faa4, type: 2}
-  _abilityType: 0
+  _abilityType: 1

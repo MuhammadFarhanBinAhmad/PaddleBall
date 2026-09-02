@@ -17,8 +17,6 @@ public abstract class ABSAbility : MonoBehaviour
 
     public SOAbilityEffect _SOAbilityEffect;
 
-    public ABILITYTYPE _abilityType;
-
     public bool IsUnlocked { get; private set; }
 
     public void SetUnlocked(bool value) => IsUnlocked = value;
