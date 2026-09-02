@@ -30,6 +30,7 @@ public class ShopLevelState
 public class StoreAbilityManager : MonoBehaviour
 {
     private TowerManager _towerManager;
+    TowerUIManager _towerUIManager;
 
     [Header("Ball Ability Database")]
     [SerializeField] private List<SOStoreAbilityContent> explosiveAbilities = new List<SOStoreAbilityContent>();
@@ -63,7 +64,7 @@ public class StoreAbilityManager : MonoBehaviour
     private void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
-
+        _towerUIManager = FindAnyObjectByType<TowerUIManager>();
     }
     private void Start()
     {
@@ -132,7 +133,11 @@ public class StoreAbilityManager : MonoBehaviour
         int price = _abilityLevelAndCostState[abilityLevel].GetPrice();
 
         if (_towerManager.GetTotalPureEssenceCount() < price)
+        {
+            _towerUIManager.PlayPopUpLackEssence();
             return false;
+
+        }
 
         if (!ability._availableToPurchaseAtStart)
         {

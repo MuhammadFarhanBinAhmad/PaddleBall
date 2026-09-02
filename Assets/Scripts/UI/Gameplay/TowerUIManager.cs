@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,9 @@ public class TowerUIManager : MonoBehaviour
     [SerializeField] GameObject _warningStamp;
     [Header("GameOverScreen")]
     public GameObject _gameOverScreen;
+    [Header("ShopAndAbility")]
+    [SerializeField] GameObject _notEnoughEssencePopUp;
+    [SerializeField] float _popUpTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -65,5 +69,15 @@ public class TowerUIManager : MonoBehaviour
         _brickFillImage.fillAmount = (float)_towerManager.GetCurrentEssence() / (float)_towerManager.GetEssencePureEssenceConversionRate();
         _currentPureEssenceText.text = _towerManager._currentPureEssence.ToString();
         _brickToTowerFillImage.fillAmount = (float)_towerManager.GetCurrentBrickCount() / (float)_towerManager.GetBrickFloorConversionRate();
+    }
+    public void PlayPopUpLackEssence()
+    {
+        StartCoroutine(PopUpLackEssence());
+    }
+    IEnumerator PopUpLackEssence()
+    {
+        _notEnoughEssencePopUp.SetActive(true);
+        yield return new WaitForSecondsRealtime(_popUpTime);
+        _notEnoughEssencePopUp.SetActive(false);
     }
 }

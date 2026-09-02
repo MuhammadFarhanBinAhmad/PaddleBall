@@ -110,6 +110,7 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
         }
         else
         {
+            _towerUIManager.PlayPopUpLackEssence();
             print("insufficnet");
         }
     }
