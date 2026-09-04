@@ -22,6 +22,6 @@ public class MegaExplosionAbility : ABSAbility, IExplosionContextModifier
 
     public void ModifyExplosionContextSubtract(HitContext hitCtx, ExplosionContext explosionCtx)
     {
-        throw new System.NotImplementedException();
+        throw new System.NotImplementedException(); 
     }
 }

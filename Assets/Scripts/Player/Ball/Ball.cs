@@ -51,6 +51,10 @@ public class Ball : MonoBehaviour
     [SerializeField] float _minVerticalForHoming;
     [SerializeField] float _homingMaxDistance;
 
+    [Header("Cursor")]
+    [SerializeField] private Texture2D _defaultTexture;
+    [SerializeField] private Texture2D _shootingTexture;
+
     [Header("AimingState")]
     [SerializeField] float _lerpSpeed;
     [SerializeField] float _slowMotionTimeValue;
@@ -119,6 +123,8 @@ public class Ball : MonoBehaviour
         OnBallRediect += RedirectBallToMouse;
         OnBallRediect += PlayBallRedirectEffect;
         OnBallRediect += StartAnimateBallRespawn;
+
+        SwitchToDefaultCursor();
     }
     private void Start()
     {
@@ -127,8 +133,18 @@ public class Ball : MonoBehaviour
         _ballDirectionArrow.DisableArrow(false);
 
         StartCoroutine(AnimateBallRespawn());
-
     }
+    void SwitchToDefaultCursor() => Cursor.SetCursor(
+            _defaultTexture,
+            Vector2.zero,
+            CursorMode.Auto
+        );
+
+    void SwitchToShootCursor() => Cursor.SetCursor(
+        _shootingTexture,
+        Vector2.zero,
+        CursorMode.Auto
+    );
     private void OnDisable()
     {
         OnBrickHit -= IncreaseCombo;
@@ -211,6 +227,7 @@ public class Ball : MonoBehaviour
                 AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallSlowmo, transform.position);
 
             _onAimingState = true;
+            SwitchToShootCursor();
             _targetTimeScale = _slowMotionTimeValue;
             _ballDirectionArrow.DisableArrow(false);
 
@@ -220,6 +237,7 @@ public class Ball : MonoBehaviour
         else // released
         {
             _onAimingState = false;
+            SwitchToDefaultCursor();
             _targetTimeScale = 1f;
             _ballDirectionArrow.DisableArrow(true);
             if (_currentCoolDownPeriod < _coolDownPeriod)

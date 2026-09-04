@@ -313,9 +313,9 @@ public class BrickBar : MonoBehaviour
         _fallSpeed = _stats._dropSpeed;
         _elementID = _stats._elementID;
         _layerNumber = _stats._layerNumber;
-        _brickUI.SetCurrentLayer(_stats._layerNumber,_stats._color);
-        _brickUI.PrepBrickLayerColour(_stats._layerNumber);
         _brickHealthComponent.SetHealth(_stats._health);
+        _brickUI.PrepBrickLayerColour(_stats._layerNumber);
+        _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
     }
     public void SetBrickPath(SplineContainer _path)
     {

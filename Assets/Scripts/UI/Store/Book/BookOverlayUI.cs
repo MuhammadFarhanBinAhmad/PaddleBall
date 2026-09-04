@@ -7,6 +7,7 @@ public class BookOverlayUI : BaseOverLayInteraction
 {
 
     [SerializeField]BookAbilityInfoUI _bookAbilityInfoUI;
+    StoreOverlayUI _overlayUI;
 
     [SerializeField] Button _openBookOverlay;
     [Header("BookOverlay")]
@@ -25,7 +26,13 @@ public class BookOverlayUI : BaseOverLayInteraction
     [SerializeField] Image _abilityIcon;
     [SerializeField] TextMeshProUGUI _abilityName;
     [SerializeField] TextMeshProUGUI _abilityDescription;
+    [SerializeField] bool _isAnOverlayOpen;
 
+
+    private void Awake()
+    {
+        _overlayUI = FindAnyObjectByType<StoreOverlayUI>();
+    }
     private void Start()
     {
         _openBookOverlay.onClick.AddListener(PlayOpenBookLogOverlayAnim);
@@ -48,13 +55,23 @@ public class BookOverlayUI : BaseOverLayInteraction
         _spellOverlyCloseButton.onClick.AddListener(PlayCloseSpellOverlayAnim);
     }
 
+    private void Update()
+    {
+        if(!_overlayUI.GetIsOverlayOpen())
+            if (Input.GetKeyDown(KeyCode.B))
+                PlayOpenBookLogOverlayAnim();
+    }
+
     //BookLog
     void PlayOpenBookLogOverlayAnim()
     {
+
         StartCoroutine(OpenBookLogOverlay());
     }
     IEnumerator OpenBookLogOverlay()
     {
+        _isAnOverlayOpen = true;
+        _overlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
         OpenOverlay(_BookLogOverLay);
         _bookOverlayAnimator.SetTrigger("OpenBookLogOverlay");
         AnimatorStateInfo state =
@@ -72,6 +89,8 @@ public class BookOverlayUI : BaseOverLayInteraction
         _bookOverlayAnimator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSecondsRealtime(state.length - .1f);
         CloseOverlay(_BookLogOverLay);
+        _isAnOverlayOpen = false;
+        _overlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
     }
 
     //CardOverlay
@@ -140,4 +159,7 @@ public class BookOverlayUI : BaseOverLayInteraction
         _abilityName.text = "";
         _abilityDescription.text = "";
     }
+
+    public bool GetIsOverlayOpen() => _isAnOverlayOpen;
+    public void SetIsOverlayOpen(bool state) => _isAnOverlayOpen = state;
 }

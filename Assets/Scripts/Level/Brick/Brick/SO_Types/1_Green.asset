@@ -24,4 +24,3 @@ MonoBehaviour:
   _brickSprite:
   - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
   - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}

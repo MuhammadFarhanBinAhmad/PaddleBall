@@ -11,7 +11,6 @@ public class BallFeedbackManager : MonoBehaviour
     [SerializeField] SpriteRenderer _spriteRenderer;
     [SerializeField] Sprite _startSpirite,_hitSprite;
     [SerializeField] float _spriteChangeTime;
-    [SerializeField] Color _startHitColor, _endHitColor;
     Coroutine _changeSpriteCoroutine;
 
     [Header("Glow")]
@@ -40,16 +39,16 @@ public class BallFeedbackManager : MonoBehaviour
     {
         if(_changeSpriteCoroutine != null) 
             StopCoroutine(_changeSpriteCoroutine);
+        //_hitEffectVFX.SetActive(true);
+
         _changeSpriteCoroutine = StartCoroutine(AnimateSpriteChange());
 
     }
     IEnumerator AnimateSpriteChange()
     {
         _spriteRenderer.sprite = _hitSprite;
-        _spriteRenderer.color = _startHitColor;
         yield return new WaitForSeconds(_spriteChangeTime);
         _spriteRenderer.sprite = _startSpirite;
-        _spriteRenderer.color = _endHitColor;
 
         Quaternion originalRotation = transform.rotation;
 

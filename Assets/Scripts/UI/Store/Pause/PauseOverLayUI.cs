@@ -23,11 +23,7 @@ public class PauseOverLayUI : BaseOverLayInteraction
     [SerializeField] TMP_Dropdown _windowModeDropDown;
     readonly List<Resolution> _resolutions = new();
     int _currentResolutionIndex;
-    [Header("Audio And Music")]
-    [SerializeField] Slider _masterVolumeSlider;
-    [SerializeField] Slider _sfxVolumeSlider;
-    [SerializeField] Slider _musicVolumeSlider;
-    [SerializeField] VOLUMETYPE _volumeType;
+
 
 
 
@@ -49,37 +45,9 @@ public class PauseOverLayUI : BaseOverLayInteraction
         SetupWindowModes();
         ApplySettings();
     }
-    private void Update()
-    {
-        switch (_volumeType)
-        {
-            case VOLUMETYPE.MASTER:
-                _masterVolumeSlider.value = AudioManager.Instance._masterVolume;
-                break;
-            case VOLUMETYPE.MUSIC:
-                _musicVolumeSlider.value = AudioManager.Instance._musicVolume;
-                break;
-            case VOLUMETYPE.SFX:
-                _sfxVolumeSlider.value = AudioManager.Instance._sfxvolume;
-                break;
-        }
-    }
 
-    public void OnSliderValueChanges()
-    {
-        switch (_volumeType)
-        {
-            case VOLUMETYPE.MASTER:
-                AudioManager.Instance._masterVolume = _masterVolumeSlider.value;
-                break;
-            case VOLUMETYPE.MUSIC:
-                AudioManager.Instance._musicVolume= _musicVolumeSlider.value;
-                break;
-            case VOLUMETYPE.SFX:
-                AudioManager.Instance._sfxvolume = _sfxVolumeSlider.value;
-                break;
-        }
-    }
+
+    
     //PauseMenu
     public void PlayOpenPauseOverlay()
     {

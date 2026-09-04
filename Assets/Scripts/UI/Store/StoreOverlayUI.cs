@@ -9,6 +9,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
     StoreAbilityManager _storeAbilityManager;
     AbilityStoreLayoutUI _abilityStoreLayoutUI;
+    BookOverlayUI _bookOverlayUI;
 
     [Header("SelectAbilityPage")]
     [SerializeField] Button _explosiveAbility;
@@ -29,7 +30,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] TextMeshProUGUI _apCurrentPointText;
     [SerializeField] TextMeshProUGUI _apLeftOverPointText;
 
-    [Header("ItemPage")]
+    [Header("CardPage")]
     [SerializeField] Button _openCardPage;
     [SerializeField] Button _closeItem;
     [SerializeField] Button _rerollItem;
@@ -40,6 +41,9 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] TextMeshProUGUI _leftOverPointText;
     [SerializeField] TextMeshProUGUI _rerollLeftText;
 
+    [SerializeField]bool _isAnOverlayOpen;
+
+
     public List<ItemAbilityButtonUI> _itemButton = new List<ItemAbilityButtonUI>();
 
     bool _pageOpen;
@@ -47,6 +51,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
     {
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
         _abilityStoreLayoutUI = FindAnyObjectByType<AbilityStoreLayoutUI>();
+        _bookOverlayUI = FindAnyObjectByType<BookOverlayUI>();
     }
 
     private void Start()
@@ -71,11 +76,17 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            HandleAbilityFlow();
+        if(!_bookOverlayUI.GetIsOverlayOpen())
+            if (!_isAnOverlayOpen)
+            {
+                if (Input.GetKeyDown(KeyCode.S))
+                    HandleAbilityFlow();
 
-        if (Input.GetKeyDown(KeyCode.E))
-            ToggleCardPage();
+                if (Input.GetKeyDown(KeyCode.C))
+                    ToggleCardPage();
+
+            }
+
     }
     void HandleAbilityFlow()
     {
@@ -95,6 +106,8 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
         // CASE 3: Nothing open ¨ open SelectAbility first
         OpenOverlay(_selectAbilityOverlay);
+        _isAnOverlayOpen = true;
+        _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
         _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStore");
     }
     void OpenPurchaseAbilityPage(STATUSTYPE type)
@@ -159,6 +172,9 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
         OpenOverlay(_cardOverlay);
         _cardStoreAnimator.SetTrigger("OpenCardStore");
+        _isAnOverlayOpen = true;
+        _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
+
     }
     public void PlayCloseCardStoreAnim()
     {
@@ -179,6 +195,9 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
         yield return new WaitForSecondsRealtime(state.length + 0.5f);
         base.CloseOverlay(_cardOverlay);
+        _isAnOverlayOpen = false;
+        _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
+
     }
     private IEnumerator CloseSelectAbilityAnimation()
     {
@@ -191,6 +210,9 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
         yield return new WaitForSecondsRealtime(state.length + 0.5f);
         CloseOverlay(_selectAbilityOverlay);
+        _isAnOverlayOpen = false;
+        _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
+
     }
     public void StartRerollCardAnim()
     {
@@ -212,12 +234,12 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     public void CalculatePriceCalculation(int cost, int totalpoint)
     {
-        _cardCostText.text = cost.ToString();
-        _currentPointText.text = "- " + totalpoint.ToString();
+        _cardCostText.text = "- " + cost.ToString();
+        _currentPointText.text = totalpoint.ToString();
         _leftOverPointText.text = (totalpoint - cost).ToString();
 
-        _apCardCostText.text = cost.ToString();
-        _apCurrentPointText.text = "- " + totalpoint.ToString();
+        _apCardCostText.text = "- " + cost.ToString();
+        _apCurrentPointText.text = totalpoint.ToString();
         _apLeftOverPointText.text = (totalpoint - cost).ToString();
     }
     public void ResetPriceCalculation()
@@ -238,5 +260,6 @@ public class StoreOverlayUI : BaseOverLayInteraction
         }
     }
     public void UpdateRerollText() => _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
-
+    public bool GetIsOverlayOpen() => _isAnOverlayOpen;
+    public void SetIsOverlayOpen(bool state) => _isAnOverlayOpen = state;
 }

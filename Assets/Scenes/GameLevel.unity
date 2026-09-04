@@ -12374,7 +12374,7 @@ MonoBehaviour:
   - {fileID: 1482436832}
   _itemCostByLevel: 0300000005000000070000000a0000000a000000
   _storeIsOpen: 0
-  _maxReroll: 5
+  _maxReroll: 1
 --- !u!1 &417831077
 GameObject:
   m_ObjectHideFlags: 0
@@ -14860,7 +14860,7 @@ GameObject:
   - component: {fileID: 573681232}
   - component: {fileID: 573681231}
   m_Layer: 5
-  m_Name: CurrentPoint
+  m_Name: TotalPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14874,7 +14874,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573681229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.1828e-11}
+  m_LocalPosition: {x: 0, y: 0, z: -2.5465978e-11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14882,7 +14882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2804, y: -21.821}
+  m_AnchoredPosition: {x: 2.2804096, y: 17.486088}
   m_SizeDelta: {x: 61.0391, y: 39.0804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &573681231
@@ -14915,7 +14915,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190236
-  m_fontColor: {r: 0.6132076, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.16037738, g: 0.029772907, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -27267,10 +27267,6 @@ MonoBehaviour:
   _optionsOverlay: {fileID: 946428456}
   _resolutionDropdown: {fileID: 1330846283}
   _windowModeDropDown: {fileID: 1295343628}
-  _masterVolumeSlider: {fileID: 167462021}
-  _sfxVolumeSlider: {fileID: 29933345}
-  _musicVolumeSlider: {fileID: 671522865}
-  _volumeType: 0
   _anim: {fileID: 1083882351}
 --- !u!1 &1085387676
 GameObject:
@@ -28979,7 +28975,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160326845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 3.637979e-12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28987,7 +28983,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2804, y: 17.2598}
+  m_AnchoredPosition: {x: 2.2803905, y: -22.047287}
   m_SizeDelta: {x: 61.0391, y: 39.0804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1160326847
@@ -29020,7 +29016,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278848010
-  m_fontColor: {r: 0.03773582, g: 0.03773582, b: 0.03773582, a: 1}
+  m_fontColor: {r: 0.6117647, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -33255,6 +33251,7 @@ MonoBehaviour:
   _currentPointText: {fileID: 1566919782}
   _leftOverPointText: {fileID: 1592670721}
   _rerollLeftText: {fileID: 58768980}
+  _isAnOverlayOpen: 0
   _itemButton:
   - {fileID: 1286664678}
   - {fileID: 1813064831}
@@ -37267,7 +37264,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566919780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.1828e-11}
+  m_LocalPosition: {x: 0, y: 0, z: -2.5465978e-11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37275,7 +37272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2804, y: -21.821}
+  m_AnchoredPosition: {x: 2.2804096, y: 17.486088}
   m_SizeDelta: {x: 61.0391, y: 39.0804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566919782
@@ -37308,7 +37305,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278848010
-  m_fontColor: {r: 0.039215688, g: 0.039215688, b: 0.039215688, a: 1}
+  m_fontColor: {r: 0.16078432, g: 0.03137255, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -38197,6 +38194,7 @@ MonoBehaviour:
   _abilityIcon: {fileID: 905007589}
   _abilityName: {fileID: 840051066}
   _abilityDescription: {fileID: 2144923187}
+  _isAnOverlayOpen: 0
 --- !u!1 &1592670719
 GameObject:
   m_ObjectHideFlags: 0
@@ -43817,7 +43815,7 @@ GameObject:
   - component: {fileID: 1868633040}
   - component: {fileID: 1868633039}
   m_Layer: 5
-  m_Name: CardCostPoint
+  m_Name: CostPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43831,7 +43829,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1868633037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -3.637979e-12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43839,7 +43837,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2804, y: 17.2598}
+  m_AnchoredPosition: {x: 2.2803895, y: -19.023659}
   m_SizeDelta: {x: 61.0391, y: 39.0804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1868633039
@@ -43872,7 +43870,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278848010
-  m_fontColor: {r: 0.03773582, g: 0.03773582, b: 0.03773582, a: 1}
+  m_fontColor: {r: 0.6117647, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -57759,10 +57757,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3762535270675772051, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
-      propertyPath: _hitEffectVFX
-      value: 
-      objectReference: {fileID: 5898855646081462555, guid: 0baed40d0cfcbca44a03d60e17dd210d, type: 3}
     - target: {fileID: 5209257556626525879, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
       propertyPath: _gameCamera
       value: 
@@ -57771,10 +57765,6 @@ PrefabInstance:
       propertyPath: _respawnPos
       value: 
       objectReference: {fileID: 625229727}
-    - target: {fileID: 5539557761722790070, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

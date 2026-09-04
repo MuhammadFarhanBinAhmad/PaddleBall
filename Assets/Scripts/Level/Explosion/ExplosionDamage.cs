@@ -8,6 +8,7 @@ public class ExplosionDamage : MonoBehaviour
 
     Vector3 _startScale = Vector3.one;
     SOStatusEffect _SOStatusEffect;
+    [SerializeField]SO_FeedbackEffect _explosionEffect;
     int _damage;
     bool _hasExploded = false;
 
@@ -34,6 +35,7 @@ public class ExplosionDamage : MonoBehaviour
         if (_hasExploded) return;
         _hasExploded = true;
         AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBombExplosion,transform.position);
+        GlobalFeedbackManager.Instance.SetFeedbackValue(_explosionEffect);
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
         Invoke("DisableSelf", .5f);
     }
