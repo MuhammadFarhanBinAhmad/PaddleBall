@@ -30,6 +30,7 @@ public class Ball : MonoBehaviour
     [Header("Damage")]
     [SerializeField] int _minDamage;
     [SerializeField] int _maxDamage;
+    int _bonusDamage;
     int _damage;
 
 
@@ -511,7 +512,7 @@ public class Ball : MonoBehaviour
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _damage = UnityEngine.Random.Range(_minDamage,_maxDamage);
+                _damage = UnityEngine.Random.Range(_minDamage,_maxDamage) + _bonusDamage;
                 _abilityManager.NotifyBrickHit(bh, (_damage));
             }
         }
@@ -559,5 +560,5 @@ public class Ball : MonoBehaviour
     public float GetMaxManaAmount() => _maxManaAmount;
     public void IncreaseHomingStrength(float val) => _homingStrength += val;
 
-
+    public void AddBonusDamage(int val) => _bonusDamage += val;
 }

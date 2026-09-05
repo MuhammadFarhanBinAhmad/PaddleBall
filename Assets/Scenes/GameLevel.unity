@@ -11925,7 +11925,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityManager
   _brickAbilities: []
-  _ballAbilities: []
   test: []
 --- !u!4 &381268553
 Transform:
@@ -12364,8 +12363,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 38ebaa21e5a22db44ba4764a7dcc4a1f, type: 2}
   - {fileID: 11400000, guid: fe807f5bf4ef4394cb250ab6c8ea4453, type: 2}
   - {fileID: 11400000, guid: dcfd3e2a55d7c8646821f032d49e9e42, type: 2}
-  - {fileID: 11400000, guid: 199ab2a6a3692404da02dc4964cbe787, type: 2}
-  - {fileID: 11400000, guid: cda9247d392f74c48bb2dad1052e3b21, type: 2}
+  - {fileID: 11400000, guid: 93bcb433b2f13db4ba565a68cf474ff4, type: 2}
   _itemPurchasedList: []
   _itemButtonsList:
   - {fileID: 1286664678}
@@ -36002,7 +36000,7 @@ MonoBehaviour:
   _onEssenceCollectParticle: {fileID: 931078547}
   _essenceTweenType: 2
   milestoneFloors: 1
-  _essenceIncreaseBase: 20
+  _essenceIncreaseBase: 5
   _brickToFloorConversionRate: 5
   _currentBrickCount: 0
   _posOffset: {x: 16, y: 3}

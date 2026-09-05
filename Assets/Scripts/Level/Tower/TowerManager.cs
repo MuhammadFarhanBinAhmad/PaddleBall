@@ -412,6 +412,7 @@ public class TowerManager : MonoBehaviour
     public int GetBrickFloorConversionRate() => _brickToFloorConversionRate;
     public int GetEssencePureEssenceConversionRate() => _essenceToPureEssenceConversionRate;
     public void AddPureEssence() => _currentPureEssence++;
+    public void ClearAllEssence() => _currentPureEssence = 0;
     public void AddEssenceCardBonus(float val) => _cardBonusMultiplier += val;
 
 }

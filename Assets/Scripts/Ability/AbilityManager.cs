@@ -1,13 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[SerializeField]
+public enum TYPE
+{
+    SPELL,
+    CARD
+}
 
 public class AbilityManager : MonoBehaviour
 {
     // now store abilities directly as ABSAbility instances
     public List<ABSAbility> _brickAbilities = new List<ABSAbility>();
-    public List<ABSAbility> _ballAbilities = new List<ABSAbility>();
+
+    int _totalSpell;
+    int _totalCard;
 
     Dictionary<string, ABSAbility> _abilitiesByID = new Dictionary<string, ABSAbility>();
 
@@ -43,6 +50,11 @@ public class AbilityManager : MonoBehaviour
 
         ability._SOAbilityEffect = so;
         ability.OnAdded(this);
+
+        if (ability._SOAbilityEffect._type == TYPE.CARD)
+            _totalCard++;
+        else
+            _totalSpell++;
 
         // store ability directly
         _brickAbilities.Add(ability);
@@ -268,4 +280,6 @@ public class AbilityManager : MonoBehaviour
 
         return false;
     }
+    public int GetTotalCard() => _totalCard;
+    public int GetTotalSpell() => _totalSpell;
 }

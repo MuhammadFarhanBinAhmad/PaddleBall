@@ -4,9 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Ability/Ability Effect")]
 public class SOAbilityEffect : ScriptableObject
 {
+
+
     public string _abilityName;
 
     public STATUSTYPE _statusType;
+    public TYPE _type;
 
     [Header("Runtime")]
     public GameObject _abilityPrefab;
