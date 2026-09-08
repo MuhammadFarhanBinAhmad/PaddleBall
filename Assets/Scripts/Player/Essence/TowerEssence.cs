@@ -41,7 +41,6 @@ public class TowerEssence : MonoBehaviour
 
     [Tooltip("Starting movement impulse.")]
     public float minImpulse;
-
     public float maxImpulse;
 
     Vector2 _velocity;
@@ -62,8 +61,6 @@ public class TowerEssence : MonoBehaviour
     bool _isAttracted;
     Vector2 _attractorPos;
     Transform _attractorTransform;
-
-
 
     [Header("Auto Attract")]
     [SerializeField] float _autoAttractStrength = 8f;

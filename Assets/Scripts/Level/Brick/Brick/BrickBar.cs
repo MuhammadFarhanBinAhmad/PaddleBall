@@ -166,28 +166,6 @@ public class BrickBar : MonoBehaviour
     {
     }
 
-    public void OnDamageLayer(int amount, DeathCause deathcause = DeathCause.NORMAL)
-    {
-        //Need resolve branching brick issue on this one
-        if (_elementID > 0)
-        {
-            SO_BrickHealthStats so = null;
-            for(int i=0; i < _brickHealthStats.Count(); i++)
-            {
-                if (_brickHealthStats[i]._elementID == _elementID)
-                {
-                    so = _brickHealthStats[i];
-                }
-            }
-            _elementID = so._parentElementID;
-            SetBrick(_brickHealthStats[_elementID]);
-        }
-        else
-        {
-            _brickHealthComponent.PendingDeath(deathcause, true);
-        }
-    }
-
     public void UpdateBrickAfterDamage(DeathCause deathcause = DeathCause.NORMAL)
     {
         switch (deathcause)
@@ -313,7 +291,7 @@ public class BrickBar : MonoBehaviour
         _fallSpeed = _stats._dropSpeed;
         _elementID = _stats._elementID;
         _layerNumber = _stats._layerNumber;
-        _brickHealthComponent.SetHealth(_stats._health);
+        _brickHealthComponent.SetHealth(_stats._tiers[_layerNumber]._health);
         _brickUI.PrepBrickLayerColour(_stats._layerNumber);
         _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
     }

@@ -16,7 +16,7 @@ MonoBehaviour:
   ability_Name: Piercer
   ability_Description: Gain a 25% chance to destroy 1 brick layer
   ability_Level: 1
-  ability_ToSpawn: {fileID: 11400000, guid: 92f5eb662a7acd849bc8fc83199cb67b, type: 2}
+  ability_ToSpawn: {fileID: 11400000, guid: 53ec1512c282f2f4098137ce37eeda08, type: 2}
   icon: {fileID: 2162073879907501594, guid: 68fde1cb982beaf4d8edbfa5974d32e9, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:

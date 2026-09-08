@@ -5011,6 +5011,7 @@ GameObject:
   - component: {fileID: 9106042457657841286}
   - component: {fileID: 2700153125295761352}
   - component: {fileID: 5719172591678964711}
+  - component: {fileID: 4721458688493095984}
   m_Layer: 8
   m_Name: Brick
   m_TagString: Brick
@@ -5167,6 +5168,33 @@ MonoBehaviour:
   _damageText: {fileID: 4269139500996097731, guid: 49ac76b83082ab64781a2799ec10c319, type: 3}
   _hitFlash: {fileID: 8109881121445184266}
   _flashPeriod: 0.1
+--- !u!50 &4721458688493095984
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5469620576531411634}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7558917431117315383
 GameObject:
   m_ObjectHideFlags: 0

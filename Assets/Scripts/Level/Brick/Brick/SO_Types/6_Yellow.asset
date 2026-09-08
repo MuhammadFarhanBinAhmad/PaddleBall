@@ -16,26 +16,39 @@ MonoBehaviour:
   _childElementID: 8
   _elementID: 6
   _layerNumber: 6
-  _health: 800
   _dropSpeed: 0.01
   _APValue: 5
   _daytoUnlock: 6
-  _color: {r: 1, g: 1, b: 1, a: 1}
-  _brickSprite:
-  - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 1148709287045872691, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 9034449238214913990, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 1114784262, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 68800044, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -297607996, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 192519827, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: 1452665365, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -214448026, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -1843491830, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -354926178, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -1266347677, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -1282816005, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - {fileID: -1078829790, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  _tiers:
+  - _health: 20
+    _brickSprite:
+    - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 40
+    _brickSprite:
+    - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 80
+    _brickSprite:
+    - {fileID: 1148709287045872691, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 9034449238214913990, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 160
+    _brickSprite:
+    - {fileID: 1114784262, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 68800044, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -297607996, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 320
+    _brickSprite:
+    - {fileID: 192519827, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1452665365, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 267357197, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 640
+    _brickSprite:
+    - {fileID: -214448026, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1843491830, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -354926178, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 1280
+    _brickSprite:
+    - {fileID: -1266347677, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1282816005, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1078829790, guid: b4f54150f5781d543be68b79249f6a14, type: 3}

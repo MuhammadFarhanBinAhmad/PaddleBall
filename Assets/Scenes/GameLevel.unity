@@ -12345,25 +12345,25 @@ MonoBehaviour:
   - _level: 0
     _purchases: 0
     _baseCost: 2
-    _multiplier: 1.25
+    _multiplier: 1.5
+  - _level: 0
+    _purchases: 0
+    _baseCost: 5
+    _multiplier: 1.5
+  - _level: 0
+    _purchases: 0
+    _baseCost: 7
+    _multiplier: 1.5
   - _level: 0
     _purchases: 0
     _baseCost: 0
-    _multiplier: 1.25
-  - _level: 0
-    _purchases: 0
-    _baseCost: 0
-    _multiplier: 1.25
-  - _level: 0
-    _purchases: 0
-    _baseCost: 0
-    _multiplier: 1.25
+    _multiplier: 1.5
   unlockedAbilities: []
   _itemAvailableList:
   - {fileID: 11400000, guid: 38ebaa21e5a22db44ba4764a7dcc4a1f, type: 2}
   - {fileID: 11400000, guid: fe807f5bf4ef4394cb250ab6c8ea4453, type: 2}
   - {fileID: 11400000, guid: dcfd3e2a55d7c8646821f032d49e9e42, type: 2}
-  - {fileID: 11400000, guid: 93bcb433b2f13db4ba565a68cf474ff4, type: 2}
+  - {fileID: 11400000, guid: 891199d148e9ebe4c8e2d13827f98ef3, type: 2}
   _itemPurchasedList: []
   _itemButtonsList:
   - {fileID: 1286664678}
@@ -13962,7 +13962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   _maxGameDuration: 21
-  _fullDayDuration: 120
+  _fullDayDuration: 30
   _bossDayDuration: 240
   _currentDayDuration: 5
   _bossDayInterval: 22

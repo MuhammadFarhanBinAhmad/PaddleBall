@@ -194,6 +194,10 @@ public class BrickHealthComponent : MonoBehaviour
             }
         }
     }
+    public void OnDestroyLayer()
+    {
+        OnDamage(_health);
+    }
     public void ApplyStatus(AbilityContext _statusEffect)
     {
         //check if status already exist

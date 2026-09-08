@@ -43,7 +43,6 @@ public abstract class ABSAbility : MonoBehaviour
     public virtual void OnHitAdd(HitContext ctx) { }
     public virtual void OnHitSubtract(HitContext ctx) { }
     public virtual void OnHitMultiply(HitContext ctx) { }
-    public virtual void OnHitDivide(HitContext ctx) { }
     // After a hit on enemy has been resolved(Best to be for spawning object)
     public virtual void OnHitResolved(HitContext ctx) { }
     // When a brick is destroyed upon hit

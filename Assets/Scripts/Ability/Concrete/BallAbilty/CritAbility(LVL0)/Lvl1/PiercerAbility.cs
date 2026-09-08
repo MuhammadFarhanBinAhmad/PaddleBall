@@ -12,7 +12,7 @@ public class PiercerAbility : ABSAbility
         if (isCrit)
         {
             ctx._status = STATUSTYPE.CRIT;
-            ctx._brick.OnDamageLayer(layerToDestroy);
+            ctx._health.OnDestroyLayer();
         }
 
         return; // only one crit owner

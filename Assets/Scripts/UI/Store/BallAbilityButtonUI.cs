@@ -138,7 +138,7 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         base.OnPointerEnter(eventData);
         print(_abilityInfo._cost);
         _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
-        _storeOverlayUI.CalculatePriceCalculation(_abilityInfo._cost,
+        _storeOverlayUI.CalculatePriceCalculation(_storeAbilityManager.GetAbilityCost(_abilityInfo.ability_Level),
                                                     _towerManager._currentPureEssence);
 
     }

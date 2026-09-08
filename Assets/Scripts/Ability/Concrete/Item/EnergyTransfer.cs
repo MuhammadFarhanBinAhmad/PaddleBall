@@ -4,7 +4,7 @@ public class EnergyTransfer : ABSAbility
 {
     TimeManager _timeManager;
     TowerManager _towerManager;
-
+    TowerUIManager _towerUIManager;
 
     float _bonusPercentage;
 
@@ -12,6 +12,7 @@ public class EnergyTransfer : ABSAbility
     {
         _timeManager = FindAnyObjectByType<TimeManager>();
         _towerManager = FindAnyObjectByType<TowerManager>();
+        _towerUIManager = FindAnyObjectByType<TowerUIManager>();
     }
     private void Start()
     {
@@ -21,6 +22,7 @@ public class EnergyTransfer : ABSAbility
     {
         _bonusPercentage = _towerManager.GetTotalPureEssenceCount() * _SOAbilityEffect._baseDamageMultiplier;
         _towerManager.ClearAllEssence();
+        _towerUIManager.UpdateEssenceUI();
     }
 
     public override void OnHitAdd(HitContext ctx)

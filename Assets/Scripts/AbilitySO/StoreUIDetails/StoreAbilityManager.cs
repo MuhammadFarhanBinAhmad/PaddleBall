@@ -86,7 +86,6 @@ public class StoreAbilityManager : MonoBehaviour
         {
             case STATUSTYPE.EXPLOSION:
                 {
-                    print("EXPLOSION");
                     abilityLookup = explosiveAbilities
                     .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
                     .ToDictionary(a => a.abilityID, a => a);
@@ -94,7 +93,6 @@ public class StoreAbilityManager : MonoBehaviour
                 }
             case STATUSTYPE.CRIT:
                 {
-                    print("CRIT");
                     abilityLookup = criticalAbilities
                     .Where(a => a != null && !string.IsNullOrEmpty(a.abilityID))
                     .ToDictionary(a => a.abilityID, a => a);

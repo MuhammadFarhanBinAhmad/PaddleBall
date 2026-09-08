@@ -154,9 +154,6 @@ public class AbilityManager : MonoBehaviour
         foreach (var ability in _brickAbilities)
             ability.OnHitMultiply(ctx);
 
-        foreach (var ability in _brickAbilities)
-            ability.OnHitDivide(ctx);
-
             // Phase 3: Apply damage
             ctx._health.OnDamage(ctx._damageValue);
 

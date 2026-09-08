@@ -6,7 +6,6 @@ public class SharpnelBits : MonoBehaviour
     BrickHealthComponent _ignoredBrick;
 
     [SerializeField]Ball _ball;
-    [SerializeField]Rigidbody2D _rb;
 
     int _damage;
     [SerializeField] float _damageMultiplier;
@@ -16,29 +15,57 @@ public class SharpnelBits : MonoBehaviour
 
     bool _canDamage;
     [SerializeField] float _collisionDelay = 0.05f;
+
+    Vector2 _velocity;
+
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
         _ball = FindAnyObjectByType<Ball>();
     }
-    public void SetStats()
+    private void Update()
+    {
+        Move();
+    }
+
+    void Move()
+    {
+        if (_velocity.sqrMagnitude <= 0.000001f)
+            return;
+
+        transform.position +=
+            (Vector3)(_velocity * Time.deltaTime);
+    }
+    public void SetStats(int dmg)
     {
         CancelInvoke();
 
         _canDamage = false;
 
-        _rb.linearVelocity = Vector2.zero;
-        _rb.angularVelocity = 0f;
+        _damage = Mathf.FloorToInt(dmg * _damageMultiplier);
 
-        Vector2 dir = Random.insideUnitCircle.normalized;
-        float mag = Random.Range(minImpulse, maxImpulse);
-
-        _rb.AddForce(dir * mag, ForceMode2D.Impulse);
-
-        _damage = Mathf.FloorToInt(_ball.GetBallBaseDamage() * _damageMultiplier);
+        Impluse();
 
         Invoke(nameof(EnableDamage), _collisionDelay);
         Invoke(nameof(KillObject), _lifetime);
+    }
+    void Impluse()
+    {
+        // Reset movement state.
+        _velocity = Vector2.zero;
+
+        // Reproduce the old initial Rigidbody impulse
+        // using our own velocity instead.
+        Vector2 direction = Random.insideUnitCircle;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            direction = Vector2.up;
+
+        direction.Normalize();
+
+        float magnitude =
+            Random.Range(minImpulse, maxImpulse);
+
+        _velocity = direction * magnitude;
     }
     void EnableDamage()
     {
@@ -63,8 +90,6 @@ public class SharpnelBits : MonoBehaviour
     void KillObject()
     {
         CancelInvoke();
-        Debug.Log("Killed by Invoke at " + Time.time);
-
         gameObject.SetActive(false);
     }
 }
