@@ -4,12 +4,11 @@ using UnityEngine;
 public class ToxicSmokeObject : ABSAbility
 {
     [Header("Lifetime")]
-    [SerializeField] private float _timeBeforeDespawn = 3f;
-    [SerializeField] private float _shrinkDuration = 0.25f;
+    [SerializeField] private float _timeBeforeDespawn;
+    [SerializeField] private float _shrinkDuration;
 
     [Header("Damage")]
-    [SerializeField] private float _damageTimeInterval = 0.5f;
-    [SerializeField] private float _damageRadius = 1.5f;
+    [SerializeField] private float _damageRadius;
     [SerializeField] private LayerMask _brickLayer;
 
     private Vector3 _startScale;
@@ -34,11 +33,11 @@ public class ToxicSmokeObject : ABSAbility
         _filter.useTriggers = true;
     }
 
-    private void OnEnable()
+    public void Initialize()
     {
-        _startScale = transform.localScale;
-
+        transform.localScale = Vector3.one;
         _cachedContext = CreateToxicContext();
+        _abilityManager.ApplyToxicModifiers(_cachedContext);
 
         if (_despawnRoutine != null)
             StopCoroutine(_despawnRoutine);
@@ -63,7 +62,7 @@ public class ToxicSmokeObject : ABSAbility
 
     IEnumerator DamageRoutine()
     {
-        WaitForSeconds wait = new WaitForSeconds(_damageTimeInterval);
+        WaitForSeconds wait = new WaitForSeconds(_cachedContext._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE]);
 
         while (true)
         {
@@ -81,8 +80,7 @@ public class ToxicSmokeObject : ABSAbility
                 if (!col.TryGetComponent(out BrickBar brick))
                     continue;
 
-                _abilityManager.ApplyToxicModifiers(_cachedContext);
-                brick._brickHealthComponent.ApplyStatus(_cachedContext);
+                brick._brickHealthComponent.OnDamage((int)_cachedContext._Stats[STATID.DAMAGE_PER_STACK]);
             }
 
             yield return wait;
@@ -91,7 +89,6 @@ public class ToxicSmokeObject : ABSAbility
     IEnumerator DespawnAfterDelay()
     {
         yield return new WaitForSeconds(_timeBeforeDespawn);
-
         yield return ShrinkAndDisable();
     }
 
@@ -115,7 +112,6 @@ public class ToxicSmokeObject : ABSAbility
 
         gameObject.SetActive(false);
     }
-
     ToxicContext CreateToxicContext()
     {
         ToxicContext ctx = new ToxicContext
@@ -124,15 +120,8 @@ public class ToxicSmokeObject : ABSAbility
             _statusType = _SOAbilityEffect._statusType
         };
 
-        ctx._Stats[STATID.STACKS_TO_ADD] = _SOAbilityEffect._stacksToAdd;
-        ctx._Stats[STATID.MAX_STACKS] = _SOAbilityEffect._maxStacks;
         ctx._Stats[STATID.DAMAGE_PER_STACK] = _SOAbilityEffect._damagePerStack;
-        ctx._Stats[STATID.STACK_LIFETIME] = _SOAbilityEffect._stackLifeTime;
         ctx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
-        ctx._Stats[STATID.SPEED_MULTIPLIER] = _SOAbilityEffect._speedMultiplier;
-
-        ctx._Statsbool[STATID.RESET_STACK_TIMER] = _SOAbilityEffect._resetStackTimer;
-        ctx._Statsbool[STATID.AFFECTS_SPEED] = _SOAbilityEffect._affectSpeed;
 
         return ctx;
     }

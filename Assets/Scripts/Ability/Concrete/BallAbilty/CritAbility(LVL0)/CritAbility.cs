@@ -10,8 +10,8 @@ public class CritAbility : ABSAbility
     {
         AbilityContext cctx = new AbilityContext { };
         cctx._Stats[STATID.BASE_DAMAGE] = ctx._damageValue;
-        cctx._Stats[STATID.CRIT_CHANCE] = _SOAbilityEffect._baseCritChance;
-        cctx._Stats[STATID.CRIT_MULTIPLIER] = _SOAbilityEffect._critMultiplier;
+        cctx._Stats[STATID.CRIT_CHANCE] = _SOAbilityEffect._baseChance;
+        cctx._Stats[STATID.CRIT_MULTIPLIER] = _SOAbilityEffect._critMultiplier + +ctx._modifyChance;
 
 
         bool isCrit =  RNGService.RollCrit(cctx._Stats[STATID.CRIT_CHANCE], _SOAbilityEffect._bonusPerFail);

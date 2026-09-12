@@ -9,5 +9,6 @@ public class ToxicEffectPool : VBasePool
     public override void SpawnObject()
     {
         base.SpawnObject();
+
     }
 }

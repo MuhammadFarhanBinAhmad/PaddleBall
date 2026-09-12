@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InfectedAbility : ABSAbility, IToxicContextModifier
+public class ToxicSuppression: ABSAbility, IToxicContextModifier
 {
     public void ModifyToxicContextAdd(AbilityContext toxicContext)
     {
@@ -14,7 +14,8 @@ public class InfectedAbility : ABSAbility, IToxicContextModifier
 
     public void ModifyToxicContextMultiple(AbilityContext toxicContext)
     {
-        toxicContext._Stats[STATID.DAMAGE_PER_STACK] *= _SOAbilityEffect._baseDamageMultiplier;
+        float adddmg = toxicContext._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier;
+        toxicContext._Stats[STATID.DAMAGE_PER_STACK] += adddmg;
     }
 
     public void ModifyToxicContextSubtract(AbilityContext toxicContext)

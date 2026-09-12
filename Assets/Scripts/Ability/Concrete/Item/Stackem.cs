@@ -14,17 +14,14 @@ public class Stackem : ABSAbility, IDischargeContextModifier, IToxicContextModif
 
     public void ModifyDischargeDivide(HitContext hitCtx, AbilityContext dischargeCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyDischargeMultiple(HitContext hitCtx, AbilityContext dischargeCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyDischargeSubtract(HitContext hitCtx, AbilityContext dischargeCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyToxicContextAdd(AbilityContext toxicContext)

@@ -14,13 +14,13 @@ public class SOAbilityEffect : ScriptableObject
     [Header("Runtime")]
     public GameObject _abilityPrefab;
 
-    public bool _genericEffect;
-    public bool _applyStatus;
-    public bool _spawnEffect;
-    public bool _critEffect;
-    public bool _explosionEffect;
-    public bool _counterEffect;
-    public bool _shieldEffect;
+    [SerializeField] bool _genericEffect;
+    [SerializeField] bool _applyStatus;
+    [SerializeField] bool _spawnEffect;
+    [SerializeField] bool _chanceEffect;
+    [SerializeField] bool _explosionEffect;
+    [SerializeField] bool _counterEffect;
+    [SerializeField] bool _shieldEffect;
 
     //-----------------Generic-----------------//
     [GroupUnder(nameof(_genericEffect))]
@@ -74,14 +74,14 @@ public class SOAbilityEffect : ScriptableObject
     public int _amountToSpawn;
     [GroupUnder(nameof(_spawnEffect))]
     public GameObject _itemToSpawn;
-    //-----------------Crit-----------------//
-    [GroupUnder(nameof(_critEffect))]
-    public float _baseCritChance;
-    [GroupUnder(nameof(_critEffect))]
+    //-----------------Crit/Chance-----------------//
+    [GroupUnder(nameof(_chanceEffect))]
+    public float _baseChance;
+    [GroupUnder(nameof(_chanceEffect))]
     public float _critMultiplier;
-    [GroupUnder(nameof(_critEffect))]
-    public float _modiftCritMultiplier;
-    [GroupUnder(nameof(_critEffect))]
+    [GroupUnder(nameof(_chanceEffect))]
+    public float _modifyCritMultiplier;
+    [GroupUnder(nameof(_chanceEffect))]
     public int _layerToDestroy;
     //-----------------Explosive-----------------//
     [GroupUnder(nameof(_explosionEffect))]

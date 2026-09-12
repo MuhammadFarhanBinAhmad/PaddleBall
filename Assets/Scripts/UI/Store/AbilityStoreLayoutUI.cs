@@ -51,9 +51,9 @@ public class AbilityStoreLayoutUI : AbstractStoreUI
 
         PopulateLevel0();
         PopulateLevel(_lvl1AbilityButton, abilityData[1].buttons);
+        PopulateLevel(_lvl2AbilityButton, abilityData[2].buttons);
         RefreshAll();
 
-        //PopulateLevel(_lvl2AbilityButton, levelButtons[2].buttons);
         //PopulateLevel(_lvl3AbilityButton, levelButtons[3].buttons);
     }
     void PopulateLevel0()

@@ -29,7 +29,9 @@ public class ExplosiveDischarge : ABSAbility
 
     public override void ActivateAbility(GameObject brick = null)
     {
+        if (brick == null) return;
         if (_explosionPool == null) return;
+
         GameObject explosionGO = _explosionPool.GetExplosion();
         explosionGO.transform.position = transform.position;
         var ed = explosionGO.GetComponent<ExplosionDamage>();

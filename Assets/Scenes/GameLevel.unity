@@ -1554,7 +1554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7808077746164234144, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_Pivot.x
@@ -1651,6 +1651,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
   m_PrefabInstance: {fileID: 59045942}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &59045946 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1278126010798643898, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
+  m_PrefabInstance: {fileID: 59045942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59045944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91967342cd6540645bd4297005827454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallAbilityButtonUI
 --- !u!1 &83030022
 GameObject:
   m_ObjectHideFlags: 0
@@ -6317,6 +6328,53 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &325303514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 325303515}
+  - component: {fileID: 325303516}
+  m_Layer: 0
+  m_Name: ToxicExplosionPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &325303515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325303514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 501465892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &325303516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325303514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f46f583e52b3f540a2d32613284b218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToxicExplosionPool
+  go_ObjectToSpawn: {fileID: 1899972121564291255, guid: cce6d089cbafc614ba25109a2ea414bf, type: 3}
+  _amountToSpawn: 50
+  _objectPool: []
 --- !u!1 &331079548
 GameObject:
   m_ObjectHideFlags: 0
@@ -12339,8 +12397,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bd618430718ca9d409244b2c33ade9e1, type: 2}
   toxicAbilities:
   - {fileID: 11400000, guid: fa9db3536f3acf6418edf5b3c2e815ec, type: 2}
+  - {fileID: 11400000, guid: 06fa88be5a6917e49bcc42410eb590d0, type: 2}
   - {fileID: 11400000, guid: 90db95f8725e76946b81c1b008aa32ae, type: 2}
+  - {fileID: 11400000, guid: a3524bfb394299c49839abe2ab61ce02, type: 2}
   - {fileID: 11400000, guid: 4f66d85284a336344a72a2f72b36f72d, type: 2}
+  - {fileID: 11400000, guid: e1224d7a233cdaf4489f0dd303a45c0a, type: 2}
+  - {fileID: 11400000, guid: 501129e61fdeab947a23e1eb84b74f44, type: 2}
   _abilityLevelAndCostState:
   - _level: 0
     _purchases: 0
@@ -13202,7 +13264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7808077746164234144, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_Pivot.x
@@ -13299,6 +13361,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
   m_PrefabInstance: {fileID: 455896361}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &455896365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1278126010798643898, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
+  m_PrefabInstance: {fileID: 455896361}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455896363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91967342cd6540645bd4297005827454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallAbilityButtonUI
 --- !u!1 &466924187
 GameObject:
   m_ObjectHideFlags: 0
@@ -13914,6 +13987,7 @@ Transform:
   - {fileID: 1801848359}
   - {fileID: 1342986886}
   - {fileID: 534841720}
+  - {fileID: 325303515}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &515077787
@@ -29013,7 +29087,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278848010
+    rgba: 4278190236
   m_fontColor: {r: 0.6117647, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -32270,7 +32344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7808077746164234144, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_Pivot.x
@@ -32367,6 +32441,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
   m_PrefabInstance: {fileID: 1297318344}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1297318348 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1278126010798643898, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
+  m_PrefabInstance: {fileID: 1297318344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297318346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91967342cd6540645bd4297005827454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallAbilityButtonUI
 --- !u!1 &1297346677
 GameObject:
   m_ObjectHideFlags: 0
@@ -33214,6 +33299,10 @@ MonoBehaviour:
   - {fileID: 1498649671}
   - {fileID: 714191320}
   - {fileID: 365069711}
+  - {fileID: 1845491772}
+  - {fileID: 1297318348}
+  - {fileID: 59045946}
+  - {fileID: 455896365}
 --- !u!114 &1346996354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43163,7 +43252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7808077746164234144, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
       propertyPath: m_Pivot.x
@@ -43260,6 +43349,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5995842847563793937, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
   m_PrefabInstance: {fileID: 1845491768}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1845491772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1278126010798643898, guid: 67aa6a571e1dc5947a2521ab5f297543, type: 3}
+  m_PrefabInstance: {fileID: 1845491768}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845491770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91967342cd6540645bd4297005827454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallAbilityButtonUI
 --- !u!1 &1847291552
 GameObject:
   m_ObjectHideFlags: 0
@@ -48613,7 +48713,11 @@ MonoBehaviour:
   _lvl1AbilityButton:
   - {fileID: 5995842845932772451}
   - {fileID: 5995842846140679797}
-  _lvl2AbilityButton: []
+  _lvl2AbilityButton:
+  - {fileID: 5995842845991212263}
+  - {fileID: 5995842847534264684}
+  - {fileID: 5995842846085062492}
+  - {fileID: 5995842846379300491}
   _lvl3AbilityButton: []
   _ballAbilityButtonUI:
   - {fileID: 0}
@@ -54885,7 +54989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &5995842846085062492
 GameObject:
   m_ObjectHideFlags: 0
@@ -54905,7 +55009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &5995842846140679797
 GameObject:
   m_ObjectHideFlags: 0
@@ -54965,7 +55069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &5995842846405175444
 GameObject:
   m_ObjectHideFlags: 0
@@ -55105,7 +55209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &5995842847669764195
 GameObject:
   m_ObjectHideFlags: 0
@@ -57763,6 +57867,10 @@ PrefabInstance:
       propertyPath: _respawnPos
       value: 
       objectReference: {fileID: 625229727}
+    - target: {fileID: 5209257556626525879, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
+      propertyPath: _manaRegenRate
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -100,11 +100,13 @@ public class BrickHealthComponent : MonoBehaviour
                 }
                 else
                 {
-                    // Restart decay timer for next stack
                     status.remainingStackTime = status.stackLifeTime;
                 }
 
-                status._ability.ActivateAbility(this.gameObject);
+                if (status._ability != null)
+                {
+                    status._ability.ActivateAbility(gameObject);
+                }
             }
             if (status.stacks > 0)
             {
@@ -227,14 +229,13 @@ public class BrickHealthComponent : MonoBehaviour
                 damagePerStack = (int)_statusEffect._Stats[STATID.DAMAGE_PER_STACK],
                 stackLifeTime = (int)_statusEffect._Stats[STATID.STACK_LIFETIME],
                 remainingStackTime = (int)_statusEffect._Stats[STATID.STACK_LIFETIME],
-                timeBeforeEffect = (int)_statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
-                remainingEffectTime = (int)_statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
+                timeBeforeEffect = _statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
+                remainingEffectTime = _statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
                 resetStackLifeTimeUponHit = _statusEffect._Statsbool[STATID.RESET_STACK_TIMER],
                 spawnPrefab = _statusEffect._spawnPrefab,
                 affectsSpeed = _statusEffect._Statsbool[STATID.AFFECTS_SPEED],
                 speedMultiplier = _statusEffect._Stats[STATID.SPEED_MULTIPLIER]
             };
-
             _statuses.Add(_statusEffect._statusType, sinst);
             SetSpeedMultiplier();
         }
@@ -258,7 +259,7 @@ public class BrickHealthComponent : MonoBehaviour
 
         _activeVFX.Add(type, vfx);
     }
-    void RemoveStatusVFX(STATUSTYPE type)
+    public void RemoveStatusVFX(STATUSTYPE type)
     {
         if (!_activeVFX.TryGetValue(type, out var vfx))
             return;
@@ -375,4 +376,5 @@ public class BrickHealthComponent : MonoBehaviour
     }
 
     public void SetVulnerableToAttack(bool status) => _vulnerableToDamage = status;
+    public StatusInstance GetStatusInstance(STATUSTYPE type) => _statuses[type];
 }

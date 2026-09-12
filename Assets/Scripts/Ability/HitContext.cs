@@ -6,6 +6,7 @@ public class HitContext
 
     public BrickBar _brick;
     public BrickHealthComponent _health;
+    public float _modifyChance;
     public int _damageValue;
 
     public float _Time;

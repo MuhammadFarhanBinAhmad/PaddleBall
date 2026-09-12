@@ -4851,9 +4851,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ToxicSmoke
   _SOAbilityEffect: {fileID: 11400000, guid: f65daf66424ba794990788b035820f0e, type: 2}
   _timeBeforeDespawn: 5
-  _shrinkDuration: 0.2
-  _damageTimeInterval: 0.1
-  _damageRadius: 8
+  _shrinkDuration: 0.1
+  _damageRadius: 10
   _brickLayer:
     serializedVersion: 2
     m_Bits: 256
