@@ -21,7 +21,8 @@ public class ExplosiveDischarge : ABSAbility
         statusCtx._Stats[STATID.STACK_LIFETIME] = _SOAbilityEffect._stackLifeTime;
         statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
         ctx._health.ApplyStatus(
-            statusCtx
+            statusCtx,
+            STATUSTYPE.DISCHARGE
         );
         _context = ctx;
 

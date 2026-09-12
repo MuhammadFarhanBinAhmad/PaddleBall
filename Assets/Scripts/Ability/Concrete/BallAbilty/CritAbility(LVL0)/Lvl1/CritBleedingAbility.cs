@@ -26,7 +26,8 @@ public class CritBleedingAbility : ABSAbility
             statusCtx._Statsbool[STATID.RESET_STACK_TIMER] = _SOAbilityEffect._resetStackTimer;
 
             ctx._health.ApplyStatus(
-                statusCtx
+                statusCtx,
+                STATUSTYPE.CRIT
             );
         }
 

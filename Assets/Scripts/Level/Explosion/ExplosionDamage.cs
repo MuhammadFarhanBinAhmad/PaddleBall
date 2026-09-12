@@ -58,7 +58,7 @@ public class ExplosionDamage : MonoBehaviour
                 statusCtx._Stats[STATID.DAMAGE_PER_STACK] = _SOStatusEffect._damagePerStack;
                 statusCtx._Stats[STATID.STACK_LIFETIME] = _SOStatusEffect._stackLifeTime;
                 statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOStatusEffect._timeBeforeEffectActivate;
-                brick.ApplyStatus(statusCtx);
+                brick.ApplyStatus(statusCtx, STATUSTYPE.EXPLOSION);
 
             }
         }

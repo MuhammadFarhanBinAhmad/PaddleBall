@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class DamageTextFeedback : MonoBehaviour
@@ -14,6 +15,13 @@ public class DamageTextFeedback : MonoBehaviour
     private Vector3 _startPos;
     private Vector3 _startScale;
     private Color _startColor;
+
+    [Header("Colour")]
+    [SerializeField] Color _explosionColour;
+    [SerializeField] Color _dischargeColour;
+    [SerializeField] Color _toxicColour;
+    [SerializeField] Color _critColour;
+    [SerializeField] Color _defaultColour;
 
     Coroutine _animationRoutine;
 
@@ -30,7 +38,30 @@ public class DamageTextFeedback : MonoBehaviour
 
         _animationRoutine = StartCoroutine(Animate());
     }
-    public void SetValue(int val) => _text.text = val.ToString();
+    public void SetValue(int val, STATUSTYPE type)
+    {
+        _text.text = val.ToString();
+        switch (type)
+        {
+            case STATUSTYPE.EXPLOSION:
+                _startColor = _explosionColour;
+                break;
+            case STATUSTYPE.TOXIC:
+                _startColor = _toxicColour;
+                break;
+            case STATUSTYPE.DISCHARGE:
+                _startColor = _dischargeColour;
+                break;
+            case STATUSTYPE.CRIT:
+                _startColor = _critColour;
+                break;
+            case STATUSTYPE.NONE:
+                _startColor = _defaultColour;
+                break;
+
+        }
+
+    }
     IEnumerator Animate()
     {
         _startPos = transform.localPosition;

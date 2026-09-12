@@ -5,9 +5,8 @@ public class ToxicOverload : ABSAbility
 {
     public override void OnHitResolved(HitContext ctx)
     {
-        print("hit");
         StatusInstance si = ctx._health.GetStatusInstance(STATUSTYPE.TOXIC);
-        if (si.stacks == 2)
+        if (si.stacks == si.maxStacks)
         {
             si.stacks = 0;
             ctx._health.RemoveStatusVFX(STATUSTYPE.TOXIC);

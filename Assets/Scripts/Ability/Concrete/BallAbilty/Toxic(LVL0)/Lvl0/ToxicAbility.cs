@@ -26,7 +26,8 @@ public class ToxicAbility : ABSAbility
 
         ctx._health.SpawnStatusVFX(STATUSTYPE.TOXIC, _vfxBuildPrefab, _vfxPopPrefab);
         ctx._health.ApplyStatus(
-            statusCtx
+            statusCtx,
+            STATUSTYPE.TOXIC
         );
         //GameObject effect = _toxicEffectPool.GetObject();
 

@@ -254,3 +254,8 @@ MonoBehaviour:
   _text: {fileID: 8294711638640476333}
   _feedback: {fileID: 11400000, guid: 64a488fd685d31d4da4f564acb0d869e, type: 2}
   _moveUpDistance: 3
+  _explosionColour: {r: 1, g: 0.53027105, b: 0, a: 1}
+  _dischargeColour: {r: 1, g: 0.9982651, b: 0, a: 1}
+  _toxicColour: {r: 0.37781304, g: 1, b: 0.3754716, a: 1}
+  _critColour: {r: 0.65245277, g: 0.8792586, b: 0.93207544, a: 1}
+  _defaultColour: {r: 1, g: 1, b: 1, a: 1}

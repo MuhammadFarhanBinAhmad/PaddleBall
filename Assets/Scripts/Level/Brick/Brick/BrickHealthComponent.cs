@@ -39,6 +39,7 @@ public class BrickHealthComponent : MonoBehaviour
     public Action _onDeathByTower;
     public Action _onDeath;
     DeathCause pendingDeathCause;
+    STATUSTYPE _dmgType;
     bool pendingDeath;
 
     internal void SetBrickBar(BrickBar _bb)
@@ -185,7 +186,7 @@ public class BrickHealthComponent : MonoBehaviour
                 bbb.HandleDamage(dmg);
             }
 
-            HitFeedbackJuice(modified);
+            SpawnDamageText(modified);
         }
         else
         {
@@ -200,8 +201,10 @@ public class BrickHealthComponent : MonoBehaviour
     {
         OnDamage(_health);
     }
-    public void ApplyStatus(AbilityContext _statusEffect)
+    public void ApplyStatus(AbilityContext _statusEffect,STATUSTYPE type)
     {
+
+        _dmgType = type;
         //check if status already exist
         if (_statuses.TryGetValue(_statusEffect._statusType, out StatusInstance existing))
         {
@@ -348,7 +351,7 @@ public class BrickHealthComponent : MonoBehaviour
         _health += amount;
         _health = Mathf.Clamp(_health, 0, _startingHealth);
     }
-    public void HitFeedbackJuice(int dmg)
+    public void SpawnDamageText(int dmg)
     {
         Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
 
@@ -364,7 +367,7 @@ public class BrickHealthComponent : MonoBehaviour
             Quaternion.identity
         );
 
-        dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg);
+        dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg,_dmgType);
 
         StartCoroutine(HitFlash());
     }

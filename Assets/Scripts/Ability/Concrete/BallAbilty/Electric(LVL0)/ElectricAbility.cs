@@ -21,7 +21,8 @@ public class ElectricAbility : ABSAbility
         _abilityManager.ApplyDischargeModifiers(ctx, statusCtx);
 
         ctx._health.ApplyStatus(
-            statusCtx
+            statusCtx,
+            STATUSTYPE.DISCHARGE
         );
         ctx._health.SpawnStatusVFX(STATUSTYPE.DISCHARGE, _vfxBuildPrefab, _vfxPopPrefab);
     }
