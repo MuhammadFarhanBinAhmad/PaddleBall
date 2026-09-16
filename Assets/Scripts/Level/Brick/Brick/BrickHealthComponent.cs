@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 [System.Serializable]
 public class ActiveStatusVFX
@@ -32,6 +33,20 @@ public class BrickHealthComponent : MonoBehaviour
     [SerializeField] float _flashPeriod;
     Dictionary<STATUSTYPE, ActiveStatusVFX> _activeVFX =
     new Dictionary<STATUSTYPE, ActiveStatusVFX>();
+    //STATUSTYPE _specialStatus;
+
+    [SerializeField] private float _rayDistance = 10f;
+    [SerializeField] private LayerMask _brickLayer;
+    [SerializeField] List<BrickHealthComponent> _nearbyBricks = new List<BrickHealthComponent>();
+
+    [Header("DischargeEffect")]
+    public GameObject _dischargeBuildVFX;
+    public GameObject _dischargePopVFX;
+    [Header("ToxicEffect")]
+    public GameObject _toxicBuildVFX;
+    public GameObject _toxicPopVFX;
+
+    float _dmgMultiplier;
 
     bool _vulnerableToDamage = true;
 
@@ -39,7 +54,6 @@ public class BrickHealthComponent : MonoBehaviour
     public Action _onDeathByTower;
     public Action _onDeath;
     DeathCause pendingDeathCause;
-    STATUSTYPE _dmgType;
     bool pendingDeath;
 
     internal void SetBrickBar(BrickBar _bb)
@@ -51,13 +65,14 @@ public class BrickHealthComponent : MonoBehaviour
         if (_health > 0)
             ExecuteStatusEffect();
 
-        if(pendingDeath)
+        if (pendingDeath)
         {
             if (transform.CompareTag("Brick"))
             {
                 ResolveDeath();
             }
         }
+        //FindNearbyBricks();
     }
 
     void ExecuteStatusEffect()
@@ -116,7 +131,7 @@ public class BrickHealthComponent : MonoBehaviour
                 if (status.remainingEffectTime <= 0)
                 {
                     status.remainingEffectTime = status.timeBeforeEffect;
-                    OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
+                    OnDamage(status.stacks * status.damagePerStack, status.type); //total stack * stack/dmg
                     PlayPopVFX(status.type);
                 }
             }
@@ -152,12 +167,12 @@ public class BrickHealthComponent : MonoBehaviour
 
         }
     }
-    public void OnDamage(int dmg, DeathCause deathcause = DeathCause.NORMAL, bool isInstantKill = false)
+    public void OnDamage(int dmg, STATUSTYPE dmgType = STATUSTYPE.NONE, DeathCause deathcause = DeathCause.NORMAL, bool isInstantKill = false)
     {
-        if(!_vulnerableToDamage)
+        if (!_vulnerableToDamage)
             return;
 
-        if(!isInstantKill)
+        if (!isInstantKill)
         {
             if (dmg == 0) dmg = 1;
 
@@ -170,6 +185,9 @@ public class BrickHealthComponent : MonoBehaviour
             //For Hit shield effect
             if (modified <= 0)
                 return;
+
+            float extradmg = modified * _dmgMultiplier;
+            modified += (int)extradmg;
 
             _health -= modified;
             for (int i = 0; i < _modifiers.Count; i++)
@@ -186,7 +204,7 @@ public class BrickHealthComponent : MonoBehaviour
                 bbb.HandleDamage(dmg);
             }
 
-            SpawnDamageText(modified);
+            SpawnDamageText(modified, dmgType);
         }
         else
         {
@@ -197,14 +215,62 @@ public class BrickHealthComponent : MonoBehaviour
             }
         }
     }
-    public void OnDestroyLayer()
+    public void OnDestroyLayer(int layer = 0)
     {
-        OnDamage(_health);
+        for (int i = 0; i < layer; i++)
+        {
+            OnDamage(_health, STATUSTYPE.CRIT);
+        }
     }
-    public void ApplyStatus(AbilityContext _statusEffect,STATUSTYPE type)
+    public void OnInstantKill(int threshold)
     {
+        BrickBar bb = GetComponent<BrickBar>();
 
-        _dmgType = type;
+        if (threshold == 0)
+        {
+            ClearAllStatusEffects();
+            //ResetSpecialStatus();
+            ResetDamageMultiplier();
+            ClearAllNearbyBrickList();
+
+            pendingDeath = false;
+            pendingDeathCause = DeathCause.NONE;
+
+            _vulnerableToDamage = true;
+
+            if (_hitFlash != null)
+                _hitFlash.SetActive(false);
+
+            SetSpeedMultiplier();
+
+            bb.HandleInstantKill(DeathCause.NORMAL);
+            return;
+        }
+        else if (bb._elementID <= threshold)
+        {
+            ClearAllStatusEffects();
+            //ResetSpecialStatus();
+            ResetDamageMultiplier();
+            ClearAllNearbyBrickList();
+
+            pendingDeath = false;
+            pendingDeathCause = DeathCause.NONE;
+
+            _vulnerableToDamage = true;
+
+            if (_hitFlash != null)
+                _hitFlash.SetActive(false);
+
+            SetSpeedMultiplier();
+
+            OnDamage(_health, STATUSTYPE.CRIT);
+            bb.HandleInstantKill(DeathCause.NORMAL);
+            return;
+        }
+
+    }
+    public void ApplyStatus(AbilityContext _statusEffect, STATUSTYPE type)
+    {
         //check if status already exist
         if (_statuses.TryGetValue(_statusEffect._statusType, out StatusInstance existing))
         {
@@ -240,27 +306,46 @@ public class BrickHealthComponent : MonoBehaviour
                 speedMultiplier = _statusEffect._Stats[STATID.SPEED_MULTIPLIER]
             };
             _statuses.Add(_statusEffect._statusType, sinst);
+            SpawnStatusVFX(_statusEffect._statusType);
             SetSpeedMultiplier();
         }
     }
     public void SpawnStatusVFX(
-        STATUSTYPE type,
-        GameObject buildupPrefab,
-        GameObject popPrefab)
+        STATUSTYPE type)
     {
         if (_activeVFX.ContainsKey(type))
             return;
-
         ActiveStatusVFX vfx = new ActiveStatusVFX();
 
+        GameObject buildupPrefab = null;
+        GameObject popPrefab = null;
+
+        switch (type)
+        {
+            case STATUSTYPE.DISCHARGE:
+                {
+                    buildupPrefab = _dischargeBuildVFX;
+                    popPrefab = _dischargePopVFX;
+                    break;
+                }
+            case STATUSTYPE.TOXIC:
+                {
+                    buildupPrefab = _toxicBuildVFX;
+                    popPrefab = _toxicPopVFX;
+                    break;
+                }
+        }
         if (buildupPrefab != null)
         {
             vfx.buildup =
                 Instantiate(buildupPrefab, transform);
+            if (popPrefab != null)
+            {
+                vfx.pop = popPrefab;
+            }
+            _activeVFX.Add(type, vfx);
         }
-        vfx.pop = popPrefab;
 
-        _activeVFX.Add(type, vfx);
     }
     public void RemoveStatusVFX(STATUSTYPE type)
     {
@@ -315,24 +400,37 @@ public class BrickHealthComponent : MonoBehaviour
                     break;
                 }
         }
+
         RemoveAllStatus();
+        //ResetSpecialStatus();
+        ResetDamageMultiplier();
+        ClearAllNearbyBrickList();
         _hitFlash.SetActive(false);
 
     }
     void RemoveAllStatus()
     {
+        ClearAllStatusEffects();
         pendingDeathCause = DeathCause.NONE;
         pendingDeath = false;
+    }
+    public void ClearAllStatusEffects()
+    {
         foreach (var kvp in _statuses)
         {
-            var status = kvp.Value;
-            status.stacks = 0;
-            RemoveStatusVFX(kvp.Key);
-            toRemove.Add(kvp.Key);
-        }
-        toRemove.Clear();
-    }
+            StatusInstance status = kvp.Value;
 
+            status.stacks = 0;
+            status.remainingStackTime = 0f;
+            status.remainingEffectTime = 0f;
+
+            RemoveStatusVFX(status.type);
+        }
+
+        _statuses.Clear();
+
+        SetSpeedMultiplier();
+    }
 
     public void OnDeathByBrick()
     {
@@ -351,7 +449,7 @@ public class BrickHealthComponent : MonoBehaviour
         _health += amount;
         _health = Mathf.Clamp(_health, 0, _startingHealth);
     }
-    public void SpawnDamageText(int dmg)
+    public void SpawnDamageText(int dmg, STATUSTYPE type)
     {
         Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
 
@@ -367,7 +465,7 @@ public class BrickHealthComponent : MonoBehaviour
             Quaternion.identity
         );
 
-        dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg,_dmgType);
+        dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg, type);
 
         StartCoroutine(HitFlash());
     }
@@ -377,7 +475,99 @@ public class BrickHealthComponent : MonoBehaviour
         yield return new WaitForSeconds(_flashPeriod);
         _hitFlash.SetActive(false);
     }
+    public void FindNearbyBricks()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
 
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+
+            RaycastHit2D[] hits = Physics2D.RaycastAll(
+                transform.position,
+                direction,
+                _rayDistance,
+                _brickLayer
+            );
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.collider == null)
+                    continue;
+
+                BrickHealthComponent brick =
+                    hit.collider.GetComponent<BrickHealthComponent>();
+
+                if (brick == null)
+                    continue;
+
+                // Ignore myself, but keep checking further along this ray
+                if (brick == this)
+                    continue;
+
+                if (!_nearbyBricks.Contains(brick))
+                {
+                    _nearbyBricks.Add(brick);
+                }
+
+                // If you only want the FIRST OTHER brick,
+                // stop checking this ray after finding it.
+                break;
+            }
+        }
+    }
+    public List<BrickHealthComponent> GetAllNearbyBrick() => _nearbyBricks;
+    public void ClearAllNearbyBrickList() => _nearbyBricks.Clear();
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+
+            Gizmos.DrawRay(
+                transform.position,
+                direction * _rayDistance
+            );
+        }
+    }
+    public void ResetDamageMultiplier() => _dmgMultiplier = 0;
+    public void ModifyDamageMultiplier(float val) => _dmgMultiplier += val;
     public void SetVulnerableToAttack(bool status) => _vulnerableToDamage = status;
     public StatusInstance GetStatusInstance(STATUSTYPE type) => _statuses[type];
+
+    public bool HasStatus(STATUSTYPE status)
+    {
+        return _statuses.ContainsKey(status);
+    }
+    public void AddStatus(STATUSTYPE status)
+    {
+        if (!_statuses.ContainsKey(status))
+        {
+            _statuses.Add(status, new StatusInstance());
+        }
+    }
+    public int GetStatusStack(STATUSTYPE status)
+    {
+        if (_statuses.ContainsKey(status))
+            return _statuses[status].stacks;
+
+        return 0;
+    }
+    public int GetMaxStack(STATUSTYPE status)
+    {
+        if (_statuses.ContainsKey(status))
+            return _statuses[status].maxStacks;
+
+        return 0;
+    }
 }

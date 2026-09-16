@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
+  m_Name: AB_DeadEye
+  m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
+  _abilityName: 
+  _statusType: 0
+  _type: 0
+  _abilityPrefab: {fileID: 8152904187135326588, guid: 65278805b1296a64ebb5767f2fd2c46a, type: 3}
+  _genericEffect: 0
+  _applyStatus: 0
+  _spawnEffect: 0
+  _chanceEffect: 1
+  _explosionEffect: 0
+  _counterEffect: 0
+  _shieldEffect: 0
+  _abilityBaseDamageValue: 0
+  _baseDamagePlus: 0
+  _baseDamageMinus: 0
+  _baseDamageMultiplier: 0
+  _speedMultiplier: 0
+  _bonusPerFail: 0
+  _scaleSizeMultiplier: 0
+  _timer: 0
+  _threshold: 0
+  _essenceValueAdd: 0
+  _timeRate: 0
+  _comboThreshold: 0
+  _maxStacks: 0
+  _stacksToAdd: 0
+  _maxStacksToAdd: 0
+  _increaseStacksToAdd: 0
+  _damagePerStack: 0
+  _stackLifeTime: 0
+  _timeBeforeEffectActivate: 0
+  _modifyTimeBeforeEffectActivate: 0
+  _resetStackTimer: 0
+  _affectSpeed: 0
+  _amountToSpawn: 0
+  _itemToSpawn: {fileID: 0}
+  _baseChance: 0
+  _critMultiplier: 0
+  _modifyCritMultiplier: 0
+  _layerToDestroy: 0
+  _instantKillThreshold: 1
+  _explosionDamageMultiplier: 0
+  _explosionSizeMultiplier: 0
+  _shieldMultiplier: 0
+  _shieldAdd: 0
+  _shieldModifyShieldRegenRate: 0
+  _shieldModifyCooldown: 0

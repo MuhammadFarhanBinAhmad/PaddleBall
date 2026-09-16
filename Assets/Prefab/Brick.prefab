@@ -5461,6 +5461,15 @@ MonoBehaviour:
   _damageText: {fileID: 4269139500996097731, guid: 49ac76b83082ab64781a2799ec10c319, type: 3}
   _hitFlash: {fileID: 8109881121445184266}
   _flashPeriod: 0.1
+  _rayDistance: 5
+  _brickLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _nearbyBricks: []
+  _dischargeBuildVFX: {fileID: 7857503364302934976, guid: 9e7a0794fb60fde4385450ff6dea085c, type: 3}
+  _dischargePopVFX: {fileID: 2021498435083084119, guid: 92b2c05e9ea292242a090c1ad6179c0e, type: 3}
+  _toxicBuildVFX: {fileID: 7857503364302934976, guid: c287de16725413a4786f2eaf3fb3e523, type: 3}
+  _toxicPopVFX: {fileID: 2021498435083084119, guid: c27e23e4f460ab242ac2c86306728d64, type: 3}
 --- !u!50 &4721458688493095984
 Rigidbody2D:
   serializedVersion: 5

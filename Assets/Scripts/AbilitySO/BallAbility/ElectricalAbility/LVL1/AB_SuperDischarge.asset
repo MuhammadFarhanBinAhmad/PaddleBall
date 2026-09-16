@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
   _statusType: 2
+  _type: 0
   _abilityPrefab: {fileID: 869635147226217814, guid: 2661490adfecf9b49a0888a88594f5f5, type: 3}
   _genericEffect: 0
   _applyStatus: 1
   _spawnEffect: 0
-  _critEffect: 0
+  _chanceEffect: 0
   _explosionEffect: 0
   _counterEffect: 0
   _shieldEffect: 0
@@ -29,6 +30,9 @@ MonoBehaviour:
   _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
+  _timer: 0
+  _threshold: 0
+  _essenceValueAdd: 0
   _timeRate: 0
   _comboThreshold: 0
   _maxStacks: 0
@@ -36,16 +40,16 @@ MonoBehaviour:
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
   _damagePerStack: 20
-  _stackLifeTime: 2
-  _timeBeforeEffectActivate: 1.9
+  _stackLifeTime: 3
+  _timeBeforeEffectActivate: 2.99
   _modifyTimeBeforeEffectActivate: 0
   _resetStackTimer: 0
   _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
-  _baseCritChance: 0
+  _baseChance: 0
   _critMultiplier: 0
-  _modiftCritMultiplier: 0
+  _modifyCritMultiplier: 0
   _layerToDestroy: 0
   _explosionDamageMultiplier: 0
   _explosionSizeMultiplier: 0

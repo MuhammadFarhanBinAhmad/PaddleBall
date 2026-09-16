@@ -45,21 +45,21 @@ public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischar
 
     }
 
-    public void ModifyExplosionContextAdd(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 
-    public void ModifyExplosionContextSubtract(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextSubtract(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 
-    public void ModifyExplosionContextMultiply(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextMultiply(HitContext hitCtx, AbilityContext explosionCtx)
     {
         if (_vengenceInEffect)
             explosionCtx._Stats[STATID.BASE_DAMAGE] = (int)(explosionCtx._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
     }
 
-    public void ModifyExplosionContextDivide(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextDivide(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 

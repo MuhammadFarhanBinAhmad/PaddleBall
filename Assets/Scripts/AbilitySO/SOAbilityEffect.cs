@@ -83,6 +83,8 @@ public class SOAbilityEffect : ScriptableObject
     public float _modifyCritMultiplier;
     [GroupUnder(nameof(_chanceEffect))]
     public int _layerToDestroy;
+    [GroupUnder(nameof(_chanceEffect))]
+    public int _instantKillThreshold;
     //-----------------Explosive-----------------//
     [GroupUnder(nameof(_explosionEffect))]
     public float _explosionDamageMultiplier;

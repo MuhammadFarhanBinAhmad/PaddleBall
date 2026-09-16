@@ -14,6 +14,8 @@ public class AbilityContext
 
     public Dictionary<STATID, float> _Stats = new Dictionary<STATID, float>();
     public Dictionary<STATID, bool> _Statsbool = new Dictionary<STATID, bool>();
+    public Dictionary<STATUSTYPE, AbilityContext> _abilityContext = new Dictionary<STATUSTYPE,AbilityContext>();
+
     public GameObject _spawnPrefab;
 
     public AbilityContext()
@@ -23,5 +25,10 @@ public class AbilityContext
             _Stats[id] = 0f;
             _Statsbool[id] = false;
         }
+    }
+
+    public void SetContext(AbilityContext ctx)
+    {
+        _abilityContext[ctx._statusType] = ctx;
     }
 }

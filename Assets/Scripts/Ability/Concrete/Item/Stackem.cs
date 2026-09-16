@@ -1,10 +1,25 @@
 using UnityEngine;
 
-public class Stackem : ABSAbility, IDischargeContextModifier, IToxicContextModifier
+public class Stackem : ABSAbility, IDischargeContextModifier, IToxicContextModifier, ICriticalContextModifier
 {
+    public void ModifyCriticalContextAdd(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyCriticalContextDivide(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyCriticalContextMultiply(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
+    public void ModifyCriticalContextSubtract(HitContext hitCtx, AbilityContext critContext)
+    {
+    }
+
     public void ModifyDischargeAdd(HitContext hitCtx, AbilityContext dischargeCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyDischargeContextAdd(HitContext hitCtx, AbilityContext dischargeCtx)

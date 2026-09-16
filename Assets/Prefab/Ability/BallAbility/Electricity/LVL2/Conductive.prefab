@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5340640371587986019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3022048261489066661}
+  - component: {fileID: 4917261749338120908}
+  m_Layer: 0
+  m_Name: Conductive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3022048261489066661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340640371587986019}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.59119, y: 48.9495, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4917261749338120908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340640371587986019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c04ee77f92d596c41bb84f6fba7c9e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConductiveAbility
+  _SOAbilityEffect: {fileID: 11400000, guid: 75aa4059fd43c1643ac27ec0080eebbf, type: 2}
+  _vfxBuildPrefab: {fileID: 7857503364302934976, guid: 9e7a0794fb60fde4385450ff6dea085c, type: 3}
+  _vfxPopPrefab: {fileID: 2021498435083084119, guid: 92b2c05e9ea292242a090c1ad6179c0e, type: 3}
+  _effect: {fileID: 11400000, guid: 2deeb38661cb26843bdfc6b0443a3e7e, type: 2}

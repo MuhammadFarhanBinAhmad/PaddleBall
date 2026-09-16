@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -216,7 +217,7 @@ public class AbilityManager : MonoBehaviour
             }
         }
     }
-    public void ApplyExplosionModifiers(HitContext hitCtx,ExplosionContext explosionCtx)
+    public void ApplyExplosionModifiers(HitContext hitCtx,AbilityContext explosionCtx)
     {
         foreach (var ability in _brickAbilities)
         {
@@ -279,4 +280,9 @@ public class AbilityManager : MonoBehaviour
     }
     public int GetTotalCard() => _totalCard;
     public int GetTotalSpell() => _totalSpell;
+
+    internal void ApplyDischargeModifiers()
+    {
+        throw new NotImplementedException();
+    }
 }

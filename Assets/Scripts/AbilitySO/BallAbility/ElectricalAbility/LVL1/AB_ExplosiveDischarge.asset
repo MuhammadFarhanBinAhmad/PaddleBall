@@ -29,7 +29,7 @@ MonoBehaviour:
   _baseDamageMultiplier: 0
   _speedMultiplier: 0
   _bonusPerFail: 0
-  _scaleSizeMultiplier: 2
+  _scaleSizeMultiplier: 0.5
   _timer: 0
   _threshold: 0
   _essenceValueAdd: 0
@@ -40,8 +40,8 @@ MonoBehaviour:
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
   _damagePerStack: 0
-  _stackLifeTime: 2
-  _timeBeforeEffectActivate: 2
+  _stackLifeTime: 3
+  _timeBeforeEffectActivate: 3
   _modifyTimeBeforeEffectActivate: 0
   _resetStackTimer: 0
   _affectSpeed: 0

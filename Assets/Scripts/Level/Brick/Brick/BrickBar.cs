@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -12,16 +11,20 @@ public enum STATUSTYPE
     DISCHARGE = 1 << 1,
     CRIT = 1 << 2,
     TOXIC = 1 << 3,
-    CHANCE = 1 << 4,
-    TIMED = 1 << 5,
-    ELEMENTAL = 1 << 6
+    CHARGE = 1 << 4,
+    FIRE = 1 << 5,
+    BLEEDING = 1 << 6,
+    STUN = 1 << 7,
+    REMNANT = 1 << 8,
 }
+
 public enum DeathCause
 {
     NONE,
     NORMAL,
     PADDLE,
-    TOWER
+    TOWER,
+    EXPLOSION
 }
 [System.Serializable]
 public class StatusInstance
@@ -372,6 +375,7 @@ public class BrickBar : MonoBehaviour
         _speedDirty = false;
         transform.parent = _brickPool.transform;
     }
+    
     public int GetLayer() => _layerNumber;
     public int GetShieldDamageValue () => _layerNumber * _baseDamage;
 }

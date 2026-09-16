@@ -12,7 +12,7 @@ public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModi
         toxicContext._Stats[STATID.DAMAGE_PER_STACK] -= (toxicContext._Stats[STATID.DAMAGE_PER_STACK]/2);
     }
 
-    public void ModifyExplosionContextSubtract(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextSubtract(HitContext hitCtx, AbilityContext explosionCtx)
     {
         explosionCtx._Stats[STATID.BASE_DAMAGE] -= (explosionCtx._Stats[STATID.BASE_DAMAGE]/2);
     }
@@ -52,15 +52,15 @@ public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModi
     {
     }
 
-    public void ModifyExplosionContextAdd(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 
-    public void ModifyExplosionContextMultiply(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextMultiply(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 
-    public void ModifyExplosionContextDivide(HitContext hitCtx, ExplosionContext explosionCtx)
+    public void ModifyExplosionContextDivide(HitContext hitCtx, AbilityContext explosionCtx)
     {
     }
 

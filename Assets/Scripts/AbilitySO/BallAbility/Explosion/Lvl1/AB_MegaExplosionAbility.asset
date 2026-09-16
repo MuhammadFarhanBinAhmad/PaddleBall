@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: ExplosionAbility
   _statusType: 0
+  _type: 0
   _abilityPrefab: {fileID: 1116886636887479489, guid: d50ea58d4589a644493668558b60e154, type: 3}
   _genericEffect: 0
   _applyStatus: 0
   _spawnEffect: 0
-  _critEffect: 0
+  _chanceEffect: 0
   _explosionEffect: 1
   _counterEffect: 0
   _shieldEffect: 0
@@ -29,6 +30,9 @@ MonoBehaviour:
   _speedMultiplier: 0
   _bonusPerFail: 0
   _scaleSizeMultiplier: 0
+  _timer: 0
+  _threshold: 0
+  _essenceValueAdd: 0
   _timeRate: 0
   _comboThreshold: 0
   _maxStacks: 0
@@ -43,10 +47,11 @@ MonoBehaviour:
   _affectSpeed: 0
   _amountToSpawn: 0
   _itemToSpawn: {fileID: 0}
-  _baseCritChance: 0
+  _baseChance: 0
   _critMultiplier: 0
-  _modiftCritMultiplier: 0
+  _modifyCritMultiplier: 0
   _layerToDestroy: 0
+  _instantKillThreshold: 0
   _explosionDamageMultiplier: 2
   _explosionSizeMultiplier: 2
   _shieldMultiplier: 0

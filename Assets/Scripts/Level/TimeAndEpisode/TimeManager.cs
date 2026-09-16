@@ -256,7 +256,6 @@ public class TimeManager : MonoBehaviour
 
     public void CheckToSpawnBoss()
     {
-        print("HIT");
         if (_isBossDay)
             if (_brickpool.IsAllBrickDestroyed())
                 _bossManager.SpawnBoss();

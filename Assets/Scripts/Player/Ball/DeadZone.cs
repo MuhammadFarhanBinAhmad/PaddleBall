@@ -121,7 +121,7 @@ public class DeadZone : MonoBehaviour
         {
             BrickBar _bb = other.GetComponent<BrickBar>();
             ShieldTakingDamage(_bb.GetShieldDamageValue(), _bb.GetLayer());
-            _bb.GetComponent<BrickHealthComponent>().OnDamage(999,DeathCause.TOWER,true);
+            _bb.GetComponent<BrickHealthComponent>().OnDamage(999,STATUSTYPE.NONE,DeathCause.TOWER,true);
         }
         if(other.CompareTag("EnemyProjectile"))
         {
