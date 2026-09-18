@@ -1,9 +1,13 @@
+using NUnit.Framework.Internal;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class ExplosionDamage : MonoBehaviour
 {
+
+    public GameObject _test;
+
     AbilityContext _ctx;
     AbilityManager _manager;
     protected ExplosionPool _explosionPool;
@@ -77,36 +81,32 @@ public class ExplosionDamage : MonoBehaviour
             for (int i = 0; i < count; i++)
             {
                 Collider2D col = _hits[i];
+                if (_explosionPool == null) return;
 
-                print(count);
+                GameObject explosionGO = _explosionPool.GetExplosion();
+                explosionGO.transform.position = col.gameObject.transform.position;
 
-                //if (_explosionPool == null) return;
+                var ed = explosionGO.GetComponent<ExplosionDamage>();
+                if (ed == null) return;
 
-                //GameObject explosionGO = _explosionPool.GetExplosion();
-                //explosionGO.transform.position = col.transform.position;
+                AbilityContext ectx = new AbilityContext
+                {
+                    _source = gameObject,
+                    _position = col.gameObject.transform.position,
+                    _statusType = STATUSTYPE.EXPLOSION
+                };
+                ectx._Stats[STATID.BASE_DAMAGE] = _damage;
+                ectx._Stats[STATID.SCALE_MULTIPLIER] = _radiusModifierMultiplier;
 
-                //var ed = explosionGO.GetComponent<ExplosionDamage>();
-                //if (ed == null) return;
-
-                //AbilityContext ectx = new AbilityContext
-                //{
-                //    _source = gameObject,
-                //    _position = col.transform.position,
-                //    _statusType = STATUSTYPE.EXPLOSION
-                //};
-                //ectx._Stats[STATID.BASE_DAMAGE] = _damage;
-                //ectx._Stats[STATID.SCALE_MULTIPLIER] = _radiusModifierMultiplier;
-
-                //// Let other abilities modify the explosion data
-                ////_abilityManager.ApplyExplosionModifiers(_hitContext, ectx);
-                //ed.Initialize(ectx, true);
+                // Let other abilities modify the explosion data
+                //_abilityManager.ApplyExplosionModifiers(_hitContext, ectx);
+                ed.Initialize(ectx, true);
             }
         }
 
         for (int i = 0; i < count; i++)
         {
             Collider2D col = _hits[i];
-            print(count);
 
             if (!col.TryGetComponent(out BrickBar brick))
                 continue;

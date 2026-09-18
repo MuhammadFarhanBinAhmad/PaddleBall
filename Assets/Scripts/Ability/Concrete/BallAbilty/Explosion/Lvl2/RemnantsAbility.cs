@@ -1,32 +1,25 @@
 using UnityEngine;
 
-public class RemnantsAbility : ABSAbility
+public class RemnantsAbility : ABSAbility, IExplosionContextModifier
 {
-    protected ExplosionPool _explosionPool;
-    HitContext _hitContext;
-
-    private void Start()
+    public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        _explosionPool = FindAnyObjectByType<ExplosionPool>();
-    }
-    public override void OnHitResolved(HitContext ctx)
-    {
-        _hitContext = ctx;
-    }
-    public override void OnBrickDestroy(BrickBar bar)
-    {
-        
-
-        AbilityContext ectx = new AbilityContext
+        bool isCrit = RNGService.RollCrit(_SOAbilityEffect._baseChance + hitCtx._modifyChance, _SOAbilityEffect._bonusPerFail);
+        if (isCrit)
         {
-            _source = gameObject,
-            _position = bar.transform.position,
-            _statusType = _SOAbilityEffect._statusType
-        };
-        ectx._Stats[STATID.BASE_DAMAGE] = _hitContext._damageValue * _SOAbilityEffect._explosionDamageMultiplier;
-        ectx._Stats[STATID.SCALE_MULTIPLIER] = _SOAbilityEffect._scaleSizeMultiplier;
+            explosionCtx._statusType = _SOAbilityEffect._statusType;
+        }
+    }
 
-        // Let other abilities modify the explosion data
-        _abilityManager.ApplyExplosionModifiers(_hitContext, ectx);
+    public void ModifyExplosionContextSubtract(HitContext hitCtx, AbilityContext explosionCtx)
+    {
+    }
+
+    public void ModifyExplosionContextMultiply(HitContext hitCtx, AbilityContext explosionCtx)
+    {
+    }
+
+    public void ModifyExplosionContextDivide(HitContext hitCtx, AbilityContext explosionCtx)
+    {
     }
 }
