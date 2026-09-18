@@ -44,14 +44,14 @@ public class BallAbilityButtonUI : BaseButtonInteraction
     [Header("UI Detail")]
     [SerializeField] private Image _thumbnailIcon;
     [SerializeField] private GameObject _lockedOverlay;
-    Button _button;
+    [SerializeField] private GameObject _purchaseOverlay;
+    [SerializeField] Button _button;
 
     private bool _abilityPurchased;
 
     private void Awake()
     {
         _abilityInfoPageUI = FindAnyObjectByType<AbilityInfoPageUI>();
-        _button = GetComponent<Button>();
         _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
         _towerManager = FindAnyObjectByType<TowerManager>();
     }
@@ -121,12 +121,19 @@ public class BallAbilityButtonUI : BaseButtonInteraction
             _storeAbilityManager.IsAvailableToPurchase(_abilityData.abilityID);
 
         _abilityPurchased = unlocked;
-
-
         _lockedOverlay.SetActive(!available);
 
         if (unlocked)
         {
+        }
+        if(_abilityPurchased)
+        {
+            _button.interactable = false;
+            _purchaseOverlay.SetActive(true);
+        }
+        else
+        {
+            _purchaseOverlay.SetActive(false);
             _button.interactable = true;
         }
     }
@@ -136,7 +143,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
             return;
 
         base.OnPointerEnter(eventData);
-        print(_abilityInfo._cost);
         _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
         _storeOverlayUI.CalculatePriceCalculation(_storeAbilityManager.GetAbilityCost(_abilityInfo.ability_Level),
                                                     _towerManager._currentPureEssence);

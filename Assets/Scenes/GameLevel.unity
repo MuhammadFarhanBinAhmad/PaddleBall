@@ -11802,8 +11802,8 @@ MonoBehaviour:
   _brickAbilities: []
   test:
   - {fileID: 11400000, guid: 8be43c92b028fe34e90d2da52d1e2a5f, type: 2}
-  - {fileID: 11400000, guid: 9d809accaa2b50a428e7a4f605419616, type: 2}
-  - {fileID: 11400000, guid: d02a0394ade5b6943a792ae46fe01d99, type: 2}
+  - {fileID: 11400000, guid: 5dcb711000751a3419e58d1d7adea391, type: 2}
+  - {fileID: 11400000, guid: db00cc9cc634a4e4cb079da6a3e48063, type: 2}
 --- !u!4 &381268553
 Transform:
   m_ObjectHideFlags: 0
@@ -12205,16 +12205,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StoreAbilityManager
   explosiveAbilities:
   - {fileID: 11400000, guid: e953c7d4b5948e644beabf6cc5cc8ec9, type: 2}
-  - {fileID: 11400000, guid: 06b4a7250988b814f97ddaae41fba708, type: 2}
   - {fileID: 11400000, guid: 10ad09ccd4d42c546b98d2d3360f1d34, type: 2}
+  - {fileID: 11400000, guid: 06b4a7250988b814f97ddaae41fba708, type: 2}
+  - {fileID: 11400000, guid: e1e27dbf6027c0147acf37b7861b2973, type: 2}
+  - {fileID: 11400000, guid: 9c0c0dc1a76d96849b8fa8a134ccb829, type: 2}
+  - {fileID: 11400000, guid: 81b40976cac1ab04a804ac9fb1e0fb3e, type: 2}
+  - {fileID: 11400000, guid: 489604e92df4a2045915f952d0a8876f, type: 2}
   criticalAbilities:
-  - {fileID: 11400000, guid: 5e36546f1be491544af578274786d3f8, type: 2}
-  - {fileID: 11400000, guid: 96b8454732d0c544486922c91cba11af, type: 2}
   - {fileID: 11400000, guid: c7945c183f1ddfa478742f9a36015ad3, type: 2}
+  - {fileID: 11400000, guid: 96b8454732d0c544486922c91cba11af, type: 2}
+  - {fileID: 11400000, guid: 5e36546f1be491544af578274786d3f8, type: 2}
+  - {fileID: 11400000, guid: 067219ad37f5ba24da5e40db271a62c2, type: 2}
+  - {fileID: 11400000, guid: baeb7359e9ad4a74889fd1c33ebbcecb, type: 2}
+  - {fileID: 11400000, guid: 4c4baef89e23ab64d988c9eaf79c3887, type: 2}
+  - {fileID: 11400000, guid: 7c999a1c66044d1428899cee5ccce4f1, type: 2}
   dischargeAbilities:
   - {fileID: 11400000, guid: 2f214ea8bbe0ea0488ec68777e7187c4, type: 2}
   - {fileID: 11400000, guid: c01d87d626ad5034fb606d6b5c59d787, type: 2}
   - {fileID: 11400000, guid: bd618430718ca9d409244b2c33ade9e1, type: 2}
+  - {fileID: 11400000, guid: 07f668a60eaab1c4ba2d279516c65029, type: 2}
+  - {fileID: 11400000, guid: 24f7200642d5da84490b9fa423d797f4, type: 2}
+  - {fileID: 11400000, guid: 2636068f1dacf8d4f984172237177d43, type: 2}
+  - {fileID: 11400000, guid: 720d8172a39e9cf418f6e365683a6a34, type: 2}
   toxicAbilities:
   - {fileID: 11400000, guid: fa9db3536f3acf6418edf5b3c2e815ec, type: 2}
   - {fileID: 11400000, guid: 06fa88be5a6917e49bcc42410eb590d0, type: 2}

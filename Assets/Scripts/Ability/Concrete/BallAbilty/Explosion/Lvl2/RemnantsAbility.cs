@@ -4,8 +4,8 @@ public class RemnantsAbility : ABSAbility, IExplosionContextModifier
 {
     public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        bool isCrit = RNGService.RollCrit(_SOAbilityEffect._baseChance + hitCtx._modifyChance, _SOAbilityEffect._bonusPerFail);
-        if (isCrit)
+        bool isRemnants = RNGService.RollCrit(_SOAbilityEffect._baseChance + hitCtx._modifyChance, _SOAbilityEffect._bonusPerFail);
+        if (isRemnants)
         {
             explosionCtx._statusType = _SOAbilityEffect._statusType;
         }

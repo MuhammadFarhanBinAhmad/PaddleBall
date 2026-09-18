@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SO_StoreAbilityUIContent_ToxicOverload
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_3_3
-  ability_Name: ToxicOverload
+  ability_Name: Toxic Overload
   ability_Description: "At max stack, \u201CToxic Overload\u201D occur. On next hit,
     All toxic stack are consumed, dealing massive damage to the brick with each stack
     dealing 200% damage"

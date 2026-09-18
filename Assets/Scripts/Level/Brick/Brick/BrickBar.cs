@@ -16,6 +16,7 @@ public enum STATUSTYPE
     BLEEDING = 1 << 6,
     STUN = 1 << 7,
     REMNANT = 1 << 8,
+    CLUSTERBOMB = 1 << 9,
 }
 
 public enum DeathCause

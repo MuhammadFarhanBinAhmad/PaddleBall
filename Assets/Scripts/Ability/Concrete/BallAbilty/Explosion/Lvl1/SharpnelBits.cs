@@ -1,9 +1,11 @@
 using Unity.Mathematics.Geometry;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SharpnelBits : MonoBehaviour
 {
     BrickHealthComponent _ignoredBrick;
+    protected ExplosionPool _explosionPool;
 
     [SerializeField]Ball _ball;
 
@@ -17,10 +19,15 @@ public class SharpnelBits : MonoBehaviour
     [SerializeField] float _collisionDelay = 0.05f;
 
     Vector2 _velocity;
+    STATUSTYPE _type;
+    
+
 
     private void Awake()
     {
         _ball = FindAnyObjectByType<Ball>();
+        _explosionPool = FindAnyObjectByType<ExplosionPool>();
+
     }
     private void Update()
     {
@@ -35,16 +42,13 @@ public class SharpnelBits : MonoBehaviour
         transform.position +=
             (Vector3)(_velocity * Time.deltaTime);
     }
-    public void SetStats(int dmg)
+    public void SetStats(int dmg, STATUSTYPE type)
     {
         CancelInvoke();
-
         _canDamage = false;
-
         _damage = Mathf.FloorToInt(dmg * _damageMultiplier);
-
+        _type = type;
         Impluse();
-
         Invoke(nameof(EnableDamage), _collisionDelay);
         Invoke(nameof(KillObject), _lifetime);
     }
@@ -75,17 +79,39 @@ public class SharpnelBits : MonoBehaviour
     {
         if (!_canDamage)
             return;
+        if (other.GetComponent<BrickHealthComponent>() != null)
+        {
+            BrickHealthComponent bb = other.GetComponent<BrickHealthComponent>();
 
-        BrickHealthComponent bb = other.GetComponent<BrickHealthComponent>();
+            if((_type & STATUSTYPE.CLUSTERBOMB) != 0)
+            {
+                GameObject explosionGO = _explosionPool.GetExplosion();
+                explosionGO.transform.position = bb.transform.position;
 
-        if (bb == null)
-            return;
+                var ed = explosionGO.GetComponent<ExplosionDamage>();
+                if (ed == null) return;
 
-        bb.OnDamage(_damage,STATUSTYPE.EXPLOSION);
+                ExplosionContext ectx = new ExplosionContext
+                {
+                    _source = gameObject,
+                    _position = bb.transform.position,
+                    _statusEffect = null
+                };
+                ectx._Stats[STATID.BASE_DAMAGE] = _damage;
+                ectx._Stats[STATID.SCALE_MULTIPLIER] = .5f;
 
-        CancelInvoke();
+                // Let other abilities modify the explosion data
+                ed.Initialize(ectx, true);
+            }
+            else
+            {
+                bb.OnDamage(_damage, STATUSTYPE.NONE);
+            }
 
-        KillObject();
+            CancelInvoke();
+            KillObject();
+        }
+        
     }
     void KillObject()
     {

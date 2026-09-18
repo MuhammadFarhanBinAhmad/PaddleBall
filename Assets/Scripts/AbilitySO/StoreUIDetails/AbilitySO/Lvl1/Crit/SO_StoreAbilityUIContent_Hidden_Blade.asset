@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1538f18f7b279be41b62407f55044702, type: 3}
-  m_Name: SO_StoreAbilityUIContent_Bleeding
+  m_Name: SO_StoreAbilityUIContent_Hidden_Blade
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level1_0_0
-  ability_Name: Bleeding
+  ability_Name: Hidden Blade
   ability_Description: 'Critical hit introduce a 10% to induce bleeding damage.
 
     Stackable
