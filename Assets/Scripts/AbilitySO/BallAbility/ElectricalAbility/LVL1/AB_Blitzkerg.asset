@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db49deff4a1310443878145d82c40685, type: 3}
-  m_Name: AB_SuperDischarge
+  m_Name: AB_Blitzkerg
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
   _statusType: 2

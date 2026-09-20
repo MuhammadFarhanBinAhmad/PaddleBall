@@ -19,7 +19,7 @@ public class ElectricAbility : ABSAbility
         statusCtx._Statsbool[STATID.AFFECTS_SPEED] = _SOAbilityEffect._affectSpeed;
         statusCtx._Stats[STATID.SPEED_MULTIPLIER] = _SOAbilityEffect._speedMultiplier;
         _abilityManager.ApplyDischargeModifiers(ctx, statusCtx);
-
+        _abilityManager.ApplyStackableModifiers(statusCtx);
         ctx._health.ApplyStatus(
             statusCtx,
             STATUSTYPE.DISCHARGE

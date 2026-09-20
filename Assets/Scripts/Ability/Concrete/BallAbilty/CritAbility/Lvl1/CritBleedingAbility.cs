@@ -25,6 +25,8 @@ public class CritBleedingAbility : ABSAbility
             statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
             statusCtx._Statsbool[STATID.RESET_STACK_TIMER] = _SOAbilityEffect._resetStackTimer;
 
+            _abilityManager.ApplyStackableModifiers(statusCtx);
+
             ctx._health.ApplyStatus(
                 statusCtx,
                 _SOAbilityEffect._statusType

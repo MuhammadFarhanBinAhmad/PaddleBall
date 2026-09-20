@@ -136,8 +136,7 @@ public class TowerManager : MonoBehaviour
         {
             _currentEssenceCount = 0;
             _currentBrickCount++;
-            _currentPureEssence++;
-            _totalPureEssenceEarn++;
+
             GameObject brick = Instantiate(_collectedBrick);
             Vector3 pos = new Vector2((transform.position.x + _startPosOffset.x) + (transform.position.x / 2) + (_posOffset.x * _currentBrickCount), transform.position.y);
             brick.transform.position = pos;
@@ -155,6 +154,8 @@ public class TowerManager : MonoBehaviour
         {
             _currentBrickCount = 0;
             _currentTowerHeight++;
+            _currentPureEssence++;
+            _totalPureEssenceEarn++;
             AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onFloorMade, transform.position);
 
             // Apply milestone logic: every milestoneFloors floors, increase essence threshold

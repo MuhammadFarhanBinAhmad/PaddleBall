@@ -86,7 +86,7 @@ public class SharpnelBits : MonoBehaviour
             if((_type & STATUSTYPE.CLUSTERBOMB) != 0)
             {
                 GameObject explosionGO = _explosionPool.GetExplosion();
-                explosionGO.transform.position = bb.transform.position;
+                explosionGO.transform.position = other.transform.position;
 
                 var ed = explosionGO.GetComponent<ExplosionDamage>();
                 if (ed == null) return;

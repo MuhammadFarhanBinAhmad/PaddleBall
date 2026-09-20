@@ -3654,15 +3654,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a725ea0c339ff024f854fd12fefe588d, type: 2}
   - {fileID: 11400000, guid: 5b46b43686cd1454f820bddfdaeedaa1, type: 2}
   - {fileID: 11400000, guid: 4285986fb3127e144b69082d7ba62410, type: 2}
-  - {fileID: 11400000, guid: e0dce2ab0efd2ff4ab3c0358cc9a162f, type: 2}
   - {fileID: 11400000, guid: c5475b467f015484986608bfe3a8152d, type: 2}
-  - {fileID: 11400000, guid: 79d7dc3dd7eec50498e9ac03ef9958ba, type: 2}
   _brickAvailableToSpawn: []
   _brickPathList: []
   _firstAttributePoints: 30
   _lastAttributePoints: 300
   _attributePoints: 
-  _offset: {x: 8, y: 0}
+  _offset: {x: 9, y: 0}
   easeOutElastic:
     serializedVersion: 2
     m_Curve:
@@ -3691,11 +3689,11 @@ MonoBehaviour:
   _capscaleMultiplier: 1.1
   _spawnedWaves: 
   _brickPrefab: {fileID: 5469620576531411634, guid: d4d61b26a923b094eb5bca5cec7d6c9c, type: 3}
-  _timerBeforeNextLineSpawn: 4
+  _timerBeforeNextLineSpawn: 3
   _brickCounter: 0
   _currentWave: 0
   _stopWaveSpawn: 0
-  _timerBeforeNextWaveSpawn: 7
+  _timerBeforeNextWaveSpawn: 2
 --- !u!4 &214501224
 Transform:
   m_ObjectHideFlags: 0
@@ -3726,7 +3724,7 @@ MonoBehaviour:
   _brickPrefab: {fileID: 5469620576531411634, guid: d4d61b26a923b094eb5bca5cec7d6c9c, type: 3}
   _brickPool: []
   _activeBrick: []
-  _brickToSpawn: 70
+  _brickToSpawn: 100
 --- !u!114 &214501226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11801,9 +11799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AbilityManager
   _brickAbilities: []
   test:
-  - {fileID: 11400000, guid: 8be43c92b028fe34e90d2da52d1e2a5f, type: 2}
-  - {fileID: 11400000, guid: 5dcb711000751a3419e58d1d7adea391, type: 2}
-  - {fileID: 11400000, guid: db00cc9cc634a4e4cb079da6a3e48063, type: 2}
+  - {fileID: 11400000, guid: 2deeb38661cb26843bdfc6b0443a3e7e, type: 2}
 --- !u!4 &381268553
 Transform:
   m_ObjectHideFlags: 0
@@ -12257,7 +12253,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 38ebaa21e5a22db44ba4764a7dcc4a1f, type: 2}
   - {fileID: 11400000, guid: fe807f5bf4ef4394cb250ab6c8ea4453, type: 2}
   - {fileID: 11400000, guid: dcfd3e2a55d7c8646821f032d49e9e42, type: 2}
-  - {fileID: 11400000, guid: 891199d148e9ebe4c8e2d13827f98ef3, type: 2}
+  - {fileID: 11400000, guid: a7ec4185188a5c143b89e15a52a19252, type: 2}
+  _emptyItem: {fileID: 11400000, guid: e7fb418d3cf174e4f96a1501ff53e0ba, type: 2}
   _itemPurchasedList: []
   _itemButtonsList:
   - {fileID: 1286664678}
@@ -35920,7 +35917,7 @@ MonoBehaviour:
   _currentEssenceCount: 0
   _onEssenceCollectParticle: {fileID: 931078547}
   _essenceTweenType: 2
-  milestoneFloors: 1
+  milestoneFloors: 10
   _essenceIncreaseBase: 5
   _brickToFloorConversionRate: 5
   _currentBrickCount: 0

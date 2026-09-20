@@ -22,6 +22,7 @@ public class ToxicAbility : ABSAbility
         statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
 
         _abilityManager.ApplyToxicModifiers(statusCtx);
+        _abilityManager.ApplyStackableModifiers(statusCtx);
 
         ctx._health.SpawnStatusVFX(STATUSTYPE.TOXIC);
         ctx._health.ApplyStatus(

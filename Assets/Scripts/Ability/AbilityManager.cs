@@ -255,7 +255,16 @@ public class AbilityManager : MonoBehaviour
                 modifier.ModifyCriticalContextSubtract(hitCtx, CriticalCtx);
                 modifier.ModifyCriticalContextMultiply(hitCtx, CriticalCtx);
                 modifier.ModifyCriticalContextDivide(hitCtx, CriticalCtx);
-
+            }
+        }
+    }
+    public void ApplyStackableModifiers(AbilityContext abc)
+    {
+        foreach (var ability in _brickAbilities)
+        {
+            if (ability is IModifyStackableAbility modifier)
+            {
+                modifier.ModifyStackableAbility(abc);
             }
         }
     }

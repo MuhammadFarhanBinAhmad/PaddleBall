@@ -9,7 +9,8 @@ public enum ITEMRARITY
     UNCOMMON,
     RARE,
     LEGENDARY,
-    ODDITIES
+    ODDITIES,
+    NULL
 }
 
 [System.Serializable]
@@ -46,6 +47,7 @@ public class StoreAbilityManager : MonoBehaviour
     [Header("Item Ability Database")]
     //2 list
     [SerializeField] List<SOItemAbilityContentUI> _itemAvailableList = new List<SOItemAbilityContentUI>();
+    [SerializeField] SOItemAbilityContentUI _emptyItem;
     [SerializeField] List<SOItemAbilityContentUI> _itemPurchasedList = new List<SOItemAbilityContentUI>();
     [SerializeField] List<ItemAbilityButtonUI> _itemButtonsList = new List<ItemAbilityButtonUI>();
     [SerializeField] int[] _itemCostByLevel = new int[4];
@@ -240,25 +242,34 @@ public class StoreAbilityManager : MonoBehaviour
     public void SetItemAvailableToPurchase()
     {
         // Safety check
-        if (_itemAvailableList.Count == 0 || _itemButtonsList.Count == 0)
+        if (_itemButtonsList.Count == 0)
             return;
 
         // Create a shuffled copy of available items
-        List<SOItemAbilityContentUI> shuffled = new List<SOItemAbilityContentUI>(_itemAvailableList);
+        List<SOItemAbilityContentUI> shuffled =
+            new List<SOItemAbilityContentUI>(_itemAvailableList);
 
+        // Shuffle
         for (int i = 0; i < shuffled.Count; i++)
         {
             int rand = UnityEngine.Random.Range(i, shuffled.Count);
             (shuffled[i], shuffled[rand]) = (shuffled[rand], shuffled[i]);
         }
 
-        // Assign to buttons
+        // Fill every card slot
         for (int i = 0; i < _itemButtonsList.Count; i++)
         {
-            if (i >= shuffled.Count)
-                break;
-
-            _itemButtonsList[i].SetItemAbilityContent(shuffled[i]);
+            if (i < shuffled.Count)
+            {
+                // Fill with a real item
+                _itemButtonsList[i].SetItemAbilityContent(shuffled[i]);
+            }
+            else
+            {
+                // No more items available
+                // Fill the remaining slot with the empty item
+                _itemButtonsList[i].SetItemAbilityContent(_emptyItem);
+            }
         }
     }
     public int GetItemCost(ITEMRARITY rarity)

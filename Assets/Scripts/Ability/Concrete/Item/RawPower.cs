@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModifier, IExplosionContextModifier, ICriticalContextModifier
+public class RawPower : ABSAbility, IDischargeContextModifier, IExplosionContextModifier, ICriticalContextModifier
 {
     public override void ModifyBaseValue(HitContext ctx)
     {
@@ -75,4 +75,5 @@ public class RawPower : ABSAbility, IDischargeContextModifier, IToxicContextModi
     public void ModifyCriticalContextDivide(HitContext hitCtx, AbilityContext critContext)
     {
     }
+
 }

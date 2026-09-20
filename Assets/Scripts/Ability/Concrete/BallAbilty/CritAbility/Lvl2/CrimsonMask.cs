@@ -1,5 +1,3 @@
-using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CrimsonMask : ABSAbility
 {

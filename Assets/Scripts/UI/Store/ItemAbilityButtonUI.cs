@@ -91,6 +91,9 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     public SOAbilityEffect GetAbilityToSpawn() => _itemAbilityContent.ability_ToSpawn;
     public void PurchaseItem()
     {
+        if(_itemAbilityContent._itemRarity == ITEMRARITY.NULL)
+            return;
+
         if(_isPurchase)
             return;
 
@@ -127,7 +130,6 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
         }
         else
         {
-            print("Got house");
             if (!_onTheHouse._itemPurchase)
             {
                 _abilityManager.AddAbility(GetAbilityToSpawn());

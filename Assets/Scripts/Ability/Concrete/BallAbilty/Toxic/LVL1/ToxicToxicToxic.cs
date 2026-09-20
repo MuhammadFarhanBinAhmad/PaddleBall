@@ -1,23 +1,10 @@
 using UnityEngine;
 
-public class ToxicToxicToxic : ABSAbility, IToxicContextModifier
+public class ToxicToxicToxic : ABSAbility, IModifyStackableAbility
 {
-    public void ModifyToxicContextAdd(AbilityContext toxicContext)
+    public void ModifyStackableAbility(AbilityContext _abc)
     {
-        toxicContext._Stats[STATID.MAX_STACKS] += _SOAbilityEffect._maxStacksToAdd;
-        toxicContext._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] -= _SOAbilityEffect._timeBeforeEffectActivate;
-
-    }
-
-    public void ModifyToxicContextDivide(AbilityContext toxicContext)
-    {
-    }
-
-    public void ModifyToxicContextMultiple(AbilityContext toxicContext)
-    {
-    }
-
-    public void ModifyToxicContextSubtract(AbilityContext toxicContext)
-    {
+        _abc._Stats[STATID.MAX_STACKS] += _SOAbilityEffect._maxStacksToAdd;
+        _abc._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] -= _SOAbilityEffect._timeBeforeEffectActivate;
     }
 }

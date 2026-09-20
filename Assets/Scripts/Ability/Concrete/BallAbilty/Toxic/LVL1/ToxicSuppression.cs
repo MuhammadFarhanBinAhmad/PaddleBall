@@ -1,24 +1,10 @@
 using UnityEngine;
 
-public class ToxicSuppression: ABSAbility, IToxicContextModifier
+public class ToxicSuppression: ABSAbility, IModifyStackableAbility
 {
-    public void ModifyToxicContextAdd(AbilityContext toxicContext)
+    public void ModifyStackableAbility(AbilityContext _abc)
     {
-        toxicContext._Statsbool[STATID.AFFECTS_SPEED] = _SOAbilityEffect._affectSpeed;
-        toxicContext._Stats[STATID.SPEED_MULTIPLIER] = _SOAbilityEffect._speedMultiplier;
-    }
-
-    public void ModifyToxicContextDivide(AbilityContext toxicContext)
-    {
-    }
-
-    public void ModifyToxicContextMultiple(AbilityContext toxicContext)
-    {
-        float adddmg = toxicContext._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier;
-        toxicContext._Stats[STATID.DAMAGE_PER_STACK] += adddmg;
-    }
-
-    public void ModifyToxicContextSubtract(AbilityContext toxicContext)
-    {
+        _abc._Statsbool[STATID.AFFECTS_SPEED] = _SOAbilityEffect._affectSpeed;
+        _abc._Stats[STATID.SPEED_MULTIPLIER] = _SOAbilityEffect._speedMultiplier;
     }
 }
