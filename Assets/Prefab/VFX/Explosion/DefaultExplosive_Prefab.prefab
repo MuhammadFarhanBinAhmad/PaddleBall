@@ -19710,14 +19710,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88953c8a12d36d948b10e8b0a4e39cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionDamage
-  _test: {fileID: 7857503364302934976, guid: 9e7a0794fb60fde4385450ff6dea085c, type: 3}
   _explosionEffect: {fileID: 11400000, guid: 6d93dd0d0703ec9429dd2dcb442cd97b, type: 2}
-  _damageRadius: 17
+  _damageRadius: 8.5
   _brickLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   _filter:
-    useTriggers: 0
+    useTriggers: 1
     useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0

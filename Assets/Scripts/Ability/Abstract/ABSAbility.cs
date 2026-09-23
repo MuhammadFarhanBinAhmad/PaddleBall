@@ -1,14 +1,6 @@
 
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public enum ABILITYTYPE
-{
-    SPELL,
-    CARD
-}
 
 public abstract class ABSAbility : MonoBehaviour
 {
@@ -38,12 +30,10 @@ public abstract class ABSAbility : MonoBehaviour
 
     //Order of calculation => 
 
-    public virtual void ModifyBaseValue(HitContext ctx) { }
+    public virtual void BeforeHitAdd(HitContext ctx) { }
+    public virtual void BeforeHitSubtract(HitContext ctx) { }
+    public virtual void BeforeHitMultiply(HitContext ctx) { }
     public virtual void OnHit(HitContext ctx) { }
-    public virtual void OnHitAdd(HitContext ctx) { }
-    public virtual void OnHitSubtract(HitContext ctx) { }
-    public virtual void OnHitMultiply(HitContext ctx) { }
-    // After a hit on enemy has been resolved(Best to be for spawning object)
     public virtual void OnHitResolved(HitContext ctx) { }
     // When a brick is destroyed upon hit
     public virtual void OnBrickDestroy(BrickBar bar) { }

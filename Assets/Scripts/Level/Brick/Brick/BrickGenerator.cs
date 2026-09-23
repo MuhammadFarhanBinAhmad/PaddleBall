@@ -56,9 +56,6 @@ public class BrickGenerator : MonoBehaviour
     public int[] _attributePoints;
     int _APPerWaveForTheDay;
 
-    [Header("Brick position")]
-    public Vector2 _offset;
-
     [Header("BrickSpawn")]
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
@@ -316,8 +313,7 @@ public class BrickGenerator : MonoBehaviour
                 var stats = available[UnityEngine.Random.Range(0, available.Count)];
 
                 Vector3 pos =
-                    transform.position +
-                    new Vector3(_offset.x * (x + 0.5f), _offset.y * (y + 0.5f));
+                    transform.position;
 
                 plan.bricks.Add(new PlannedBrick
                 {

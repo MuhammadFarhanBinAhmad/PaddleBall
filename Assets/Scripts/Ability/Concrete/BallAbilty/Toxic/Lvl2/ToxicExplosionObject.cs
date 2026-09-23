@@ -46,8 +46,9 @@ public class ToxicExplosionObject : MonoBehaviour
         _context._Stats[STATID.MAX_STACKS] =
             _SOAbilityEffect._maxStacks;
 
+        float dmg = ctx._damageValue * _SOAbilityEffect._damagePerStackMultiplier;
         _context._Stats[STATID.DAMAGE_PER_STACK] =
-            _SOAbilityEffect._damagePerStack;
+            dmg;
 
         _context._Stats[STATID.STACK_LIFETIME] =
             _SOAbilityEffect._stackLifeTime;
@@ -56,6 +57,7 @@ public class ToxicExplosionObject : MonoBehaviour
             _SOAbilityEffect._timeBeforeEffectActivate;
 
         _abilityManager.ApplyToxicModifiers(_context);
+        _abilityManager.ApplyStackableModifiers(_context);
 
         ExplodeNow();
     }

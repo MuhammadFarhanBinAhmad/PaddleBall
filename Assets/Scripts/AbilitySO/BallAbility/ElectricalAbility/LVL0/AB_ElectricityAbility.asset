@@ -39,7 +39,7 @@ MonoBehaviour:
   _stacksToAdd: 1
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
-  _damagePerStack: 10
+  _damagePerStackMultiplier: 125
   _stackLifeTime: 3
   _timeBeforeEffectActivate: 2.99
   _modifyTimeBeforeEffectActivate: 0
@@ -51,7 +51,9 @@ MonoBehaviour:
   _critMultiplier: 0
   _modifyCritMultiplier: 0
   _layerToDestroy: 0
+  _instantKillThreshold: 0
   _explosionDamageMultiplier: 0
+  _explosionRadius: 0
   _explosionSizeMultiplier: 0
   _shieldMultiplier: 0
   _shieldAdd: 0

@@ -12,12 +12,10 @@ public class SharpnelAbility : ABSAbility
         _sharpnelPool = FindAnyObjectByType<SharpnelPool>();
 
     }
-    public override void OnHit(HitContext ctx)
-    {
-        _transform = ctx._health.transform;
-    }
     public override void OnHitResolved(HitContext ctx)
     {
+        _transform = ctx._health.transform;
+
         if (_convertToBomb)
             ctx._status |= STATUSTYPE.CLUSTERBOMB;
 

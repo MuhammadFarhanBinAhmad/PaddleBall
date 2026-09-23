@@ -5,7 +5,7 @@ public class Veteran : ABSAbility
     int _brickDestroyed;
     int _stack;
 
-    public override void ModifyBaseValue(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         ctx._damageValue += _stack * _SOAbilityEffect._baseDamagePlus;
     }

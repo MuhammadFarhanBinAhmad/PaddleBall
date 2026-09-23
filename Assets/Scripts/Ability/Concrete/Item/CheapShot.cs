@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CheapShot : ABSAbility
 {
-    public override void OnHitMultiply(HitContext ctx)
+    public override void BeforeHitMultiply(HitContext ctx)
     {
         bool hit = ctx._health.GetHealth() > ctx._health.GetStartingHealth() * .9f;
         if (hit)

@@ -137,30 +137,22 @@ public class AbilityManager : MonoBehaviour
             _damageValue = basedmg,
         };
 
-        //Phase 1: Modifier
+        //-----Phase 1: Implement generics-----//
         foreach (var ability in _brickAbilities)
-            ability.ModifyBaseValue(ctx);
-
-        // Phase 2: On hit(Add->Subtract->Multiply->Division)
+            ability.BeforeHitAdd(ctx);
         foreach (var ability in _brickAbilities)
-            ability.OnHit(ctx);//For base abilities
-
-        //For modifiying existing ability
+            ability.BeforeHitSubtract(ctx);
         foreach (var ability in _brickAbilities)
-            ability.OnHitAdd(ctx);
-
+            ability.BeforeHitMultiply(ctx);
+        //-----Phase 2: Implement ability traits-----//
         foreach (var ability in _brickAbilities)
-            ability.OnHitSubtract(ctx);
-
-        foreach (var ability in _brickAbilities)
-            ability.OnHitMultiply(ctx);
-
-            // Phase 3: Apply damage
-            ctx._health.OnDamage(ctx._damageValue);
-
-        // Phase 4: Notify abilities of outcome
+            ability.OnHit(ctx);
+        //-----Phase 3: Resolve event that occur after hit-----//
         foreach (var ability in _brickAbilities)
             ability.OnHitResolved(ctx);
+        //-----Phase 4: Apply damage-----//
+        ctx._health.OnDamage(ctx._damageValue);
+
     }
 
     public void NotifyBrickDestroyed(BrickBar brick)

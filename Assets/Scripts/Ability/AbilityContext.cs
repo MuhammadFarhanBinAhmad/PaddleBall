@@ -26,7 +26,7 @@ public class AbilityContext
             _Statsbool[id] = false;
         }
     }
-
+    //add new status and context for modifier in explosion object
     public void SetContext(AbilityContext ctx)
     {
         _abilityContext[ctx._statusType] = ctx;

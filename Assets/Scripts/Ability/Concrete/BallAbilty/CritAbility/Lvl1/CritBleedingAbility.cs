@@ -8,7 +8,6 @@ public class CritBleedingAbility : ABSAbility
     {
         //Increase base damage
         var critChance = _SOAbilityEffect._baseChance + ctx._modifyChance;
-        var critMultiplier = _SOAbilityEffect._critMultiplier;
         bool isCrit = RNGService.RollCrit(critChance, _SOAbilityEffect._bonusPerFail);
 
         if (isCrit)

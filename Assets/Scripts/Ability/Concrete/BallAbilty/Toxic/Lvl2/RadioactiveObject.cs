@@ -120,7 +120,7 @@ public class ToxicSmokeObject : ABSAbility
             _statusType = _SOAbilityEffect._statusType
         };
 
-        ctx._Stats[STATID.DAMAGE_PER_STACK] = _SOAbilityEffect._damagePerStack;
+        ctx._Stats[STATID.DAMAGE_PER_STACK] = _SOAbilityEffect._damagePerStackMultiplier;
         ctx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
 
         return ctx;

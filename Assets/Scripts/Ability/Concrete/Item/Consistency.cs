@@ -7,7 +7,7 @@ public class Consistency : ABSAbility
 
     int _currentThreshold;
 
-    public override void ModifyBaseValue(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         if (_ball._currentCombo % _SOAbilityEffect._comboThreshold == 0)
         {

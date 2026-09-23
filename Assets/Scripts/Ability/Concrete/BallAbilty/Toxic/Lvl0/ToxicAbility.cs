@@ -7,17 +7,17 @@ public class ToxicAbility : ABSAbility
 
     private void Start() => _toxicEffectPool = FindAnyObjectByType<ToxicEffectPool>();
 
-    public override void OnHitResolved(HitContext ctx)
+    public override void OnHit(HitContext ctx)
     {
         var statusCtx = new ToxicContext
         {
             _abililty = this,
             _statusType = _SOAbilityEffect._statusType,
         };
-
+        float dmg = ctx._damageValue * _SOAbilityEffect._damagePerStackMultiplier;
         statusCtx._Stats[STATID.STACKS_TO_ADD] = _SOAbilityEffect._stacksToAdd;
         statusCtx._Stats[STATID.MAX_STACKS] = _SOAbilityEffect._maxStacks;
-        statusCtx._Stats[STATID.DAMAGE_PER_STACK] = _SOAbilityEffect._damagePerStack;
+        statusCtx._Stats[STATID.DAMAGE_PER_STACK] = dmg;
         statusCtx._Stats[STATID.STACK_LIFETIME] = _SOAbilityEffect._stackLifeTime;
         statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
 

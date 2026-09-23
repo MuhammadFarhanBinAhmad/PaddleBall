@@ -24,20 +24,14 @@ public class TowerEssence : MonoBehaviour
     float intensityTimer;
     bool intensityDone;
 
-    [SerializeField] float intensityDuration = 3f;
-
-    [Header("Particle Effects")]
-    [SerializeField] ParticleSystem _particleEffects;
+    [SerializeField] float intensityDuration;
 
     [Header("Movement")]
     [Tooltip("Maximum movement speed.")]
-    public float maxSpeed = 10f;
-
-    [Tooltip("Movement drag while being attracted.")]
-    public float attractedDrag = 5f;
+    public float maxSpeed;
 
     [Tooltip("Normal movement drag.")]
-    public float normalDrag = 1f;
+    public float normalDrag;
 
     [Tooltip("Starting movement impulse.")]
     public float minImpulse;
@@ -51,11 +45,11 @@ public class TowerEssence : MonoBehaviour
     [Header("Suction Tuning")]
     [Tooltip("How strongly the Essence accelerates toward the vacuum.")]
     [SerializeField] float _attractStrength;
-    [SerializeField]float _attractRadius = 1f;
+    [SerializeField]float _attractRadius;
 
     [Tooltip("How much velocity is retained while being sucked.")]
     [Range(0f, 1f)]
-    public float suctionDragMultiplier = 0.9f;
+    public float suctionDragMultiplier;
 
     // Attraction state
     bool _isAttracted;
@@ -63,9 +57,14 @@ public class TowerEssence : MonoBehaviour
     Transform _attractorTransform;
 
     [Header("Auto Attract")]
-    [SerializeField] float _autoAttractStrength = 8f;
-    [SerializeField] float _autoAttractRadius = 999f;
+    [SerializeField] float _autoAttractStrength;
+    [SerializeField] float _autoAttractRadius;
     [SerializeField] bool _autoAttract;
+
+    [Header("Light Alpha")]
+    [SerializeField, Range(0f, 1f)] float _minAlpha;
+    [SerializeField, Range(0f, 1f)] float _maxAlpha;
+    [SerializeField] float _alphaPingPongSpeed;
 
     void Awake()
     {
@@ -113,6 +112,7 @@ public class TowerEssence : MonoBehaviour
     {
         UpdateLifetime();
         UpdateLight();
+        UpdateLightAlpha();
 
         if (_isAttracted)
         {
@@ -120,7 +120,6 @@ public class TowerEssence : MonoBehaviour
         }
 
         Move();
-
         CheckCollectionDistance();
     }
 
@@ -136,10 +135,6 @@ public class TowerEssence : MonoBehaviour
         {
             _currentExpirationPhase++;
 
-            if (_currentExpirationPhase == 1)
-            {
-                _particleEffects.Stop();
-            }
 
             if (_currentExpirationPhase == 3)
             {
@@ -166,7 +161,18 @@ public class TowerEssence : MonoBehaviour
             intensityDone = true;
         }
     }
+    void UpdateLightAlpha()
+    {
+        float alpha = Mathf.Lerp(
+            _minAlpha,
+            _maxAlpha,
+            Mathf.PingPong(Time.time * _alphaPingPongSpeed, 1f)
+        );
 
+        Color color = _light2D.color;
+        color.a = alpha;
+        _light2D.color = color;
+    }
     void UpdateAttraction()
     {
         // Auto-attract override.
@@ -342,8 +348,6 @@ public class TowerEssence : MonoBehaviour
 
         _currentExpirationPhase = 0;
         _essenceCurrentLiveTime = 0f;
-
-        _particleEffects.Play();
 
         _autoAttract = false;
 

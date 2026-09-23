@@ -11,7 +11,7 @@ public class ExplosiveAbility : ABSAbility
         _explosionPool = FindAnyObjectByType<ExplosionPool>();
     }
 
-    public override void OnHitResolved(HitContext ctx)
+    public override void OnHit(HitContext ctx)
     {
         if (_explosionPool == null) return;
 
@@ -38,7 +38,7 @@ public class ExplosiveAbility : ABSAbility
             _statusEffect = null
         };
         ectx._Stats[STATID.BASE_DAMAGE] = ctx._damageValue * _SOAbilityEffect._explosionDamageMultiplier;
-        ectx._Stats[STATID.SCALE_MULTIPLIER] = _SOAbilityEffect._scaleSizeMultiplier;
+        ectx._Stats[STATID.EXPLOSION_RADIUS] = _SOAbilityEffect._explosionRadius;
 
         // Let other abilities modify the explosion data
         _abilityManager.ApplyExplosionModifiers(ctx, ectx);

@@ -4,7 +4,7 @@ using UnityEngine;
 public class FirstStrike : ABSAbility
 {
     bool _firstStike = true;
-    public override void OnHitMultiply(HitContext ctx)
+    public override void BeforeHitMultiply(HitContext ctx)
     {
         if(_firstStike)
         {

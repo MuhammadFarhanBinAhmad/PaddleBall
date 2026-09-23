@@ -8,7 +8,7 @@ public class Hoarder : ABSAbility
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
     }
-    public override void OnHitAdd(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         ctx._damageValue += _towerManager.GetTotalPureEssenceCount() * _SOAbilityEffect._baseDamagePlus;
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using FMOD.Studio;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class PaddleVacoom : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class PaddleVacoom : MonoBehaviour
     float inhalePower = 0;
     public float increaseSpeed = 1.5f;
     public float decreaseSpeed = 1f;
+
+    HashSet<TowerEssence> _currentlySuckedEssences =
+    new HashSet<TowerEssence>();
+
     private void Awake()
     {
         _paddleHealth = FindAnyObjectByType<PaddleHealth>();
@@ -80,10 +85,16 @@ public class PaddleVacoom : MonoBehaviour
             return;
 
         if (_disableVacoom)
+        {
+            StopSuction();
             return;
+        }
 
         if (!Input.GetKey(KeyCode.Space))
+        {
+            StopSuction();
             return;
+        }
 
         SuctionObject();
     }
@@ -153,13 +164,16 @@ public class PaddleVacoom : MonoBehaviour
             _suctionResults
         );
 
-        if (hitCount == 0)
-            return;
+        HashSet<TowerEssence> currentTargets =
+            new HashSet<TowerEssence>();
 
         Vector2 forward = _mouseForward;
 
-        float halfAngleRad = (coneAngle * 0.5f) * Mathf.Deg2Rad;
-        float cosThreshold = Mathf.Cos(halfAngleRad);
+        float halfAngleRad =
+            (coneAngle * 0.5f) * Mathf.Deg2Rad;
+
+        float cosThreshold =
+            Mathf.Cos(halfAngleRad);
 
         for (int i = 0; i < hitCount; i++)
         {
@@ -169,33 +183,64 @@ public class PaddleVacoom : MonoBehaviour
                 continue;
 
             Vector2 toTarget =
-                (Vector2)collider.transform.position - paddlePosition;
+                (Vector2)collider.transform.position -
+                paddlePosition;
 
             float sqrDistance = toTarget.sqrMagnitude;
 
             if (sqrDistance <= 0.0001f)
                 continue;
 
-            Vector2 direction = toTarget.normalized;
+            Vector2 direction =
+                toTarget.normalized;
 
+            // Outside cone
             if (Vector2.Dot(forward, direction) < cosThreshold)
                 continue;
 
             TowerEssence essence =
                 collider.GetComponent<TowerEssence>();
 
-            if (essence != null)
-            {
-                essence.StartAttraction(
-                    transform,
-                    _pushPullStrength,
-                    attractRadius
-                );
+            if (essence == null)
+                continue;
 
-                essence.UpdateAttractionTarget(paddlePosition);
+            currentTargets.Add(essence);
+
+            essence.StartAttraction(
+                transform,
+                _pushPullStrength,
+                attractRadius
+            );
+
+            essence.UpdateAttractionTarget(
+                paddlePosition
+            );
+        }
+
+        // Stop Essences that are no longer
+        // inside the suction cone.
+        foreach (TowerEssence essence in _currentlySuckedEssences)
+        {
+            if (!currentTargets.Contains(essence))
+            {
+                if (essence != null)
+                    essence.StopAttraction();
             }
         }
+
+        _currentlySuckedEssences = currentTargets;
     }
+    void StopSuction()
+    {
+        foreach (TowerEssence essence in _currentlySuckedEssences)
+        {
+            if (essence != null)
+                essence.StopAttraction();
+        }
+
+        _currentlySuckedEssences.Clear();
+    }
+
     void PlaySuctionAudio()
     {
         _paddleInhale.setParameterByName("InhalePower", inhalePower);

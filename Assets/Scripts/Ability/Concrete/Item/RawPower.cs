@@ -2,24 +2,26 @@ using UnityEngine;
 
 public class RawPower : ABSAbility, IDischargeContextModifier, IExplosionContextModifier, ICriticalContextModifier
 {
-    public override void ModifyBaseValue(HitContext ctx)
+
+
+    public override void BeforeHitMultiply(HitContext ctx)
     {
-        ctx._damageValue += _SOAbilityEffect._baseDamagePlus;
+        ctx._damageValue += ctx._damageValue;
     }
 
     public void ModifyToxicContextSubtract(AbilityContext toxicContext)
     {
-        toxicContext._Stats[STATID.DAMAGE_PER_STACK] -= (toxicContext._Stats[STATID.DAMAGE_PER_STACK]/2);
+        toxicContext._Stats[STATID.DAMAGE_PER_STACK] -= (toxicContext._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier);
     }
 
     public void ModifyExplosionContextSubtract(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        explosionCtx._Stats[STATID.BASE_DAMAGE] -= (explosionCtx._Stats[STATID.BASE_DAMAGE]/2);
+        explosionCtx._Stats[STATID.BASE_DAMAGE] -= (explosionCtx._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
     }
 
     public void ModifyCriticalContextSubtract(HitContext hitCtx, AbilityContext critContext)
     {
-        critContext._Stats[STATID.CRIT_MULTIPLIER] -= (critContext._Stats[STATID.CRIT_MULTIPLIER] / 2);
+        critContext._Stats[STATID.BASE_DAMAGE] -= (critContext._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
     }
 
     public void ModifyDischargeAdd(HitContext hitCtx, AbilityContext dischargeCtx)
@@ -29,7 +31,7 @@ public class RawPower : ABSAbility, IDischargeContextModifier, IExplosionContext
 
     public void ModifyDischargeSubtract(HitContext hitCtx, AbilityContext dischargeCtx)
     {
-        dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] -= (dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] / 2);
+        dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] -= (dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier);
     }
 
     public void ModifyDischargeMultiple(HitContext hitCtx, AbilityContext dischargeCtx)

@@ -2,15 +2,16 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using FMOD.Studio;
+using UnityEngine.UI;
 
 [System.Serializable]
-public struct ComboPerformance
+
+public class ComboBG
 {
     public int comboThreshold;
-    public string word;
-    public string rankLetter;
+    public Sprite _bg;
+    public Sprite _magicCircle;
 }
-
 public class BallUIManager : MonoBehaviour
 {
     Ball _ballManager;
@@ -18,9 +19,9 @@ public class BallUIManager : MonoBehaviour
     [Header("ComboUI")]
     [SerializeField] TextMeshProUGUI _currentComboText;
     [SerializeField] int _comboParticleThreshold;
-    [SerializeField] TextMeshProUGUI _comboPerformanceText;
-    [SerializeField] ComboPerformance[] _comboPerformances;
-    [SerializeField] int _rankLetterSize, _wordTextSize;
+    [SerializeField] int _wordTextSize;
+    [SerializeField] ComboBG[] _comboBGs;
+    [SerializeField] Image _bg, _magicCircle;
 
     [Header("Animation")]
     [SerializeField] AnimationCurve easeOutElastic;
@@ -29,7 +30,23 @@ public class BallUIManager : MonoBehaviour
     [SerializeField] float _increasescaleMultiplier;
     [SerializeField] float _currentscaleMultiplier;
     [SerializeField] float _capscaleMultiplier;
+    [Header("Magic Circle Spin")]
+    [SerializeField] float _initialSpinSpeed = 720f;
+    [SerializeField] float _spinSlowdownDuration = 2f;
 
+
+    [Header("Combo Popup")]
+    [SerializeField] RectTransform _comboPopup;
+    [SerializeField] float _comboPopupOffset = 150f;
+    [SerializeField] float _comboPopupDuration = 0.25f;
+
+    Vector2 _comboShownPosition;
+    Vector2 _comboHiddenPosition;
+
+    Coroutine comboPopupAnim;
+    bool _comboPopupShown;
+
+    Coroutine magicCircleSpin;
     bool _audioPlayed;
     EventInstance _paddleHitCombo;
 
@@ -43,13 +60,26 @@ public class BallUIManager : MonoBehaviour
     void Start()
     {
 
-        _paddleHitCombo = AudioManager.Instance.CreateEventInstance(FmodEvent.Instance.sfx_onPaddleComboHit);
-
+        _paddleHitCombo = AudioManager.Instance.CreateEventInstance(
+                FmodEvent.Instance.sfx_onPaddleComboHit
+            );
 
         _ballManager.OnBrickHit += UpdateComboUI;
         _ballManager.OnBrickHit += PlayComboAudio;
+        _ballManager.OnBallReset += UpdateComboUI;
 
-        _ballManager.OnBallReset+= UpdateComboUI;
+        if (_comboPopup == null)
+            _comboPopup = GetComponent<RectTransform>();
+
+        _comboShownPosition = _comboPopup.anchoredPosition;
+
+        _comboHiddenPosition =
+            _comboShownPosition + Vector2.down * _comboPopupOffset;
+
+        // Start hidden
+        _comboPopup.anchoredPosition = _comboHiddenPosition;
+
+        UpdateComboUI();
     }
 
     private void OnDisable()
@@ -62,6 +92,21 @@ public class BallUIManager : MonoBehaviour
 
     public void UpdateComboUI()
     {
+        int combo = _ballManager._currentCombo;
+
+        // First combo hit
+        if (combo == 1 && !_comboPopupShown)
+        {
+            _comboPopupShown = true;
+            PlayComboPopup(true);
+        }
+        // Combo lost / reset
+        else if (combo <= 0 && _comboPopupShown)
+        {
+            _comboPopupShown = false;
+            PlayComboPopup(false);
+        }
+
         UpdateComboPerformanceNumber();
         UpdateComboPerformanceText();
 
@@ -69,12 +114,17 @@ public class BallUIManager : MonoBehaviour
             StopCoroutine(comboAnim);
 
         comboAnim = StartCoroutine(AnimateCombo());
+
+        if (magicCircleSpin != null)
+            StopCoroutine(magicCircleSpin);
+
+        magicCircleSpin = StartCoroutine(SpinMagicCircle());
     }
     void UpdateComboPerformanceNumber()
     {
         if (_ballManager._currentCombo > 0)
         {
-            _currentComboText.text = _ballManager._currentCombo.ToString() + 'x';
+            _currentComboText.text = _ballManager._currentCombo.ToString();
             if (_ballManager._currentCombo % _comboParticleThreshold == 0 && _currentscaleMultiplier < _capscaleMultiplier)
             {
                 _currentscaleMultiplier += _increasescaleMultiplier;
@@ -86,24 +136,35 @@ public class BallUIManager : MonoBehaviour
             _currentComboText.text = "";
             return;
         }
-
-
-
     }
+
     void UpdateComboPerformanceText()
     {
         int combo = _ballManager._currentCombo;
 
-        for (int i = _comboPerformances.Length - 1; i >= 0; i--)
+        for (int i = _comboBGs.Length - 1; i >= 0; i--)
         {
-            if (combo >= _comboPerformances[i].comboThreshold)
+            if (combo >= _comboBGs[i].comboThreshold)
             {
-                _comboPerformanceText.text =
-                    $"<size={_rankLetterSize}><b>{_comboPerformances[i].rankLetter}</b></size>" +
-                    $"<size={_wordTextSize}> {_comboPerformances[i].word}</size>";
+                _bg.sprite = _comboBGs[i]._bg;
+                _magicCircle.sprite = _comboBGs[i]._magicCircle;
                 return;
             }
         }
+    }
+    void PlayComboPopup(bool show)
+    {
+        if (comboPopupAnim != null)
+            StopCoroutine(comboPopupAnim);
+
+        Vector2 startPosition = _comboPopup.anchoredPosition;
+        Vector2 targetPosition = show
+            ? _comboShownPosition
+            : _comboHiddenPosition;
+
+        comboPopupAnim = StartCoroutine(
+            AnimateComboPopup(startPosition, targetPosition)
+        );
     }
     void PlayComboAudio()
     {
@@ -123,7 +184,7 @@ public class BallUIManager : MonoBehaviour
     IEnumerator AnimateCombo()
     {
         Transform n = _currentComboText.transform;
-        Transform t = _comboPerformanceText.transform;
+        Transform t = _magicCircle.transform;
         Vector3 startScale = Vector3.one;
         Vector3 targetScale = Vector3.one * _currentscaleMultiplier;
 
@@ -134,14 +195,58 @@ public class BallUIManager : MonoBehaviour
             float normalized = time / animationDuration;
             float curveValue = easeOutElastic.Evaluate(normalized);
 
-            t.localScale = Vector3.LerpUnclamped(startScale, targetScale, curveValue);
             n.localScale = Vector3.LerpUnclamped(startScale, targetScale, curveValue);
+            t.localScale = Vector3.LerpUnclamped(startScale, targetScale, curveValue);
 
             time += Time.deltaTime;
             yield return null;
         }
 
-        t.localScale = Vector3.one;
         n.localScale = Vector3.one;
+        t.localScale = Vector3.one;
+    }
+    IEnumerator SpinMagicCircle()
+    {
+        float time = 0f;
+
+        while (time < _spinSlowdownDuration)
+        {
+            float normalized = time / _spinSlowdownDuration;
+
+            // Starts at 1 and gradually reaches 0
+            float speedMultiplier = 1f - normalized;
+
+            float rotationAmount = _initialSpinSpeed * speedMultiplier * Time.deltaTime;
+
+            _magicCircle.transform.Rotate(0f, 0f, rotationAmount);
+
+            time += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+    IEnumerator AnimateComboPopup(
+    Vector2 startPosition,
+    Vector2 targetPosition)
+    {
+        float time = 0f;
+
+        while (time < _comboPopupDuration)
+        {
+            float normalized = time / _comboPopupDuration;
+
+            _comboPopup.anchoredPosition =
+                Vector2.Lerp(
+                    startPosition,
+                    targetPosition,
+                    normalized
+                );
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        _comboPopup.anchoredPosition = targetPosition;
+        comboPopupAnim = null;
     }
 }

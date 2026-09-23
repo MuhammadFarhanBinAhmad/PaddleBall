@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HalfAndHalfExplosion : ABSAbility, IExplosionContextModifier
+public class ControlledFirePower : ABSAbility, IExplosionContextModifier
 {
     public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
     {

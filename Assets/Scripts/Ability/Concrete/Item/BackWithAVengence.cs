@@ -35,14 +35,13 @@ public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischar
             _vengenceInEffect = false;
     }
 
-    public override void OnHitAdd(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         if (_vengenceInEffect)
         {
             float dmg = ctx._damageValue * _SOAbilityEffect._baseDamageMultiplier;
             ctx._damageValue = (int)(dmg);
         }
-
     }
 
     public void ModifyExplosionContextAdd(HitContext hitCtx, AbilityContext explosionCtx)
@@ -74,7 +73,7 @@ public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischar
     public void ModifyDischargeMultiple(HitContext hitCtx, AbilityContext dischargeCtx)
     {
         if (_vengenceInEffect)
-            dischargeCtx._Stats[STATID.BASE_DAMAGE] = (int)(dischargeCtx._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+            dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] = (int)(dischargeCtx._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier);
 
     }
 
@@ -112,7 +111,7 @@ public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischar
     public void ModifyToxicContextMultiple(AbilityContext toxicContext)
     {
         if (_vengenceInEffect)
-            toxicContext._Stats[STATID.BASE_DAMAGE] = (int)(toxicContext._Stats[STATID.BASE_DAMAGE] * _SOAbilityEffect._baseDamageMultiplier);
+            toxicContext._Stats[STATID.DAMAGE_PER_STACK] = (int)(toxicContext._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._baseDamageMultiplier);
 
     }
 

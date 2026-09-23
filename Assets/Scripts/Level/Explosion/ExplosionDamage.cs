@@ -1,12 +1,11 @@
 using NUnit.Framework.Internal;
 using System;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class ExplosionDamage : MonoBehaviour
 {
-
-    public GameObject _test;
 
     AbilityContext _ctx;
     AbilityManager _manager;
@@ -34,6 +33,10 @@ public class ExplosionDamage : MonoBehaviour
     {
         _manager = FindAnyObjectByType<AbilityManager>();
         _explosionPool = FindAnyObjectByType<ExplosionPool>();
+
+        _filter.SetLayerMask(_brickLayer);
+        _filter.useLayerMask = true;
+        _filter.useTriggers = true;
     }
 
     public void Initialize(AbilityContext ctx,bool explodeNow)
@@ -43,6 +46,7 @@ public class ExplosionDamage : MonoBehaviour
         transform.localScale = _startScale  * _ctx._Stats[STATID.SCALE_MULTIPLIER];
         _radiusModifierMultiplier = _ctx._Stats[STATID.SCALE_MULTIPLIER];
         _damage = (int)ctx._Stats[STATID.BASE_DAMAGE];
+        _damageRadius = ctx._Stats[STATID.EXPLOSION_RADIUS];
         _SOStatusEffect = ctx._statusEffect;
         _hasExploded = false;
         _statusType = ctx._statusType;
@@ -70,72 +74,101 @@ public class ExplosionDamage : MonoBehaviour
     {
 
         int count = Physics2D.defaultPhysicsScene.OverlapCircle(
-            transform.position,
-            _damageRadius * _radiusModifierMultiplier,
-            _filter,
-            _hits
-        );
+        transform.position,
+        _damageRadius,
+        _filter,
+        _hits);
 
-        if (_statusType == STATUSTYPE.REMNANT)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                Collider2D col = _hits[i];
-                if (_explosionPool == null) return;
-
-                GameObject explosionGO = _explosionPool.GetExplosion();
-                explosionGO.transform.position = col.gameObject.transform.position;
-
-                var ed = explosionGO.GetComponent<ExplosionDamage>();
-                if (ed == null) return;
-
-                AbilityContext ectx = new AbilityContext
-                {
-                    _source = gameObject,
-                    _position = col.gameObject.transform.position,
-                    _statusType = STATUSTYPE.EXPLOSION
-                };
-                ectx._Stats[STATID.BASE_DAMAGE] = _damage;
-                ectx._Stats[STATID.SCALE_MULTIPLIER] = _radiusModifierMultiplier;
-
-                // Let other abilities modify the explosion data
-                //_abilityManager.ApplyExplosionModifiers(_hitContext, ectx);
-                ed.Initialize(ectx, true);
-            }
-        }
+        Debug.Log($"Explosion detected {count} colliders.");
 
         for (int i = 0; i < count; i++)
         {
             Collider2D col = _hits[i];
 
-            if (!col.TryGetComponent(out BrickBar brick))
+            Debug.Log(
+                $"Hit {i}: {col.name} | " +
+                $"Layer: {LayerMask.LayerToName(col.gameObject.layer)}"
+            );
+
+            BrickBar brick = col.GetComponentInParent<BrickBar>();
+
+            if (brick == null)
                 continue;
 
-            brick._brickHealthComponent.OnDamage(_damage,STATUSTYPE.EXPLOSION);
-
-            if (_ctx._abilityContext.Count == 0)
-                continue;
-
-            foreach (var abctx in _ctx._abilityContext)
-            {
-                switch (abctx.Key)
-                {
-                    case STATUSTYPE.DISCHARGE:
-                        {
-                            _manager.ApplyDischargeModifiers(null, abctx.Value);
-                            brick._brickHealthComponent.ApplyStatus(abctx.Value, abctx.Key);
-                            break;
-                        }
-                    case STATUSTYPE.EXPLOSION:
-                        {
-                            _manager.ApplyExplosionModifiers(null, abctx.Value);
-                            brick._brickHealthComponent.ApplyStatus(abctx.Value, abctx.Key);
-                            break;
-                        }
-                }
-            }
-
+            brick._brickHealthComponent.OnDamage(
+                _damage,
+                STATUSTYPE.EXPLOSION
+            );
         }
+
+
+
+        //for (int i = 0; i < count; i++)
+        //{
+        //    Collider2D col = _hits[i];
+        //    print( col );
+        //    BrickBar brick = col.GetComponentInParent<BrickBar>();
+
+        //    if (brick == null)
+        //        continue;
+
+        //    brick._brickHealthComponent.OnDamage(
+        //        _damage,
+        //        STATUSTYPE.EXPLOSION
+        //    );
+
+        //    if (_ctx._abilityContext.Count == 0)
+        //        continue;
+
+        //    //foreach (var abctx in _ctx._abilityContext)
+        //    //{
+        //    //    switch (abctx.Key)
+        //    //    {
+        //    //        case STATUSTYPE.DISCHARGE:
+        //    //            {
+        //    //                _manager.ApplyDischargeModifiers(null, abctx.Value);
+        //    //                brick._brickHealthComponent.ApplyStatus(abctx.Value, abctx.Key);
+        //    //                continue;
+        //    //            }
+        //    //        case STATUSTYPE.EXPLOSION:
+        //    //            {
+        //    //                _manager.ApplyExplosionModifiers(null, abctx.Value);
+        //    //                brick._brickHealthComponent.ApplyStatus(abctx.Value, abctx.Key);
+        //    //                continue;
+        //    //            }
+        //    //    }
+        //    //}
+
+        //}
+
+
+        //if (_statusType == STATUSTYPE.REMNANT)
+        //{
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Collider2D col = _hits[i];
+        //        if (_explosionPool == null) return;
+
+        //        GameObject explosionGO = _explosionPool.GetExplosion();
+        //        explosionGO.transform.position = col.gameObject.transform.position;
+
+        //        var ed = explosionGO.GetComponent<ExplosionDamage>();
+        //        if (ed == null) return;
+
+        //        AbilityContext ectx = new AbilityContext
+        //        {
+        //            _source = gameObject,
+        //            _position = col.gameObject.transform.position,
+        //            _statusType = STATUSTYPE.EXPLOSION
+        //        };
+        //        ectx._Stats[STATID.BASE_DAMAGE] = _damage;
+        //        ectx._Stats[STATID.SCALE_MULTIPLIER] = _radiusModifierMultiplier;
+
+        //        // Let other abilities modify the explosion data
+        //        //_abilityManager.ApplyExplosionModifiers(_hitContext, ectx);
+        //        ed.Initialize(ectx, true);
+        //    }
+        //}
     }
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
@@ -147,27 +180,5 @@ public class ExplosionDamage : MonoBehaviour
         );
     }
 #endif
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    if (_ctx == null) return;
-
-    //    var brick = other.GetComponent<BrickHealthComponent>();
-    //    if (brick != null)
-    //    {
-    //        brick.OnDamage(_damage);
-
-    //        if(_SOStatusEffect != null)
-    //        {
-    //            var statusCtx = new AbilityContext
-    //            {
-    //            };
-    //            statusCtx._Stats[STATID.MAX_STACKS] = _SOStatusEffect._maxStacks;
-    //            statusCtx._Stats[STATID.DAMAGE_PER_STACK] = _SOStatusEffect._damagePerStack;
-    //            statusCtx._Stats[STATID.STACK_LIFETIME] = _SOStatusEffect._stackLifeTime;
-    //            statusCtx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOStatusEffect._timeBeforeEffectActivate;
-    //            brick.ApplyStatus(statusCtx, STATUSTYPE.EXPLOSION);
-
-    //        }
-    //    }
-    //}
+    
 }

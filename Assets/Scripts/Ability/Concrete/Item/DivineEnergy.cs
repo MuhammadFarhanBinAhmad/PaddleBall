@@ -9,7 +9,7 @@ public class DivineEnergy : ABSAbility
         _manager = FindAnyObjectByType<AbilityManager>();
     }
 
-    public override void OnHitAdd(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         float dmg = _manager.GetTotalSpell() * (_SOAbilityEffect._baseDamageMultiplier * ctx._damageValue);
         ctx._damageValue += (int)dmg;

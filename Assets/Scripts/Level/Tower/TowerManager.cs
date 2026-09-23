@@ -26,9 +26,10 @@ public class TowerManager : MonoBehaviour
     public Action OnEssenceCollect;
 
     [Header("Essence scaling (milestones)")]
-    public TWEENTYPE _essenceTweenType = TWEENTYPE.LINEAR;
-    public int milestoneFloors = 5;
-    public int _essenceIncreaseBase = 2;
+    public TWEENTYPE _essenceTweenType;
+    public int milestoneFloors;
+    public int _maxIncreaseConversionValue;
+    public int _increaseConversionRate;
 
     [Header("Brick")]
     [SerializeField] int _brickToFloorConversionRate;
@@ -170,21 +171,27 @@ public class TowerManager : MonoBehaviour
 
     void ApplyEssenceMilestoneIncrease()
     {
-        // compute which milestone we are at (1-based)
-        int milestoneIndex = Mathf.FloorToInt((float)_currentTowerHeight / milestoneFloors);
+        // How many milestones have been reached
+        float milestoneIndex =
+            Mathf.FloorToInt((float)_currentTowerHeight / milestoneFloors);
 
-        // use TimeManager's max month as a normaliser to build progress for the easing curve
-        int maxPhases;
-        maxPhases = _timeManager.GetTotalDayPass();
+        // Convert milestone count into a 0-1 value that naturally approaches 1.
+        float progress = milestoneIndex / (milestoneIndex + _increaseConversionRate);
 
-        // progress in [0,1] = milestoneIndex / maxPhases (clamped)
-        float progress = (float)milestoneIndex / (float)maxPhases;
+
         progress = Mathf.Clamp01(progress);
 
-        float eased = TweenService.GetEased(progress, _essenceTweenType);
+        // Apply your existing tween/easing curve
+        float eased =
+            TweenService.GetEased(progress, _essenceTweenType);
 
-        // compute increase (at least 1)
-        int increase = Mathf.Max(1, Mathf.RoundToInt(_essenceIncreaseBase * eased));
+
+
+        // Calculate increase
+        int increase =
+            Mathf.Max(1, Mathf.RoundToInt(_maxIncreaseConversionValue * eased));
+
+
 
         _essenceToPureEssenceConversionRate += increase;
     }

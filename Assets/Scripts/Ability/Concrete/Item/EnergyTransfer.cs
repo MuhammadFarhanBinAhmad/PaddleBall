@@ -25,7 +25,7 @@ public class EnergyTransfer : ABSAbility
         _towerUIManager.UpdateEssenceUI();
     }
 
-    public override void OnHitAdd(HitContext ctx)
+    public override void BeforeHitAdd(HitContext ctx)
     {
         float dmg = ctx._damageValue * _bonusPercentage;
         ctx._damageValue += (int)dmg;

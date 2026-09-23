@@ -58,7 +58,7 @@ public class SOAbilityEffect : ScriptableObject
     [GroupUnder(nameof(_applyStatus))]
     public int _increaseStacksToAdd;
     [GroupUnder(nameof(_applyStatus))]
-    public int _damagePerStack;
+    public float _damagePerStackMultiplier;
     [GroupUnder(nameof(_applyStatus))]
     public float _stackLifeTime;
     [GroupUnder(nameof(_applyStatus))]
@@ -88,6 +88,8 @@ public class SOAbilityEffect : ScriptableObject
     //-----------------Explosive-----------------//
     [GroupUnder(nameof(_explosionEffect))]
     public float _explosionDamageMultiplier;
+    [GroupUnder(nameof(_explosionEffect))]
+    public float _explosionRadius ;
     [GroupUnder(nameof(_explosionEffect))]
     public float _explosionSizeMultiplier;
     //-----------------Shield-----------------//

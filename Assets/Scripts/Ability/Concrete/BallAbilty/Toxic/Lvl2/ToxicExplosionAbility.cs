@@ -33,7 +33,7 @@ public class ToxicExplosionAbility : ABSAbility
             ectx._Stats[STATID.SCALE_MULTIPLIER] = _SOAbilityEffect._scaleSizeMultiplier;
 
             // Let other abilities modify the explosion data
-            _abilityManager.ApplyDischargeModifiers(ctx, ectx);
+            _abilityManager.ApplyToxicModifiers(ectx);
             ed.Initialize(ctx, this);
         }
 

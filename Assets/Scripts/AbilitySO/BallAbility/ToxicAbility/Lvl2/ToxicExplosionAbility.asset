@@ -20,7 +20,7 @@ MonoBehaviour:
   _applyStatus: 0
   _spawnEffect: 1
   _chanceEffect: 0
-  _explosionEffect: 0
+  _explosionEffect: 1
   _counterEffect: 0
   _shieldEffect: 0
   _abilityBaseDamageValue: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   _stacksToAdd: 0
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
-  _damagePerStack: 0
+  _damagePerStackMultiplier: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
   _modifyTimeBeforeEffectActivate: 0
@@ -51,8 +51,10 @@ MonoBehaviour:
   _critMultiplier: 0
   _modifyCritMultiplier: 0
   _layerToDestroy: 0
+  _instantKillThreshold: 0
   _explosionDamageMultiplier: 0
-  _explosionSizeMultiplier: 0
+  _explosionRadius: 0
+  _explosionSizeMultiplier: 1
   _shieldMultiplier: 0
   _shieldAdd: 0
   _shieldModifyShieldRegenRate: 0
