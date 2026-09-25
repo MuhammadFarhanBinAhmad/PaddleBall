@@ -42,7 +42,9 @@ public class EnemyProjectile : MonoBehaviour
     }
     public void HandleProjectileDeath()
     {
-        Destroy(gameObject);
+        _damage =0;
+        _shootSpeed = 0;
+        gameObject.SetActive(false);
     }
 
 

@@ -55,6 +55,7 @@ public class StatusInstance
 public class BrickBar : MonoBehaviour
 {
     BrickUI _brickUI;
+    BrickAbilityManager _brickAbilityManager;
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
     List<STATUSTYPE> toRemove = new List<STATUSTYPE>();
 
@@ -117,6 +118,8 @@ public class BrickBar : MonoBehaviour
         _AnimCurveEffect = GetComponent<AnimationCurveEffect>();
 
         _hitBrickDeathPool = FindAnyObjectByType<HitBrickDeathPool>();
+
+        _brickAbilityManager = GetComponent<BrickAbilityManager>();
 
         _brickHealthComponent._onDeath += HandleDeath;
         _brickHealthComponent._onDeath += SpawnEssence;
@@ -220,7 +223,7 @@ public class BrickBar : MonoBehaviour
 
         ResetToDefault();
 
-        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
     void HandleDeathByPaddle()
     {
@@ -296,6 +299,7 @@ public class BrickBar : MonoBehaviour
         _elementID = _stats._elementID;
         _layerNumber = _stats._layerNumber;
         _brickHealthComponent.SetHealth(_stats._tiers[_layerNumber]._health);
+        _brickAbilityManager.ActivateAbilities(_stats._ability);
         _brickUI.PrepBrickLayerColour(_stats._layerNumber);
         _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
     }

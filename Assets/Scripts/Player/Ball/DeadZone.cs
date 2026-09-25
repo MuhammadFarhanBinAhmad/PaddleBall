@@ -8,73 +8,46 @@ public class DeadZone : MonoBehaviour
     TowerManager _towerManager;
 
     public Action OnShieldDamage;
-    public Action OnShieldRecharging;
 
     public GameObject _deathVFX;
 
     [Header("Shield")]
     [SerializeField] SpriteRenderer _spriteRenderer;
-    [SerializeField] float _maxShieldMana;
-    [SerializeField] float _currentShieldMana;
-    [SerializeField] float _coolDownPeriod;
-    [SerializeField] float _currentCoolDownTime;
-    [SerializeField] float _shieldRegenRate;
+    [SerializeField] float _maxTowerAndPaddleHealth;
+    [SerializeField] float _currentTowerAndPaddleHealth;
     [Header("Feedback")]
     [SerializeField] SO_FeedbackEffect so_OnBallHit;
     [SerializeField] SO_FeedbackEffect so_OnShieldHit;
     [SerializeField] SO_FeedbackEffect so_OnShieldDown;
-
-
 
     Color shieldColour;
 
     private void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
-
+        shieldColour = _spriteRenderer.color;
+        _currentTowerAndPaddleHealth = _maxTowerAndPaddleHealth;
     }
     private void Start()
     {
         OnShieldDamage += UpdateShieldVisual;
-        OnShieldRecharging += UpdateShieldVisual;
 
-        shieldColour = _spriteRenderer.color;
-        _currentShieldMana = _maxShieldMana;
+
     }
 
     private void OnDestroy()
     {
         OnShieldDamage -= UpdateShieldVisual;
-        OnShieldRecharging -= UpdateShieldVisual;
     }
-    private void Update()
+    
+    public void ShieldTakingDamage(int val)
     {
-        if (_currentShieldMana >= _maxShieldMana) return;
-
-        if(_currentShieldMana < _maxShieldMana)
-        {
-            if(_currentCoolDownTime > 0)
-                _currentCoolDownTime -= Time.deltaTime;
-            else
-                _currentShieldMana += _shieldRegenRate * Time.deltaTime;
-
-            _currentShieldMana = Mathf.Clamp(_currentShieldMana, 0, _maxShieldMana);
-            OnShieldRecharging?.Invoke();
-        }
-    }
-    public void ShieldTakingDamage(int val,int layer)
-    {
-        _currentShieldMana -= val;
-        _currentCoolDownTime = _coolDownPeriod;
-        _currentShieldMana = Mathf.Max(_currentShieldMana, 0);
+        int dma = Math.Max(1, val);
+        _currentTowerAndPaddleHealth -= dma;
+        _currentTowerAndPaddleHealth = Mathf.Max(_currentTowerAndPaddleHealth, 0);
 
         GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnShieldHit);
 
-        if (_currentShieldMana <=0)
-        {
-            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnShieldDown);
-            _towerManager._onTowerTakingDamage?.Invoke(layer);
-        }
 
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
         OnShieldDamage?.Invoke();
@@ -83,7 +56,7 @@ public class DeadZone : MonoBehaviour
     {
         if (_spriteRenderer == null) return;
 
-        float normalized = _currentShieldMana / _maxShieldMana;
+        float normalized = _currentTowerAndPaddleHealth / _maxTowerAndPaddleHealth;
         normalized = Mathf.Pow(normalized, 1.5f); // tweak this
         shieldColour.a = normalized;
         _spriteRenderer.color = shieldColour;
@@ -120,26 +93,22 @@ public class DeadZone : MonoBehaviour
         if (other.CompareTag("Brick"))
         {
             BrickBar _bb = other.GetComponent<BrickBar>();
-            ShieldTakingDamage(_bb.GetShieldDamageValue(), _bb.GetLayer());
+            ShieldTakingDamage(_bb.GetLayer());
             _bb.GetComponent<BrickHealthComponent>().OnDamage(999,STATUSTYPE.NONE,DeathCause.TOWER,true);
         }
-        if(other.CompareTag("EnemyProjectile"))
-        {
-            EnemyProjectile ep = other.GetComponent<EnemyProjectile>();
-            ep.HandleProjectileDeath();
-            ShieldTakingDamage(ep.GetDamage(),1);//Need set value for enemy projectile
+        //if(other.CompareTag("EnemyProjectile"))
+        //{
+        //    EnemyProjectile ep = other.GetComponent<EnemyProjectile>();
+        //    ep.HandleProjectileDeath();
+        //    ShieldTakingDamage(ep.GetDamage(),1);//Need set value for enemy projectile
 
-        }
+        //}
     }
-    public float GetCurrentShield() => _currentShieldMana;
-    public float GetMaxShield() => _maxShieldMana;
-    public float GetShieldPercentage() => _currentShieldMana/_maxShieldMana;
-    public void AddShieldValue(int val) => _maxShieldMana += val;
-    public void MinusShieldValue(int val) => _maxShieldMana -= val;
-    public void MultipleMinusShieldValue(float val) => _maxShieldMana *= val;
-    public void AddShieldRegenRate(int val) => _shieldRegenRate += val;
-    public void MinusShieldRegenRate(int val) => _shieldRegenRate -= val;
-    public void AddShieldCooldown(int val) => _coolDownPeriod += val;
-    public void MinusShieldCooldown(int val) => _coolDownPeriod -= val;
-    public void ResetShield() => _currentShieldMana = _maxShieldMana;
+    public float GetCurrentShield() => _currentTowerAndPaddleHealth;
+    public float GetMaxShield() => _maxTowerAndPaddleHealth;
+    public float GetShieldPercentage() => _currentTowerAndPaddleHealth / _maxTowerAndPaddleHealth;
+    public void AddShieldValue(int val) => _maxTowerAndPaddleHealth += val;
+    public void MinusShieldValue(int val) => _maxTowerAndPaddleHealth -= val;
+    public void MultipleMinusShieldValue(float val) => _maxTowerAndPaddleHealth *= val;
+    public void ResetShield() => _currentTowerAndPaddleHealth = _maxTowerAndPaddleHealth;
 }

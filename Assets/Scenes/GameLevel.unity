@@ -13908,6 +13908,7 @@ Transform:
   - {fileID: 1342986886}
   - {fileID: 534841720}
   - {fileID: 325303515}
+  - {fileID: 1066040988}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &515077787
@@ -18235,11 +18236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DeadZone
   _deathVFX: {fileID: 367412272}
   _spriteRenderer: {fileID: 196625518}
-  _maxShieldMana: 100
-  _currentShieldMana: 100
-  _coolDownPeriod: 5
-  _currentCoolDownTime: 0
-  _shieldRegenRate: 2
+  _maxTowerAndPaddleHealth: 100
+  _currentTowerAndPaddleHealth: 0
   so_OnBallHit: {fileID: 11400000, guid: effdaa02c695c6242be3f84ba8a38593, type: 2}
   so_OnShieldHit: {fileID: 11400000, guid: 109b789badfeed44cae545eafba2befa, type: 2}
   so_OnShieldDown: {fileID: 11400000, guid: 9a1401b72dfeee2439cd113bc9b49fda, type: 2}
@@ -26712,6 +26710,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1646783984}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1066040987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1066040988}
+  - component: {fileID: 1066040989}
+  m_Layer: 0
+  m_Name: ProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1066040988
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066040987}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 501465892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1066040989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066040987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e84e4826abe3a14ba9e1d7c3f1e6d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectilePool
+  go_ObjectToSpawn: {fileID: 3991320937753763627, guid: f5fe7b53e80398b4d9f6593378d86ca4, type: 3}
+  _amountToSpawn: 50
+  _objectPool: []
 --- !u!1 &1066323768
 GameObject:
   m_ObjectHideFlags: 0
@@ -32148,8 +32193,6 @@ MonoBehaviour:
   _spawnPos: {fileID: 345154200}
   _deathVFX: {fileID: 705368668}
   _timeTillRespawn: 3
-  _knockbackDistance: 10
-  _knockbackDuration: 0.25
   _hat: {fileID: 862861751}
 --- !u!1 &1295343626
 GameObject:
@@ -57857,10 +57900,6 @@ PrefabInstance:
       propertyPath: _respawnPos
       value: 
       objectReference: {fileID: 625229727}
-    - target: {fileID: 5209257556626525879, guid: dd60b9b692fb43840896e0ea925f6095, type: 3}
-      propertyPath: _manaRegenRate
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

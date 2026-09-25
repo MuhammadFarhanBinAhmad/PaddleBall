@@ -211,14 +211,14 @@ public class TowerManager : MonoBehaviour
 
     public void TowerTakeDamage(int layer)
     {
-        RemoveBrick();
+        //RemoveBrick();
         GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnTowerHit);
-        if (_currentBrickCount <= -1)
-        {
-            RemoveFloor();
-            OnHeightDecrease?.Invoke();
-            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnFloorLost);
-        }
+        //if (_currentBrickCount <= -1)
+        //{
+        //    RemoveFloor();
+        //    OnHeightDecrease?.Invoke();
+        //    GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnFloorLost);
+        //}
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
     }
     void RemoveBrick()

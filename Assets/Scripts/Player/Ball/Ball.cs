@@ -472,8 +472,8 @@ public class Ball : MonoBehaviour
         if (_awaitingLaunch)
             return;
 
-        if (other.gameObject.CompareTag("Wall") || 
-            other.gameObject.CompareTag("Paddle") || 
+        if (other.gameObject.CompareTag("Wall") ||
+            other.gameObject.CompareTag("Paddle") ||
             other.gameObject.CompareTag("Brick") ||
             other.gameObject.CompareTag("Boss") ||
             other.gameObject.CompareTag("Shield") ||
@@ -485,35 +485,58 @@ public class Ball : MonoBehaviour
 
             Vector2 avgNormal = Vector2.zero;
             int contacts = Mathf.Max(1, other.contactCount);
+
             for (int i = 0; i < other.contactCount; i++)
             {
                 avgNormal += other.GetContact(i).normal;
             }
+
             avgNormal /= contacts;
 
             if (avgNormal.sqrMagnitude > 0.0001f)
                 avgNormal.Normalize();
             else
-                avgNormal = Vector2.up; // fallback
+                avgNormal = Vector2.up;
 
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
-            if (other.gameObject.CompareTag("Brick") || other.gameObject.CompareTag("Boss"))
+
+
+            // =========================
+            // SHIELD
+            // =========================
+            if (other.gameObject.TryGetComponent<B_ShieldAbility>(out _))
             {
-                BrickHealthComponent bh = other.gameObject.GetComponent<BrickHealthComponent>();
-                //BrickBar bb = other.gameObject.GetComponent<BrickBar>();
+                return;
+            }
+
+
+            // =========================
+            // BRICK / BOSS
+            // =========================
+            if (other.gameObject.CompareTag("Brick") ||
+                other.gameObject.CompareTag("Boss"))
+            {
+                BrickHealthComponent bh =
+                    other.gameObject.GetComponent<BrickHealthComponent>();
 
                 if (_copyBall)
                 {
                     _currentBounce++;
+
                     if (_currentBounce > _maxBounce)
                         Destroy(gameObject);
                 }
+
                 _currentDelayTime = _delayTimeAfterHit;
 
                 OnBrickHit?.Invoke();
-                _damage = UnityEngine.Random.Range(_minDamage,_maxDamage) + _bonusDamage;
-                _abilityManager.NotifyBrickHit(bh, (_damage));
+
+                _damage =
+                    UnityEngine.Random.Range(_minDamage, _maxDamage)
+                    + _bonusDamage;
+
+                _abilityManager.NotifyBrickHit(bh, _damage);
             }
         }
     }

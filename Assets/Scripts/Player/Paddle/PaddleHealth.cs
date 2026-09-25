@@ -8,6 +8,7 @@ public class PaddleHealth : MonoBehaviour
     PaddleMovement _paddleMovement;
     PaddleVacoom _paddleVacoom;
     PaddleFeedbackManager _paddleFeedbackManager;
+    DeadZone _deadZone;
 
     SpriteRenderer _spriteRenderer;
 
@@ -21,11 +22,6 @@ public class PaddleHealth : MonoBehaviour
     public Action OnPaddleEnable;
     public Action<bool> SetBoolOnPaddleDisable;
 
-    [Header("Knockback")]
-    [SerializeField] float _knockbackDistance = 0.6f;
-    [SerializeField] float _knockbackDuration = 0.15f;
-    bool _isKnockbacking;
-
     public GameObject _hat;
 
     private void Awake()
@@ -34,6 +30,7 @@ public class PaddleHealth : MonoBehaviour
         _paddleVacoom = FindAnyObjectByType<PaddleVacoom>();
         _ball = FindAnyObjectByType<Ball>();   
         _paddleFeedbackManager = FindAnyObjectByType<PaddleFeedbackManager>();
+        _deadZone = FindAnyObjectByType<DeadZone>();
 
         _spriteRenderer = GetComponentInParent<SpriteRenderer>();
 
@@ -97,48 +94,24 @@ public class PaddleHealth : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (_isKnockbacking) return;
 
-        if (other.CompareTag("Brick")&& _spriteRenderer.enabled)
+        if (other.CompareTag("Brick"))
         {
-            _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
-            SetBoolOnPaddleDisable?.Invoke(true);
-            other.GetComponentInChildren<BrickHealthComponent>().OnDeathByBrick();
-            StartCoroutine(Knockback());
+            BrickHealthComponent _bhc = other.GetComponentInChildren<BrickHealthComponent>();
+            BrickBar _bb = other.GetComponent<BrickBar>();
+            _bhc.OnDeathByBrick();
+            _deadZone.ShieldTakingDamage(_bb.GetLayer());
         }
-        if (other.CompareTag("EnemyProjectile") && _spriteRenderer.enabled)
+        if (other.CompareTag("EnemyProjectile"))
         {
-            _paddleFeedbackManager.OnBeingKnockBack?.Invoke();
-            SetBoolOnPaddleDisable?.Invoke(true);
-            other.GetComponent<EnemyProjectile>().HandleProjectileDeath();
-            _ball.OnBallReset?.Invoke();
-            StartCoroutine(Knockback());
+            EnemyProjectile ep = other.GetComponent<EnemyProjectile>();
+
+            _deadZone.ShieldTakingDamage(ep.GetDamage());
+            ep.HandleProjectileDeath();
         }
     }
     public void PlayPaddleDisableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleDestroy, transform.position);
     public void PlayPaddleEnableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleRespawn, transform.position);
     public bool IsPaddleDead() => _isPaddleDead;
-    IEnumerator Knockback()
-    {
-        _isKnockbacking = true;
 
-
-        Vector3 startPos = transform.parent.position;
-        Vector3 targetPos = startPos + Vector3.down * _knockbackDistance;
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / _knockbackDuration;
-            transform.parent.position = Vector3.Lerp(startPos, targetPos, t);
-            yield return null;
-        }
-
-        // re-enable control
-        SetBoolOnPaddleDisable?.Invoke(false);
-
-        _isKnockbacking = false;
-
-        OnPaddleDisable?.Invoke();
-    }
 }

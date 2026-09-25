@@ -16,19 +16,20 @@ public class ShieldUIManager : MonoBehaviour
     private void Start()
     {
         _deadZone.OnShieldDamage += UpdateShieldUI;
-        _deadZone.OnShieldRecharging += UpdateShieldUI;
 
         UpdateShieldUI();
     }
     private void OnDestroy()
     {
         _deadZone.OnShieldDamage -= UpdateShieldUI;
-        _deadZone.OnShieldRecharging -= UpdateShieldUI;
 
     }
     public void UpdateShieldUI()
     {
+        _health.text =
+            Mathf.RoundToInt(_deadZone.GetCurrentShield()).ToString()
+            + "/"
+            + Mathf.RoundToInt(_deadZone.GetMaxShield()).ToString();
         _manaImage.fillAmount = _deadZone.GetShieldPercentage();
-        _health.text = _deadZone.GetCurrentShield().ToString() + '/' + _deadZone.GetMaxShield().ToString();
     }
 }

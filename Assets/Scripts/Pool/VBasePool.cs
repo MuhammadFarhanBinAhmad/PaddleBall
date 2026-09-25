@@ -8,7 +8,7 @@ public abstract class VBasePool : MonoBehaviour, IBasePool
 
     [SerializeField]List<GameObject> _objectPool = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         SpawnObject();
     }
