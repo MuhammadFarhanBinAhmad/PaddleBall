@@ -15,6 +15,7 @@ public class ComboBG
 public class BallUIManager : MonoBehaviour
 {
     Ball _ballManager;
+    PaddleFeedbackManager _paddleFeedbackManager;
 
     [Header("ComboUI")]
     [SerializeField] TextMeshProUGUI _currentComboText;
@@ -22,6 +23,8 @@ public class BallUIManager : MonoBehaviour
     [SerializeField] int _wordTextSize;
     [SerializeField] ComboBG[] _comboBGs;
     [SerializeField] Image _bg, _magicCircle;
+    [Header("DurabiltiyUI")]
+    [SerializeField] Image _durabilityCircle;
 
     [Header("Animation")]
     [SerializeField] AnimationCurve easeOutElastic;
@@ -55,6 +58,7 @@ public class BallUIManager : MonoBehaviour
     private void Awake()
     {
         _ballManager = FindAnyObjectByType<Ball>();
+        _paddleFeedbackManager = FindAnyObjectByType < PaddleFeedbackManager>();
 
     }
     void Start()
@@ -66,7 +70,10 @@ public class BallUIManager : MonoBehaviour
 
         _ballManager.OnBrickHit += UpdateComboUI;
         _ballManager.OnBrickHit += PlayComboAudio;
+        _ballManager.OnBrickHit += UpdateDurabilityUI;
         _ballManager.OnBallReset += UpdateComboUI;
+        _ballManager.OnBallReset += UpdateDurabilityUI;
+        _paddleFeedbackManager.OnHitBall += UpdateDurabilityUI;
 
         if (_comboPopup == null)
             _comboPopup = GetComponent<RectTransform>();
@@ -85,9 +92,11 @@ public class BallUIManager : MonoBehaviour
     private void OnDisable()
     {
         _ballManager.OnBrickHit -= UpdateComboUI;
-        _ballManager.OnBallHit -= PlayComboAudio;
-
+        _ballManager.OnBrickHit -= PlayComboAudio;
+        _ballManager.OnBrickHit -= UpdateDurabilityUI;
         _ballManager.OnBallReset -= UpdateComboUI;
+        _ballManager.OnBallReset -= UpdateDurabilityUI;
+        _paddleFeedbackManager.OnHitBall -= UpdateDurabilityUI;
     }
 
     public void UpdateComboUI()
@@ -248,5 +257,9 @@ public class BallUIManager : MonoBehaviour
 
         _comboPopup.anchoredPosition = targetPosition;
         comboPopupAnim = null;
+    }
+    public void UpdateDurabilityUI()
+    {
+        _durabilityCircle.fillAmount = _ballManager.GetDurabilityPercentage();
     }
 }

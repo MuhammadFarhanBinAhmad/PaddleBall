@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e479bbda8d451d740bd53cbfad504bcf, type: 3}
-  m_Name: OnBrickDestroy
+  m_Name: OnBrickHit
   m_EditorClassIdentifier: Assembly-CSharp::SO_FeedbackEffect
-  _duration: 0.2
-  _trauma: 0.25
+  _duration: 0.1
+  _trauma: 0.125
   _animCurve:
     serializedVersion: 2
     m_Curve:
@@ -28,9 +28,9 @@ MonoBehaviour:
       outWeight: 0.1302903
     - serializedVersion: 3
       time: 0.25
-      value: 0.75
-      inSlope: 0.72727275
-      outSlope: 0.72727275
+      value: 0.5
+      inSlope: 0.45454544
+      outSlope: 0.45454544
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -56,9 +56,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 0.1
+  animationDuration: 0.25
   _startscaleMultiplier: 1
-  _endscaleMultiplier: 1.25
+  _endscaleMultiplier: 1.05
   _vfxEffect: {fileID: 0}
   <sfx_feedback>k__BackingField:
     Guid:

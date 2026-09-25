@@ -84,6 +84,7 @@ public class BrickBar : MonoBehaviour
     [SerializeField] internal float _fallSpeed;
     [SerializeField] internal int _baseDamage;
     [SerializeField] internal SplineContainer _brickPath;
+    [SerializeField] GameObject parentObject;
     float progress;
     bool _speedDirty;
 
@@ -113,7 +114,7 @@ public class BrickBar : MonoBehaviour
         _essencePool = FindAnyObjectByType<EssencePool>();
 
         _brickUI = GetComponent<BrickUI>();
-        _brickHealthComponent = GetComponent<BrickHealthComponent>();
+        _brickHealthComponent = GetComponentInChildren<BrickHealthComponent>();
 
         _AnimCurveEffect = GetComponent<AnimationCurveEffect>();
 
@@ -223,7 +224,7 @@ public class BrickBar : MonoBehaviour
 
         ResetToDefault();
 
-        transform.parent.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
     void HandleDeathByPaddle()
     {

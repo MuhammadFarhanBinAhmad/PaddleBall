@@ -68,10 +68,6 @@ public class EnemyProjectile : MonoBehaviour
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
         }
-        if(other.gameObject.CompareTag("Ball"))
-        {
-            HandleProjectileDeath();
-        }
     }
 
     public int GetDamage() => _damage;

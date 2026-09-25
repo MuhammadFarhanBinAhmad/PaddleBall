@@ -98,9 +98,8 @@ public class PaddleHealth : MonoBehaviour
         if (other.CompareTag("Brick"))
         {
             BrickHealthComponent _bhc = other.GetComponentInChildren<BrickHealthComponent>();
-            BrickBar _bb = other.GetComponent<BrickBar>();
             _bhc.OnDeathByBrick();
-            _deadZone.ShieldTakingDamage(_bb.GetLayer());
+            _deadZone.ShieldTakingDamage(_bhc._brickBar.GetLayer());
         }
         if (other.CompareTag("EnemyProjectile"))
         {

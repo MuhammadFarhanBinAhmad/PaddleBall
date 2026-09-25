@@ -90,11 +90,11 @@ public class DeadZone : MonoBehaviour
             AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_essenceDestroyed, transform.position);
             te.gameObject.SetActive(false);
         }
-        if (other.CompareTag("Brick"))
+        if (other.GetComponent<BrickHealthComponent>() != null)
         {
-            BrickBar _bb = other.GetComponent<BrickBar>();
-            ShieldTakingDamage(_bb.GetLayer());
-            _bb.GetComponent<BrickHealthComponent>().OnDamage(999,STATUSTYPE.NONE,DeathCause.TOWER,true);
+            BrickHealthComponent _bb = other.GetComponent<BrickHealthComponent>();
+            ShieldTakingDamage(_bb._brickBar.GetLayer());
+            _bb.OnDamage(999,STATUSTYPE.NONE,DeathCause.TOWER,true);
         }
         //if(other.CompareTag("EnemyProjectile"))
         //{

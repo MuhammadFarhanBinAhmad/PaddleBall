@@ -16,11 +16,11 @@ MonoBehaviour:
   _childElementID: 1
   _elementID: 0
   _layerNumber: 0
-  _dropSpeed: 0.1
+  _dropSpeed: 0.05
   _APValue: 1
   _daytoUnlock: 0
   _tiers:
   - _health: 20
     _brickSprite:
     - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 4
+  _ability: 0

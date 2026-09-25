@@ -17,7 +17,7 @@ public class BrickHealthComponent : MonoBehaviour
     TowerManager _towerManager;
     AbilityManager abilityManager;
 
-    BrickBar _brickBar;
+    internal BrickBar _brickBar;
 
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
     List<STATUSTYPE> toRemove = new List<STATUSTYPE>();
@@ -210,8 +210,7 @@ public class BrickHealthComponent : MonoBehaviour
         {
             if (transform.CompareTag("Brick"))
             {
-                BrickBar bb = GetComponent<BrickBar>();
-                bb.HandleInstantKill(deathcause);
+                _brickBar.HandleInstantKill(deathcause);
             }
         }
     }

@@ -68,12 +68,16 @@ public class Ball : MonoBehaviour
     float _currentCoolDownPeriod;
     Coroutine _timeScaleRoutine;
     [SerializeField] bool _onAimingState;
+     bool _isBallDeactivate;
     [SerializeField] ParticleSystem _shotParticle;
 
     [Header("ManaBar")]
     [SerializeField] float _maxManaAmount;
     [SerializeField] float _currentManaAmount;
     [SerializeField] float _manaRegenRate;
+    [SerializeField] float _maxBallDurability;
+    [SerializeField] float _currentBallDurability;
+    [SerializeField] float _onHitDurabilityLost;
 
     [Header("Respawn")]
     public float _respawnTime;
@@ -91,7 +95,10 @@ public class Ball : MonoBehaviour
 
 
     [Header("Ball Feedback")]
+    [SerializeField] GameObject _ballHitVFX;
     [SerializeField] SO_FeedbackEffect so_OnBallHit;
+    [SerializeField] SO_FeedbackEffect so_OnHitBrick;
+
     // -------------------------
     // Push lock (prevents immediate re-attraction)
     // -------------------------
@@ -117,6 +124,7 @@ public class Ball : MonoBehaviour
         OnBallReset += DeactivateBall;
         //OnBallReset += ResetPosition;
         OnBallReset += PlayBallDestroyAudio;
+        OnBallReset += ResetBallDurability;
 
         OnBallDestroy += DestroyCopyBall;
         OnBallDestroy += PlayBallDestroyAudio;
@@ -130,7 +138,7 @@ public class Ball : MonoBehaviour
     private void Start()
     {
         _startingScale = transform.localScale;
-        _currentManaAmount = _maxManaAmount;
+        ResetBallDurability();
         _ballDirectionArrow.DisableArrow(false);
 
         StartCoroutine(AnimateBallRespawn());
@@ -157,6 +165,7 @@ public class Ball : MonoBehaviour
         OnBallReset -= DeactivateBall;
         //OnBallReset -= ResetPosition;
         OnBallReset -= PlayBallDestroyAudio;
+        OnBallReset -= ResetBallDurability;
 
         OnBallDestroy -= DestroyCopyBall;
         OnBallDestroy -= PlayBallDestroyAudio;
@@ -222,7 +231,7 @@ public class Ball : MonoBehaviour
         if (TimeManager.IsGamePause())
             return;
 
-        if (Input.GetMouseButton(1) && _currentCoolDownPeriod >= _coolDownPeriod) // holding
+        if (Input.GetMouseButton(1) && _currentCoolDownPeriod >= _coolDownPeriod && !_isBallDeactivate) // holding
         {
             if (!_onAimingState)
                 AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallSlowmo, transform.position);
@@ -253,7 +262,6 @@ public class Ball : MonoBehaviour
     {
         if (_currentManaAmount < _maxManaAmount)
             _currentManaAmount += _manaRegenRate * Time.deltaTime;
-
     }
 
     void RedirectBallToMouse()
@@ -393,7 +401,7 @@ public class Ball : MonoBehaviour
     public void DestroyCopyBall()
     {
         _abilityManager.NotifyBallDestroyed(this);
-        Destroy(gameObject);
+        //Destroy(gameObject);
 
     }
     public void ResettingBall()
@@ -454,6 +462,7 @@ public class Ball : MonoBehaviour
         _collider.enabled = false;
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
+        _isBallDeactivate = true;
     }
     public void ActivateBall()
     {
@@ -461,6 +470,7 @@ public class Ball : MonoBehaviour
         _spriteRenderer.enabled = true;
         _trailRenderer.Clear();
         _trailRenderer.enabled = true;
+        _isBallDeactivate = false;
     }
     public void PlayPaddleDeathEffect() => _deathEffect.gameObject.SetActive(true);
 
@@ -473,14 +483,13 @@ public class Ball : MonoBehaviour
             return;
 
         if (other.gameObject.CompareTag("Wall") ||
-            other.gameObject.CompareTag("Paddle") ||
             other.gameObject.CompareTag("Brick") ||
             other.gameObject.CompareTag("Boss") ||
             other.gameObject.CompareTag("Shield") ||
-            other.gameObject.CompareTag("EnemyProjectile"))
+            other.gameObject.CompareTag("Paddle"))
         {
             GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
-            GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
+            GameObject vfx = Instantiate(_ballHitVFX,transform.position, Quaternion.identity);
             OnBallHit?.Invoke();
 
             Vector2 avgNormal = Vector2.zero;
@@ -501,32 +510,28 @@ public class Ball : MonoBehaviour
             Vector2 opposite = -avgNormal;
             transform.up = opposite;
 
-
-            // =========================
-            // SHIELD
-            // =========================
-            if (other.gameObject.TryGetComponent<B_ShieldAbility>(out _))
+            if (other.gameObject.CompareTag("Paddle"))
             {
-                return;
+                ResetBallDurability();
             }
-
-
             // =========================
             // BRICK / BOSS
             // =========================
             if (other.gameObject.CompareTag("Brick") ||
                 other.gameObject.CompareTag("Boss"))
             {
+                HandleDurabilityLost();
+                GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnHitBrick);
                 BrickHealthComponent bh =
                     other.gameObject.GetComponent<BrickHealthComponent>();
 
-                if (_copyBall)
-                {
-                    _currentBounce++;
+                //if (_copyBall)
+                //{
+                //    _currentBounce++;
 
-                    if (_currentBounce > _maxBounce)
-                        Destroy(gameObject);
-                }
+                //    if (_currentBounce > _maxBounce)
+                //        Destroy(gameObject);
+                //}
 
                 _currentDelayTime = _delayTimeAfterHit;
 
@@ -538,8 +543,22 @@ public class Ball : MonoBehaviour
 
                 _abilityManager.NotifyBrickHit(bh, _damage);
             }
+
+            GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
         }
     }
+    void HandleDurabilityLost()
+    {
+        _currentBallDurability -= _onHitDurabilityLost;
+        if( _currentBallDurability < 0 )
+        {
+            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
+            GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
+            OnBallReset?.Invoke();
+        }
+    }
+    void ResetBallDurability()
+    { _currentBallDurability = _maxBallDurability; }
     //HELPER
     public int GetBallBaseDamage() => _damage;
     public void SetTimeScaleSmooth(float target, float duration)
@@ -584,4 +603,6 @@ public class Ball : MonoBehaviour
     public void IncreaseHomingStrength(float val) => _homingStrength += val;
 
     public void AddBonusDamage(int val) => _bonusDamage += val;
+
+    public float GetDurabilityPercentage() => _currentBallDurability / _maxBallDurability;
 }
