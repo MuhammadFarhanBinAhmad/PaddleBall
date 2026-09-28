@@ -29,13 +29,23 @@ public class PaddleMovement : MonoBehaviour
         if (_disablePaddleMovement)
             return;
 
-        float mouseX = Input.GetAxis("Mouse X");
-
-        if ((mouseX > 0 && transform.position.x < _maxXPos) ||
-            (mouseX < 0 && transform.position.x > -_maxXPos))
+        if (Input.GetKey(KeyCode.A) && transform.position.x > -_maxXPos)
         {
-            transform.position += Vector3.right * mouseX * _speed * Time.deltaTime;
+            transform.position += Vector3.left * _speed * Time.deltaTime;
         }
+
+        if (Input.GetKey(KeyCode.D) && transform.position.x < _maxXPos)
+        {
+            transform.position += Vector3.right * _speed * Time.deltaTime;
+        }
+
+        //float mouseX = Input.GetAxis("Mouse X");
+
+        //if ((mouseX > 0 && transform.position.x < _maxXPos) ||
+        //    (mouseX < 0 && transform.position.x > -_maxXPos))
+        //{
+        //    transform.position += Vector3.right * mouseX * _speed * Time.deltaTime;
+        //}
     }
 
     public void DisblePaddleMovement(bool disable)
