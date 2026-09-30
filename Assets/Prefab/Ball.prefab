@@ -171,9 +171,6 @@ MonoBehaviour:
   _maxManaAmount: 100
   _currentManaAmount: 0
   _manaRegenRate: 100
-  _maxBallDurability: 100
-  _currentBallDurability: 0
-  _onHitDurabilityLost: 25
   _respawnTime: 3
   _currentRespawnTimer: 0
   _respawnPos: {fileID: 0}
@@ -25087,7 +25084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5194783719524149919
 RectTransform:
   m_ObjectHideFlags: 0

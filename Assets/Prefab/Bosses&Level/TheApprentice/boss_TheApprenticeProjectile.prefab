@@ -169,3 +169,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile
   _soEnemyProjectile: {fileID: 11400000, guid: 1ba362f4fb0c08d429098ee6b3152c01, type: 2}
+  _timeBeforeDeactive: 5

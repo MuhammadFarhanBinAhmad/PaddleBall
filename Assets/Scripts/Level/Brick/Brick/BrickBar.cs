@@ -300,6 +300,8 @@ public class BrickBar : MonoBehaviour
         _elementID = _stats._elementID;
         _layerNumber = _stats._layerNumber;
         _brickHealthComponent.SetHealth(_stats._tiers[_layerNumber]._health);
+        if (_stats._AggresiveBrickStats != null)
+            _brickAbilityManager.SetAggresiveBrickStats(_stats._AggresiveBrickStats);
         _brickAbilityManager.ActivateAbilities(_stats._ability);
         _brickUI.PrepBrickLayerColour(_stats._layerNumber);
         _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());

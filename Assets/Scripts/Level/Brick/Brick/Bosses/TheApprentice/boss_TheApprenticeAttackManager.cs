@@ -259,7 +259,7 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
             yield return new WaitForSeconds(_projectileBuildUpAttack);
             GameObject proj = Instantiate(_projectile, _spawnPos.position, Quaternion.identity);
             EnemyProjectile ep = proj.GetComponent<EnemyProjectile>();
-            ep.ShootProjectile(_target);
+            //ep.ShootProjectile(_target);
             _conjuringProjectileEffect.SetActive(false);
             yield return new WaitForSeconds(_projectileRest);
         }

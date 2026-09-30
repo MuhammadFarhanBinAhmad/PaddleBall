@@ -44,9 +44,11 @@ public class Ball : MonoBehaviour
     internal bool _copyBall;
     int _currentBounce;
 
-    [Header("Homing (subtle)")]
     public float _delayTimeAfterHit;
     public float _currentDelayTime;
+
+    [Header("Homing (subtle)")]
+
     [Range(0f, 1f)]
     [SerializeField] float _homingStrength;
     [SerializeField] float _minVerticalForHoming;
@@ -75,9 +77,9 @@ public class Ball : MonoBehaviour
     [SerializeField] float _maxManaAmount;
     [SerializeField] float _currentManaAmount;
     [SerializeField] float _manaRegenRate;
-    [SerializeField] float _maxBallDurability;
-    [SerializeField] float _currentBallDurability;
-    [SerializeField] float _onHitDurabilityLost;
+    //[SerializeField] float _maxBallDurability;
+    //[SerializeField] float _currentBallDurability;
+    //[SerializeField] float _onHitDurabilityLost;
 
     [Header("Respawn")]
     public float _respawnTime;
@@ -549,16 +551,18 @@ public class Ball : MonoBehaviour
     }
     void HandleDurabilityLost()
     {
-        _currentBallDurability -= _onHitDurabilityLost;
-        if( _currentBallDurability < 0 )
-        {
-            GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
-            GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
-            OnBallReset?.Invoke();
-        }
+        //_currentBallDurability -= _onHitDurabilityLost;
+        //if( _currentBallDurability < 0 )
+        //{
+        //    GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
+        //    GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
+        //    OnBallReset?.Invoke();
+        //}
     }
     void ResetBallDurability()
-    { _currentBallDurability = _maxBallDurability; }
+    { 
+        //_currentBallDurability = _maxBallDurability; 
+    }
     //HELPER
     public int GetBallBaseDamage() => _damage;
     public void SetTimeScaleSmooth(float target, float duration)
@@ -604,5 +608,9 @@ public class Ball : MonoBehaviour
 
     public void AddBonusDamage(int val) => _bonusDamage += val;
 
-    public float GetDurabilityPercentage() => _currentBallDurability / _maxBallDurability;
+    public float GetDurabilityPercentage() 
+    {
+        //_currentBallDurability / _maxBallDurability;
+        return 0;
+    }
 }

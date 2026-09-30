@@ -13,9 +13,9 @@ public class TierContent
 public enum ABILITY
 {
     NONE = 0,
-    SHOOT_PROJECTILE_01 = 1 << 1,
-    DEFENSE_01 = 1 << 2,
-    SUPPORT_01 = 1 << 3,
+    SHOOT_PROJECTILE = 1 << 1,
+    DEFENSE = 1 << 2,
+    SUPPORT = 1 << 3,
 }
 public class SO_BrickHealthStats : ScriptableObject
 {
@@ -29,6 +29,7 @@ public class SO_BrickHealthStats : ScriptableObject
     public int _daytoUnlock;
     public List<TierContent> _tiers = new List<TierContent>();
     public ABILITY _ability;
+    public SO_AggresiveBrickStats _AggresiveBrickStats;
     //public List<Sprite> _brickSprite = new List<Sprite>();
 
 }

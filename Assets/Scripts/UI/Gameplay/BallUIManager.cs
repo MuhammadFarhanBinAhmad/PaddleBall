@@ -260,6 +260,6 @@ public class BallUIManager : MonoBehaviour
     }
     public void UpdateDurabilityUI()
     {
-        _durabilityCircle.fillAmount = _ballManager.GetDurabilityPercentage();
+        //_durabilityCircle.fillAmount = _ballManager.GetDurabilityPercentage();
     }
 }

@@ -1,9 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField]internal SO_EnemyProjectile _soEnemyProjectile;
-
+    [SerializeField] float _timeBeforeDeactive;
     Rigidbody2D _rigidbody2D;
 
     float _shootSpeed;
@@ -14,10 +15,19 @@ public class EnemyProjectile : MonoBehaviour
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
+    private void OnEnable()
+    {
+        StartCoroutine(DeactivateAfterTime());
+    }
     public virtual void SetUpProjectile()
     {
         _shootSpeed = _soEnemyProjectile._shootSpeed;
         _damage = _soEnemyProjectile._damage;
+    }
+    public virtual void SetUpProjectile(float speed, int damage)
+    {
+        _shootSpeed = speed;
+        _damage = damage;
     }
     public void ShootProjectile(Transform target)
     {
@@ -28,7 +38,6 @@ public class EnemyProjectile : MonoBehaviour
         Vector2 direction = (target.position - transform.position).normalized;
         ShootProjectile(direction);
     }
-
     public void ShootProjectile(Vector2 direction)
     {
         if (_rigidbody2D == null) return;
@@ -70,5 +79,11 @@ public class EnemyProjectile : MonoBehaviour
         }
     }
 
+    private IEnumerator DeactivateAfterTime()
+    {
+        yield return new WaitForSeconds(_timeBeforeDeactive);
+
+        HandleProjectileDeath();
+    }
     public int GetDamage() => _damage;
 }

@@ -18,7 +18,7 @@ public class boss_TheApprenticeMagicProjectile : EnemyProjectile
         if (other.gameObject.CompareTag("Ball"))
         {
             //Aim back to boss
-            ShootProjectile(_target);
+            //ShootProjectile(_target);
         }
     }
 
