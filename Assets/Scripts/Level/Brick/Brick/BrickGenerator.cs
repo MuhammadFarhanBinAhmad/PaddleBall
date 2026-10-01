@@ -57,6 +57,7 @@ public class BrickGenerator : MonoBehaviour
     int _APPerWaveForTheDay;
 
     [Header("BrickSpawn")]
+    [SerializeField] GameObject _spawnInBrickVFX;
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
     [SerializeField] float _capscaleMultiplier;
@@ -270,7 +271,7 @@ public class BrickGenerator : MonoBehaviour
 
             _brickCounter++;
             StartCoroutine(AnimateBrickSpawn(brick.transform));
-
+            GameObject vfx = Instantiate(_spawnInBrickVFX,brick.transform.position,Quaternion.identity);
             yield return null;
         }
 

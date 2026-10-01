@@ -3659,6 +3659,7 @@ MonoBehaviour:
   _firstAttributePoints: 30
   _lastAttributePoints: 300
   _attributePoints: 
+  _spawnInBrickVFX: {fileID: 289900962488667634, guid: 07c5e7c61d040ab4799b091575fbfab6, type: 3}
   easeOutElastic:
     serializedVersion: 2
     m_Curve:
@@ -3672,18 +3673,27 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.034618616
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1.1052481
-      outSlope: 1.1052481
+      time: 0.5
+      value: 1.25
+      inSlope: 0.13757789
+      outSlope: 0.13757789
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.09584093
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1.4301373
+      outSlope: 1.4301373
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.46802926
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 0.1
+  animationDuration: 0.25
   _capscaleMultiplier: 1.1
   _spawnedWaves: 
   _brickPrefab: {fileID: 5469620576531411634, guid: d4d61b26a923b094eb5bca5cec7d6c9c, type: 3}

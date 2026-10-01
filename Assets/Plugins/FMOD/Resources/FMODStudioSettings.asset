@@ -476,18 +476,8 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks:
-  - Master
-  Banks:
-  - Ability
-  - Ball
-  - Bricks
-  - CutScene
-  - Essence
-  - Music
-  - Paddle
-  - Time
-  - UI
+  MasterBanks: []
+  Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

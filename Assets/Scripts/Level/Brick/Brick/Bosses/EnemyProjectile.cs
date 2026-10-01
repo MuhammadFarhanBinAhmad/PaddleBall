@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField]internal SO_EnemyProjectile _soEnemyProjectile;
     [SerializeField] float _timeBeforeDeactive;
+    [SerializeField] TrailRenderer _trail;
     Rigidbody2D _rigidbody2D;
 
     float _shootSpeed;
@@ -17,6 +19,8 @@ public class EnemyProjectile : MonoBehaviour
     }
     private void OnEnable()
     {
+        _trail.Clear();
+        _trail.enabled = true;
         StartCoroutine(DeactivateAfterTime());
     }
     public virtual void SetUpProjectile()
@@ -51,7 +55,8 @@ public class EnemyProjectile : MonoBehaviour
     }
     public void HandleProjectileDeath()
     {
-        _damage =0;
+        _trail.enabled = false;
+        _damage = 0;
         _shootSpeed = 0;
         gameObject.SetActive(false);
     }
