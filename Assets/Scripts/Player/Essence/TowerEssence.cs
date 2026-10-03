@@ -66,6 +66,11 @@ public class TowerEssence : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float _maxAlpha;
     [SerializeField] float _alphaPingPongSpeed;
 
+    [Header("Gravity")]
+    [Tooltip("Downward acceleration when the essence is not being sucked.")]
+    [SerializeField] float _gravityStrength = 2f;
+    [Tooltip("Maximum falling speed.")]
+    [SerializeField] float _maxFallSpeed = 3f;
     void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
@@ -245,14 +250,22 @@ public class TowerEssence : MonoBehaviour
         if (_velocity.sqrMagnitude <= 0.000001f)
             return;
 
-        // Apply normal drag when not being sucked.
         if (!_isAttracted)
         {
-            _velocity *=
-                Mathf.Pow(
-                    normalDrag,
-                    Time.deltaTime
-                );
+            // Apply gravity, accelerating the essence downward.
+            _velocity.y -= _gravityStrength * Time.deltaTime;
+
+            // Clamp downward velocity.
+            _velocity.y = Mathf.Max(
+                _velocity.y,
+                -_maxFallSpeed
+            );
+
+            // Apply normal drag.
+            _velocity *= Mathf.Pow(
+                normalDrag,
+                Time.deltaTime
+            );
         }
 
         transform.position +=

@@ -29,7 +29,7 @@ public class SO_BrickHealthStats : ScriptableObject
     public int _daytoUnlock;
     public List<TierContent> _tiers = new List<TierContent>();
     public ABILITY _ability;
-    public SO_AggresiveBrickStats _AggresiveBrickStats;
+    public SO_BrickAbilityStats _BrickStats;
     //public List<Sprite> _brickSprite = new List<Sprite>();
 
 }

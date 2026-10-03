@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244c2b84ad2f87f4f8b6d2e7baab3fae, type: 3}
+  m_Name: Default
+  m_EditorClassIdentifier: Assembly-CSharp::SO_AggresiveBrickStats
+  _aggresiveBrick: 1
+  _defensiveBrick: 0
+  _supportBrick: 0
+  _shootInterval: 1
+  _damage: 1
+  _projectileSpeed: 35
+  _burstFire: 0
+  _shotgunFire: 0
+  _homingShot: 0
+  _sniperlaserShot: 0
+  _burstInterval: 0
+  _numberOfSuccession: 0
+  _numberOfProjectiles: 0
+  _shotAngle: 0
+  _buildUpTime: 0
+  _buildUpVFX: {fileID: 0}
+  _activateStaticShield: 0
+  _shieldSide: 0
+  _upTime: 0
+  _rechargeTime: 0
+  _activateMovingShield: 0
+  _movementSpeed: 0

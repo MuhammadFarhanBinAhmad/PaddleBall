@@ -11,9 +11,9 @@ public class BrickAbilityManager : MonoBehaviour
     
     public List<AbilityObject> _abilityList = new List<AbilityObject>();
 
-    SO_AggresiveBrickStats _AggresiveBrickStats;
+    SO_BrickAbilityStats _BrickAbilityStats;
 
-    public void SetAggresiveBrickStats(SO_AggresiveBrickStats stats) => _AggresiveBrickStats = stats;
+    public void SetBrickAbilityStats(SO_BrickAbilityStats stats) => _BrickAbilityStats = stats;
 
     public void ActivateAbilities(ABILITY _ABS)
     {
@@ -24,7 +24,11 @@ public class BrickAbilityManager : MonoBehaviour
             ability._gameObject.SetActive(isActive);
             if ((ability._ability & ABILITY.SHOOT_PROJECTILE) != 0)
             {
-                ability._gameObject.GetComponent<B_ShootProjectileAbility>().SetStats(_AggresiveBrickStats);
+                ability._gameObject.GetComponent<B_ShootProjectileAbility>().SetStats(_BrickAbilityStats);
+            }
+            if ((ability._ability & ABILITY.DEFENSE) != 0)
+            {
+                ability._gameObject.GetComponent<B_ShieldAbility>().SetStats(_BrickAbilityStats);
             }
         }
 

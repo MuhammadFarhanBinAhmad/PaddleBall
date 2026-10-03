@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class B_ShootProjectileAbility : MonoBehaviour
 {
-    SO_AggresiveBrickStats _stats;
+    SO_BrickAbilityStats _stats;
     [Header("Projectile Basic Stats")]
     ProjectilePool _projectilePool;
     [SerializeField] Transform _projSpawnPoint;
@@ -41,7 +41,7 @@ public class B_ShootProjectileAbility : MonoBehaviour
         _projectilePool = FindAnyObjectByType<ProjectilePool>();
         _target = FindAnyObjectByType<PaddleHealth>().transform;
     }
-    public void SetStats(SO_AggresiveBrickStats stats)
+    public void SetStats(SO_BrickAbilityStats stats)
     {
         _stats = stats;
 

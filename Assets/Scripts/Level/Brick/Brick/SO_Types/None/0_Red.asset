@@ -23,5 +23,5 @@ MonoBehaviour:
   - _health: 20
     _brickSprite:
     - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 2
-  _AggresiveBrickStats: {fileID: 11400000, guid: a754da51930ddce43bfc7d8897735fee, type: 2}
+  _ability: 0
+  _BrickStats: {fileID: 0}

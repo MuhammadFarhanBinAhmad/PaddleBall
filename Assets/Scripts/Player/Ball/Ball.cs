@@ -101,6 +101,13 @@ public class Ball : MonoBehaviour
     [SerializeField] SO_FeedbackEffect so_OnBallHit;
     [SerializeField] SO_FeedbackEffect so_OnHitBrick;
 
+    [Header("Ball Stability")]
+    [SerializeField] float _minimumVelocity;
+    [SerializeField] float _stuckVelocityThreshold;
+    Vector2 _lastStableDirection = Vector2.up;
+    [SerializeField] Vector2 _arenaMin;
+    [SerializeField] Vector2 _arenaMax;
+    Vector2 _lastSafePosition;
     // -------------------------
     // Push lock (prevents immediate re-attraction)
     // -------------------------
@@ -109,8 +116,15 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+
+        _rigidbody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Interpolate;
+        _rigidbody.sleepMode = RigidbodySleepMode2D.NeverSleep;
+        _rigidbody.freezeRotation = true;
+
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<CircleCollider2D>();
+
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _brickPool = FindAnyObjectByType<BrickPool>();
         _ballFeedbackManager = FindAnyObjectByType<BallFeedbackManager>();
@@ -205,9 +219,18 @@ public class Ball : MonoBehaviour
     private void FixedUpdate()
     {
         if (_rigidbody.linearVelocity.magnitude > _maxVelocity)
-            _rigidbody.linearVelocity = Vector2.ClampMagnitude(_rigidbody.linearVelocity, _maxVelocity);
-        HandleManaRegen();
+            _rigidbody.linearVelocity =
+                Vector2.ClampMagnitude(
+                    _rigidbody.linearVelocity,
+                    _maxVelocity
+                );
 
+        if (!_awaitingLaunch)
+        {
+            MaintainBallVelocity();
+        }
+
+        HandleManaRegen();
 
         if (_paddleHealth.IsPaddleDead())
             return;
@@ -218,13 +241,17 @@ public class Ball : MonoBehaviour
         HandleTimeScaleInput();
 
         if (pushLockTimer > 0f)
-            pushLockTimer = Mathf.Max(0f, pushLockTimer - Time.fixedDeltaTime);
+            pushLockTimer = Mathf.Max(
+                0f,
+                pushLockTimer - Time.fixedDeltaTime
+            );
 
         if (_currentDelayTime < 0)
             ApplyHoming();
         else
-            _currentDelayTime -= Time.deltaTime;
+            _currentDelayTime -= Time.fixedDeltaTime;
 
+        CheckBallBounds();
 
     }
 
@@ -490,6 +517,7 @@ public class Ball : MonoBehaviour
             other.gameObject.CompareTag("Shield") ||
             other.gameObject.CompareTag("Paddle"))
         {
+            StabilizeAfterCollision(other);
             GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
             GameObject vfx = Instantiate(_ballHitVFX,transform.position, Quaternion.identity);
             OnBallHit?.Invoke();
@@ -612,5 +640,87 @@ public class Ball : MonoBehaviour
     {
         //_currentBallDurability / _maxBallDurability;
         return 0;
+    }
+
+    private void MaintainBallVelocity()
+    {
+        Vector2 velocity = _rigidbody.linearVelocity;
+        float speed = velocity.magnitude;
+
+        if (speed > _stuckVelocityThreshold)
+        {
+            _lastStableDirection = velocity.normalized;
+        }
+
+        if (speed > 0.01f && speed < _minimumVelocity)
+        {
+            _rigidbody.linearVelocity =
+                velocity.normalized * _minimumVelocity;
+        }
+        else if (speed <= 0.01f)
+        {
+            _rigidbody.linearVelocity =
+                _lastStableDirection * _minimumVelocity;
+        }
+    }
+    private void StabilizeAfterCollision(Collision2D collision)
+    {
+        Vector2 velocity = _rigidbody.linearVelocity;
+
+        // Normal case — physics produced a good velocity.
+        if (velocity.sqrMagnitude >
+            _stuckVelocityThreshold *
+            _stuckVelocityThreshold)
+        {
+            _lastStableDirection = velocity.normalized;
+            return;
+        }
+
+        if (collision.contactCount <= 0)
+            return;
+
+        Vector2 averageNormal = Vector2.zero;
+
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            averageNormal += collision.GetContact(i).normal;
+        }
+
+        averageNormal.Normalize();
+
+        // Recover using the previous valid direction.
+        Vector2 recoveryDirection =
+            Vector2.Reflect(
+                _lastStableDirection,
+                averageNormal
+            ).normalized;
+
+        _rigidbody.linearVelocity =
+            recoveryDirection * _minimumVelocity;
+
+        _lastStableDirection = recoveryDirection;
+    }
+    private void CheckBallBounds()
+    {
+        Vector2 position = _rigidbody.position;
+
+        bool outOfBounds =
+            position.x < _arenaMin.x ||
+            position.x > _arenaMax.x ||
+            position.y < _arenaMin.y ||
+            position.y > _arenaMax.y;
+
+        if (!outOfBounds)
+        {
+            _lastSafePosition = position;
+            return;
+        }
+
+        Debug.LogWarning("Ball escaped play area. Recovering.");
+
+        _rigidbody.position = _lastSafePosition;
+
+        _rigidbody.linearVelocity =
+            _lastStableDirection * _minimumVelocity;
     }
 }

@@ -132,6 +132,8 @@ MonoBehaviour:
   _minAlpha: 0.3
   _maxAlpha: 1
   _alphaPingPongSpeed: 0.5
+  _gravityStrength: 10
+  _maxFallSpeed: 15
 --- !u!61 &3033111623831855939
 BoxCollider2D:
   m_ObjectHideFlags: 0
