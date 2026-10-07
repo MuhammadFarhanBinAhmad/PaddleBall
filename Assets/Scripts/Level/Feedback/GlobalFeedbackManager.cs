@@ -13,6 +13,8 @@ public class GlobalFeedbackManager : MonoBehaviour
 
     public Action PlayGlobalFeedback;
 
+    [SerializeField] SO_FeedbackEffect _resetFeedback;
+
     [Header("PlayerObjects")]
     [SerializeField] Transform _ballTransform;
     [SerializeField] Transform _paddleTransform;
@@ -92,6 +94,10 @@ public class GlobalFeedbackManager : MonoBehaviour
 
         PlayGlobalFeedback += PlayShakeWorldAnimation;
         PlayGlobalFeedback += PlayCamShakeEvent;
+
+        SetFeedbackValue(_resetFeedback);
+        PlayGlobalFeedback?.Invoke();
+
     }
 
     public void SetWall(List<GameObject> wall)

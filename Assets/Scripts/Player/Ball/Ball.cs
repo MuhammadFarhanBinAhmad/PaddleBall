@@ -723,4 +723,5 @@ public class Ball : MonoBehaviour
         _rigidbody.linearVelocity =
             _lastStableDirection * _minimumVelocity;
     }
+    public void AddMana(float mana) => _currentManaAmount += mana;
 }

@@ -6232,6 +6232,7 @@ MonoBehaviour:
   _baseFallSpeed: 0
   _fallSpeed: 1
   _baseDamage: 5
+  _manaToGive: 10
   _brickPath: {fileID: 0}
   parentObject: {fileID: 0}
   _onDamageAnimEffect: {fileID: 11400000, guid: 3f05282951564bf4588e34e29fdd91b7, type: 2}

@@ -56,6 +56,8 @@ public class BrickBar : MonoBehaviour
 {
     BrickUI _brickUI;
     BrickAbilityManager _brickAbilityManager;
+    Ball _ball;
+
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
     List<STATUSTYPE> toRemove = new List<STATUSTYPE>();
 
@@ -83,6 +85,7 @@ public class BrickBar : MonoBehaviour
     [SerializeField] internal float _baseFallSpeed;
     [SerializeField] internal float _fallSpeed;
     [SerializeField] internal int _baseDamage;
+    [SerializeField] float _manaToGive;
     [SerializeField] internal SplineContainer _brickPath;
     [SerializeField] GameObject parentObject;
     float progress;
@@ -112,6 +115,7 @@ public class BrickBar : MonoBehaviour
 
         _brickPool = FindAnyObjectByType<BrickPool>();
         _essencePool = FindAnyObjectByType<EssencePool>();
+        _ball = FindAnyObjectByType<Ball>();
 
         _brickUI = GetComponent<BrickUI>();
         _brickHealthComponent = GetComponentInChildren<BrickHealthComponent>();
@@ -198,6 +202,8 @@ public class BrickBar : MonoBehaviour
                         _AnimCurveEffect.PlayEffect(_onDamageAnimEffect, this.gameObject);
                         _damageParticle.Play();
                     }
+
+                    _ball.AddMana(_manaToGive);
                     break;
                 }
 
