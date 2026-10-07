@@ -125,7 +125,6 @@ public class TowerEssence : MonoBehaviour
         }
 
         Move();
-        CheckCollectionDistance();
     }
 
     void UpdateLifetime()
@@ -270,22 +269,6 @@ public class TowerEssence : MonoBehaviour
 
         transform.position +=
             (Vector3)(_velocity * Time.deltaTime);
-    }
-
-    void CheckCollectionDistance()
-    {
-        if (_paddleVacoom == null)
-            return;
-
-        Vector2 delta =
-            (Vector2)transform.position -
-            (Vector2)_paddleVacoom.transform.position;
-
-        if (delta.sqrMagnitude <=
-            _collectDistance * _collectDistance)
-        {
-            HandleCollection();
-        }
     }
 
     // -------------------------

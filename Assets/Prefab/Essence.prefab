@@ -105,19 +105,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1ed3d36bae39840b1f09e1e57b84ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerEssence
-  _essenceMinWorth: 3
+  _essenceMinWorth: 2
   _essenceMaxWorth: 5
   _essenceBonusMultiplier: 1.25
   _essenceExpirationTime:
   - 10
-  - 15
   - 20
-  - 25
+  - 30
+  - 45
   _essenceCurrentLiveTime: 0
   _light2D: {fileID: 8287269463037795241}
   _startIntensity: 5
   _endIntensity: 0
-  intensityDuration: 10
+  intensityDuration: 20
   maxSpeed: 50
   normalDrag: 0.25
   minImpulse: 0.5
@@ -178,7 +178,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!1 &2420200355732895348
 GameObject:

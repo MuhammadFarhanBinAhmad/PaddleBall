@@ -320,6 +320,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a39772603d5c5c4c9d3c71c99d34130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile
-  _soEnemyProjectile: {fileID: 11400000, guid: 1ba362f4fb0c08d429098ee6b3152c01, type: 2}
-  _timeBeforeDeactive: 5
+  _timeBeforeDeactive: 7
   _trail: {fileID: 5851215193737987442}

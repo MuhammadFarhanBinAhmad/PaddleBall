@@ -4,7 +4,6 @@ using static UnityEngine.ParticleSystem;
 
 public class EnemyProjectile : MonoBehaviour
 {
-    [SerializeField]internal SO_EnemyProjectile _soEnemyProjectile;
     [SerializeField] float _timeBeforeDeactive;
     [SerializeField] TrailRenderer _trail;
     Rigidbody2D _rigidbody2D;
@@ -19,28 +18,15 @@ public class EnemyProjectile : MonoBehaviour
     }
     private void OnEnable()
     {
-        _trail.Clear();
-        _trail.enabled = true;
         StartCoroutine(DeactivateAfterTime());
-    }
-    public virtual void SetUpProjectile()
-    {
-        _shootSpeed = _soEnemyProjectile._shootSpeed;
-        _damage = _soEnemyProjectile._damage;
     }
     public virtual void SetUpProjectile(float speed, int damage)
     {
+        _trail.Clear();
+        _trail.enabled = true;
+        _trail.Clear();
         _shootSpeed = speed;
         _damage = damage;
-    }
-    public void ShootProjectile(Transform target)
-    {
-        if (target == null) return;
-
-        SetUpProjectile();
-
-        Vector2 direction = (target.position - transform.position).normalized;
-        ShootProjectile(direction);
     }
     public void ShootProjectile(Vector2 direction)
     {

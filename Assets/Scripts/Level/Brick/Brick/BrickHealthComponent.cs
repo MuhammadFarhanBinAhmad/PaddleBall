@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.UI;
 using UnityEngine;
 [System.Serializable]
 public class ActiveStatusVFX

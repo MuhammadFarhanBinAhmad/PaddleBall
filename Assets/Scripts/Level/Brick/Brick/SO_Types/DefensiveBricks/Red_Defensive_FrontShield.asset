@@ -10,23 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: 1_Green
+  m_Name: Red_Defensive_FrontShield
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
   _parentElementID: 0
-  _childElementID: 2
-  _elementID: 1
-  _layerNumber: 1
+  _childElementID: 1
+  _elementID: 0
+  _layerNumber: 0
   _dropSpeed: 0.01
-  _APValue: 1
-  _daytoUnlock: 1
+  _APValue: 5
+  _daytoUnlock: 4
   _tiers:
   - _health: 20
     _brickSprite:
     - {fileID: 989652391, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: 1616271449, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - _health: 40
-    _brickSprite:
-    - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-    - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 0
-  _BrickStats: {fileID: 0}
+  _ability: 4
+  _BrickStats: {fileID: 11400000, guid: b5f16a65a18141349ae3ca8e64a6f885, type: 2}

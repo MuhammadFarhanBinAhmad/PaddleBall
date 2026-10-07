@@ -41,19 +41,18 @@ public class BrickGenerator : MonoBehaviour
     TimeManager _timeManager;
     BrickModifierList _brickModifierList;
     [SerializeField]LevelManager _levelManager;
-
+    [Header("Brick Info")]
     public List<SOBrickFormation> _brickFormationList = new List<SOBrickFormation>();
-
     public List<SO_BrickHealthStats> _brickTypesList;
     public List<SO_BrickHealthStats> _brickAvailableToSpawn = new List<SO_BrickHealthStats>();
-
     [SerializeField]List<SplineContainer>_brickPathList = new List<SplineContainer>();
 
     [Header("AttributePoints")]
-    TWEENTYPE _APTweenType;
-    [SerializeField] int _firstAttributePoints;
-    [SerializeField] int _lastAttributePoints;
+    [SerializeField] int _startAttributePoints;
+    [SerializeField] int _minAttributePointsGrowth;
+    [SerializeField] int _maxAttributePointsGrowth;
     public int[] _attributePoints;
+    [SerializeField] TWEENTYPE _APTweenType;
     int _APPerWaveForTheDay;
 
     [Header("BrickSpawn")]
@@ -198,7 +197,7 @@ public class BrickGenerator : MonoBehaviour
 
             float easedStart = TweenService.GetEased(tStart, _APTweenType);
 
-            float val = Mathf.Lerp(_firstAttributePoints, _lastAttributePoints, easedStart);
+            float val = Mathf.Lerp(_minAttributePointsGrowth, _maxAttributePointsGrowth, easedStart);
 
             _attributePoints[i] = Mathf.RoundToInt(val);
         }
@@ -256,6 +255,7 @@ public class BrickGenerator : MonoBehaviour
             }
             bb.SetBrick(p.stats);
             bb.SetBrickPath(_brickPathList[p.index]);
+
 
             if (_brickModifierList != null &&
                 _timeManager.GetTotalDayPass() >= _brickModifierList._dayFirstModiferCheckUnlock)

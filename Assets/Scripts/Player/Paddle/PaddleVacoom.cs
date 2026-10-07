@@ -258,10 +258,6 @@ public class PaddleVacoom : MonoBehaviour
             _paddleInhale.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
-    /// <summary>
-    /// Returns a normalized forward direction vector pointing from this object to the mouse world position.
-    /// Falls back to transform.up if mouse world position is essentially the same as this object's position.
-    /// </summary>
     Vector2 GetMouseForward()
     {
         if (_mainCamera == null)
@@ -333,6 +329,13 @@ public class PaddleVacoom : MonoBehaviour
         }
 
         return transform.up.normalized;
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.GetComponent<TowerEssence>() != null)
+        {
+            other.GetComponent<TowerEssence>().HandleCollection();
+        }
     }
 
 

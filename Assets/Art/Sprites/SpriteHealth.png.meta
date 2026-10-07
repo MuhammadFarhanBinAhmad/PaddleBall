@@ -118,9 +118,9 @@ TextureImporter:
       name: SpriteHealth_0
       rect:
         serializedVersion: 2
-        x: 20
+        x: 430
         y: 345
-        width: 406
+        width: 407
         height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -140,7 +140,7 @@ TextureImporter:
       name: SpriteHealth_1
       rect:
         serializedVersion: 2
-        x: 430
+        x: 839
         y: 345
         width: 407
         height: 76
@@ -162,7 +162,7 @@ TextureImporter:
       name: SpriteHealth_2
       rect:
         serializedVersion: 2
-        x: 839
+        x: 1250
         y: 345
         width: 407
         height: 76
@@ -184,7 +184,7 @@ TextureImporter:
       name: SpriteHealth_3
       rect:
         serializedVersion: 2
-        x: 1250
+        x: 1659
         y: 345
         width: 407
         height: 76
@@ -206,9 +206,9 @@ TextureImporter:
       name: SpriteHealth_4
       rect:
         serializedVersion: 2
-        x: 1659
+        x: 2070
         y: 345
-        width: 407
+        width: 406
         height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -228,10 +228,10 @@ TextureImporter:
       name: SpriteHealth_5
       rect:
         serializedVersion: 2
-        x: 2070
-        y: 345
+        x: 20
+        y: 266
         width: 406
-        height: 76
+        height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,9 +250,9 @@ TextureImporter:
       name: SpriteHealth_6
       rect:
         serializedVersion: 2
-        x: 20
+        x: 430
         y: 266
-        width: 406
+        width: 407
         height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -272,7 +272,7 @@ TextureImporter:
       name: SpriteHealth_7
       rect:
         serializedVersion: 2
-        x: 430
+        x: 839
         y: 266
         width: 407
         height: 74
@@ -294,7 +294,7 @@ TextureImporter:
       name: SpriteHealth_8
       rect:
         serializedVersion: 2
-        x: 839
+        x: 1250
         y: 266
         width: 407
         height: 74
@@ -316,7 +316,7 @@ TextureImporter:
       name: SpriteHealth_9
       rect:
         serializedVersion: 2
-        x: 1250
+        x: 1659
         y: 266
         width: 407
         height: 74
@@ -338,9 +338,9 @@ TextureImporter:
       name: SpriteHealth_10
       rect:
         serializedVersion: 2
-        x: 1659
+        x: 2070
         y: 266
-        width: 407
+        width: 406
         height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -360,8 +360,8 @@ TextureImporter:
       name: SpriteHealth_11
       rect:
         serializedVersion: 2
-        x: 2070
-        y: 266
+        x: 20
+        y: 186
         width: 406
         height: 74
       alignment: 0
@@ -382,9 +382,9 @@ TextureImporter:
       name: SpriteHealth_12
       rect:
         serializedVersion: 2
-        x: 20
+        x: 430
         y: 186
-        width: 406
+        width: 407
         height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -404,7 +404,7 @@ TextureImporter:
       name: SpriteHealth_13
       rect:
         serializedVersion: 2
-        x: 430
+        x: 839
         y: 186
         width: 407
         height: 74
@@ -426,7 +426,7 @@ TextureImporter:
       name: SpriteHealth_14
       rect:
         serializedVersion: 2
-        x: 839
+        x: 1250
         y: 186
         width: 407
         height: 74
@@ -448,7 +448,7 @@ TextureImporter:
       name: SpriteHealth_15
       rect:
         serializedVersion: 2
-        x: 1250
+        x: 1659
         y: 186
         width: 407
         height: 74
@@ -470,9 +470,9 @@ TextureImporter:
       name: SpriteHealth_16
       rect:
         serializedVersion: 2
-        x: 1659
+        x: 2070
         y: 186
-        width: 407
+        width: 406
         height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -492,10 +492,10 @@ TextureImporter:
       name: SpriteHealth_17
       rect:
         serializedVersion: 2
-        x: 2070
-        y: 186
+        x: 20
+        y: 105
         width: 406
-        height: 74
+        height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -514,9 +514,9 @@ TextureImporter:
       name: SpriteHealth_18
       rect:
         serializedVersion: 2
-        x: 20
+        x: 430
         y: 105
-        width: 406
+        width: 407
         height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -536,7 +536,7 @@ TextureImporter:
       name: SpriteHealth_19
       rect:
         serializedVersion: 2
-        x: 430
+        x: 839
         y: 105
         width: 407
         height: 76
@@ -558,7 +558,7 @@ TextureImporter:
       name: SpriteHealth_20
       rect:
         serializedVersion: 2
-        x: 839
+        x: 1250
         y: 105
         width: 407
         height: 76
@@ -580,7 +580,7 @@ TextureImporter:
       name: SpriteHealth_21
       rect:
         serializedVersion: 2
-        x: 1250
+        x: 1659
         y: 105
         width: 407
         height: 76
@@ -602,9 +602,9 @@ TextureImporter:
       name: SpriteHealth_22
       rect:
         serializedVersion: 2
-        x: 1659
+        x: 2070
         y: 105
-        width: 407
+        width: 406
         height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -624,10 +624,10 @@ TextureImporter:
       name: SpriteHealth_23
       rect:
         serializedVersion: 2
-        x: 2070
-        y: 105
+        x: 20
+        y: 25
         width: 406
-        height: 76
+        height: 75
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -646,10 +646,10 @@ TextureImporter:
       name: SpriteHealth_24
       rect:
         serializedVersion: 2
-        x: 20
-        y: 16
-        width: 406
-        height: 74
+        x: 430
+        y: 25
+        width: 407
+        height: 75
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -668,10 +668,10 @@ TextureImporter:
       name: SpriteHealth_25
       rect:
         serializedVersion: 2
-        x: 431
-        y: 16
-        width: 404
-        height: 74
+        x: 839
+        y: 25
+        width: 407
+        height: 75
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -690,10 +690,10 @@ TextureImporter:
       name: SpriteHealth_26
       rect:
         serializedVersion: 2
-        x: 840
-        y: 16
-        width: 405
-        height: 74
+        x: 1250
+        y: 25
+        width: 407
+        height: 75
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -704,6 +704,28 @@ TextureImporter:
       bones: []
       spriteID: 911a954eb4c698c48ac9af31f54bc89c
       internalID: 1616271449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteHealth_27
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 24
+        width: 411
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87ae672cc0cb50d4fa5d3d7488e87f76
+      internalID: 989652391
       vertices: []
       indices: 
       edges: []
@@ -744,6 +766,7 @@ TextureImporter:
       SpriteHealth_24: 19427120
       SpriteHealth_25: -129122643
       SpriteHealth_26: 1616271449
+      SpriteHealth_27: 989652391
       SpriteHealth_3: -1677729360234972228
       SpriteHealth_4: 9034449238214913990
       SpriteHealth_5: 1148709287045872691

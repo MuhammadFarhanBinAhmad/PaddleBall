@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,7 @@ public class TimeManager : MonoBehaviour
     StoreOverlayUI _overlayUI;
     BossManager _bossManager;
     EpisodeManager _episodeManager;
+    TowerManager _towerManager;
 
     [Header("TimeKeeper")]
     [SerializeField] int _maxGameDuration;
@@ -41,13 +43,20 @@ public class TimeManager : MonoBehaviour
     [SerializeField] float _currentRealTimePass;
 
     [Header("BackGround")]
+    [SerializeField] List<Sprite> _dayBGList = new List<Sprite>();
+    [SerializeField] List<Sprite> _nightBGList = new List<Sprite>();
     [SerializeField] float _backgroundFadeDuration = 1f;
-    [SerializeField] SpriteRenderer _dayBG;
-    [SerializeField] SpriteRenderer _nightBG;
+    int _currentBGIndex = 1;
+    [SerializeField] SpriteRenderer[] _dayBG;
+    [SerializeField] SpriteRenderer[] _nightBG;
     [SerializeField] SpriteRenderer _frontCloud,_backCloud;
     [SerializeField] Color _dayFrontCloudShade, _nightFrontCloudShade;
     [SerializeField] Color _dayBackCloudShade, _nightBackCloudShade;
-
+    [Header("Background Movement")]
+    [SerializeField] float _backgroundMoveDuration;
+    [SerializeField] float _backgroundMoveValue;
+    [SerializeField] Transform _bgStartPos,_bgEndPos;
+    Coroutine _backgroundMoveCoroutine;
     bool _startDayTimer;
     bool _wasDayTime;
 
@@ -58,6 +67,7 @@ public class TimeManager : MonoBehaviour
         _brickpool = FindAnyObjectByType<BrickPool>();
         _episodeManager = FindAnyObjectByType<EpisodeManager>();
         _overlayUI = FindAnyObjectByType<StoreOverlayUI>();
+        _towerManager = FindAnyObjectByType<TowerManager>();
     }
 
     private void Start()
@@ -77,6 +87,9 @@ public class TimeManager : MonoBehaviour
 
         _onBossDefeated += SetBossDefeated;
         _onBossDefeated += StartDayTimer;
+
+        _towerManager.OnHeightIncrease += MoveBackgroundsY;
+
 
         _daysDuration = _fullDayDuration;
         _currentDayDuration = _daysDuration;
@@ -103,6 +116,8 @@ public class TimeManager : MonoBehaviour
         _dayPass -= _storeAbilityManager.ResetRoroll;
         _dayPass -= _overlayUI.ResetItems;
         _dayPass -= _overlayUI.UpdateRerollText;
+
+        _towerManager.OnHeightIncrease -= MoveBackgroundsY;
     }
 
     private void Update()
@@ -111,12 +126,6 @@ public class TimeManager : MonoBehaviour
             return;
 
         CountDayTime();
-
-        // Always progresses according to the regular 24-hour cycle
-        //_currentGameTime += Time.deltaTime * _daySpeedMultiplier;
-
-        //if (_currentGameTime >= _fullDayDuration)
-        //    _currentGameTime -= _fullDayDuration;
 
         _currentRealTimePass += Time.deltaTime;
     }
@@ -143,7 +152,8 @@ public class TimeManager : MonoBehaviour
                 {
                     Debug.Log("06:00 - DAY TIME");
 
-                    FadeSpriteAlpha(_nightBG, 0f);
+                    FadeSpriteAlpha(_nightBG[0], 0f);
+                    FadeSpriteAlpha(_nightBG[1], 0f);
                     FadeSpriteColor(_frontCloud, _dayFrontCloudShade);
                     FadeSpriteColor(_backCloud, _dayBackCloudShade);
                     AudioManager.Instance.SetMusicArea(MUSIC_TRANSISTION.DAY);
@@ -152,7 +162,8 @@ public class TimeManager : MonoBehaviour
                 {
                     Debug.Log("18:00 - NIGHT TIME");
 
-                    FadeSpriteAlpha(_nightBG, 1f);
+                    FadeSpriteAlpha(_nightBG[0], 1f);
+                    FadeSpriteAlpha(_nightBG[1], 1f);
                     FadeSpriteColor(_frontCloud, _nightFrontCloudShade);
                     FadeSpriteColor(_backCloud, _nightBackCloudShade);
                     AudioManager.Instance.SetMusicArea(MUSIC_TRANSISTION.NIGHT);
@@ -359,5 +370,118 @@ public class TimeManager : MonoBehaviour
 
         // Ensure final colour is exact
         sprite.color = target;
+    }
+    public void MoveBackgroundsY()
+    {
+        if (_backgroundMoveCoroutine != null)
+            StopCoroutine(_backgroundMoveCoroutine);
+
+        _backgroundMoveCoroutine = StartCoroutine(
+            MoveBackgroundsYRoutine(_backgroundMoveValue)
+        );
+    }
+
+    private IEnumerator MoveBackgroundsYRoutine(float targetY)
+    {
+        // Store the starting positions
+        List<Vector3> dayStartPositions = new List<Vector3>();
+        List<Vector3> nightStartPositions = new List<Vector3>();
+
+        foreach (SpriteRenderer bg in _dayBG)
+        {
+            if (bg != null)
+                dayStartPositions.Add(bg.transform.position);
+        }
+
+        foreach (SpriteRenderer bg in _nightBG)
+        {
+            if (bg != null)
+                nightStartPositions.Add(bg.transform.position);
+        }
+
+        // Get the starting Y position from each background
+        float timer = 0f;
+
+        while (timer < _backgroundMoveDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t = Mathf.Clamp01(
+                timer / _backgroundMoveDuration
+            );
+
+            // Move day backgrounds
+            int dayIndex = 0;
+            foreach (SpriteRenderer bg in _dayBG)
+            {
+                if (bg == null)
+                    continue;
+
+                Vector3 pos = bg.transform.position;
+                pos.y = Mathf.Lerp(
+                    dayStartPositions[dayIndex].y,
+                    bg.transform.position.y + targetY,
+                    t
+                );
+
+                bg.transform.position = pos;
+                dayIndex++;
+            }
+
+            // Move night backgrounds
+            int nightIndex = 0;
+            foreach (SpriteRenderer bg in _nightBG)
+            {
+                if (bg == null)
+                    continue;
+
+                Vector3 pos = bg.transform.position;
+                pos.y = Mathf.Lerp(
+                    nightStartPositions[nightIndex].y,
+                    bg.transform.position.y + targetY,
+                    t
+                );
+
+                bg.transform.position = pos;
+                nightIndex++;
+            }
+
+            yield return null;
+        }
+
+        // Ensure both backgrounds reach the exact target Y
+        foreach (SpriteRenderer bg in _dayBG)
+        {
+            if (bg == null)
+                continue;
+
+            Vector3 pos = bg.transform.position;
+            pos.y += targetY;
+            bg.transform.position = pos;
+
+            if( bg.transform.position.y < _bgEndPos.position.y)
+            {
+                bg.transform.position = _bgStartPos.position;
+                _currentBGIndex++;
+                bg.sprite = _dayBGList[_currentBGIndex];
+            }
+        }
+
+        foreach (SpriteRenderer bg in _nightBG)
+        {
+            if (bg == null)
+                continue;
+
+            Vector3 pos = bg.transform.position;
+            pos.y += targetY;
+            bg.transform.position = pos;
+            if (bg.transform.position.y < _bgEndPos.position.y)
+            {
+                bg.transform.position = _bgStartPos.position;
+                bg.sprite = _dayBGList[_currentBGIndex];
+            }
+        }
+
+        _backgroundMoveCoroutine = null;
     }
 }

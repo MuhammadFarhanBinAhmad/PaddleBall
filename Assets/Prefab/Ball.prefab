@@ -170,7 +170,7 @@ MonoBehaviour:
   _shotParticle: {fileID: 641955743365530108}
   _maxManaAmount: 100
   _currentManaAmount: 0
-  _manaRegenRate: 100
+  _manaRegenRate: 50
   _respawnTime: 3
   _currentRespawnTimer: 0
   _respawnPos: {fileID: 0}
@@ -223,8 +223,8 @@ MonoBehaviour:
   _ballHitVFX: {fileID: 5709904626060109338, guid: 43e0f1090bf59244981920012f3ba2a7, type: 3}
   so_OnBallHit: {fileID: 11400000, guid: f31a311adb73fe2478ac6882ddb40fe7, type: 2}
   so_OnHitBrick: {fileID: 11400000, guid: 29e1fbf2e6e5d8440b8ee142d66aa7fa, type: 2}
-  _minimumVelocity: 50
-  _stuckVelocityThreshold: 50
+  _minimumVelocity: 75
+  _stuckVelocityThreshold: 75
   _arenaMin: {x: -200, y: -125}
   _arenaMax: {x: 200, y: 125}
 --- !u!114 &3762535270675772051

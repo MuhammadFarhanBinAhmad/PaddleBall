@@ -15,19 +15,19 @@ MonoBehaviour:
   _aggresiveBrick: 1
   _defensiveBrick: 0
   _supportBrick: 0
-  _shootInterval: 1
+  _shootInterval: 2
   _damage: 1
-  _projectileSpeed: 35
+  _projectileSpeed: 30
   _burstFire: 0
   _shotgunFire: 0
   _homingShot: 0
-  _sniperlaserShot: 0
+  _sniperlaserShot: 1
   _burstInterval: 0
   _numberOfSuccession: 0
   _numberOfProjectiles: 0
   _shotAngle: 0
-  _buildUpTime: 0
-  _buildUpVFX: {fileID: 0}
+  _buildUpTime: 1
+  _buildUpVFX: {fileID: 3526117444712284641, guid: cde4bb5490eec2247840c906d766e4bb, type: 3}
   _activateStaticShield: 0
   _shieldSide: 0
   _upTime: 0

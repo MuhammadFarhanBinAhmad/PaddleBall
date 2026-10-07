@@ -301,7 +301,7 @@ public class BrickBar : MonoBehaviour
         _layerNumber = _stats._layerNumber;
         _brickHealthComponent.SetHealth(_stats._tiers[_layerNumber]._health);
 
-        if (_stats._BrickStats != null && (_stats._ability & ABILITY.NONE) !=0)
+        if (_stats._BrickStats != null)
         {
             _brickAbilityManager.SetBrickAbilityStats(_stats._BrickStats);
             _brickAbilityManager.ActivateAbilities(_stats._ability);
