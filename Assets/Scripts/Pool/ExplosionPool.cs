@@ -4,14 +4,18 @@ using UnityEngine;
 public class ExplosionPool : MonoBehaviour
 {
     public GameObject _explosionPrefab;
-
     public List<GameObject> _explosionPrefabPool = new List<GameObject>();
-
     [SerializeField] int _explosionToSpawn;
+
+    AbilityManager _abilityManager;
 
     private void OnEnable()
     {
         SpawnAllExplosion();
+    }
+    private void Awake()
+    {
+        _abilityManager = FindAnyObjectByType<AbilityManager>();
     }
     void SpawnAllExplosion()
     {
@@ -36,4 +40,26 @@ public class ExplosionPool : MonoBehaviour
         }
         return null;
     }
+    public void SpawnExplosion(ExplosionContext context,Transform pos)
+    {
+
+        GameObject explosionGO = GetExplosion();
+        explosionGO.transform.position = transform.position;
+        var ed = explosionGO.GetComponent<ExplosionDamage>();
+        if (ed == null) return;
+
+        ExplosionContext ectx = new ExplosionContext
+        {
+            _source = gameObject,
+            _position = pos.position,
+            _statusEffect = null
+        };
+        ectx._Stats[STATID.BASE_DAMAGE] = context._Stats[STATID.BASE_DAMAGE];
+        ectx._Stats[STATID.EXPLOSION_RADIUS] = context._Stats[STATID.EXPLOSION_RADIUS];
+
+        // Let other abilities modify the explosion data
+        _abilityManager.ApplyExplosionModifiers(null, ectx);
+        ed.Initialize(ectx, true);
+    }    
+
 }

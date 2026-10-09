@@ -132,7 +132,6 @@ public class Ball : MonoBehaviour
         _paddleHealth = FindAnyObjectByType<PaddleHealth>();
 
         OnBrickHit += IncreaseCombo;
-        OnBrickHit += _ballFeedbackManager.UpdateGlowIntensity;
 
         OnBallReset += ResetCombo;
         OnBallReset += ResetBallRespawnTimer;
@@ -173,7 +172,6 @@ public class Ball : MonoBehaviour
     private void OnDisable()
     {
         OnBrickHit -= IncreaseCombo;
-        OnBrickHit -= _ballFeedbackManager.UpdateGlowIntensity;
 
         OnBallReset -= ResetCombo;
         OnBallReset -= ResetBallRespawnTimer;
@@ -195,12 +193,12 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        if (_paddleHealth.IsPaddleDead())
-        {
-            TimeManager.ResetTimeScale();
-            _ballDirectionArrow.DisableArrow(true);
-            return;
-        }
+        //if (_paddleHealth.IsPaddleDead())
+        //{
+        //    TimeManager.ResetTimeScale();
+        //    _ballDirectionArrow.DisableArrow(true);
+        //    return;
+        //}
 
         if(!_isBallDead)
             return;
@@ -218,6 +216,9 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_isBallDeactivate)
+            return;
+
         if (_rigidbody.linearVelocity.magnitude > _maxVelocity)
             _rigidbody.linearVelocity =
                 Vector2.ClampMagnitude(
@@ -252,7 +253,6 @@ public class Ball : MonoBehaviour
             _currentDelayTime -= Time.fixedDeltaTime;
 
         CheckBallBounds();
-
     }
 
     void HandleTimeScaleInput()
@@ -403,7 +403,6 @@ public class Ball : MonoBehaviour
     {
         transform.position = position;
         _rigidbody.linearVelocity = Vector2.zero;
-        _rigidbody.angularVelocity = 0f;
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
         _awaitingLaunch = true;
     }
@@ -488,17 +487,25 @@ public class Ball : MonoBehaviour
     public void DeactivateBall()
     {
         _ballDirectionArrow.DisableArrow(true);
+
         _collider.enabled = false;
         _spriteRenderer.enabled = false;
         _trailRenderer.enabled = false;
+
         _isBallDeactivate = true;
+
+        _rigidbody.linearVelocity = Vector2.zero;
+        _rigidbody.angularVelocity = 0f;
+        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
     }
     public void ActivateBall()
     {
         _ballDirectionArrow.DisableArrow(false);
+
         _spriteRenderer.enabled = true;
         _trailRenderer.Clear();
         _trailRenderer.enabled = true;
+
         _isBallDeactivate = false;
     }
     public void PlayPaddleDeathEffect() => _deathEffect.gameObject.SetActive(true);

@@ -12,12 +12,6 @@ public class BallFeedbackManager : MonoBehaviour
     [SerializeField] Sprite _startSpirite,_hitSprite;
     [SerializeField] float _spriteChangeTime;
     Coroutine _changeSpriteCoroutine;
-
-    [Header("Glow")]
-    [SerializeField] Light2D _glowLight;
-    [SerializeField] float _startLightIntensity;
-    [SerializeField] float[] _glowThreshold;
-    [SerializeField] float[] _glowIntensity;
     private void Start()
     {
         _ballManager = FindAnyObjectByType<Ball>();
@@ -25,7 +19,6 @@ public class BallFeedbackManager : MonoBehaviour
         _ballManager.OnBallHit += ChangeSpriteOnHit;
         _ballManager.OnBallHit += PlayHitWallAudio;
 
-        _ballManager.OnBallReset += ResetGlow;
 
     }
     private void OnDestroy()
@@ -33,7 +26,6 @@ public class BallFeedbackManager : MonoBehaviour
         _ballManager.OnBallHit -= ChangeSpriteOnHit;
         _ballManager.OnBallHit -= PlayHitWallAudio;
 
-        _ballManager.OnBallReset -= ResetGlow;
     }
     public void ChangeSpriteOnHit()
     {
@@ -55,19 +47,6 @@ public class BallFeedbackManager : MonoBehaviour
         float randomZ = UnityEngine.Random.Range(0f, 360f);
         transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
     }
-    public void UpdateGlowIntensity()
-    {
-        int combo = _ballManager._currentCombo;
 
-        for (int i = _glowThreshold.Length - 1; i >= 0; i--)
-        {
-            if (combo >= _glowThreshold[i])
-            {
-                _glowLight.intensity = _glowIntensity[i];
-                return;
-            }
-        }
-    }
     public void PlayHitWallAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallHitWall, transform.position);
-    void ResetGlow() => _glowLight.intensity = _startLightIntensity;
 }

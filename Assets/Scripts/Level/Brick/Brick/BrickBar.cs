@@ -48,6 +48,7 @@ public class StatusInstance
 
     public bool resetStackLifeTimeUponHit;
     public GameObject spawnPrefab;
+    public ExplosionContext _explosiveContext;
 
     public bool affectsSpeed;
     public float speedMultiplier;

@@ -17,7 +17,7 @@ public class AbilityContext
     public Dictionary<STATUSTYPE, AbilityContext> _abilityContext = new Dictionary<STATUSTYPE,AbilityContext>();
 
     public GameObject _spawnPrefab;
-
+    public ExplosionContext _explosionContext;
     public AbilityContext()
     {
         foreach (STATID id in Enum.GetValues(typeof(STATID)))

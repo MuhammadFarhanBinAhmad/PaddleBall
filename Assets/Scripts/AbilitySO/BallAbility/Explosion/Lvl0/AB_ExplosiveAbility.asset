@@ -53,7 +53,7 @@ MonoBehaviour:
   _layerToDestroy: 0
   _instantKillThreshold: 0
   _explosionDamageMultiplier: 0.5
-  _explosionRadius: 20
+  _explosionRadius: 30
   _explosionSizeMultiplier: 1
   _shieldMultiplier: 0
   _shieldAdd: 0

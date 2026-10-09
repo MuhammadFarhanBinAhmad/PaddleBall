@@ -10,7 +10,7 @@ public class ActiveStatusVFX
 }
 public class BrickHealthComponent : MonoBehaviour
 {
-    EssencePool _essencePool;
+    ExplosionPool _explosionPool;
 
     TowerManager _towerManager;
     AbilityManager abilityManager;
@@ -54,6 +54,10 @@ public class BrickHealthComponent : MonoBehaviour
     DeathCause pendingDeathCause;
     bool pendingDeath;
 
+    private void Awake()
+    {
+        _explosionPool = FindAnyObjectByType<ExplosionPool>();
+    }
     internal void SetBrickBar(BrickBar _bb)
     {
         _brickBar = _bb;
@@ -117,6 +121,9 @@ public class BrickHealthComponent : MonoBehaviour
                     status.remainingStackTime = status.stackLifeTime;
                 }
 
+
+
+
                 if (status._ability != null)
                 {
                     status._ability.ActivateAbility(gameObject);
@@ -131,6 +138,13 @@ public class BrickHealthComponent : MonoBehaviour
                     status.remainingEffectTime = status.timeBeforeEffect;
                     OnDamage(status.stacks * status.damagePerStack, status.type); //total stack * stack/dmg
                     PlayPopVFX(status.type);
+
+                    if (status._explosiveContext != null)
+                    {
+                        print("Not null");
+                        _explosionPool.SpawnExplosion(status._explosiveContext, transform);
+                    }
+
                 }
             }
 
@@ -281,6 +295,7 @@ public class BrickHealthComponent : MonoBehaviour
             {
                 existing.remainingStackTime = existing.stackLifeTime;
             }
+
             SetSpeedMultiplier();
             return;
         }
@@ -305,6 +320,11 @@ public class BrickHealthComponent : MonoBehaviour
             _statuses.Add(_statusEffect._statusType, sinst);
             SpawnStatusVFX(_statusEffect._statusType);
             SetSpeedMultiplier();
+            if (_statusEffect._explosionContext != null)
+            {
+                print("ADD EXPLSION");
+                sinst._explosiveContext = _statusEffect._explosionContext;
+            }
         }
     }
     public void SpawnStatusVFX(

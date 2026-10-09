@@ -221,27 +221,6 @@ public class TowerManager : MonoBehaviour
         //}
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
     }
-    void RemoveBrick()
-    {
-        if(_createdBricks.Count > 0)
-        {
-            _currentBrickCount--;
-            GameObject brick = _createdBricks[_createdBricks.Count - 1];
-            _createdBricks.RemoveAt(_createdBricks.Count - 1);
-            Destroy(brick);
-        }
-    }
-    void RemoveFloor()
-    {
-        if (_currentTowerHeight >0 )
-        {
-            _currentTowerHeight--;
-            _currentBrickCount = _brickToFloorConversionRate - 1;
-            if (_moveRoutine != null)
-                StopCoroutine(_moveRoutine);
-            _moveRoutine = StartCoroutine(AnimateShiftUp());
-        }
-    }
     IEnumerator AnimateShiftDown()
     {
         if (_createdBricks.Count == 0)

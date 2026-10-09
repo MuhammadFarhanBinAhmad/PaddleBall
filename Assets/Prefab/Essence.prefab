@@ -119,9 +119,9 @@ MonoBehaviour:
   _endIntensity: 0
   intensityDuration: 20
   maxSpeed: 50
-  normalDrag: 0.25
-  minImpulse: 0.5
-  maxImpulse: 1
+  normalDrag: 1
+  minImpulse: 0
+  maxImpulse: 0
   _collectDistance: 3
   _attractStrength: 10
   _attractRadius: 1

@@ -28,6 +28,11 @@ public class SO_CutSceneEventContent : ScriptableObject
     public string _speakerName;
     [TextArea(3, 10)]
     public List<string> _dialougeTexts = new();
+    public bool _freezeGame;
+    public TEXTBOX_TYPE TEXTBOX_TYPE;
+
+    [Header("POINT_OF_FOCUS")]
+    public GameObject _focusCircle;
 
     [Header("POPIN")]
     public AnimationCurve _popInEffectLerp;

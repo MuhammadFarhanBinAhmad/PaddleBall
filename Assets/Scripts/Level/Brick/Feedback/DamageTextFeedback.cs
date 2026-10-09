@@ -51,7 +51,6 @@ public class DamageTextFeedback : MonoBehaviour
                 break;
             case STATUSTYPE.DISCHARGE:
                 _startColor = _dischargeColour;
-                _feedback._startscaleMultiplier *= 2;
                 break;
             case STATUSTYPE.CRIT:
                 _startColor = _critColour;

@@ -234,11 +234,11 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     public void CalculatePriceCalculation(int cost, int totalpoint)
     {
-        _cardCostText.text = "- " + cost.ToString();
+        _cardCostText.text = "-" + cost.ToString();
         _currentPointText.text = totalpoint.ToString();
         _leftOverPointText.text = (totalpoint - cost).ToString();
 
-        _apCardCostText.text = "- " + cost.ToString();
+        _apCardCostText.text = "-" + cost.ToString();
         _apCurrentPointText.text = totalpoint.ToString();
         _apLeftOverPointText.text = (totalpoint - cost).ToString();
     }

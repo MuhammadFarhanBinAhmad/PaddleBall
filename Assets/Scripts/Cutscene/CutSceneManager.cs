@@ -23,6 +23,10 @@ public  class CutSceneManager : MonoBehaviour
     public List<SO_CutSceneEventContent> _cutSceneEvent = new List<SO_CutSceneEventContent>();
     [SerializeField]GameObject _currentBossObject;
 
+    //[Header("Tutorial")]
+    Action _onTutorialCutsceneComplete;
+    bool _isPlayingTutorialCutscene;
+
     [Header("EventType")]
     [SerializeField] TalkingBubbleCutsceneEvent _dialougeEvent;
     [SerializeField] PopInCutSceneEvent _popInCutSceneEvent;
@@ -107,40 +111,74 @@ public  class CutSceneManager : MonoBehaviour
     public void EventEnded()
     {
         _cutSceneIndex++;
-        if(_cutSceneIndex < _cutSceneEvent.Count)
+
+        if (_cutSceneIndex < _cutSceneEvent.Count)
         {
             SetUpEvent();
+            return;
         }
-        else
+
+        // --------------------------------------------
+        // Tutorial cutscene
+        // --------------------------------------------
+
+        if (_isPlayingTutorialCutscene)
         {
-            switch (_cutsceneToPlay)
-            {
-                case BOSSCUTSCENETOPLAY.INTRO:
-                    {
-                        //Start boss fight
-                        _cutSceneIndex = 0;
-                        _setBoolOnEndCutScene?.Invoke(false);
-                        BaseBossBrick bb = _currentBossObject.GetComponent<BaseBossBrick>();
-                        _episodeTitleCardUI.SetBossIntroText(bb._bossIntroText);
-                        bb.onStartBossFight?.Invoke();
-                        break;
-                    }
-                case BOSSCUTSCENETOPLAY.DEFEATBOSS:
-                    {
-                        //End of boss fight(win)
-                        ResetBoosFightCondition();
-                        _setBoolOnEndCutScene?.Invoke(false);
-                        _onEndBossCutScene?.Invoke();
-                        _timeManager._onBossDefeated?.Invoke();
-                        break;
-                    }
-                case BOSSCUTSCENETOPLAY.GAMEOVER:
-                    {
-                        ResetBoosFightCondition();
-                        _setBoolOnEndCutScene?.Invoke(false);
-                        break;
-                    }
-            }
+            _isPlayingTutorialCutscene = false;
+
+            _setBoolOnEndCutScene?.Invoke(false);
+
+            Action callback = _onTutorialCutsceneComplete;
+            _onTutorialCutsceneComplete = null;
+
+            _cutSceneEvent.Clear();
+            _cutSceneIndex = 0;
+
+            callback?.Invoke();
+
+            return;
+        }
+
+        // --------------------------------------------
+        // Existing boss cutscene logic
+        // --------------------------------------------
+
+        switch (_cutsceneToPlay)
+        {
+            case BOSSCUTSCENETOPLAY.INTRO:
+                {
+                    _cutSceneIndex = 0;
+                    _setBoolOnEndCutScene?.Invoke(false);
+
+                    BaseBossBrick bb =
+                        _currentBossObject.GetComponent<BaseBossBrick>();
+
+                    _episodeTitleCardUI.SetBossIntroText(
+                        bb._bossIntroText
+                    );
+
+                    bb.onStartBossFight?.Invoke();
+                    break;
+                }
+
+            case BOSSCUTSCENETOPLAY.DEFEATBOSS:
+                {
+                    ResetBoosFightCondition();
+
+                    _setBoolOnEndCutScene?.Invoke(false);
+                    _onEndBossCutScene?.Invoke();
+                    _timeManager._onBossDefeated?.Invoke();
+
+                    break;
+                }
+
+            case BOSSCUTSCENETOPLAY.GAMEOVER:
+                {
+                    ResetBoosFightCondition();
+                    _setBoolOnEndCutScene?.Invoke(false);
+
+                    break;
+                }
         }
     }
     private void ResetBoosFightCondition()
@@ -287,4 +325,30 @@ public  class CutSceneManager : MonoBehaviour
         EventEnded();
     }
     public void SetBossCutsceneToPlay(BOSSCUTSCENETOPLAY ct) => _cutsceneToPlay = ct;
+
+    //TUTORIAL
+
+    public void PlayTutorialCutscene(
+    List<SO_CutSceneEventContent> content,
+    Action onComplete)
+    {
+        if (content == null || content.Count == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        _isPlayingTutorialCutscene = true;
+        _onTutorialCutsceneComplete = onComplete;
+
+        _cutSceneIndex = 0;
+        _skipRequested = false;
+
+        _cutSceneEvent = content;
+
+        // Disable player control during cutscene
+        _setBoolOnStartCutScene?.Invoke(true);
+
+        SetUpEvent();
+    }
 }

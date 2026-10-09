@@ -1,15 +1,38 @@
 using FMOD.Studio;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+public enum TEXTBOX_TYPE
+{
+    TUTORIAL,
+    BOSS,
+    PLAYER
+}
+[System.Serializable]
+public class TextBoxContent
+{
+    public GameObject TalkingBubbleCutscene;
+    public TextMeshProUGUI _name;
+    public TextMeshProUGUI _text;
+    public float _typeSpeed;
+}
+
+[System.Serializable]
+public class TextBoxType
+{
+    public TEXTBOX_TYPE textbox_type;
+    public TextBoxContent content;
+}
+
 public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
 {
-    [SerializeField] GameObject TalkingBubbleCutscene;
+    [SerializeField] WorldToCanvasPosition _worldToCanvasPosition;
 
-    [SerializeField] TextMeshProUGUI _name;
-    [SerializeField] TextMeshProUGUI _text;
-    [SerializeField] float _typeSpeed;
+    [SerializeField] public List<TextBoxType> _TextBoxType;
+    TextBoxContent _currTextBoxContent;
+
 
     private EventInstance _typingLoopInstance;
 
@@ -20,12 +43,39 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
 
     public override void ExecuteEvent()
     {
-        TalkingBubbleCutscene.SetActive(true);
+
+        foreach (var t in _TextBoxType)
+        {
+            t.content.TalkingBubbleCutscene.gameObject.SetActive(false);
+        }
+
+        switch (_content.TEXTBOX_TYPE)
+        {
+            case TEXTBOX_TYPE.TUTORIAL:
+                {
+                    _currTextBoxContent = _TextBoxType[0].content;
+                    break;
+                }
+            case TEXTBOX_TYPE.BOSS:
+                {
+                    _currTextBoxContent = _TextBoxType[1].content;
+                    break;
+                }
+            case TEXTBOX_TYPE.PLAYER:
+                {
+                    _currTextBoxContent = _TextBoxType[2].content;
+                    break;
+                }
+        }
+        _worldToCanvasPosition._textBox = _currTextBoxContent.TalkingBubbleCutscene.GetComponent<RectTransform>();
+        _currTextBoxContent.TalkingBubbleCutscene.gameObject.SetActive(true);
 
         if (_dialogueRoutine != null)
             StopCoroutine(_dialogueRoutine);
 
         _dialogueRoutine = StartCoroutine(PlayDialogue());
+        if (_content._freezeGame)
+            TimeManager.StopTime();
     }
 
     public override void EndEvent()
@@ -42,11 +92,12 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
         _skipLine = false;
         _advanceLine = false;
 
-        if (_text != null)
-            _text.text = string.Empty;
+        if (_currTextBoxContent._text != null)
+            _currTextBoxContent._text.text = string.Empty;
 
-        TalkingBubbleCutscene.SetActive(false);
-
+        _currTextBoxContent.TalkingBubbleCutscene.gameObject.SetActive(false);
+        if (_content._freezeGame)
+            TimeManager.ResetTimeScale();
         NotifyFinished();
 
     }
@@ -56,7 +107,7 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
         if (_dialogueRoutine == null)
             return;
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_isTyping)
             {
@@ -71,11 +122,11 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
 
     private IEnumerator PlayDialogue()
     {
-        if (_content == null || _text == null)
+        if (_content == null || _currTextBoxContent._text == null)
             yield break;
 
-        _text.gameObject.SetActive(true);
-        _name.text = _content._speakerName;
+        _currTextBoxContent._text.gameObject.SetActive(true);
+        _currTextBoxContent._name.text = _content._speakerName;
         for (int i = 0; i < _content._dialougeTexts.Count; i++)
         {
             yield return StartCoroutine(TypeLine(_content._dialougeTexts[i]));
@@ -96,26 +147,26 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
         _skipLine = false;
         StartTypingSfx();
 
-        _text.text = line;
-        _text.maxVisibleCharacters = 0;
-        _text.ForceMeshUpdate();
+        _currTextBoxContent._text.text = line;
+        _currTextBoxContent._text.maxVisibleCharacters = 0;
+        _currTextBoxContent._text.ForceMeshUpdate();
 
-        int totalVisibleCharacters = _text.textInfo.characterCount;
+        int totalVisibleCharacters = _currTextBoxContent._text.textInfo.characterCount;
 
         for (int i = 0; i <= totalVisibleCharacters; i++)
         {
             if (_skipLine)
             {
                 StopTypingSfx();
-                _text.maxVisibleCharacters = totalVisibleCharacters;
+                _currTextBoxContent._text.maxVisibleCharacters = totalVisibleCharacters;
                 break;
             }
 
-            _text.maxVisibleCharacters = i;
-            yield return new WaitForSeconds(_typeSpeed);
+            _currTextBoxContent._text.maxVisibleCharacters = i;
+            yield return new WaitForSecondsRealtime(_currTextBoxContent._typeSpeed);
         }
 
-        _text.maxVisibleCharacters = totalVisibleCharacters;
+        _currTextBoxContent._text.maxVisibleCharacters = totalVisibleCharacters;
         _isTyping = false;
         StopTypingSfx();
     }

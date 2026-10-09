@@ -20,11 +20,11 @@ MonoBehaviour:
   _APValue: 1
   _daytoUnlock: 1
   _tiers:
-  - _health: 20
+  - _health: 10
     _brickSprite:
     - {fileID: 989652391, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: 1616271449, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - _health: 40
+  - _health: 20
     _brickSprite:
     - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}

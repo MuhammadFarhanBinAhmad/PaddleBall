@@ -54,6 +54,8 @@ public class ExplosionDamage : MonoBehaviour
         _damage =
             (int)ctx._Stats[STATID.BASE_DAMAGE];
 
+        print(_damage);
+
         _damageRadius =
             ctx._Stats[STATID.EXPLOSION_RADIUS];
 

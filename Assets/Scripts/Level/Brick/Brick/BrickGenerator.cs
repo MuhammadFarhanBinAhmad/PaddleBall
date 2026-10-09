@@ -40,12 +40,12 @@ public class BrickGenerator : MonoBehaviour
     BrickPool _brickPool;
     TimeManager _timeManager;
     BrickModifierList _brickModifierList;
-    [SerializeField]LevelManager _levelManager;
+    [SerializeField] LevelManager _levelManager;
     [Header("Brick Info")]
     public List<SOBrickFormation> _brickFormationList = new List<SOBrickFormation>();
     public List<SO_BrickHealthStats> _brickTypesList;
     public List<SO_BrickHealthStats> _brickAvailableToSpawn = new List<SO_BrickHealthStats>();
-    [SerializeField]List<SplineContainer>_brickPathList = new List<SplineContainer>();
+    [SerializeField] List<SplineContainer> _brickPathList = new List<SplineContainer>();
 
     [Header("AttributePoints")]
     [SerializeField] int _startAttributePoints;
@@ -100,11 +100,15 @@ public class BrickGenerator : MonoBehaviour
 
         _onSpawnNextWave += SpawnNextWave;
 
-        SetAttributePointForEachPhase();
         _brickModifierList.PopulateModifierChanceTable();
-        CheckBrickToAdd();
         _brickModifierList.CheckModifierToAdd();
+
+        SetAttributePointForEachPhase();
+        CheckBrickToAdd();
         SetAPOfTheDay();
+    }
+    public void StartGame()
+    {
         DelayBeforeStartWave();
         _timeManager.StartDayTimer();
     }
@@ -182,9 +186,9 @@ public class BrickGenerator : MonoBehaviour
 
     void SetAttributePointForEachPhase()
     {
-        int phases = 1 ;
+        int phases = 1;
         if (_timeManager != null)
-            phases = _timeManager.GetMaxGameDuration() ;
+            phases = _timeManager.GetMaxGameDuration();
         else
             Debug.LogWarning("TimeManager not found when generating health per phase. Defaulting to 1 phase.");
 
@@ -204,7 +208,7 @@ public class BrickGenerator : MonoBehaviour
     }
     void SetAPOfTheDay()
     {
-        if(_timeManager.GetMaxGameDuration() > _timeManager.GetTotalDayPass())
+        if (_timeManager.GetMaxGameDuration() > _timeManager.GetTotalDayPass())
             _APPerWaveForTheDay = _attributePoints[_timeManager.GetTotalDayPass()];
     }
     void SpawnNextWave()
@@ -271,7 +275,7 @@ public class BrickGenerator : MonoBehaviour
 
             _brickCounter++;
             StartCoroutine(AnimateBrickSpawn(brick.transform));
-            GameObject vfx = Instantiate(_spawnInBrickVFX,brick.transform.position,Quaternion.identity);
+            GameObject vfx = Instantiate(_spawnInBrickVFX, brick.transform.position, Quaternion.identity);
             yield return null;
         }
 
@@ -389,4 +393,147 @@ public class BrickGenerator : MonoBehaviour
         _brickPathList = container;
     }
     public void SetFormation(List<SOBrickFormation> container) => _brickFormationList = container;
+
+    //TUTORIAL
+    public void SpawnTutorialFormation(
+     SOBrickFormation formation,
+     SO_BrickHealthStats brickStats,
+     SplineContainer brickPath)
+    {
+        if (formation == null)
+        {
+            Debug.LogWarning("Tutorial formation is NULL.");
+            return;
+        }
+
+        if (brickStats == null)
+        {
+            Debug.LogWarning("Tutorial brick stats are NULL.");
+            return;
+        }
+
+        if (brickPath == null)
+        {
+            Debug.LogWarning("Tutorial brick path is NULL.");
+            return;
+        }
+
+        WavePlan plan = BuildTutorialWavePlan(
+            formation,
+            brickStats
+        );
+
+        StartCoroutine(
+            ExecuteTutorialWavePlan(plan, brickPath)
+        );
+    }
+    private WavePlan BuildTutorialWavePlan(
+    SOBrickFormation formation,
+    SO_BrickHealthStats brickStats)
+    {
+        WavePlan plan = new WavePlan();
+
+        int x = 0;
+        int y = 0;
+
+        foreach (char c in formation.formation)
+        {
+            if (c == '\n')
+            {
+                y++;
+                x = 0;
+                continue;
+            }
+
+            if (c == '0')
+            {
+                x++;
+                continue;
+            }
+
+            if (c == '1')
+            {
+                plan.bricks.Add(new PlannedBrick
+                {
+                    stats = brickStats,
+                    index = x
+                });
+
+                x++;
+            }
+        }
+
+        return plan;
+    }
+    private IEnumerator ExecuteTutorialWavePlan(
+    WavePlan plan,
+    SplineContainer brickPath)
+    {
+        if (plan == null || plan.bricks.Count == 0)
+        {
+            Debug.LogWarning(
+                "Tutorial WavePlan contains no bricks."
+            );
+
+            yield break;
+        }
+
+        foreach (var p in plan.bricks)
+        {
+            GameObject brick = _brickPool.GetBrick();
+
+            if (brick == null)
+            {
+                Debug.LogError(
+                    "BrickPool returned null brick."
+                );
+
+                continue;
+            }
+
+            _brickPool.PlaceActiveBrickInList(brick);
+
+            BrickBar bb = brick.GetComponent<BrickBar>();
+
+            if (bb == null)
+            {
+                Debug.LogError(
+                    "Spawned brick is missing BrickBar component."
+                );
+
+                continue;
+            }
+
+            if (p.stats == null)
+            {
+                Debug.LogError(
+                    "PlannedBrick.stats is null."
+                );
+
+                continue;
+            }
+
+            bb.SetBrick(p.stats);
+
+            // Explicitly assign tutorial spline
+            bb.SetBrickPath(brickPath);
+
+            _brickCounter++;
+
+            StartCoroutine(
+                AnimateBrickSpawn(brick.transform)
+            );
+
+            if (_spawnInBrickVFX != null)
+            {
+                Instantiate(
+                    _spawnInBrickVFX,
+                    brick.transform.position,
+                    Quaternion.identity
+                );
+            }
+
+            yield return null;
+        }
+    }
 }
