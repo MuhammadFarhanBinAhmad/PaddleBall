@@ -351,4 +351,33 @@ public  class CutSceneManager : MonoBehaviour
 
         SetUpEvent();
     }
+    public void CancelTutorialCutscene()
+    {
+        if (!_isPlayingTutorialCutscene)
+            return;
+
+        // Prevent callbacks from advancing the cutscene while cleaning up.
+        _skipRequested = true;
+        _activeCutsceneEventCount = 0;
+
+        // Prevent the tutorial order from starting after cancellation.
+        _onTutorialCutsceneComplete = null;
+
+        // Stop and clean up active cutscene events.
+        _dialougeEvent?.EndEvent();
+        _popInCutSceneEvent?.EndEvent();
+        _particleEffectCutsceneEvent?.EndEvent();
+        _camshakeCutSceneEvent?.EndEvent();
+        _destryoBossCutSceneEvent?.EndEvent();
+        _FadeInCanvasBlackRingEventCutScene?.EndEvent();
+        _FadeInOutScreenEventCutScene?.EndEvent();
+
+        // Restore player controls.
+        _setBoolOnEndCutScene?.Invoke(false);
+
+        // Clear tutorial cutscene state.
+        _isPlayingTutorialCutscene = false;
+        _cutSceneEvent.Clear();
+        _cutSceneIndex = 0;
+    }
 }

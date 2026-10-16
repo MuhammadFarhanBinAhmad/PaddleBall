@@ -9,6 +9,7 @@ public class AbilityInfoPageUI : MonoBehaviour
     AbilityManager _abilityManager;
     AbilityStoreLayoutUI _abilityStoreUI;
     StoreAbilityManager _storeAbilityManager;
+    StatManager _statManager;
 
     [SerializeField] private Image _icon;
     [SerializeField] Button _button;
@@ -28,7 +29,7 @@ public class AbilityInfoPageUI : MonoBehaviour
         _abilityStoreUI = FindAnyObjectByType<AbilityStoreLayoutUI>();
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
-
+        _statManager = FindAnyObjectByType<StatManager>();
     }
     private void Start()
     {
@@ -67,6 +68,31 @@ public class AbilityInfoPageUI : MonoBehaviour
     {
         if (_storeAbilityManager.PurchaseAbility(ID))
         {
+            _statManager.AddBallSpell();
+
+            switch(ability_ToSpawn._statusType)
+            {
+                case STATUSTYPE.EXPLOSION:
+                    {
+                        _statManager.AddTotalExplosionSpell();
+                        break;
+                    }
+                case STATUSTYPE.DISCHARGE:
+                    {
+                        _statManager.AddTotalDischargeSpell();
+                        break;
+                    }
+                case STATUSTYPE.CRIT:
+                    {
+                        _statManager.AddTotalCritSpell();
+                        break;
+                    }
+                case STATUSTYPE.TOXIC:
+                    {
+                        _statManager.AddTotalToxicSpell();
+                        break;
+                    }
+            }
             _abilityManager.AddAbility(ability_ToSpawn);
             IsAbilityPurchased(false);
             OnAbilityPurchase?.Invoke();

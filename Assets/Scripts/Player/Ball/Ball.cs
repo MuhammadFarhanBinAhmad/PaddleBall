@@ -14,6 +14,7 @@ public class Ball : MonoBehaviour
     BallDirectionArrow _ballDirectionArrow;
     PaddleHealth _paddleHealth;
     CircleCollider2D _collider;
+    StatManager _statManager;
 
     public float _gravityScale;
     public float _maxVelocity;
@@ -130,6 +131,7 @@ public class Ball : MonoBehaviour
         _ballFeedbackManager = FindAnyObjectByType<BallFeedbackManager>();
         _ballDirectionArrow = FindAnyObjectByType<BallDirectionArrow>();
         _paddleHealth = FindAnyObjectByType<PaddleHealth>();
+        _statManager = FindAnyObjectByType<StatManager>();
 
         OnBrickHit += IncreaseCombo;
 
@@ -147,6 +149,8 @@ public class Ball : MonoBehaviour
         OnBallRediect += RedirectBallToMouse;
         OnBallRediect += PlayBallRedirectEffect;
         OnBallRediect += StartAnimateBallRespawn;
+        OnBallRediect += _statManager.AddTotalTimeRedirectBall;
+
 
         SwitchToDefaultCursor();
     }
@@ -169,7 +173,7 @@ public class Ball : MonoBehaviour
         Vector2.zero,
         CursorMode.Auto
     );
-    private void OnDisable()
+    private void OnDestroy()
     {
         OnBrickHit -= IncreaseCombo;
 
@@ -188,10 +192,11 @@ public class Ball : MonoBehaviour
         OnBallRediect -= PlayBallRedirectEffect;
         OnBallRediect -= StartAnimateBallRespawn;
 
+        OnBallRediect -= _statManager.AddTotalTimeRedirectBall;
     }
 
 
-    private void Update()
+private void Update()
     {
         //if (_paddleHealth.IsPaddleDead())
         //{
@@ -476,6 +481,7 @@ public class Ball : MonoBehaviour
     }
     void ResetCombo()
     {
+        _statManager.AddHighestCombo(_currentCombo);
         _currentCombo = 0;
         _particleTrail.SetActive(false);
     }
@@ -486,6 +492,7 @@ public class Ball : MonoBehaviour
     }
     public void DeactivateBall()
     {
+        _statManager.AddTotalBallDestroyed();
         _ballDirectionArrow.DisableArrow(true);
 
         _collider.enabled = false;

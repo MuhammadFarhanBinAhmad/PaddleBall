@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e479bbda8d451d740bd53cbfad504bcf, type: 3}
   m_Name: OnBrickDestroy
   m_EditorClassIdentifier: Assembly-CSharp::SO_FeedbackEffect
-  _duration: 0.2
-  _trauma: 0.25
+  _duration: 0.1
+  _trauma: 0.15
   _animCurve:
     serializedVersion: 2
     m_Curve:
@@ -58,7 +58,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   animationDuration: 0.1
   _startscaleMultiplier: 1
-  _endscaleMultiplier: 1.25
+  _endscaleMultiplier: 1.15
   _vfxEffect: {fileID: 0}
   <sfx_feedback>k__BackingField:
     Guid:

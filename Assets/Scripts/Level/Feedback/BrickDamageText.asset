@@ -27,8 +27,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.110782586
     - serializedVersion: 3
-      time: 0.1357616
-      value: 2
+      time: 0.25
+      value: 5
       inSlope: -0.043570712
       outSlope: -0.043570712
       tangentMode: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   animationDuration: 1
-  _startscaleMultiplier: 0.1
+  _startscaleMultiplier: 0.5
   _endscaleMultiplier: 1
   _vfxEffect: {fileID: 0}
   <sfx_feedback>k__BackingField:

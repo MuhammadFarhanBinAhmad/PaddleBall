@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -71,6 +72,23 @@ public class TowerEssence : MonoBehaviour
     [SerializeField] float _gravityStrength = 2f;
     [Tooltip("Maximum falling speed.")]
     [SerializeField] float _maxFallSpeed = 3f;
+
+
+    //TUTORIAL
+    // All currently active Essence objects.
+    private static readonly HashSet<TowerEssence> _activeEssences =
+        new HashSet<TowerEssence>();
+
+    public static IEnumerable<TowerEssence> ActiveEssences =>
+        _activeEssences;
+
+    // Notifies listeners when a pooled Essence becomes active.
+    public static event Action<TowerEssence> OnEssenceSpawned;
+
+    // Notifies listeners when this Essence is collected.
+    public event Action<TowerEssence> OnCollected;
+
+
     void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
@@ -101,11 +119,16 @@ public class TowerEssence : MonoBehaviour
         intensityDone = false;
 
         _light2D.intensity = _startIntensity;
+
+        _activeEssences.Add(this);
+        OnEssenceSpawned?.Invoke(this);
     }
 
     private void OnDisable()
     {
         _OnCollectionEvent = null;
+        _activeEssences.Remove(this);
+
     }
 
     public void SetToAutoAttract()
@@ -334,6 +357,9 @@ public class TowerEssence : MonoBehaviour
                 );
                 break;
         }
+
+        // Notify the tutorial before this pooled object is deactivated.
+        OnCollected?.Invoke(this);
 
         ResetStats();
     }

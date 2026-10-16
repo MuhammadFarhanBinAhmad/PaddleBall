@@ -9,6 +9,7 @@ public class TowerManager : MonoBehaviour
 {
 
     TimeManager _timeManager;
+    StatManager _statManager;
     public GameObject _collectedBrick;
 
     [Header("Essence")]
@@ -19,8 +20,6 @@ public class TowerManager : MonoBehaviour
     public int _essenceToPureEssenceConversionRate;
     public int _currentEssenceCount;
     internal int _currentPureEssence { get; private set; }
-    internal int _totalPureEssenceEarn {  get; private set; }
-    internal int _totalPureEssenceSpent { get; private set; }
 
     [SerializeField] ParticleSystem _onEssenceCollectParticle;
     public Action OnEssenceCollect;
@@ -56,9 +55,6 @@ public class TowerManager : MonoBehaviour
     [SerializeField] SO_FeedbackEffect so_OnTowerHit;
     [SerializeField] SO_FeedbackEffect so_OnFloorLost;
 
-    [Header("Tower Health")]
-    [SerializeField]int _maxTowerHealth;
-    [SerializeField]int _towerHealth;
 
     [Header("Dailycheck")]
     public TWEENTYPE _towerTweenType = TWEENTYPE.LINEAR;
@@ -68,7 +64,6 @@ public class TowerManager : MonoBehaviour
     public int[] _towerHeightCheck;
     bool _receiveWarning;
 
-    public Action OnReceivingWarning;
     public Action<int> _onTowerTakingDamage;
 
     //cheatcode
@@ -78,7 +73,7 @@ public class TowerManager : MonoBehaviour
     {
         _timeManager = FindAnyObjectByType<TimeManager>();
         _essenceToPureEssenceConversionRate = _initialEssenceThreshold;
-
+        _statManager = FindAnyObjectByType<StatManager>();
     }
     private void Start()
     {
@@ -90,18 +85,17 @@ public class TowerManager : MonoBehaviour
 
         OnEssenceCollect += IncreaseBrickCount;
 
-        OnHeightIncrease += CreateNewFloor;
-
-
         _onTowerTakingDamage += TowerTakeDamage;
 
-        OnAddPureEssence += AddPureEssence;
+        OnHeightIncrease += CreateNewFloor;
+        OnHeightIncrease += _statManager.AddTowerHeight;
 
-        OnReceivingWarning += WarningGiven;
+        OnBrickIncrease += _statManager.AddBrickTotal;
+
+        OnAddPureEssence += AddPureEssence;
+        OnAddPureEssence += _statManager.AddTotalPureEssenceEarn;
 
         PopulateTowerHeightCheck();
-
-        _towerHealth = _maxTowerHealth;
     }
 #if UNITY_EDITOR
     private void OnValidate()
@@ -117,14 +111,16 @@ public class TowerManager : MonoBehaviour
         _timeManager._endGame -= EndOfGame;
         
         OnEssenceCollect -= IncreaseBrickCount;
-        
+
+        OnBrickIncrease -= _statManager.AddBrickTotal;
+
         OnHeightIncrease -= CreateNewFloor;
+        OnHeightIncrease -= _statManager.AddTowerHeight;
 
         _onTowerTakingDamage -= TowerTakeDamage;
 
         OnAddPureEssence -= AddPureEssence;
-
-        OnReceivingWarning -= WarningGiven;
+        OnAddPureEssence -= _statManager.AddTotalPureEssenceEarn;
 
     }
 
@@ -132,6 +128,7 @@ public class TowerManager : MonoBehaviour
     {
         float val = (float)amt * _cardBonusMultiplier;
         _currentEssenceCount += (int)val;
+        _statManager.AddTotalEssenceEarn((int)val);
         _onEssenceCollectParticle.Play();
         if (_currentEssenceCount >= _essenceToPureEssenceConversionRate)
         {
@@ -156,7 +153,6 @@ public class TowerManager : MonoBehaviour
             _currentBrickCount = 0;
             _currentTowerHeight++;
             _currentPureEssence++;
-            _totalPureEssenceEarn++;
             AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onFloorMade, transform.position);
 
             // Apply milestone logic: every milestoneFloors floors, increase essence threshold
@@ -392,7 +388,7 @@ public class TowerManager : MonoBehaviour
     public void DeductPureEssence(int value)
     {
         _currentPureEssence -= value;
-        _totalPureEssenceSpent += value;
+        _statManager.AddTotalPureEssenceSpent(value);
     }
     public int GetTotalPureEssenceCount() => _currentPureEssence;
     public int GetCurrentBrickCount() => _currentBrickCount;

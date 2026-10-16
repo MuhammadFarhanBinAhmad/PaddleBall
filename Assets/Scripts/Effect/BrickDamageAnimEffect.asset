@@ -45,5 +45,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 0.2
-  _capscaleMultiplier: 1.5
+  animationDuration: 0.1
+  _capscaleMultiplier: 1.15

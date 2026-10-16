@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum TUTORIAL_SECTION
 {
@@ -16,6 +17,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private List<TutorialSection> _sectionOrder =
         new List<TutorialSection>();
+
+    [SerializeField] Button _skipTutorial;
 
     int _currentSectionIndex = -1;
     bool _tutorialActive;
@@ -69,6 +72,7 @@ public class TutorialManager : MonoBehaviour
 
     public void StartTutorial()
     {
+        _skipTutorial.gameObject.SetActive(true);
         if (_sectionOrder == null || _sectionOrder.Count == 0)
         {
             Debug.LogWarning("Tutorial has no sections.");
@@ -220,6 +224,7 @@ public class TutorialManager : MonoBehaviour
 
     private void CompleteTutorial()
     {
+        _skipTutorial.gameObject.SetActive(false);
         _tutorialActive = false;
 
         Debug.Log("Tutorial Completed!");
@@ -261,5 +266,37 @@ public class TutorialManager : MonoBehaviour
             _sectionOrder != null &&
             _currentSectionIndex >= 0 &&
             _currentSectionIndex < _sectionOrder.Count;
+    }
+    public void SkipTutorial()
+    {
+        if (!_tutorialActive)
+            return;
+
+        Debug.Log("Tutorial skipped by player.");
+
+        // First stop any active tutorial cutscene and clean up its UI.
+        if (_cutSceneManager != null)
+        {
+            _cutSceneManager.CancelTutorialCutscene();
+        }
+
+        // Then stop the current tutorial section.
+        if (IsValidSectionIndex())
+        {
+            TutorialSection currentSection =
+                _sectionOrder[_currentSectionIndex];
+
+            if (currentSection != null)
+            {
+                currentSection.OnSectionCompleted -= HandleSectionCompleted;
+                currentSection.gameObject.SetActive(false);
+            }
+        }
+
+        _tutorialActive = false;
+        _currentSectionIndex = _sectionOrder.Count;
+
+        // Trigger the existing game-start flow.
+        CompleteTutorial();
     }
 }

@@ -10,16 +10,13 @@ public class ControlledFirePower : ABSAbility, IExplosionContextModifier
 
     public void ModifyExplosionContextDivide(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyExplosionContextMultiply(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ModifyExplosionContextSubtract(HitContext hitCtx, AbilityContext explosionCtx)
     {
-        throw new System.NotImplementedException();
     }
 }

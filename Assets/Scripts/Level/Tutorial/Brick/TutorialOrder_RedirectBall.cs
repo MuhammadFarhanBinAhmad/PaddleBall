@@ -10,27 +10,20 @@ public class TutorialOrder_RedirectBall : TutorialOrder
 
     protected override IEnumerator WaitForAction()
     {
-        bool holdingRightMouse = false;
-
+        _worldToCanvasPosition.ToggleFocus(false);
         while (true)
         {
-            // Step 1: RMB must be held
-            if (Input.GetMouseButton(1))
+            // RMB must be held while LMB is clicked.
+            if (Input.GetMouseButton(1) &&
+                Input.GetMouseButtonDown(0))
             {
-                holdingRightMouse = true;
-            }
-            else
-            {
-                holdingRightMouse = false;
-            }
-
-            // Step 2: LMB must be clicked while RMB is held
-            if (holdingRightMouse && Input.GetMouseButtonDown(0))
-            {
-                yield break;
+                break;
             }
 
             yield return null;
         }
+
+        // Delay before advancing to the next tutorial order.
+        yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }
 }

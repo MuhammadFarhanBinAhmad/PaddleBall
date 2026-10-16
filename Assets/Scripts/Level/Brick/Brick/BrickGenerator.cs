@@ -396,9 +396,9 @@ public class BrickGenerator : MonoBehaviour
 
     //TUTORIAL
     public void SpawnTutorialFormation(
-     SOBrickFormation formation,
-     SO_BrickHealthStats brickStats,
-     SplineContainer brickPath)
+        SOBrickFormation formation,
+        SO_BrickHealthStats brickStats,
+        List<SplineContainer> brickPaths)
     {
         if (formation == null)
         {
@@ -412,9 +412,9 @@ public class BrickGenerator : MonoBehaviour
             return;
         }
 
-        if (brickPath == null)
+        if (brickPaths == null || brickPaths.Count == 0)
         {
-            Debug.LogWarning("Tutorial brick path is NULL.");
+            Debug.LogWarning("Tutorial brick paths are empty.");
             return;
         }
 
@@ -424,8 +424,124 @@ public class BrickGenerator : MonoBehaviour
         );
 
         StartCoroutine(
-            ExecuteTutorialWavePlan(plan, brickPath)
+            ExecuteTutorialWavePlan(plan, brickPaths)
         );
+
+        StartCoroutine(
+        SpawnTutorialFormationRoutine(
+            formation,
+            brickStats,
+            brickPaths,
+            null
+        )
+    );
+    }
+    public IEnumerator SpawnTutorialFormationRoutine(
+    SOBrickFormation formation,
+    SO_BrickHealthStats brickStats,
+    List<SplineContainer> brickPaths,
+    Action<BrickBar> onBrickSpawned)
+    {
+        if (formation == null || brickStats == null)
+        {
+            Debug.LogError(
+                "Tutorial formation or brick stats are missing."
+            );
+            yield break;
+        }
+
+        if (brickPaths == null || brickPaths.Count == 0)
+        {
+            Debug.LogError("Tutorial brick paths are missing.");
+            yield break;
+        }
+
+        WavePlan plan = BuildTutorialWavePlan(
+            formation,
+            brickStats
+        );
+
+        yield return ExecuteTutorialWavePlan(
+            plan,
+            brickPaths,
+            onBrickSpawned
+        );
+    }
+    public IEnumerator SpawnTutorialFormationRoutine(
+    SOBrickFormation formation,
+    SO_BrickHealthStats brickStats,
+    List<SplineContainer> brickPaths)
+    {
+        yield return SpawnTutorialFormationRoutine(
+            formation,
+            brickStats,
+            brickPaths,
+            null
+        );
+    }
+    private IEnumerator ExecuteTutorialWavePlan(
+    WavePlan plan,
+    List<SplineContainer> brickPaths,
+    Action<BrickBar> onBrickSpawned)
+    {
+        if (plan == null || plan.bricks.Count == 0)
+        {
+            Debug.LogWarning("Tutorial WavePlan contains no bricks.");
+            yield break;
+        }
+
+        foreach (PlannedBrick p in plan.bricks)
+        {
+            if (p.index < 0 ||
+                p.index >= brickPaths.Count ||
+                brickPaths[p.index] == null)
+            {
+                Debug.LogError(
+                    $"Missing tutorial spline at index {p.index}."
+                );
+                continue;
+            }
+
+            GameObject brick = _brickPool.GetBrick();
+
+            if (brick == null)
+            {
+                Debug.LogError("BrickPool returned null brick.");
+                continue;
+            }
+
+            BrickBar bb = brick.GetComponent<BrickBar>();
+
+            if (bb == null || p.stats == null)
+            {
+                Debug.LogError(
+                    "BrickBar component or brick stats are missing."
+                );
+                continue;
+            }
+
+            bb.SetBrick(p.stats);
+            bb.SetBrickPath(brickPaths[p.index]);
+
+            _brickPool.PlaceActiveBrickInList(brick);
+            _brickCounter++;
+
+            // Register the brick with the tutorial order.
+            onBrickSpawned?.Invoke(bb);
+
+            StartCoroutine(AnimateBrickSpawn(brick.transform));
+
+            if (_spawnInBrickVFX != null)
+            {
+                Instantiate(
+                    _spawnInBrickVFX,
+                    brick.transform.position,
+                    Quaternion.identity
+                );
+            }
+
+            yield return null;
+        }
     }
     private WavePlan BuildTutorialWavePlan(
     SOBrickFormation formation,
@@ -467,62 +583,61 @@ public class BrickGenerator : MonoBehaviour
     }
     private IEnumerator ExecuteTutorialWavePlan(
     WavePlan plan,
-    SplineContainer brickPath)
+    List<SplineContainer> brickPaths)
     {
         if (plan == null || plan.bricks.Count == 0)
         {
-            Debug.LogWarning(
-                "Tutorial WavePlan contains no bricks."
-            );
-
+            Debug.LogWarning("Tutorial WavePlan contains no bricks.");
             yield break;
         }
 
-        foreach (var p in plan.bricks)
+        foreach (PlannedBrick p in plan.bricks)
         {
-            GameObject brick = _brickPool.GetBrick();
-
-            if (brick == null)
+            // Each brick uses its formation column as the path index.
+            if (p.index < 0 ||
+                p.index >= brickPaths.Count ||
+                brickPaths[p.index] == null)
             {
                 Debug.LogError(
-                    "BrickPool returned null brick."
+                    $"Missing tutorial spline at index {p.index}. " +
+                    $"Available paths: {brickPaths.Count}."
                 );
 
                 continue;
             }
 
-            _brickPool.PlaceActiveBrickInList(brick);
+            GameObject brick = _brickPool.GetBrick();
+
+            if (brick == null)
+            {
+                Debug.LogError("BrickPool returned null brick.");
+                continue;
+            }
 
             BrickBar bb = brick.GetComponent<BrickBar>();
 
             if (bb == null)
             {
-                Debug.LogError(
-                    "Spawned brick is missing BrickBar component."
-                );
-
+                Debug.LogError("Spawned brick is missing BrickBar.");
                 continue;
             }
 
             if (p.stats == null)
             {
-                Debug.LogError(
-                    "PlannedBrick.stats is null."
-                );
-
+                Debug.LogError("PlannedBrick.stats is null.");
                 continue;
             }
 
+            _brickPool.PlaceActiveBrickInList(brick);
+
             bb.SetBrick(p.stats);
 
-            // Explicitly assign tutorial spline
-            bb.SetBrickPath(brickPath);
+            // Assign the spline corresponding to this formation column.
+            bb.SetBrickPath(brickPaths[p.index]);
 
             _brickCounter++;
 
-            StartCoroutine(
-                AnimateBrickSpawn(brick.transform)
-            );
+            StartCoroutine(AnimateBrickSpawn(brick.transform));
 
             if (_spawnInBrickVFX != null)
             {

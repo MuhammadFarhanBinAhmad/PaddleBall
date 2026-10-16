@@ -10,13 +10,16 @@ public abstract class TutorialOrder : MonoBehaviour
     public bool IsCompleted { get; private set; }
 
     [Header("Focus Target")]
+    public bool _showFocus;
+    public FOCUS_TYPE _type;
     [SerializeField] internal WorldToCanvasPosition _worldToCanvasPosition;
     [SerializeField] Transform _target;
     [Header("Text Box")]
-    [SerializeField] Transform _textBoxPos;
-
-    public bool _showFocus;
     public bool _moveTextBoxPosition;
+    [SerializeField] Transform _textBoxPos;
+    [Header("Delay")]
+    public float _delayBeforeNextStep;
+
 
     public event Action<TutorialOrder> OnOrderCompleted;
     public List <SO_CutSceneEventContent> _cutsceneContent = new List<SO_CutSceneEventContent>();
@@ -31,11 +34,10 @@ public abstract class TutorialOrder : MonoBehaviour
     }
     public void ShowFocusArea()
     {
-        _worldToCanvasPosition.UpdateFocusPosition(_target);
+        _worldToCanvasPosition.UpdateFocusPosition(_target, _type);
     }
     private IEnumerator RunOrder()
     {
-        _worldToCanvasPosition.UpdateTextBoxPosition(_textBoxPos);
         // 1. Give instruction
         GiveInstruction();
 

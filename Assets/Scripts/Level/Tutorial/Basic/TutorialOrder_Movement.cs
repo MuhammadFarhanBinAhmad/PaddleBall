@@ -21,18 +21,20 @@ public class TutorialOrder_Movement : TutorialOrder
             {
                 pressedA = true;
                 Debug.Log("A pressed!");
-                _worldToCanvasPosition.ToggleFocusCircle(false);
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
                 pressedD = true;
                 Debug.Log("D pressed!");
-                _worldToCanvasPosition.ToggleFocusCircle(false);
             }
 
             yield return null;
         }
-    }
 
+        // Both keys have been pressed.
+
+        // Brief delay before completing the order.
+        yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
+    }
 }

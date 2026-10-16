@@ -17,7 +17,7 @@ MonoBehaviour:
   _elementID: 2
   _layerNumber: 2
   _dropSpeed: 0.01
-  _APValue: 2
+  _APValue: 5
   _daytoUnlock: 2
   _tiers:
   - _health: 10

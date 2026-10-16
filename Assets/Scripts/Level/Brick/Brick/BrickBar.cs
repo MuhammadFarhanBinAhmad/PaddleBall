@@ -57,6 +57,7 @@ public class BrickBar : MonoBehaviour
 {
     BrickUI _brickUI;
     BrickAbilityManager _brickAbilityManager;
+    
     Ball _ball;
 
     Dictionary<STATUSTYPE, StatusInstance> _statuses = new Dictionary<STATUSTYPE, StatusInstance>();
@@ -105,7 +106,7 @@ public class BrickBar : MonoBehaviour
     public int _essenceMinAmountToSpawn;
     public int _essenceMaxAmountToSpawn;
 
-
+    public event Action<BrickBar> OnBrickDestroyed;
 
     private void Awake()
     {
@@ -132,17 +133,20 @@ public class BrickBar : MonoBehaviour
         _brickHealthComponent._onDeath += _brickGenerator.OnBrickDestroyed;
         _brickHealthComponent._onDeath += _statuses.Clear;
         _brickHealthComponent._onDeath += RemoveAllModifiers;
-
+        _brickHealthComponent._onDeath += _brickAbilityManager.ResetAllAbility;
 
         _brickHealthComponent._onDeathByPaddle += HandleDeathByPaddle;
         _brickHealthComponent._onDeathByPaddle += _statuses.Clear;
         _brickHealthComponent._onDeathByPaddle += RemoveAllModifiers;
         _brickHealthComponent._onDeathByPaddle += _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByPaddle += _brickAbilityManager.ResetAllAbility;
 
         _brickHealthComponent._onDeathByTower += HandleDeathByPaddle;
         _brickHealthComponent._onDeathByTower += _statuses.Clear;
         _brickHealthComponent._onDeathByTower += RemoveAllModifiers;
         _brickHealthComponent._onDeathByTower += _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByTower += _brickAbilityManager.ResetAllAbility;
+
 
         _brickHealthComponent.SetBrickBar(this);
     }
@@ -153,11 +157,13 @@ public class BrickBar : MonoBehaviour
         _brickHealthComponent._onDeath -= _brickGenerator.OnBrickDestroyed;
         _brickHealthComponent._onDeath -= _statuses.Clear;
         _brickHealthComponent._onDeath -= RemoveAllModifiers;
+        _brickHealthComponent._onDeath -= _brickAbilityManager.ResetAllAbility;
 
         _brickHealthComponent._onDeathByPaddle -= HandleDeathByPaddle;
         _brickHealthComponent._onDeathByPaddle -= _statuses.Clear;
         _brickHealthComponent._onDeathByPaddle -= RemoveAllModifiers;
         _brickHealthComponent._onDeathByPaddle -= _brickGenerator.OnBrickDestroyed;
+        _brickHealthComponent._onDeathByPaddle -= _brickAbilityManager.ResetAllAbility;
 
         _brickHealthComponent._onDeathByTower -= HandleDeathByPaddle;
         _brickHealthComponent._onDeathByTower -= _statuses.Clear;
@@ -218,29 +224,43 @@ public class BrickBar : MonoBehaviour
         _brickHealthComponent.PendingDeath(deathcause, true);
     }
 
-    void HandleDeath()
+    internal void HandleDeath()
     {
+        OnBrickDestroyed?.Invoke(this);
+
         GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBrickDestroy);
         GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
         GlobalFeedbackManager.Instance.PlayFreezeFrame();
+
         abilityManager.NotifyBrickDestroyed(this);
-        _brickPool.RemoveActiveBrick(this.gameObject);
-        GameObject _vfx = _hitBrickDeathPool.GetObject();
-        _vfx.transform.position = transform.position;
-        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
+        _brickPool.RemoveActiveBrick(gameObject);
+
+        GameObject vfx = _hitBrickDeathPool.GetObject();
+        vfx.transform.position = transform.position;
+
+        AudioManager.Instance.PlayOneShot(
+            FmodEvent.Instance.sfx_brickDestroy,
+            transform.position
+        );
 
         ResetToDefault();
-
         gameObject.SetActive(false);
     }
     void HandleDeathByPaddle()
     {
+        OnBrickDestroyed?.Invoke(this);
+
         abilityManager.NotifyBrickDestroyed(this);
-        _brickPool.RemoveActiveBrick(this.gameObject);
-        GameObject _vfx = _hitBrickDeathPool.GetObject();
-        _vfx.transform.position = transform.position;
-        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_brickDestroy, transform.position);
-        
+        _brickPool.RemoveActiveBrick(gameObject);
+
+        GameObject vfx = _hitBrickDeathPool.GetObject();
+        vfx.transform.position = transform.position;
+
+        AudioManager.Instance.PlayOneShot(
+            FmodEvent.Instance.sfx_brickDestroy,
+            transform.position
+        );
+
         gameObject.SetActive(false);
     }
     void SpawnEssence()

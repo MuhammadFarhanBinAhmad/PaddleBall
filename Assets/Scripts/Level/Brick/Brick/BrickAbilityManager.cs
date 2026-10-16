@@ -31,7 +31,13 @@ public class BrickAbilityManager : MonoBehaviour
                 ability._gameObject.GetComponent<B_ShieldAbility>().SetStats(_BrickAbilityStats);
             }
         }
+    }
 
-
+    public void ResetAllAbility()
+    {
+        foreach (AbilityObject ability in _abilityList)
+        {
+            ability._gameObject.SetActive(false);
+        }
     }
 }

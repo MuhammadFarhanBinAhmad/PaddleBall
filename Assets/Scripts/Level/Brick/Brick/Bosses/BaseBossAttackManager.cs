@@ -8,7 +8,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     {
         One,
         Two,
-        Three
+        Three,
+        Four
     }
 
     internal enum AttackEndMode
@@ -94,6 +95,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         _attackOrder.Add(AttackType.One);
         _attackOrder.Add(AttackType.Two);
         _attackOrder.Add(AttackType.Three);
+        _attackOrder.Add(AttackType.Four);
 
         ShuffleList(_attackOrder);
     }
@@ -129,6 +131,9 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
             case AttackType.Three:
                 AttackPatternThree();
+                break;
+            case AttackType.Four:
+                AttackPatternFour();
                 break;
         }
 
@@ -242,5 +247,6 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     public abstract void AttackPatternOne();
     public abstract void AttackPatternTwo();
     public abstract void AttackPatternThree();
+    public abstract void AttackPatternFour();
     public abstract void RestToNeutral();
 }

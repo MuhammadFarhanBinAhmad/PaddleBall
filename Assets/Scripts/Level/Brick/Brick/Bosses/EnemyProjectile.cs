@@ -39,6 +39,17 @@ public class EnemyProjectile : MonoBehaviour
         if (direction.sqrMagnitude > 0.0001f)
             transform.up = direction;
     }
+    public void ShootProjectile(Transform target)
+    {
+        if (_rigidbody2D == null || target == null) return;
+
+        Vector2 direction = ((Vector2)target.position - (Vector2)transform.position).normalized;
+
+        _rigidbody2D.linearVelocity = direction * _shootSpeed;
+
+        if (direction.sqrMagnitude > 0.0001f)
+            transform.up = direction;
+    }
     public void HandleProjectileDeath()
     {
         _trail.enabled = false;

@@ -14,5 +14,8 @@ public class TutorialOrder_LaunchBall : TutorialOrder
         {
             yield return null;
         }
+
+        // Wait briefly after the player clicks.
+        yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }
 }

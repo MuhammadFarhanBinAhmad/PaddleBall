@@ -11,7 +11,7 @@ public class ActiveStatusVFX
 public class BrickHealthComponent : MonoBehaviour
 {
     ExplosionPool _explosionPool;
-
+    StatManager _statManager;
     TowerManager _towerManager;
     AbilityManager abilityManager;
 
@@ -57,6 +57,7 @@ public class BrickHealthComponent : MonoBehaviour
     private void Awake()
     {
         _explosionPool = FindAnyObjectByType<ExplosionPool>();
+        _statManager = FindAnyObjectByType<StatManager>();
     }
     internal void SetBrickBar(BrickBar _bb)
     {
@@ -215,7 +216,8 @@ public class BrickHealthComponent : MonoBehaviour
                 BaseBossBrick bbb = GetComponentInParent<BaseBossBrick>();
                 bbb.HandleDamage(dmg);
             }
-
+            _statManager.AddMaxDamage(dmg);
+            _statManager.AddTotalDamage(dmg);
             SpawnDamageText(modified, dmgType);
         }
         else
@@ -235,7 +237,6 @@ public class BrickHealthComponent : MonoBehaviour
     }
     public void OnInstantKill(int threshold)
     {
-        BrickBar bb = GetComponent<BrickBar>();
 
         if (threshold == 0)
         {
@@ -254,10 +255,10 @@ public class BrickHealthComponent : MonoBehaviour
 
             SetSpeedMultiplier();
 
-            bb.HandleInstantKill(DeathCause.NORMAL);
+            _brickBar.HandleInstantKill(DeathCause.NORMAL);
             return;
         }
-        else if (bb._elementID <= threshold)
+        else if (_brickBar._elementID <= threshold)
         {
             ClearAllStatusEffects();
             //ResetSpecialStatus();
@@ -275,7 +276,7 @@ public class BrickHealthComponent : MonoBehaviour
             SetSpeedMultiplier();
 
             OnDamage(_health, STATUSTYPE.CRIT);
-            bb.HandleInstantKill(DeathCause.NORMAL);
+            _brickBar.HandleInstantKill(DeathCause.NORMAL);
             return;
         }
 
@@ -423,7 +424,7 @@ public class BrickHealthComponent : MonoBehaviour
         ResetDamageMultiplier();
         ClearAllNearbyBrickList();
         _hitFlash.SetActive(false);
-
+        _statManager.AddTotalBrickDestroyed();
     }
     void RemoveAllStatus()
     {

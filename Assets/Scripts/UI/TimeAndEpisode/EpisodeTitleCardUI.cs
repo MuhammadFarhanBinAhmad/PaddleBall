@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class EpisodeTitleCardUI : MonoBehaviour
 {
     SO_BossIntroText _BossIntroText;
+    EndGameSequenceManager _EndGameSequenceManager;
 
     [SerializeField] GameObject _titleCardGameObject;
     [SerializeField] GameObject _defeatTitleCardGameObject;
@@ -29,6 +30,12 @@ public class EpisodeTitleCardUI : MonoBehaviour
 
     Vector3 _cardOriginalScale;
     Coroutine _titleCardRoutine;
+
+
+    private void Awake()
+    {
+        _EndGameSequenceManager = FindAnyObjectByType<EndGameSequenceManager>();
+    }
 
     private void Start()
     {
@@ -198,6 +205,8 @@ public class EpisodeTitleCardUI : MonoBehaviour
         _defeatTitleCardGameObject.SetActive(false);
         _titleCardRoutine = null;
         TimeManager.ResetTimeScale();
+        yield return new WaitForSecondsRealtime(_displayDuration);
+        _EndGameSequenceManager.StartEndGameSequence();
     }
     void SetAlpha(float a)
     {

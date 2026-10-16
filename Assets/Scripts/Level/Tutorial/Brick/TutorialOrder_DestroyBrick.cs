@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -8,46 +9,109 @@ public class TutorialOrder_DestroyBrick : TutorialOrder
     [SerializeField] BrickGenerator _brickGenerator;
     [SerializeField] SOBrickFormation _tutorialFormation;
     [SerializeField] SO_BrickHealthStats _tutorialBrickStats;
-    [SerializeField] SplineContainer _tutorialBrickPath;
+
+    [SerializeField]
+    List<SplineContainer> _tutorialBrickPaths =
+        new List<SplineContainer>();
+
+    [Header("Spawn Settings")]
+    [SerializeField] float _timerBeforeNextWave = 1f;
+    [SerializeField] int _numberToSpawn = 1;
+
+    // Bricks spawned by this tutorial order that remain alive.
+    readonly List<BrickBar> _remainingBricks =
+        new List<BrickBar>();
 
     protected override void GiveInstruction()
     {
-        Debug.Log("Destroy the brick!");
+        Debug.Log("Destroy the bricks!");
     }
 
     protected override IEnumerator WaitForAction()
     {
-        if (_brickGenerator == null)
+        if (_brickGenerator == null ||
+            _tutorialFormation == null ||
+            _tutorialBrickStats == null ||
+            _tutorialBrickPaths == null ||
+            _tutorialBrickPaths.Count == 0)
         {
-            Debug.LogError("BrickGenerator is not assigned.");
+            Debug.LogError(
+                "TutorialOrder_DestroyBrick has missing references."
+            );
             yield break;
         }
 
-        if (_tutorialFormation == null)
+        _remainingBricks.Clear();
+
+        // Spawn each formation and wait for its spawning coroutine
+        // to finish before scheduling the next formation.
+        for (int i = 0; i < _numberToSpawn; i++)
         {
-            Debug.LogError("Tutorial formation is not assigned.");
-            yield break;
+            yield return _brickGenerator.SpawnTutorialFormationRoutine(
+                _tutorialFormation,
+                _tutorialBrickStats,
+                _tutorialBrickPaths,
+                RegisterSpawnedBrick
+            );
+
+            if (i < _numberToSpawn - 1)
+            {
+                yield return new WaitForSeconds(
+                    _timerBeforeNextWave
+                );
+            }
         }
 
-        if (_tutorialBrickStats == null)
+        // All formations have finished spawning.
+        // Wait until every tracked brick has been destroyed.
+        while (_remainingBricks.Count > 0)
         {
-            Debug.LogError("Tutorial brick stats are not assigned.");
-            yield break;
+            yield return new WaitForSeconds(_delayBeforeNextStep);
         }
 
-        if (_tutorialBrickPath == null)
-        {
-            Debug.LogError("Tutorial brick path is not assigned.");
-            yield break;
-        }
+        Debug.Log("All tutorial bricks destroyed.");
+    }
 
-        _brickGenerator.SpawnTutorialFormation(
-            _tutorialFormation,
-            _tutorialBrickStats,
-            _tutorialBrickPath
+    private void RegisterSpawnedBrick(BrickBar brick)
+    {
+        if (brick == null)
+            return;
+
+        if (_remainingBricks.Contains(brick))
+            return;
+
+        _remainingBricks.Add(brick);
+        brick.OnBrickDestroyed += HandleTutorialBrickDestroyed;
+
+        Debug.Log(
+            $"Tutorial brick registered. Remaining: {_remainingBricks.Count}"
         );
+    }
 
-        // Temporary until we add actual brick-destroy detection.
-        yield return null;
+    private void HandleTutorialBrickDestroyed(BrickBar brick)
+    {
+        if (brick == null)
+            return;
+
+        brick.OnBrickDestroyed -= HandleTutorialBrickDestroyed;
+
+        if (_remainingBricks.Remove(brick))
+        {
+            Debug.Log(
+                $"Tutorial brick removed. Remaining: {_remainingBricks.Count}"
+            );
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Clean up event subscriptions if the order is interrupted.
+        foreach (BrickBar brick in _remainingBricks)
+        {
+            if (brick != null)
+                brick.OnBrickDestroyed -= HandleTutorialBrickDestroyed;
+        }
+
+        _remainingBricks.Clear();
     }
 }

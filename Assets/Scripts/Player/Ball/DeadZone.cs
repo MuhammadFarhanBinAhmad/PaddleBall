@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class DeadZone : MonoBehaviour
 {
     TowerManager _towerManager;
+    StatManager _statManager;
 
     public Action OnShieldDamage;
 
@@ -25,11 +26,14 @@ public class DeadZone : MonoBehaviour
     private void Awake()
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
+        _statManager = FindAnyObjectByType<StatManager>();
         shieldColour = _spriteRenderer.color;
         _currentTowerAndPaddleHealth = _maxTowerAndPaddleHealth;
+
     }
     private void Start()
     {
+
         OnShieldDamage += UpdateShieldVisual;
 
 
@@ -45,6 +49,9 @@ public class DeadZone : MonoBehaviour
         int dma = Math.Max(1, val);
         _currentTowerAndPaddleHealth -= dma;
         _currentTowerAndPaddleHealth = Mathf.Max(_currentTowerAndPaddleHealth, 0);
+
+        _statManager.AddTotalDamageTaken(val);
+        _statManager.AddHighestDamageTaken(val);
 
         GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnShieldHit);
 

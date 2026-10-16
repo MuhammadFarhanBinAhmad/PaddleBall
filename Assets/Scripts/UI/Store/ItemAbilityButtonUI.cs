@@ -11,6 +11,8 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
     AbilityManager _abilityManager;
     StoreOverlayUI _storeOverlayUI;
     OnTheHouse _onTheHouse;
+    StatManager _statManager;
+
     //ViewItemAbilityButtonUI _viewItemAbilityButtonUI;
     [SerializeField]StoreAbilityManager _storeAbilityManager;
     internal SOItemAbilityContentUI _itemAbilityContent { get;private set; }
@@ -35,6 +37,7 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
         _towerUIManager = FindAnyObjectByType<TowerUIManager>();
         _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
+        _statManager = FindAnyObjectByType<StatManager>();
     }
     private void Start()
     {
@@ -139,6 +142,32 @@ public class ItemAbilityButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
             }
         }
 
+        switch (_itemAbilityContent._itemRarity)
+        {
+            case ITEMRARITY.COMMON:
+                {
+                    _statManager.AddTotalCommonCard();
+                    break;
+                }
+            case ITEMRARITY.UNCOMMON:
+                {
+                    _statManager.AddTotalUncommonCard ();
+                    break;
+                }
+            case ITEMRARITY.RARE:
+                {
+                    _statManager.AddTotalRareCard();
+                    break;
+                }
+            case ITEMRARITY.LEGENDARY:
+                {
+                    _statManager.AddTotalLegendaryCard();
+                    break;
+                }
+        }    
+
+
+        _statManager.AddTotalCard();
         _storeAbilityManager.MoveAbility(_itemAbilityContent);
         _itemAbilityContent = null;
     }    

@@ -18,6 +18,7 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
 
     PaddleMovement _paddleMovement;
     boss_TheApprenticeManager _TheApprenticeManager;
+    [SerializeField]BrickAbilityManager _brickAbilityManager;
     [Header("Point And Movement")]
     [SerializeField]
     private List<SplineContainer> _movementPos = new List<SplineContainer>();
@@ -29,11 +30,8 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     APPRENTICECURRENTATTACK _currentAttack;
 
     [Header("Attack One")]
-    [SerializeField] GameObject _projectile;
-    [SerializeField] GameObject _conjuringProjectileEffect;
-
-    public float _projectileRest;
-    public float _projectileBuildUpAttack;
+    [SerializeField] ABILITY _attackAbility;
+    [SerializeField] SO_BrickAbilityStats _shotgunAttack;
     [Header("Attack Two")]
     //Slow down
     [SerializeField] float _conjuringSpellTime;
@@ -42,15 +40,14 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     [SerializeField] float _slowDownDuration;
     [SerializeField] float _slowDownTimeScale;
     [SerializeField] float _curseDuration;
+    Coroutine _conjuringRoutine;
 
     [Header("Attack Three")]
-    [SerializeField] SO_BrickSpecialEffect _spawnBrickEffect;
-    [SerializeField] SO_BrickHealthStats _stats;
-    BrickPool _brickPool;
-    [SerializeField] List<Transform> _pos = new List<Transform>();
-    [SerializeField] List<BrickBar> _active = new List<BrickBar>();
-    [SerializeField] float _timeToSpawnBrick;
-    Coroutine _conjuringRoutine;
+    [SerializeField] ABILITY _shieldAbility;
+    [SerializeField] SO_BrickAbilityStats _shieldAttack;
+    [Header("Attack One")]
+    [SerializeField] ABILITY _attackAbility_two;
+    [SerializeField] SO_BrickAbilityStats _burstFireAttack;
     //[SerializeField] List<Transform> _telePos;
     //[SerializeField] float _stayDuration;
     //[SerializeField] float _teleportDuration;
@@ -62,7 +59,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
         _TheApprenticeManager = GetComponentInParent<boss_TheApprenticeManager>();
         _target = FindAnyObjectByType<PaddleBallShooter>().transform;
         _paddleMovement = FindAnyObjectByType<PaddleMovement>();
-        _brickPool = FindAnyObjectByType<BrickPool>();
         _apprenticeParent = transform.parent;
     }
 
@@ -78,18 +74,34 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     public override void AttackPatternOne()
     {
         BeginPointMovement();
+        _brickAbilityManager.SetBrickAbilityStats(_shotgunAttack);
+        _brickAbilityManager.ActivateAbilities(_attackAbility);
         _currentAttack = APPRENTICECURRENTATTACK.MOVE_AND_SHOOTING;
     }
 
     public override void AttackPatternTwo()
     {
-        StartSpawningShield();
-        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
+        //StartSpawningShield();
+        //_currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
+        _conjuringRoutine = StartCoroutine(ConjuringSpell());
+
     }
 
     public override void AttackPatternThree()
     {
-        _conjuringRoutine = StartCoroutine(ConjuringSpell());
+        BeginPointMovement();
+        _brickAbilityManager.SetBrickAbilityStats(_shieldAttack);
+        _brickAbilityManager.ActivateAbilities(_shieldAbility);
+        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
+    }
+
+    public override void AttackPatternFour()
+    {
+        BeginPointMovement();
+        _brickAbilityManager.SetBrickAbilityStats(_burstFireAttack);
+        _brickAbilityManager.ActivateAbilities(_attackAbility_two);
+        _currentAttack = APPRENTICECURRENTATTACK.MOVE_AND_SHOOTING;
+
     }
 
     public override void RestToNeutral()
@@ -105,7 +117,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     //Attacks
     public void StartSpawningShield()
     {
-        StartCoroutine(SpawnBrick());
     }
     protected void BeginPointMovement()
     {
@@ -171,8 +182,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
         switch (_currentAttack)
         {
             case APPRENTICECURRENTATTACK.MOVE_AND_SHOOTING:
-                _conjuringProjectileEffect.SetActive(true);
-                StartCoroutine(ShootNormalProjectile());
                 break;
 
             case APPRENTICECURRENTATTACK.CONJURING:
@@ -244,26 +253,13 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
                     finalWorldPosition);
 
             CompleteCurrentAttack();
+
+            _brickAbilityManager.ResetAllAbility();
         }
 
         _movementRoutine = null;
     }
-    IEnumerator ShootNormalProjectile()
-    {
-
-        yield return new WaitForSeconds(_lerpOutEffect._lerpDuration + .25f);
-
-        while (IsAttackActive)
-        {
-            _conjuringProjectileEffect.SetActive(true);
-            yield return new WaitForSeconds(_projectileBuildUpAttack);
-            GameObject proj = Instantiate(_projectile, _spawnPos.position, Quaternion.identity);
-            EnemyProjectile ep = proj.GetComponent<EnemyProjectile>();
-            //ep.ShootProjectile(_target);
-            _conjuringProjectileEffect.SetActive(false);
-            yield return new WaitForSeconds(_projectileRest);
-        }
-    }
+    
     IEnumerator ConjuringSpell()
     {
 
@@ -285,42 +281,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
 
         _conjuringSpellEffect.SetActive(false);
         _conjuringSpellEnd.SetActive(true);
-
-        CompleteCurrentAttack();
-        _movementRoutine = null;
-    }
-
-    IEnumerator SpawnBrick()
-    {
-        
-        for (int i =0; i < _pos.Count;i++)
-        {
-            if (_active[i] == null)
-            {
-                yield return new WaitForSeconds(_timeToSpawnBrick);
-                GameObject _bb = _brickPool.GetBrick();
-                BrickBar brickBar = _bb.GetComponent<BrickBar>();
-                brickBar.SetBrick(_stats);
-                _bb.transform.position = _pos[i].position;
-                _bb.transform.parent = _pos[i].transform;
-                GlobalEffects.Instance.PlayLerpObject(_bb, _spawnBrickEffect);
-                _active[i] = brickBar;
-                continue;
-            }
-            if (_active[i].gameObject.activeInHierarchy)
-            {
-                continue;
-            }
-            else
-            {
-                yield return new WaitForSeconds(_timeToSpawnBrick);
-                _active[i].gameObject.SetActive(true);
-                _active[i].SetBrick(_stats);
-                _active[i].transform.position = _pos[i].position;
-                _active[i].transform.parent = _pos[i].transform;
-                GlobalEffects.Instance.PlayLerpObject(_active[i].gameObject, _spawnBrickEffect);
-            }
-        }
 
         CompleteCurrentAttack();
         _movementRoutine = null;

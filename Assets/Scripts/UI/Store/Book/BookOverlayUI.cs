@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -28,6 +29,8 @@ public class BookOverlayUI : BaseOverLayInteraction
     [SerializeField] TextMeshProUGUI _abilityDescription;
     [SerializeField] bool _isAnOverlayOpen;
 
+    public event Action OnBookLogOpened;
+    public event Action OnBookLogClosed;
 
     private void Awake()
     {
@@ -35,8 +38,16 @@ public class BookOverlayUI : BaseOverLayInteraction
     }
     private void Start()
     {
-        _openBookOverlay.onClick.AddListener(PlayOpenBookLogOverlayAnim);
-        _bookOverlyCloseButton.onClick.AddListener(PlayCloseBookLogOverlayAnim);
+        _openBookOverlay.onClick.AddListener(() =>
+        {
+            OnBookLogOpened?.Invoke();
+            PlayOpenBookLogOverlayAnim();
+        });
+        _bookOverlyCloseButton.onClick.AddListener(() =>
+        {
+            OnBookLogClosed?.Invoke();
+            PlayCloseBookLogOverlayAnim();
+        });
 
         _spellButton.onClick.AddListener(PlayOpenSpellOverlay);
         _spellButton.onClick.AddListener(() =>

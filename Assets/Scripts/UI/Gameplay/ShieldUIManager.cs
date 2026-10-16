@@ -7,6 +7,7 @@ public class ShieldUIManager : MonoBehaviour
     DeadZone _deadZone;
 
     [SerializeField] Image _manaImage;
+    [SerializeField] Image _healthImage;
     [SerializeField] TextMeshProUGUI _health;
 
     private void Awake()
@@ -16,7 +17,6 @@ public class ShieldUIManager : MonoBehaviour
     private void Start()
     {
         _deadZone.OnShieldDamage += UpdateShieldUI;
-
         UpdateShieldUI();
     }
     private void OnDestroy()
@@ -30,6 +30,7 @@ public class ShieldUIManager : MonoBehaviour
             Mathf.RoundToInt(_deadZone.GetCurrentShield()).ToString()
             + "/"
             + Mathf.RoundToInt(_deadZone.GetMaxShield()).ToString();
+        _healthImage. fillAmount = Mathf.RoundToInt(_deadZone.GetCurrentShield())/Mathf.RoundToInt(_deadZone.GetMaxShield());
         _manaImage.fillAmount = _deadZone.GetShieldPercentage();
     }
 }

@@ -17,6 +17,14 @@ public enum CUTSCENETYPE
     FADE_IN_OUT = 1 << 9,
 
 }
+public enum FOCUS_TYPE
+{
+    CIRCLE,
+    ARROW,
+    DOUBLE_ARROW
+}
+
+
 
 [CreateAssetMenu(fileName = "SO_CutSceneEvent", menuName = "Cutscene/SO_CutSceneEvent")]
 public class SO_CutSceneEventContent : ScriptableObject
@@ -32,7 +40,7 @@ public class SO_CutSceneEventContent : ScriptableObject
     public TEXTBOX_TYPE TEXTBOX_TYPE;
 
     [Header("POINT_OF_FOCUS")]
-    public GameObject _focusCircle;
+    public FOCUS_TYPE _focusType;
 
     [Header("POPIN")]
     public AnimationCurve _popInEffectLerp;

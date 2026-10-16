@@ -17,8 +17,8 @@ MonoBehaviour:
   _elementID: 5
   _layerNumber: 5
   _dropSpeed: 0.01
-  _APValue: 5
-  _daytoUnlock: 5
+  _APValue: 33
+  _daytoUnlock: 9
   _tiers:
   - _health: 10
     _brickSprite:

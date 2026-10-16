@@ -32,7 +32,7 @@ public class TutorialOrder_HitPaddle : TutorialOrder
 
         while (!ballHitPaddle)
         {
-            yield return null;
+            yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
         }
 
         _paddleReflection.OnBallHitPaddle -= HandleBallHit;

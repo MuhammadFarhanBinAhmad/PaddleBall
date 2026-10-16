@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,6 +22,8 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] Button _closeSelectAbilityPage;
     [SerializeField] GameObject _selectAbilityOverlay;
     [SerializeField] Animator _abilitySelectAbilityAnimator;
+    public event Action OnSelectAbilityPageClicked;
+    public event Action OnCloseSelectAbilityPageClicked;
 
     [Header("AbilityPage")]
     [SerializeField] Button _closePurchaseAbilityOverlay;
@@ -40,6 +43,8 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] TextMeshProUGUI _currentPointText;
     [SerializeField] TextMeshProUGUI _leftOverPointText;
     [SerializeField] TextMeshProUGUI _rerollLeftText;
+    public event Action OnOpenCardClicked;
+    public event Action OnCloseCardClicked;
 
     [SerializeField]bool _isAnOverlayOpen;
 
@@ -62,13 +67,31 @@ public class StoreOverlayUI : BaseOverLayInteraction
         _toxicAbility.onClick.AddListener(() => OpenPurchaseAbilityPage(STATUSTYPE.TOXIC));
         _criticalAbility.onClick.AddListener(() => OpenPurchaseAbilityPage(STATUSTYPE.CRIT));
 
-        _openSelectAbilityPage.onClick.AddListener(HandleAbilityFlow);
-        _closeSelectAbilityPage.onClick.AddListener(HandleAbilityFlow);
+
+
+        _openSelectAbilityPage.onClick.AddListener(() =>
+        {
+            OnSelectAbilityPageClicked?.Invoke();
+            HandleAbilityFlow();
+        });
+        _closeSelectAbilityPage.onClick.AddListener(() =>
+        {
+            OnCloseSelectAbilityPageClicked?.Invoke();
+            HandleAbilityFlow();
+        });
         _closePurchaseAbilityOverlay.onClick.AddListener(ClosePurchaseAbilityPage);
 
         // Item
-        _openCardPage.onClick.AddListener(ToggleCardPage);
-        _closeItem.onClick.AddListener(PlayCloseCardStoreAnim);
+        _openCardPage.onClick.AddListener(() =>
+        {
+            OnOpenCardClicked?.Invoke();
+            ToggleCardPage();
+        });
+        _closeItem.onClick.AddListener(() =>
+        {
+            OnCloseCardClicked?.Invoke();
+            PlayCloseCardStoreAnim();
+        });
         _rerollItem.onClick.AddListener(StartRerollCardAnim);
 
         _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();

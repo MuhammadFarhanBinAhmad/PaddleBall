@@ -82,11 +82,11 @@ public class TimeManager : MonoBehaviour
         _onStartBossDay += StopDayTimer;
         _onStartBossDay += CheckToSpawnBoss;
 
-        _onEndBossDay += SwitchRegularDayDuration;
-        _onEndBossDay += SetNewEpisode;
+        //_onEndBossDay += SwitchRegularDayDuration;
+        //_onEndBossDay += SetNewEpisode;
 
         _onBossDefeated += SetBossDefeated;
-        _onBossDefeated += StartDayTimer;
+        //_onBossDefeated += StartDayTimer;
 
         _towerManager.OnHeightIncrease += MoveBackgroundsY;
 
@@ -105,11 +105,11 @@ public class TimeManager : MonoBehaviour
         _onStartBossDay -= StopDayTimer;
         _onStartBossDay -= CheckToSpawnBoss;
 
-        _onEndBossDay -= SwitchRegularDayDuration;
-        _onEndBossDay -= SetNewEpisode;
+        //_onEndBossDay -= SwitchRegularDayDuration;
+        //_onEndBossDay -= SetNewEpisode;
 
         _onBossDefeated -= SetBossDefeated;
-        _onBossDefeated -= StartDayTimer;
+        //_onBossDefeated -= StartDayTimer;
 
         _dayPass -= PlayDayPassAudio;
         _dayPass -= _storeAbilityManager.SetItemAvailableToPurchase;
