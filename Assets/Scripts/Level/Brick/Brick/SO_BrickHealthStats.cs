@@ -19,10 +19,6 @@ public enum ABILITY
 }
 public class SO_BrickHealthStats : ScriptableObject
 {
-
-    public int _parentElementID, _childElementID;
-    public int _elementID;
-    public int _layerNumber;
     //public int _health;
     public float _dropSpeed;
     public int _APValue;

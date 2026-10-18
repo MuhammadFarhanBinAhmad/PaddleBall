@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: 8_DarkOrange
+  m_Name: Basic_Brick_08
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
-  _parentElementID: 6
-  _childElementID: 0
-  _elementID: 8
-  _layerNumber: 7
-  _dropSpeed: 0.1
-  _APValue: 257
-  _daytoUnlock: 17
+  _parentElementID: 5
+  _childElementID: 9
+  _elementID: 7
+  _layerNumber: 8
+  _dropSpeed: 0.15
+  _APValue: 134
+  _daytoUnlock: 12
   _tiers:
   - _health: 10
     _brickSprite:
@@ -58,10 +58,5 @@ MonoBehaviour:
     - {fileID: 1298558339, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -279782341, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -1964450564, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - _health: 2560
-    _brickSprite:
-    - {fileID: -129122643, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-    - {fileID: 19427120, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-    - {fileID: 1154508149, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
   _ability: 0
   _BrickStats: {fileID: 0}

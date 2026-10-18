@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: 9_White
+  m_Name: Basic_Brick_10
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
   _parentElementID: 7
   _childElementID: 0
   _elementID: 9
   _layerNumber: 7
   _dropSpeed: 0.2
-  _APValue: 513
-  _daytoUnlock: 8
+  _APValue: 524
+  _daytoUnlock: 16
   _tiers:
   - _health: 10
     _brickSprite:

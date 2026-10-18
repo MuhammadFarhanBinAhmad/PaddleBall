@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: Blue_Aggressive_Shotgun
+  m_Name: Basic_Brick_04
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
-  _parentElementID: 0
-  _childElementID: 1
-  _elementID: 0
-  _layerNumber: 0
   _dropSpeed: 0.01
-  _APValue: 6
-  _daytoUnlock: 2
+  _APValue: 10
+  _daytoUnlock: 5
   _tiers:
   - _health: 10
     _brickSprite:
@@ -33,5 +29,10 @@ MonoBehaviour:
     - {fileID: 9034449238214913990, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 2
-  _BrickStats: {fileID: 11400000, guid: 609777b9d34bba14baab442e6fb19266, type: 2}
+  - _health: 160
+    _brickSprite:
+    - {fileID: 68800044, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -297607996, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1148709287045872691, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  _ability: 0
+  _BrickStats: {fileID: 0}

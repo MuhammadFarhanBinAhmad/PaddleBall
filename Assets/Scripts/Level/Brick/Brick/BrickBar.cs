@@ -81,7 +81,6 @@ public class BrickBar : MonoBehaviour
     internal BrickHealthComponent _brickHealthComponent;
 
     [Header("BrickStats")]
-    [SerializeField] internal int _elementID;
     [SerializeField] internal int _layerNumber;
     [SerializeField] internal float _tickTimer;
     [SerializeField] internal float _baseFallSpeed;
@@ -194,10 +193,10 @@ public class BrickBar : MonoBehaviour
                     if (_brickHealthComponent.GetHealth() <= 0)
                     {
                         _AnimCurveEffect.PlayEffect(_onDeathAnimEffect, this.gameObject);
-                        if (_elementID > 0)
+                        if (_layerNumber > 0)
                         {
-                            _elementID = _brickHealthStats[_elementID]._parentElementID;
-                            SetBrick(_brickHealthStats[_elementID]);
+                            _layerNumber--;
+                            SetBrick(_brickHealthStats[_layerNumber]);
                         }
                         else
                         {
@@ -324,8 +323,7 @@ public class BrickBar : MonoBehaviour
     {
         _baseFallSpeed = _stats._dropSpeed;
         _fallSpeed = _stats._dropSpeed;
-        _elementID = _stats._elementID;
-        _layerNumber = _stats._layerNumber;
+        _layerNumber = _stats._tiers.Count-1;
         _brickHealthComponent.SetHealth(_stats._tiers[_layerNumber]._health);
 
         if (_stats._BrickStats != null)
@@ -334,7 +332,7 @@ public class BrickBar : MonoBehaviour
             _brickAbilityManager.ActivateAbilities(_stats._ability);
         }
 
-        _brickUI.PrepBrickLayerColour(_stats._layerNumber);
+        _brickUI.PrepBrickLayerColour(_layerNumber);
         _brickUI.UpdateHealth(_brickHealthComponent.GetStartingHealth(), _brickHealthComponent.GetHealth());
     }
     public void SetBrickPath(SplineContainer _path)
@@ -403,7 +401,6 @@ public class BrickBar : MonoBehaviour
 
     void ResetToDefault()
     {
-        _elementID = 0;
         _layerNumber = 0;
         _tickTimer = 0;
         _baseFallSpeed = 0;

@@ -44,6 +44,8 @@ public class BrickGenerator : MonoBehaviour
     [Header("Brick Info")]
     public List<SOBrickFormation> _brickFormationList = new List<SOBrickFormation>();
     public List<SO_BrickHealthStats> _brickTypesList;
+    [Header("Brick To Spawn")]
+    [SerializeField] int _maxBrickTypeToSpawn;
     public List<SO_BrickHealthStats> _brickAvailableToSpawn = new List<SO_BrickHealthStats>();
     [SerializeField] List<SplineContainer> _brickPathList = new List<SplineContainer>();
 
@@ -350,7 +352,13 @@ public class BrickGenerator : MonoBehaviour
             if (_brickTypesList[i]._daytoUnlock == day)
             {
                 _brickAvailableToSpawn.Add(_brickTypesList[i]);
+                
             }
+        }
+
+        if (_brickAvailableToSpawn.Count > _maxBrickTypeToSpawn)
+        {
+            _brickAvailableToSpawn.RemoveAt(0);
         }
     }
     IEnumerator AnimateBrickSpawn(Transform brickTransform)

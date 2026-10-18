@@ -258,7 +258,7 @@ public class BrickHealthComponent : MonoBehaviour
             _brickBar.HandleInstantKill(DeathCause.NORMAL);
             return;
         }
-        else if (_brickBar._elementID <= threshold)
+        else if (_brickBar._layerNumber <= threshold)
         {
             ClearAllStatusEffects();
             //ResetSpecialStatus();

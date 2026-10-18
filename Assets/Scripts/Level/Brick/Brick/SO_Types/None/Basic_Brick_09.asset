@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
+  m_Name: Basic_Brick_09
+  m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
+  _parentElementID: 6
+  _childElementID: 0
+  _elementID: 8
+  _layerNumber: 9
+  _dropSpeed: 0.1
+  _APValue: 264
+  _daytoUnlock: 14
+  _tiers:
+  - _health: 10
+    _brickSprite:
+    - {fileID: 989652391, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1616271449, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 20
+    _brickSprite:
+    - {fileID: -7565971343181142863, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 6425016848602906310, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 40
+    _brickSprite:
+    - {fileID: 9034449238214913990, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1677729360234972228, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -787673415922187111, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 80
+    _brickSprite:
+    - {fileID: 68800044, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -297607996, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1148709287045872691, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 160
+    _brickSprite:
+    - {fileID: 1452665365, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 267357197, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1114784262, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 320
+    _brickSprite:
+    - {fileID: -1843491830, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -354926178, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 192519827, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 640
+    _brickSprite:
+    - {fileID: -1282816005, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1078829790, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -214448026, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 1280
+    _brickSprite:
+    - {fileID: 1298558339, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -279782341, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: -1964450564, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  - _health: 2560
+    _brickSprite:
+    - {fileID: -129122643, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 19427120, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+    - {fileID: 1154508149, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
+  _ability: 0
+  _BrickStats: {fileID: 0}

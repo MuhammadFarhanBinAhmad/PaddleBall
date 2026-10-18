@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: 7_Black
+  m_Name: Defensive_Brick_02
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
-  _parentElementID: 5
-  _childElementID: 9
-  _elementID: 7
-  _layerNumber: 6
-  _dropSpeed: 0.15
-  _APValue: 129
-  _daytoUnlock: 14
+  _dropSpeed: 0.01
+  _APValue: 5
+  _daytoUnlock: 13
   _tiers:
   - _health: 10
     _brickSprite:
@@ -53,10 +49,5 @@ MonoBehaviour:
     - {fileID: -1282816005, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -1078829790, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: -214448026, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  - _health: 1280
-    _brickSprite:
-    - {fileID: 1298558339, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-    - {fileID: -279782341, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-    - {fileID: -1964450564, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 0
-  _BrickStats: {fileID: 0}
+  _ability: 4
+  _BrickStats: {fileID: 11400000, guid: 4d67d76e486c3bf4aafcf811550997b3, type: 2}

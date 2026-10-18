@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ea19f7c6d080e740ad47939c426de98, type: 3}
-  m_Name: Red_Aggressive_Default
+  m_Name: Basic_Brick_01
   m_EditorClassIdentifier: Assembly-CSharp::SO_BrickHealthStats
   _parentElementID: 0
   _childElementID: 1
   _elementID: 0
   _layerNumber: 0
   _dropSpeed: 0.01
-  _APValue: 6
-  _daytoUnlock: 2
+  _APValue: 2
+  _daytoUnlock: 0
   _tiers:
-  - _health: 20
+  - _health: 10
     _brickSprite:
     - {fileID: 989652391, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
     - {fileID: 1616271449, guid: b4f54150f5781d543be68b79249f6a14, type: 3}
-  _ability: 2
-  _BrickStats: {fileID: 11400000, guid: 1eb4eb3c76f174f4c8d6b257380a0b1f, type: 2}
+  _ability: 0
+  _BrickStats: {fileID: 0}

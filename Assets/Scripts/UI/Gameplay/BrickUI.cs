@@ -8,26 +8,21 @@ public class BrickUI : MonoBehaviour
     public List<SO_BrickHealthStats> _healthSprites = new List<SO_BrickHealthStats>();
 
     [SerializeField] int _currentLayer;
-
     [SerializeField] List<Sprite> _currentSprites = new List<Sprite>();
 
     public void PrepBrickLayerColour(int layer)
     {
         _currentLayer = layer;
-
         _currentSprites.Clear();
 
         foreach (SO_BrickHealthStats stats in _healthSprites)
         {
-            if (stats != null && stats._layerNumber == _currentLayer)
+            if (stats != null && stats._tiers.Count-1 == _currentLayer)
             {
-                // If you only want one tier, handle that here.
-                // Otherwise add sprites from all tiers.
                 foreach (Sprite sprite in stats._tiers[layer]._brickSprite)
                 {
                     _currentSprites.Add(sprite);
                 }
-
                 break;
             }
         }
