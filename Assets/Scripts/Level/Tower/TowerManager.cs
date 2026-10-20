@@ -1,15 +1,15 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TowerManager : MonoBehaviour
 {
 
     TimeManager _timeManager;
     StatManager _statManager;
+    CutSceneManager _cutSceneManager;
+
     public GameObject _collectedBrick;
 
     [Header("Essence")]
@@ -64,6 +64,10 @@ public class TowerManager : MonoBehaviour
     public int[] _towerHeightCheck;
     bool _receiveWarning;
 
+    [Header("GameOver")]
+    [SerializeField] List<SO_CutSceneEventContent> _gameover;
+
+
     public Action<int> _onTowerTakingDamage;
 
     //cheatcode
@@ -72,8 +76,10 @@ public class TowerManager : MonoBehaviour
     void Awake()
     {
         _timeManager = FindAnyObjectByType<TimeManager>();
-        _essenceToPureEssenceConversionRate = _initialEssenceThreshold;
+        _cutSceneManager = FindAnyObjectByType<CutSceneManager>();
         _statManager = FindAnyObjectByType<StatManager>();
+
+        _essenceToPureEssenceConversionRate = _initialEssenceThreshold;
     }
     private void Start()
     {
@@ -383,7 +389,12 @@ public class TowerManager : MonoBehaviour
             _towerHeightCheck[i] = Mathf.RoundToInt(val);    // integer thresholds
         }
     }
-
+    public void OnGameOver()
+    {
+        _cutSceneManager.FillCutSceneEvent(_gameover);
+        _cutSceneManager.SetBossCutsceneToPlay(BOSSCUTSCENETOPLAY.GAMEOVER);
+        _cutSceneManager.StartCutScene();
+    }
     public int GetCurrentEssence() => _currentEssenceCount;
     public void DeductPureEssence(int value)
     {

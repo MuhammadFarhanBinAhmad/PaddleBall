@@ -109,7 +109,7 @@ public class CameraShake : MonoBehaviour
 
             transform.localPosition = _originalLocalPos + offset;
 
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 

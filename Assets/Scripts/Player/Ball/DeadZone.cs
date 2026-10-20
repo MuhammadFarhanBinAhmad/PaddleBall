@@ -1,7 +1,5 @@
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class DeadZone : MonoBehaviour
 {
@@ -19,7 +17,6 @@ public class DeadZone : MonoBehaviour
     [Header("Feedback")]
     [SerializeField] SO_FeedbackEffect so_OnBallHit;
     [SerializeField] SO_FeedbackEffect so_OnShieldHit;
-    [SerializeField] SO_FeedbackEffect so_OnShieldDown;
 
     Color shieldColour;
 
@@ -27,16 +24,17 @@ public class DeadZone : MonoBehaviour
     {
         _towerManager = FindAnyObjectByType<TowerManager>();
         _statManager = FindAnyObjectByType<StatManager>();
+
+
+
+
         shieldColour = _spriteRenderer.color;
         _currentTowerAndPaddleHealth = _maxTowerAndPaddleHealth;
 
     }
     private void Start()
     {
-
         OnShieldDamage += UpdateShieldVisual;
-
-
     }
 
     private void OnDestroy()
@@ -58,6 +56,11 @@ public class DeadZone : MonoBehaviour
 
         GlobalFeedbackManager.Instance.PlayGlobalFeedback();
         OnShieldDamage?.Invoke();
+
+        if(_currentTowerAndPaddleHealth <=0)
+            _towerManager.OnGameOver();
+            
+
     }
     void UpdateShieldVisual()
     {

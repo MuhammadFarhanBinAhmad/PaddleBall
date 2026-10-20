@@ -41,13 +41,19 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     [SerializeField] float _slowDownTimeScale;
     [SerializeField] float _curseDuration;
     Coroutine _conjuringRoutine;
-
     [Header("Attack Three")]
     [SerializeField] ABILITY _shieldAbility;
     [SerializeField] SO_BrickAbilityStats _shieldAttack;
-    [Header("Attack One")]
+    [Header("Attack Four")]
     [SerializeField] ABILITY _attackAbility_two;
     [SerializeField] SO_BrickAbilityStats _burstFireAttack;
+    [Header("Resting Movement")]
+    [SerializeField] private Transform _restPoint;
+    [SerializeField] private float _restMovementSpeed = 5f;
+    [SerializeField] private float _restArrivalDistance = 0.05f;
+
+    private Coroutine _restMovementRoutine;
+    private bool _hasReachedRestPoint;
     //[SerializeField] List<Transform> _telePos;
     //[SerializeField] float _stayDuration;
     //[SerializeField] float _teleportDuration;
@@ -83,16 +89,15 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     {
         //StartSpawningShield();
         //_currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
+        _brickAbilityManager.SetBrickAbilityStats(_shieldAttack);
+        _brickAbilityManager.ActivateAbilities(_shieldAbility);
+        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
         _conjuringRoutine = StartCoroutine(ConjuringSpell());
 
     }
 
     public override void AttackPatternThree()
     {
-        BeginPointMovement();
-        _brickAbilityManager.SetBrickAbilityStats(_shieldAttack);
-        _brickAbilityManager.ActivateAbilities(_shieldAbility);
-        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
     }
 
     public override void AttackPatternFour()
@@ -298,5 +303,67 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
             _movementRoutine = null;
             print("hit");
         }
+    }
+    public override void StopBossAttack()
+    {
+        base.StopBossAttack();
+
+        if (_restMovementRoutine != null)
+        {
+            StopCoroutine(_restMovementRoutine);
+            _restMovementRoutine = null;
+        }
+
+        _brickAbilityManager.ResetAllAbility();
+    }
+    public override void Resting()
+    {
+        if (_restPoint == null)
+        {
+            Debug.LogWarning("Apprentice rest point not assigned!");
+            _hasReachedRestPoint = true;
+            return;
+        }
+
+        if (_restMovementRoutine != null)
+            StopCoroutine(_restMovementRoutine);
+
+        _hasReachedRestPoint = false;
+
+        _brickAbilityManager.ResetAllAbility();
+
+        _restMovementRoutine = StartCoroutine(
+            MoveToRestPoint()
+        );
+    }
+    private IEnumerator MoveToRestPoint()
+    {
+        GlobalEffects.Instance.PlayLerpObject(
+        gameObject,
+        _lerpInEffect
+    );
+
+        yield return new WaitForSeconds(
+            _lerpInEffect._lerpDuration + 0.25f
+        );
+
+        transform.position = _restPoint.position;
+
+        GlobalEffects.Instance.PlayLerpObject(
+            gameObject,
+            _lerpOutEffect
+        );
+
+        yield return new WaitForSeconds(
+            _lerpOutEffect._lerpDuration + 0.25f
+        );
+
+        _hasReachedRestPoint = true;
+        _restMovementRoutine = null;
+    }
+
+    protected override bool IsBossAtRestPoint()
+    {
+        return _hasReachedRestPoint;
     }
 }

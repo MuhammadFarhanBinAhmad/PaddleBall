@@ -69,4 +69,5 @@ public class SO_CutSceneEventContent : ScriptableObject
     public float _Fadetime;
     public float _startFadeAlpha;
     public float _endFadeAlpha;
+    
 }

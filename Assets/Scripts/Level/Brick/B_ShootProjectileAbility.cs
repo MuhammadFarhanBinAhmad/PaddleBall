@@ -80,6 +80,10 @@ public class B_ShootProjectileAbility : MonoBehaviour
             // =========================
             // BURST FIRE
             // =========================
+            GameObject vfx = Instantiate(_buildUpVFX, _projSpawnPoint.transform.position, Quaternion.identity);
+            vfx.transform.parent = _projSpawnPoint;
+            yield return new WaitForSeconds(_buildUpTime);
+
             if (_burstFire)
             {
                 for (int i = 0; i < _numberOfSuccession; i++)
@@ -99,21 +103,8 @@ public class B_ShootProjectileAbility : MonoBehaviour
                 // =========================
                 // NORMAL / SHOTGUN
                 // =========================
-
-
-                if(_sniperlaserShot)
-                {
-                    GameObject vfx = Instantiate(_buildUpVFX, _projSpawnPoint.transform.position, Quaternion.identity);
-                    vfx.transform.parent = _projSpawnPoint;
-                    yield return new WaitForSeconds(_buildUpTime);
-                    Shoot();
-                    yield return new WaitForSeconds(_shootInterval);
-                }
-                else
-                {
-                    Shoot();
-                    yield return new WaitForSeconds(_shootInterval);
-                }
+                Shoot();
+                yield return new WaitForSeconds(_shootInterval);
 
             }
         }

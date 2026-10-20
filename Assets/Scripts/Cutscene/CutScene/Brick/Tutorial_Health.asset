@@ -16,10 +16,14 @@ MonoBehaviour:
   _speakerName: Master
   _dialougeTexts:
   - Nice control of your ball Paddle. Moving on this gauge is your health
-  - Taking direct hit from the incoming brick can lower your health
-  - You can also lose health if the brick reach the tower. So keep that in mind
-  - If the health guage reaches 0, the tower willl collapse
-  _freezeGame: 1
+  - Taking direct hit from the incoming brick or enemy projectile can harm you
+  - In addition, I also link you life energy and the tower into one
+  - So if the tower takes damage, you too will take damage aswell
+  - Reason was because the last apprentice task with fixing the tower bailed on me
+  - So as punishment, I used his lifeforce to rebuild the tower
+  - So guard the tower with your left
+  - No Pressure tho
+  _freezeGame: 0
   TEXTBOX_TYPE: 0
   _focusType: 0
   _popInEffectLerp:

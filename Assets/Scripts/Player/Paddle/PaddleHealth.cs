@@ -18,12 +18,6 @@ public class PaddleHealth : MonoBehaviour
     public float _timeTillRespawn;
     bool _isPaddleDead;
 
-    public Action OnPaddleDisable;
-    public Action OnPaddleEnable;
-    public Action<bool> SetBoolOnPaddleDisable;
-
-    public GameObject _hat;
-
     private void Awake()
     {
         _paddleMovement = FindAnyObjectByType<PaddleMovement>();
@@ -34,64 +28,9 @@ public class PaddleHealth : MonoBehaviour
 
         _spriteRenderer = GetComponentInParent<SpriteRenderer>();
 
-        OnPaddleDisable += DisablePaddle;
-        OnPaddleDisable += StartRespawnPaddleTimer;
-        OnPaddleDisable += PlayPaddleDisableAudio;
-
-        OnPaddleEnable += EnablePaddle;
-        OnPaddleEnable += PlayPaddleEnableAudio;
-
-        SetBoolOnPaddleDisable += _paddleMovement.DisblePaddleMovement;
-        SetBoolOnPaddleDisable += _paddleMovement.DisblePaddleCollider;
-        SetBoolOnPaddleDisable += _paddleVacoom.DisableVacoom;
 
 
     }
-    private void OnDisable()
-    {
-        OnPaddleDisable -= DisablePaddle;
-        OnPaddleDisable -= StartRespawnPaddleTimer;
-        OnPaddleDisable -= PlayPaddleDisableAudio;
-
-        OnPaddleEnable -= EnablePaddle;
-        OnPaddleEnable -= PlayPaddleEnableAudio;
-
-        SetBoolOnPaddleDisable -= _paddleMovement.DisblePaddleMovement;
-        SetBoolOnPaddleDisable -= _paddleMovement.DisblePaddleCollider;
-        SetBoolOnPaddleDisable -= _paddleVacoom.DisableVacoom;
-
-    }
-
-    void DisablePaddle()
-    {
-        SetBoolOnPaddleDisable?.Invoke(true);
-        _hat.SetActive(false);
-        _spriteRenderer.enabled = false;
-        _isPaddleDead = true;
-        _deathVFX.SetActive(true);
-        _paddleFeedbackManager.OnBeingDestroyed.Invoke();
-    }
-
-    void EnablePaddle()
-    {
-        SetBoolOnPaddleDisable?.Invoke(false);
-        _hat.SetActive(true);
-        _spriteRenderer.enabled = true;
-        _isPaddleDead = false;
-        transform.parent.position = _spawnPos.position;
-        _paddleFeedbackManager.OnRespawn?.Invoke();
-    }
-
-    void StartRespawnPaddleTimer()
-    {
-        StartCoroutine(RespawnPaddle());
-    }
-    IEnumerator RespawnPaddle()
-    {
-        yield return new WaitForSeconds(_timeTillRespawn);
-        OnPaddleEnable?.Invoke();
-    }
-
     public void OnTriggerEnter2D(Collider2D other)
     {
 

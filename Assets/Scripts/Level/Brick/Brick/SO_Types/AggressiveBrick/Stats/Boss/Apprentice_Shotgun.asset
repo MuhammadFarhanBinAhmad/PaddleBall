@@ -26,7 +26,7 @@ MonoBehaviour:
   _numberOfSuccession: 5
   _numberOfProjectiles: 6
   _shotAngle: 15
-  _buildUpTime: 3
+  _buildUpTime: 2
   _buildUpVFX: {fileID: 3526117444712284641, guid: 76ff54a6937b6a6459fcee6a1fe046d3, type: 3}
   _activateStaticShield: 0
   _shieldSide: 0

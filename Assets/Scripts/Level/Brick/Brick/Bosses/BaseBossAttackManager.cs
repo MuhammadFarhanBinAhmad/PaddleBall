@@ -62,30 +62,20 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         {
             BuildAndShuffleAttackList();
 
-            yield return RestSequence();
-            if (_stopAttacking) yield break;
-
             for (int i = 0; i < _attackOrder.Count; i++)
             {
                 if (_stopAttacking)
                     yield break;
 
-                while (_isStunned && !_stopAttacking)
-                    yield return null;
-
-                if (_stopAttacking)
-                    yield break;
-
                 yield return ExecuteAttack(_attackOrder[i]);
 
-                while (_isStunned && !_stopAttacking)
-                    yield return null;
-
                 if (_stopAttacking)
                     yield break;
-
-                yield return RestSequence();
             }
+
+            // All four attack patterns have finished.
+            // Return to resting position.
+            yield return RestSequence();
         }
     }
 
@@ -112,9 +102,25 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     private IEnumerator RestSequence()
     {
         StopPingPongMovement();
+
+        // Tell the derived boss manager to start returning to rest.
+        Resting();
+
+        // Wait until the boss reaches its resting point.
+        while (!_stopAttacking && !IsBossAtRestPoint())
+            yield return null;
+
+        if (_stopAttacking)
+            yield break;
+
+        // Rest after arriving.
         yield return new WaitForSeconds(_restDuration);
     }
-    
+    protected virtual bool IsBossAtRestPoint()
+    {
+        return true;
+    }
+
     private IEnumerator ExecuteAttack(AttackType attack)
     {
         ResetCurrentAttackState();
@@ -248,5 +254,6 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     public abstract void AttackPatternTwo();
     public abstract void AttackPatternThree();
     public abstract void AttackPatternFour();
+    public abstract void Resting();
     public abstract void RestToNeutral();
 }

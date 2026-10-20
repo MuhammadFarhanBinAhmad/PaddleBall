@@ -3,19 +3,12 @@ using UnityEngine;
 public class BackWithAVengence : ABSAbility, IExplosionContextModifier, IDischargeContextModifier, ICriticalContextModifier, IToxicContextModifier
 {
 
-    PaddleHealth _paddleHealth;
     
     float _currentTime;
     bool _vengenceInEffect;
 
     private void Awake()
     {
-        _paddleHealth = FindAnyObjectByType<PaddleHealth>();
-        _paddleHealth.OnPaddleEnable += ResetTime;
-    }
-    private void OnDestroy()
-    {
-        _paddleHealth.OnPaddleEnable -= ResetTime;
     }
 
     void ResetTime()
