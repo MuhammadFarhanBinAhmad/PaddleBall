@@ -15,8 +15,6 @@ public class DestroyBossCutsceneEvent : BaseCutsceneEvent
     public override void EndEvent()
     {
 
-        print("delay ends");
-
         if (_targetObject != null)
             Destroy(_targetObject);
 

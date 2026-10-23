@@ -227,8 +227,6 @@ public class TutorialManager : MonoBehaviour
         _skipTutorial.gameObject.SetActive(false);
         _tutorialActive = false;
 
-        Debug.Log("Tutorial Completed!");
-
         OnTutorialCompleted?.Invoke();
     }
 
@@ -271,8 +269,6 @@ public class TutorialManager : MonoBehaviour
     {
         if (!_tutorialActive)
             return;
-
-        Debug.Log("Tutorial skipped by player.");
 
         // First stop any active tutorial cutscene and clean up its UI.
         if (_cutSceneManager != null)

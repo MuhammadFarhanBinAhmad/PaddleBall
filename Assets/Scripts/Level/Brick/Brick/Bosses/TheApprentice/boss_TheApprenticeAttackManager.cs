@@ -87,17 +87,18 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
 
     public override void AttackPatternTwo()
     {
-        //StartSpawningShield();
-        //_currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
-        _brickAbilityManager.SetBrickAbilityStats(_shieldAttack);
-        _brickAbilityManager.ActivateAbilities(_shieldAbility);
-        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
-        _conjuringRoutine = StartCoroutine(ConjuringSpell());
+        _conjuringRoutine = StartCoroutine(
+            StartConjuringSequence()
+        );
 
     }
 
     public override void AttackPatternThree()
     {
+        BeginPointMovement();
+        _brickAbilityManager.SetBrickAbilityStats(_shieldAttack);
+        _brickAbilityManager.ActivateAbilities(_shieldAbility);
+        _currentAttack = APPRENTICECURRENTATTACK.SPAWNING_SHIELD;
     }
 
     public override void AttackPatternFour()
@@ -112,16 +113,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     public override void RestToNeutral()
     {
         Debug.Log("Boss is resting / resetting to neutral");
-    }
-    protected void BeginTimedAttack(float duration)
-    {
-        _currentAttackEndMode = AttackEndMode.Duration;
-        _attackEndTime = Time.time + Mathf.Max(0f, duration);
-        _attackComplete = false;
-    }
-    //Attacks
-    public void StartSpawningShield()
-    {
     }
     protected void BeginPointMovement()
     {
@@ -203,8 +194,6 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
 
         if (splineLength <= 0f)
         {
-            Debug.LogWarning(
-                $"{name}: Selected spline has no length.");
 
             CompleteCurrentAttack();
             yield break;
@@ -264,17 +253,26 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
 
         _movementRoutine = null;
     }
-    
+    private IEnumerator StartConjuringSequence()
+    {
+        // Teleport before starting the attack.
+        yield return StartCoroutine(TeleportToSpawn());
+
+        if (_stopAttacking || _isStunned)
+            yield break;
+
+        // Start conjuring only after teleporting.
+        yield return StartCoroutine(ConjuringSpell());
+
+        _conjuringRoutine = null;
+    }
     IEnumerator ConjuringSpell()
     {
 
-        GlobalEffects.Instance.PlayLerpObject(this.gameObject, _lerpInEffect);
-        yield return new WaitForSeconds(_lerpInEffect._lerpDuration + .25f);
         _conjuringSpellEffect.SetActive(true);
-        transform.position = _spawnPos.position;
-        GlobalEffects.Instance.PlayLerpObject(this.gameObject, _lerpOutEffect);
-        yield return new WaitForSeconds(_lerpOutEffect._lerpDuration + 0.5f);
+
         yield return new WaitForSeconds(_conjuringSpellTime);
+
         int index = Random.Range(0, 1);
 
         switch (index)
@@ -287,22 +285,24 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
         _conjuringSpellEffect.SetActive(false);
         _conjuringSpellEnd.SetActive(true);
 
+        yield return new WaitForSeconds(_conjuringSpellTime);
+
+
         CompleteCurrentAttack();
-        _movementRoutine = null;
     }
     public void StopConjuringSpell()
     {
-        if (_conjuringRoutine != null)
-        {
-            StopCoroutine(_conjuringRoutine);
-            StopCoroutine(SplineMovementRoutine());
-            _conjuringSpellEffect.SetActive(false);
-            _conjuringRoutine = null;
+        if (_conjuringRoutine == null)
+            return;
 
-            CompleteCurrentAttack();
-            _movementRoutine = null;
-            print("hit");
-        }
+        StopCoroutine(_conjuringRoutine);
+        _conjuringRoutine = null;
+
+        _conjuringSpellEffect.SetActive(false);
+
+        CompleteCurrentAttack();
+
+        Debug.Log("Conjuring interrupted!");
     }
     public override void StopBossAttack()
     {
@@ -338,17 +338,28 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
     }
     private IEnumerator MoveToRestPoint()
     {
+        _hasReachedRestPoint = false;
+
+        // Disable all active abilities before resting.
+        _brickAbilityManager.ResetAllAbility();
+
+        // Step 1: Lerp in (disappear).
         GlobalEffects.Instance.PlayLerpObject(
-        gameObject,
-        _lerpInEffect
-    );
+            gameObject,
+            _lerpInEffect
+        );
 
         yield return new WaitForSeconds(
             _lerpInEffect._lerpDuration + 0.25f
         );
 
-        transform.position = _restPoint.position;
+        if (_stopAttacking || _isStunned)
+            yield break;
 
+        // Step 2: Teleport to spawn position.
+        transform.position = _spawnPos.position;
+
+        // Step 3: Lerp out (reappear).
         GlobalEffects.Instance.PlayLerpObject(
             gameObject,
             _lerpOutEffect
@@ -358,10 +369,45 @@ public class boss_TheApprenticeAttackManager : BaseBossAttackManager
             _lerpOutEffect._lerpDuration + 0.25f
         );
 
+        if (_stopAttacking || _isStunned)
+            yield break;
+
+        // Step 4: Notify the base manager that the boss
+        // has arrived at its resting position.
         _hasReachedRestPoint = true;
         _restMovementRoutine = null;
     }
+    private IEnumerator TeleportToSpawn()
+    {
+        if (_spawnPos == null)
+            yield break;
 
+        // Step 1: Lerp in (disappear).
+        GlobalEffects.Instance.PlayLerpObject(
+            gameObject,
+            _lerpInEffect
+        );
+
+        yield return new WaitForSeconds(
+            _lerpInEffect._lerpDuration + 0.25f
+        );
+
+        if (_stopAttacking || _isStunned)
+            yield break;
+
+        // Step 2: Teleport to spawn position.
+        transform.position = _spawnPos.position;
+
+        // Step 3: Lerp out (reappear).
+        GlobalEffects.Instance.PlayLerpObject(
+            gameObject,
+            _lerpOutEffect
+        );
+
+        yield return new WaitForSeconds(
+            _lerpOutEffect._lerpDuration + 0.25f
+        );
+    }
     protected override bool IsBossAtRestPoint()
     {
         return _hasReachedRestPoint;

@@ -23,7 +23,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
 
     [Header("Boss Attack Flow")]
-    [SerializeField] private float _restDuration;
+    [SerializeField] internal float _restDuration;
 
     [Header("Stun")]
     [SerializeField] private float _stunDuration;
@@ -84,8 +84,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         _attackOrder.Clear();
         _attackOrder.Add(AttackType.One);
         _attackOrder.Add(AttackType.Two);
-        _attackOrder.Add(AttackType.Three);
-        _attackOrder.Add(AttackType.Four);
+        //_attackOrder.Add(AttackType.Three);
 
         ShuffleList(_attackOrder);
     }
@@ -103,17 +102,19 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     {
         StopPingPongMovement();
 
-        // Tell the derived boss manager to start returning to rest.
+        // Begin teleporting to the resting position.
         Resting();
 
-        // Wait until the boss reaches its resting point.
-        while (!_stopAttacking && !IsBossAtRestPoint())
+        // Wait for the teleport animation to finish.
+        while (!_stopAttacking && !_isStunned && !IsBossAtRestPoint())
+        {
             yield return null;
+        }
 
-        if (_stopAttacking)
+        if (_stopAttacking || _isStunned)
             yield break;
 
-        // Rest after arriving.
+        // Rest at the spawn position.
         yield return new WaitForSeconds(_restDuration);
     }
     protected virtual bool IsBossAtRestPoint()
@@ -123,6 +124,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
     private IEnumerator ExecuteAttack(AttackType attack)
     {
+
+        yield return new WaitForSeconds(_restDuration);
         ResetCurrentAttackState();
 
         switch (attack)
@@ -130,11 +133,9 @@ public abstract class BaseBossAttackManager : MonoBehaviour
             case AttackType.One:
                 AttackPatternOne();
                 break;
-
             case AttackType.Two:
                 AttackPatternTwo();
                 break;
-
             case AttackType.Three:
                 AttackPatternThree();
                 break;

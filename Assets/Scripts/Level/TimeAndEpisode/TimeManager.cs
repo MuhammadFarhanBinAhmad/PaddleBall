@@ -150,7 +150,6 @@ public class TimeManager : MonoBehaviour
             {
                 if (currentDayTime)
                 {
-                    Debug.Log("06:00 - DAY TIME");
 
                     FadeSpriteAlpha(_nightBG[0], 0f);
                     FadeSpriteAlpha(_nightBG[1], 0f);
@@ -160,7 +159,6 @@ public class TimeManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("18:00 - NIGHT TIME");
 
                     FadeSpriteAlpha(_nightBG[0], 1f);
                     FadeSpriteAlpha(_nightBG[1], 1f);
