@@ -4,33 +4,44 @@ using UnityEngine;
 
 public class Apprentice_ShotGunAttack : BaseBossAttack
 {
-    [Header("Ability")]
-    [SerializeField] private BrickAbilityManager _abilityManager;
-    [SerializeField] private ABILITY _ability;
-    [SerializeField] private SO_BrickAbilityStats _abilityStats;
 
-    [Header("Duration")]
-    [SerializeField] private float _attackDuration = 5f;
 
     protected override IEnumerator ExecuteAttack()
     {
-        if (_abilityManager == null || _abilityStats == null)
-        {
-            Debug.LogError(
-                $"{name}: AbilityManager or AbilityStats is NULL!"
-            );
-
-            yield break;
-        }
-
         // Step 1: Assign the stats.
         _abilityManager.SetBrickAbilityStats(_abilityStats);
 
         // Step 2: Activate the ability.
         _abilityManager.ActivateAbilities(_ability);
 
-        // Step 3: Wait for attack duration.
-        yield return new WaitForSeconds(_attackDuration);
+        // Step 3: Execute based on attack type.
+        switch (_executionType)
+        {
+            case BOSS_ATTACK_EXECUTION_TYPE.TIME:
+                {
+                    yield return new WaitForSeconds(_attackDuration);
+                    break;
+                }
+
+            case BOSS_ATTACK_EXECUTION_TYPE.MOVING:
+                {
+                    // Start movement along a random spline.
+                    _bossManager.StartRandomSplineMovement();
+                    print("hit");
+                    // Wait until movement finishes.
+                    while (_bossManager.IsMoving)
+                    {
+                        yield return null;
+                    }
+
+                    break;
+                }
+
+            case BOSS_ATTACK_EXECUTION_TYPE.NONE:
+                {
+                    break;
+                }
+        }
 
         // Step 4: Complete attack.
         CompleteAttack();
@@ -43,6 +54,7 @@ public class Apprentice_ShotGunAttack : BaseBossAttack
 
     protected override void OnAttackCancelled()
     {
+        _bossManager.StopSplineMovement();
         _abilityManager?.ResetAllAbility();
     }
 }

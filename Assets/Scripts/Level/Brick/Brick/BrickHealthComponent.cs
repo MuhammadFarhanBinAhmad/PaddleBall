@@ -27,7 +27,6 @@ public class BrickHealthComponent : MonoBehaviour
     [SerializeField] int _health;
     [SerializeField] float _tickTimer;
     [SerializeField] GameObject _damageText;
-    [SerializeField] GameObject _hitFlash;
     [SerializeField] float _flashPeriod;
     Dictionary<STATUSTYPE, ActiveStatusVFX> _activeVFX =
     new Dictionary<STATUSTYPE, ActiveStatusVFX>();
@@ -250,8 +249,6 @@ public class BrickHealthComponent : MonoBehaviour
 
             _vulnerableToDamage = true;
 
-            if (_hitFlash != null)
-                _hitFlash.SetActive(false);
 
             SetSpeedMultiplier();
 
@@ -270,8 +267,6 @@ public class BrickHealthComponent : MonoBehaviour
 
             _vulnerableToDamage = true;
 
-            if (_hitFlash != null)
-                _hitFlash.SetActive(false);
 
             SetSpeedMultiplier();
 
@@ -423,7 +418,6 @@ public class BrickHealthComponent : MonoBehaviour
         //ResetSpecialStatus();
         ResetDamageMultiplier();
         ClearAllNearbyBrickList();
-        _hitFlash.SetActive(false);
         _statManager.AddTotalBrickDestroyed();
     }
     void RemoveAllStatus()
@@ -485,14 +479,12 @@ public class BrickHealthComponent : MonoBehaviour
 
         dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg, type);
 
-        StartCoroutine(HitFlash());
+        //StartCoroutine(HitFlash());
     }
-    IEnumerator HitFlash()
-    {
-        _hitFlash.SetActive(true);
-        yield return new WaitForSeconds(_flashPeriod);
-        _hitFlash.SetActive(false);
-    }
+    //IEnumerator HitFlash()
+    //{
+    //    yield return new WaitForSeconds(_flashPeriod);
+    //}
     public void FindNearbyBricks()
     {
         for (int i = 0; i < 8; i++)

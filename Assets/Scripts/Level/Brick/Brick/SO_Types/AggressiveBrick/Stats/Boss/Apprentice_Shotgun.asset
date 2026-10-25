@@ -13,21 +13,20 @@ MonoBehaviour:
   m_Name: Apprentice_Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::SO_AggresiveBrickStats
   _aggresiveBrick: 1
-  _defensiveBrick: 0
+  _defensiveBrick: 1
   _supportBrick: 0
   _shootInterval: 3.1
   _damage: 1
   _projectileSpeed: 125
+  _buildUpTime: 3
+  _buildUpVFX: {fileID: 3526117444712284641, guid: 76ff54a6937b6a6459fcee6a1fe046d3, type: 3}
   _burstFire: 0
   _shotgunFire: 1
   _homingShot: 0
-  _sniperlaserShot: 1
   _burstInterval: 0.5
   _numberOfSuccession: 5
   _numberOfProjectiles: 6
   _shotAngle: 15
-  _buildUpTime: 3
-  _buildUpVFX: {fileID: 3526117444712284641, guid: 76ff54a6937b6a6459fcee6a1fe046d3, type: 3}
   _activateStaticShield: 0
   _shieldSide: 0
   _upTime: 0

@@ -29,11 +29,12 @@ public class PaddleHealth : MonoBehaviour
         }
         if (other.CompareTag("EnemyProjectile"))
         {
-            EnemyProjectile ep = other.GetComponent<EnemyProjectile>();
+            BaseEnemyProjectile ep = other.GetComponent<BaseEnemyProjectile>();
 
             _deadZone.ShieldTakingDamage(ep.GetDamage());
             ep.HandleProjectileDeath();
         }
+
     }
     public void PlayPaddleDisableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleDestroy, transform.position);
     public void PlayPaddleEnableAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onPaddleRespawn, transform.position);

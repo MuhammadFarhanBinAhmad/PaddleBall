@@ -3,13 +3,6 @@ using UnityEngine;
 
 public class Apprentice_BurstFireAttack : BaseBossAttack
 {
-    [Header("Ability")]
-    [SerializeField] private BrickAbilityManager _abilityManager;
-    [SerializeField] private ABILITY _ability;
-    [SerializeField] private SO_BrickAbilityStats _abilityStats;
-
-    [Header("Duration")]
-    [SerializeField] private float _attackDuration = 5f;
 
     protected override IEnumerator ExecuteAttack()
     {

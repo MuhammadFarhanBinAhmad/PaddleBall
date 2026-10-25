@@ -9,7 +9,14 @@ public class SO_BrickAbilityStatsEditor : Editor
     {
         serializedObject.Update();
 
-        // Ability types
+        // =====================================
+        // ABILITY TYPES
+        // =====================================
+
+        EditorGUILayout.LabelField(
+            "Ability Types",
+            EditorStyles.boldLabel);
+
         EditorGUILayout.PropertyField(
             serializedObject.FindProperty("_aggresiveBrick"));
 
@@ -21,11 +28,22 @@ public class SO_BrickAbilityStatsEditor : Editor
 
         EditorGUILayout.Space(10);
 
-        // Aggressive Brick Stats
+
+        // =====================================
+        // AGGRESSIVE BRICK STATS
+        // =====================================
+
         if (serializedObject.FindProperty("_aggresiveBrick").boolValue)
         {
             EditorGUILayout.LabelField(
                 "Aggressive Brick Stats",
+                EditorStyles.boldLabel);
+
+            EditorGUILayout.Space(5);
+
+            // Projectile Basic Stats
+            EditorGUILayout.LabelField(
+                "Projectile Basic Stats",
                 EditorStyles.boldLabel);
 
             EditorGUILayout.PropertyField(
@@ -37,7 +55,16 @@ public class SO_BrickAbilityStatsEditor : Editor
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("_projectileSpeed"));
 
-            EditorGUILayout.Space(5);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("_buildUpTime"));
+
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("_buildUpVFX"));
+
+
+            EditorGUILayout.Space(10);
+
+            // Projectile Special Stats
             EditorGUILayout.LabelField(
                 "Projectile Special Stats",
                 EditorStyles.boldLabel);
@@ -51,13 +78,15 @@ public class SO_BrickAbilityStatsEditor : Editor
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("_homingShot"));
 
-            EditorGUILayout.PropertyField(
-                serializedObject.FindProperty("_sniperlaserShot"));
 
-            // Burst Fire
+            // =====================================
+            // BURST FIRE
+            // =====================================
+
             if (serializedObject.FindProperty("_burstFire").boolValue)
             {
-                EditorGUILayout.Space(5);
+                EditorGUILayout.Space(10);
+
                 EditorGUILayout.LabelField(
                     "Burst Fire Stats",
                     EditorStyles.boldLabel);
@@ -69,10 +98,15 @@ public class SO_BrickAbilityStatsEditor : Editor
                     serializedObject.FindProperty("_numberOfSuccession"));
             }
 
-            // Shotgun Fire
+
+            // =====================================
+            // SHOTGUN FIRE
+            // =====================================
+
             if (serializedObject.FindProperty("_shotgunFire").boolValue)
             {
-                EditorGUILayout.Space(5);
+                EditorGUILayout.Space(10);
+
                 EditorGUILayout.LabelField(
                     "Shotgun Fire Stats",
                     EditorStyles.boldLabel);
@@ -83,39 +117,32 @@ public class SO_BrickAbilityStatsEditor : Editor
                 EditorGUILayout.PropertyField(
                     serializedObject.FindProperty("_shotAngle"));
             }
-
-            // Sniper / Laser
-            if (serializedObject.FindProperty("_sniperlaserShot").boolValue)
-            {
-                EditorGUILayout.Space(5);
-                EditorGUILayout.LabelField(
-                    "Sniper / Laser Stats",
-                    EditorStyles.boldLabel);
-
-                EditorGUILayout.PropertyField(
-                    serializedObject.FindProperty("_buildUpTime"));
-
-                EditorGUILayout.PropertyField(
-                    serializedObject.FindProperty("_buildUpVFX"));
-            }
         }
+
 
         EditorGUILayout.Space(10);
 
-        // Defensive Brick Stats
+
+        // =====================================
+        // DEFENSIVE BRICK STATS
+        // =====================================
+
         if (serializedObject.FindProperty("_defensiveBrick").boolValue)
         {
             EditorGUILayout.LabelField(
                 "Defensive Brick Stats",
                 EditorStyles.boldLabel);
 
+            EditorGUILayout.Space(5);
+
+            // Static Shield
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("_activateStaticShield"));
 
-            // Static Shield Stats
             if (serializedObject.FindProperty("_activateStaticShield").boolValue)
             {
                 EditorGUILayout.Space(5);
+
                 EditorGUILayout.LabelField(
                     "Static Shield Stats",
                     EditorStyles.boldLabel);
@@ -124,7 +151,10 @@ public class SO_BrickAbilityStatsEditor : Editor
                     serializedObject.FindProperty("_shieldSide"));
             }
 
-            EditorGUILayout.Space(5);
+
+            EditorGUILayout.Space(10);
+
+            // Shield Timing
             EditorGUILayout.LabelField(
                 "Shield Timing",
                 EditorStyles.boldLabel);
@@ -135,13 +165,21 @@ public class SO_BrickAbilityStatsEditor : Editor
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("_rechargeTime"));
 
-            // Moving Shield Stats
-            EditorGUILayout.Space(5);
+
+            EditorGUILayout.Space(10);
+
+            // Moving Shield
+            EditorGUILayout.LabelField(
+                "Moving Shield Stats",
+                EditorStyles.boldLabel);
+
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("_activateMovingShield"));
 
             if (serializedObject.FindProperty("_activateMovingShield").boolValue)
             {
+                EditorGUILayout.Space(5);
+
                 EditorGUILayout.PropertyField(
                     serializedObject.FindProperty("_movementSpeed"));
             }

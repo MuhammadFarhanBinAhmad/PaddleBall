@@ -4,12 +4,16 @@ using UnityEngine;
 public class B_ShootProjectileAbility : MonoBehaviour
 {
     SO_BrickAbilityStats _stats;
+
     [Header("Projectile Basic Stats")]
     ProjectilePool _projectilePool;
+    [SerializeField] float delayBeforeStartAttack;
     [SerializeField] Transform _projSpawnPoint;
     [SerializeField] float _shootInterval;
     [SerializeField] float _projectileSpeed;
     [SerializeField] int _damage;
+    [SerializeField] float _accuracyDeviationAngle;
+
     [Header("Projectile Special Stats")]
     [SerializeField] bool _burstFire;
     [SerializeField] bool _shotgunFire;
@@ -23,6 +27,7 @@ public class B_ShootProjectileAbility : MonoBehaviour
     [Header("Sniper/Laser Stats")]
     [SerializeField] float _buildUpTime;
     [SerializeField] GameObject _buildUpVFX;
+    GameObject _existingBuildUpVFX;
     [Header("ProjectileSpecialEffect")]
 
     [Header("Homing (subtle)")]
@@ -34,13 +39,17 @@ public class B_ShootProjectileAbility : MonoBehaviour
 
     [SerializeField]Transform _target;
 
-
     private Coroutine _shootRoutine;
 
     private void Awake()
     {
         _projectilePool = FindAnyObjectByType<ProjectilePool>();
         _target = FindAnyObjectByType<PaddleHealth>().transform;
+    }
+    private void OnEnable()
+    {
+        StopShooting();
+
     }
     public void SetStats(SO_BrickAbilityStats stats)
     {
@@ -101,6 +110,7 @@ public class B_ShootProjectileAbility : MonoBehaviour
         {
             StopCoroutine(_shootRoutine);
             _shootRoutine = null;
+            Destroy(_existingBuildUpVFX);
         }
     }
 
@@ -111,17 +121,21 @@ public class B_ShootProjectileAbility : MonoBehaviour
 
     private IEnumerator ShootRoutine()
     {
+        yield return new WaitForSeconds(delayBeforeStartAttack);
+
         while (true)
         {
             // =========================
             // BURST FIRE
             // =========================
-            GameObject vfx = Instantiate(_buildUpVFX, _projSpawnPoint.transform.position, Quaternion.identity);
-            vfx.transform.parent = _projSpawnPoint;
-            yield return new WaitForSeconds(_buildUpTime);
+            _existingBuildUpVFX = Instantiate(_buildUpVFX, _projSpawnPoint.transform.position, Quaternion.identity);
+            _existingBuildUpVFX.transform.parent = _projSpawnPoint;
+            
 
             if (_burstFire)
             {
+
+                yield return new WaitForSeconds(_buildUpTime);
                 for (int i = 0; i < _numberOfSuccession; i++)
                 {
                     Shoot();
@@ -136,6 +150,7 @@ public class B_ShootProjectileAbility : MonoBehaviour
             }
             else
             {
+                yield return new WaitForSeconds(_buildUpTime);
                 // =========================
                 // NORMAL / SHOTGUN
                 // =========================
@@ -192,7 +207,7 @@ public class B_ShootProjectileAbility : MonoBehaviour
 
         for (int i = 0; i < _numberOfProjectiles; i++)
         {
-            float currentAngle = startAngle + angleStep * i;
+            float currentAngle = startAngle + Random.Range(-_accuracyDeviationAngle, _accuracyDeviationAngle) + angleStep * i;
 
             Vector2 shotDirection =
                 Quaternion.Euler(0f, 0f, currentAngle) * baseDirection;
@@ -204,16 +219,21 @@ public class B_ShootProjectileAbility : MonoBehaviour
     private void ShootProjectile(Vector2 direction)
     {
         GameObject p = _projectilePool.GetObject();
+        Vector2 baseDirection = GetDirectionToTarget();
 
         if (!p.TryGetComponent(out EnemyProjectile ep))
         {
             Debug.LogError("Projectile does not have EnemyProjectile component!");
             return;
         }
+        float currentAngle =   Random.Range(-_accuracyDeviationAngle, _accuracyDeviationAngle);
+
+        Vector2 shotDirection =
+            Quaternion.Euler(0f, 0f, currentAngle) * baseDirection;
 
         p.transform.position = _projSpawnPoint.position;
         ep.SetUpProjectile(_stats._projectileSpeed, _stats._damage);
-        ep.ShootProjectile(direction);
+        ep.ShootProjectile(shotDirection);
     }
 
     private Vector2 GetDirectionToTarget()

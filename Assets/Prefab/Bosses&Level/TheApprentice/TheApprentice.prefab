@@ -4836,6 +4836,58 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &789492550420986121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7936558124097475170}
+  - component: {fileID: 4823590965249515403}
+  m_Layer: 8
+  m_Name: BurstAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7936558124097475170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789492550420986121}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 337.87033, y: -180.0447, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7859496079033589972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4823590965249515403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789492550420986121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c99d2b8e3d1d89841abfcfb713053c99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Apprentice_BurstFireAttack
+  _attackName: 
+  _isEnabled: 1
+  _executionType: 3
+  _abilityManager: {fileID: 8213812749613968555}
+  _ability: 2
+  _abilityStats: {fileID: 11400000, guid: 0b8baf1e9270c3345bc4cf12fcfc7339, type: 2}
+  _attackDuration: 12
+  _teleportAmount: 0
 --- !u!1 &1276148210196695208
 GameObject:
   m_ObjectHideFlags: 0
@@ -5359,6 +5411,9 @@ Transform:
   - {fileID: 8264969650636385673}
   - {fileID: 5805483367045895423}
   - {fileID: 3054296187436064001}
+  - {fileID: 1026989880956458440}
+  - {fileID: 7936558124097475170}
+  - {fileID: 530729319596734176}
   m_Father: {fileID: 8814793812229418955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1709724121999278095
@@ -5423,7 +5478,6 @@ MonoBehaviour:
   _health: 0
   _tickTimer: 1
   _damageText: {fileID: 4269139500996097731, guid: 49ac76b83082ab64781a2799ec10c319, type: 3}
-  _hitFlash: {fileID: 0}
   _flashPeriod: 0
   _rayDistance: 10
   _brickLayer:
@@ -5446,34 +5500,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc2ba776e5ba5a4e8d5de71ac586d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::boss_TheApprenticeAttackManager
+  _attacks:
+  - {fileID: 6946816970677009151}
+  _shuffleAttacks: 1
   _restDuration: 1
-  _stunDuration: 2
+  _delayBetweenAttacks: 3
+  _defaultStunDuration: 2
   _movementSpeed: 20
-  _brickAbilityManager: {fileID: 8213812749613968555}
   _movementPos:
   - {fileID: 1800649016332052904}
   - {fileID: 8468592737151690341}
   - {fileID: 2311510639091041649}
   - {fileID: 2922689770584132163}
-  _target: {fileID: 0}
-  _spawnPos: {fileID: 2214514153019786380}
   _lerpInEffect: {fileID: 11400000, guid: ed8f9b5f58749914aa3f8023696edbb3, type: 2}
   _lerpOutEffect: {fileID: 11400000, guid: 2351f7f4b9b584e46aa0d60c70401e93, type: 2}
-  _attackAbility: 2
-  _shotgunAttack: {fileID: 11400000, guid: edc2de2a09257bf469e1d3b27c864022, type: 2}
-  _conjuringSpellTime: 3
-  _conjuringSpellEffect: {fileID: 5228804669671755104}
-  _conjuringSpellEnd: {fileID: 7012566661648513738}
-  _slowDownDuration: 3
-  _slowDownTimeScale: 0.1
-  _curseDuration: 5
-  _shieldAbility: 4
-  _shieldAttack: {fileID: 11400000, guid: d664403225afa7c48af2be93ab8879aa, type: 2}
-  _attackAbility_two: 2
-  _burstFireAttack: {fileID: 11400000, guid: 0b8baf1e9270c3345bc4cf12fcfc7339, type: 2}
-  _restPoint: {fileID: 1942675324118052613}
-  _restMovementSpeed: 5
-  _restArrivalDistance: 0.05
+  _bossTransform: {fileID: 7859496079033589972}
+  _teleportDelay: 0.25
+  _startMovementDelay: 2
+  _endRestDelay: 2
+  _brickAbilityManager: {fileID: 8213812749613968555}
 --- !u!114 &8213812749613968555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11148,6 +11193,67 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 10.5, y: 2.5}
   m_EdgeRadius: 0
+--- !u!1 &4901707782458693776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 530729319596734176}
+  - component: {fileID: 6946816970677009151}
+  m_Layer: 8
+  m_Name: SpawnMeteor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &530729319596734176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4901707782458693776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8694218310893042872}
+  m_Father: {fileID: 7859496079033589972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6946816970677009151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4901707782458693776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d3117d8ffebb040bf377b2f5a26757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Apprentice_SpawnFromAboveAttack
+  _attackName: 
+  _isEnabled: 1
+  _executionType: 0
+  _abilityManager: {fileID: 8213812749613968555}
+  _ability: 0
+  _abilityStats: {fileID: 0}
+  _attackDuration: 0
+  _teleportAmount: 0
+  _meteor: {fileID: 5190755072940398529, guid: c8c29fc663a342f428d67af2254d5e7e, type: 3}
+  _meteorWarning: {fileID: 8980146510286686381, guid: 14525330bf013454ca3b7cbdca3c882b, type: 3}
+  _meteorWarningDelay: 2.1
+  _amountToDrop: 3
+  _spawnPos: {fileID: 8694218310893042872}
+  _minSpawnX: -30
+  _maxSpawnX: 30
+  _spawnInterval: 2
 --- !u!1 &4903431740136029497
 GameObject:
   m_ObjectHideFlags: 0
@@ -16601,6 +16707,37 @@ Transform:
   - {fileID: 8157545479111737135}
   m_Father: {fileID: 7004230330875697945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6736459059586453562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4825311946431069812}
+  m_Layer: 0
+  m_Name: SpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4825311946431069812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6736459059586453562}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8814793812229418955}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6953193354705050292
 GameObject:
   m_ObjectHideFlags: 0
@@ -21711,6 +21848,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &7302870412565679658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8694218310893042872}
+  m_Layer: 8
+  m_Name: SpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8694218310893042872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7302870412565679658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 100, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 530729319596734176}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7425215322635038117
 GameObject:
   m_ObjectHideFlags: 0
@@ -22107,6 +22275,7 @@ Transform:
   m_Children:
   - {fileID: 7859496079033589972}
   - {fileID: 1942675324118052613}
+  - {fileID: 4825311946431069812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8147492841803621049
@@ -22250,6 +22419,58 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &8517225875813709302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1026989880956458440}
+  - component: {fileID: 7968428493286414558}
+  m_Layer: 8
+  m_Name: ShotGunAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1026989880956458440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517225875813709302}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 337.87033, y: -180.0447, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7859496079033589972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7968428493286414558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517225875813709302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add69d50762c04341a82439fe8aeb28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Apprentice_ShotGunAttack
+  _attackName: 
+  _isEnabled: 1
+  _executionType: 2
+  _abilityManager: {fileID: 8213812749613968555}
+  _ability: 2
+  _abilityStats: {fileID: 11400000, guid: edc2de2a09257bf469e1d3b27c864022, type: 2}
+  _attackDuration: 0
+  _teleportAmount: 0
 --- !u!1 &8636821438650904712
 GameObject:
   m_ObjectHideFlags: 0
@@ -22477,6 +22698,14 @@ PrefabInstance:
     - target: {fileID: 4683859894402983076, guid: 5a80cd26e21282c4ab68075dd44263b7, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5912704835554576601, guid: 5a80cd26e21282c4ab68075dd44263b7, type: 3}
+      propertyPath: delayBeforeStartAttack
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5912704835554576601, guid: 5a80cd26e21282c4ab68075dd44263b7, type: 3}
+      propertyPath: _accuracyDeviationAngle
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

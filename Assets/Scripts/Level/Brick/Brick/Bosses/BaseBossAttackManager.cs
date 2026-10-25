@@ -2,34 +2,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public abstract class BaseBossAttackManager : MonoBehaviour
 {
     [Header("Boss Attacks")]
-    [SerializeField] private List<BaseBossAttack> _attacks = new();
-    [SerializeField] private bool _shuffleAttacks = true;
+    [SerializeField]  List<BaseBossAttack> _attacks = new();
+    [SerializeField]  bool _shuffleAttacks = true;
 
     [Header("Boss Attack Flow")]
-    [SerializeField] protected float _restDuration = 2f;
-    [SerializeField] protected float _delayBetweenAttacks = 0.5f;
+    [SerializeField] protected float _restDuration;
+    [SerializeField] protected float _delayBetweenAttacks;
 
     [Header("Stun")]
-    [SerializeField] private float _defaultStunDuration = 2f;
+    [SerializeField]  float _defaultStunDuration;
 
     [Header("Movement")]
-    [SerializeField] protected float _movementSpeed = 5f;
+    [SerializeField] internal float _movementSpeed;
+    [SerializeField] internal List<SplineContainer> _movementPos = new List<SplineContainer>();
+    [SerializeField] internal SO_BrickSpecialEffect _lerpInEffect, _lerpOutEffect;
+    [SerializeField] internal Transform _bossTransform;
+    [SerializeField] float _teleportDelay;
+    [SerializeField] float _startMovementDelay;
+    [SerializeField] float _endRestDelay;
+    Coroutine _movementRoutine;
+    bool _isMoving;
+
 
     protected bool _stopAttacking = true;
     protected bool _isStunned;
 
-    private Coroutine _bossRoutine;
-    private BaseBossAttack _currentAttack;
+    Coroutine _bossRoutine;
+    BaseBossAttack _currentAttack;
 
-    private readonly List<BaseBossAttack> _attackOrder = new();
+    readonly List<BaseBossAttack> _attackOrder = new();
 
     public BaseBossAttack CurrentAttack => _currentAttack;
     public bool IsStunned => _isStunned;
-
+    public bool IsMoving => _isMoving;
     protected virtual void Awake()
     {
         foreach (BaseBossAttack attack in _attacks)
@@ -52,6 +62,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
     private IEnumerator BossAttackLoop()
     {
+        yield return new WaitForSeconds(_delayBetweenAttacks);
         while (!_stopAttacking)
         {
             BuildAttackList();
@@ -220,8 +231,148 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         _isStunned = false;
     }
 
+    #region Movement
+    public void StartRandomSplineMovement()
+    {
+        if (_stopAttacking || _isStunned)
+            return;
+
+        StopSplineMovement();
+
+        if (_bossTransform == null ||
+            _movementPos == null ||
+            _movementPos.Count == 0)
+        {
+            Debug.LogWarning($"{name}: Missing boss transform or splines.");
+            return;
+        }
+
+        _isMoving = true;
+        _movementRoutine = StartCoroutine(RandomSplineMovementRoutine());
+    }
+
+    private IEnumerator RandomSplineMovementRoutine()
+    {
+
+        yield return new WaitForSeconds(_startMovementDelay);
+
+        // Select a valid random spline.
+        List<SplineContainer> validSplines =
+            _movementPos.FindAll(s => s != null);
+
+        if (validSplines.Count == 0)
+        {
+            _isMoving = false;
+            _movementRoutine = null;
+            yield break;
+        }
+
+        SplineContainer selectedSpline =
+            validSplines[Random.Range(0, validSplines.Count)];
+
+        // Calculate the starting position in world space.
+        Vector3 startWorldPosition =
+            selectedSpline.transform.TransformPoint(
+                selectedSpline.EvaluatePosition(0f)
+            );
+
+        // Step 1: Disappear.
+        if (_lerpInEffect != null)
+        {
+            GlobalEffects.Instance.PlayLerpObject(
+                _bossTransform.gameObject,
+                _lerpInEffect
+            );
+            yield return new WaitForSeconds(
+                _lerpInEffect._lerpDuration + _teleportDelay
+            );
+        }
+
+        if (_stopAttacking || _isStunned)
+        {
+            FinishMovement();
+            yield break;
+        }
+
+        // Step 2: Teleport to spline start.
+        _bossTransform.position = startWorldPosition;
+        // Step 3: Reappear.
+        if (_lerpOutEffect != null)
+        {
+            GlobalEffects.Instance.PlayLerpObject(
+                _bossTransform.gameObject,
+                _lerpOutEffect
+            );
+            yield return new WaitForSeconds(
+                _lerpOutEffect._lerpDuration + _teleportDelay
+            );
+        }
+
+        if (_stopAttacking || _isStunned)
+        {
+            FinishMovement();
+            yield break;
+        }
+
+        // Step 4: Move along the spline.
+        float splineLength = selectedSpline.CalculateLength();
+
+        if (splineLength <= 0.001f)
+        {
+            FinishMovement();
+            yield break;
+        }
+
+        float t = 0f;
+
+        while (t < 1f && !_stopAttacking && !_isStunned)
+        {
+            t += (_movementSpeed / splineLength) * Time.deltaTime;
+            t = Mathf.Clamp01(t);
+
+            Vector3 splineWorldPosition =
+                selectedSpline.transform.TransformPoint(
+                    selectedSpline.EvaluatePosition(t)
+                );
+
+            _bossTransform.position = splineWorldPosition;
+
+            yield return null;
+        }
+
+        if (!_stopAttacking && !_isStunned)
+        {
+            _bossTransform.position =
+                selectedSpline.transform.TransformPoint(
+                    selectedSpline.EvaluatePosition(1f)
+                );
+        }
+
+        yield return new WaitForSeconds(_endRestDelay);
+
+        FinishMovement();
+    }
+
+    private void FinishMovement()
+    {
+        _isMoving = false;
+        _movementRoutine = null;
+    }
+
+    public void StopSplineMovement()
+    {
+        if (_movementRoutine != null)
+        {
+            StopCoroutine(_movementRoutine);
+            _movementRoutine = null;
+        }
+
+        _isMoving = false;
+    }
     public void SetSpeed(float speed)
     {
         _movementSpeed = speed;
     }
+
+    #endregion
 }

@@ -2,11 +2,30 @@
 using System.Collections;
 using UnityEngine;
 
+enum BOSS_ATTACK_EXECUTION_TYPE
+{
+    NONE,
+    TELEPORT,
+    MOVING,
+    TIME
+}
+
+
 public abstract class BaseBossAttack : MonoBehaviour
 {
     [Header("Attack Info")]
-    [SerializeField] private string _attackName;
-    [SerializeField] private bool _isEnabled = true;
+    [SerializeField] string _attackName;
+    [SerializeField] bool _isEnabled = true;
+    [SerializeField] internal BOSS_ATTACK_EXECUTION_TYPE _executionType;
+    [Header("Ability")]
+    [SerializeField] internal BrickAbilityManager _abilityManager;
+    [SerializeField] internal ABILITY _ability;
+    [SerializeField] internal SO_BrickAbilityStats _abilityStats;
+
+    [Header("TIME")]
+    [SerializeField] internal float _attackDuration;
+    [Header("Teleport")]
+    [SerializeField] internal int _teleportAmount;
 
     protected BaseBossAttackManager _bossManager;
 
@@ -76,10 +95,8 @@ public abstract class BaseBossAttack : MonoBehaviour
         OnAttackCancelled();
     }
 
-    // Optional cleanup after successful completion.
     protected virtual void OnAttackCompleted() { }
 
-    // Optional cleanup when interrupted.
     protected virtual void OnAttackCancelled() { }
 
     protected virtual void OnDisable()

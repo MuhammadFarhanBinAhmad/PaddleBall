@@ -1,68 +1,25 @@
-using System.Collections;
 using UnityEngine;
 
-public class Apprentice_FallingProjectile : MonoBehaviour
+public class Apprentice_FallingProjectile : BaseEnemyProjectile
 {
-    [SerializeField] float _timeBeforeDeactive;
-    [SerializeField] TrailRenderer _trail;
 
+    [SerializeField] int _meteorDamage;
     [SerializeField] float _fallSpeed;
-    int _damage;
 
-
-    public void OnLight()
-    {
-
-    }
-    private void Awake()
-    {
-    }
     private void OnEnable()
     {
         StartCoroutine(DeactivateAfterTime());
+        _damage = _meteorDamage;
+        _shootSpeed = _fallSpeed;
     }
-    public virtual void SetUpProjectile(float speed, int damage)
+    private void Update()
     {
-        _trail.Clear();
-        _trail.enabled = true;
-        _trail.Clear();
-        _damage = damage;
+        transform.position += Vector3.down * _shootSpeed * Time.deltaTime;
+
     }
-    public void HandleProjectileDeath()
+    public override void HandleProjectileDeath()
     {
-        _trail.enabled = false;
-        _damage = 0;
         Destroy(gameObject);
     }
 
-
-    //private void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    if (other.gameObject.CompareTag("Wall"))
-    //    {
-    //        Vector2 avgNormal = Vector2.zero;
-    //        int contacts = Mathf.Max(1, other.contactCount);
-    //        for (int i = 0; i < other.contactCount; i++)
-    //        {
-    //            avgNormal += other.GetContact(i).normal;
-    //        }
-    //        avgNormal /= contacts;
-
-    //        if (avgNormal.sqrMagnitude > 0.0001f)
-    //            avgNormal.Normalize();
-    //        else
-    //            avgNormal = Vector2.up; // fallback
-
-    //        Vector2 opposite = -avgNormal;
-    //        transform.up = opposite;
-    //    }
-    //}
-
-    private IEnumerator DeactivateAfterTime()
-    {
-        yield return new WaitForSeconds(_timeBeforeDeactive);
-
-        HandleProjectileDeath();
-    }
-    public int GetDamage() => _damage;
 }

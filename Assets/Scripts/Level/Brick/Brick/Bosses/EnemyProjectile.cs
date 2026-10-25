@@ -2,14 +2,10 @@ using System.Collections;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-public class EnemyProjectile : MonoBehaviour
+public class EnemyProjectile : BaseEnemyProjectile
 {
-    [SerializeField] float _timeBeforeDeactive;
     [SerializeField] TrailRenderer _trail;
     Rigidbody2D _rigidbody2D;
-
-    float _shootSpeed;
-    int _damage;
 
 
     private void Awake()
@@ -20,7 +16,7 @@ public class EnemyProjectile : MonoBehaviour
     {
         StartCoroutine(DeactivateAfterTime());
     }
-    public virtual void SetUpProjectile(float speed, int damage)
+    public override void SetUpProjectile(float speed, int damage)
     {
         _trail.Clear();
         _trail.enabled = true;
@@ -50,7 +46,7 @@ public class EnemyProjectile : MonoBehaviour
         if (direction.sqrMagnitude > 0.0001f)
             transform.up = direction;
     }
-    public void HandleProjectileDeath()
+    public override void HandleProjectileDeath()
     {
         _trail.enabled = false;
         _damage = 0;
@@ -81,11 +77,4 @@ public class EnemyProjectile : MonoBehaviour
         }
     }
 
-    private IEnumerator DeactivateAfterTime()
-    {
-        yield return new WaitForSeconds(_timeBeforeDeactive);
-
-        HandleProjectileDeath();
-    }
-    public int GetDamage() => _damage;
 }
