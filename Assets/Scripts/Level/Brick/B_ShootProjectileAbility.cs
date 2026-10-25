@@ -13,8 +13,6 @@ public class B_ShootProjectileAbility : MonoBehaviour
     [Header("Projectile Special Stats")]
     [SerializeField] bool _burstFire;
     [SerializeField] bool _shotgunFire;
-    [SerializeField] bool _homingShot;
-    [SerializeField] bool _sniperlaserShot;
 
     [Header("Burst Fire Stats")]
     [SerializeField] float _burstInterval;
@@ -34,7 +32,10 @@ public class B_ShootProjectileAbility : MonoBehaviour
     [SerializeField] float _homingMaxDistance;
 
 
-    Transform _target;
+    [SerializeField]Transform _target;
+
+
+    private Coroutine _shootRoutine;
 
     private void Awake()
     {
@@ -43,14 +44,20 @@ public class B_ShootProjectileAbility : MonoBehaviour
     }
     public void SetStats(SO_BrickAbilityStats stats)
     {
+        if (stats == null)
+        {
+            Debug.LogError("SO_BrickAbilityStats is null!");
+            return;
+        }
+
+        StopShooting();
+
         _stats = stats;
 
         _shootInterval = _stats._shootInterval;
         _damage = _stats._damage;
         _burstFire = _stats._burstFire;
         _shotgunFire = _stats._shotgunFire;
-        _homingShot = _stats._homingShot;
-        _sniperlaserShot = _stats._sniperlaserShot;
 
         _burstInterval = _stats._burstInterval;
         _numberOfSuccession = _stats._numberOfSuccession;
@@ -61,16 +68,45 @@ public class B_ShootProjectileAbility : MonoBehaviour
         _buildUpTime = _stats._buildUpTime;
         _buildUpVFX = _stats._buildUpVFX;
 
+        if (isActiveAndEnabled)
+            StartShooting();
     }
 
-    private void OnEnable()
+
+
+    public void StartShooting()
     {
-        Invoke("StartShooting", 3);
+        if (_stats == null)
+        {
+            Debug.LogWarning("Shooting stats not assigned!");
+            return;
+        }
+
+        if (!isActiveAndEnabled)
+            return;
+
+        // Prevent duplicate shooting coroutines.
+        if (_shootRoutine != null)
+            return;
+
+        _shootRoutine = StartCoroutine(ShootRoutine());
     }
 
-    void StartShooting()
+    public void StopShooting()
     {
-        StartCoroutine(ShootRoutine());
+        // Cancel any previously scheduled Invoke.
+        CancelInvoke(nameof(StartShooting));
+
+        if (_shootRoutine != null)
+        {
+            StopCoroutine(_shootRoutine);
+            _shootRoutine = null;
+        }
+    }
+
+    private void OnDisable()
+    {
+        StopShooting();
     }
 
     private IEnumerator ShootRoutine()

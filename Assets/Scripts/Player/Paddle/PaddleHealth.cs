@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class PaddleHealth : MonoBehaviour
 {
-    Ball _ball;
-    PaddleMovement _paddleMovement;
-    PaddleVacoom _paddleVacoom;
-    PaddleFeedbackManager _paddleFeedbackManager;
     DeadZone _deadZone;
 
-    SpriteRenderer _spriteRenderer;
 
     [Header("Respawn")]
     public Transform _spawnPos;
@@ -20,15 +15,7 @@ public class PaddleHealth : MonoBehaviour
 
     private void Awake()
     {
-        _paddleMovement = FindAnyObjectByType<PaddleMovement>();
-        _paddleVacoom = FindAnyObjectByType<PaddleVacoom>();
-        _ball = FindAnyObjectByType<Ball>();   
-        _paddleFeedbackManager = FindAnyObjectByType<PaddleFeedbackManager>();
         _deadZone = FindAnyObjectByType<DeadZone>();
-
-        _spriteRenderer = GetComponentInParent<SpriteRenderer>();
-
-
 
     }
     public void OnTriggerEnter2D(Collider2D other)

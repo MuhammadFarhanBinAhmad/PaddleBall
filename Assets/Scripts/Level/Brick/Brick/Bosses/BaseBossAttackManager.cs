@@ -1,58 +1,52 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BaseBossAttackManager : MonoBehaviour
 {
-    internal enum AttackType
-    {
-        One,
-        Two,
-        Three,
-        Four
-    }
-
-    internal enum AttackEndMode
-    {
-        None,
-        HitCount,
-        Duration,
-        Point,
-        Manual
-    }
-
+    [Header("Boss Attacks")]
+    [SerializeField] private List<BaseBossAttack> _attacks = new();
+    [SerializeField] private bool _shuffleAttacks = true;
 
     [Header("Boss Attack Flow")]
-    [SerializeField] internal float _restDuration;
+    [SerializeField] protected float _restDuration = 2f;
+    [SerializeField] protected float _delayBetweenAttacks = 0.5f;
 
     [Header("Stun")]
-    [SerializeField] private float _stunDuration;
+    [SerializeField] private float _defaultStunDuration = 2f;
 
     [Header("Movement")]
-    [SerializeField] internal float _movementSpeed;
+    [SerializeField] protected float _movementSpeed = 5f;
 
-    internal Coroutine _movementRoutine;
-    internal int _currentMovementTargetIndex;
-    internal int _movementDirection = 1;
-    internal Transform _currentPointTarget;
+    protected bool _stopAttacking = true;
+    protected bool _isStunned;
 
-    internal bool _stopAttacking;
-    internal bool _isStunned;
+    private Coroutine _bossRoutine;
+    private BaseBossAttack _currentAttack;
 
-    internal AttackEndMode _currentAttackEndMode = AttackEndMode.None;
-    internal int _targetHits;
-    internal int _currentHits;
-    internal float _attackEndTime;
-    internal bool _attackComplete;
-    protected bool IsAttackActive => !_attackComplete;
+    private readonly List<BaseBossAttack> _attackOrder = new();
 
-    Coroutine _bossRoutine;
+    public BaseBossAttack CurrentAttack => _currentAttack;
+    public bool IsStunned => _isStunned;
 
-    private readonly List<AttackType> _attackOrder = new List<AttackType>();
-
+    protected virtual void Awake()
+    {
+        foreach (BaseBossAttack attack in _attacks)
+        {
+            if (attack != null)
+                attack.Initialize(this);
+        }
+    }
 
     public virtual void StartBossFight()
     {
+        if (_bossRoutine != null)
+            return;
+
+        _stopAttacking = false;
+        _isStunned = false;
+
         _bossRoutine = StartCoroutine(BossAttackLoop());
     }
 
@@ -60,201 +54,174 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     {
         while (!_stopAttacking)
         {
-            BuildAndShuffleAttackList();
+            BuildAttackList();
 
-            for (int i = 0; i < _attackOrder.Count; i++)
+            if (_attackOrder.Count == 0)
+            {
+                Debug.LogWarning(
+                    $"{name}: No boss attacks available."
+                );
+
+                _bossRoutine = null;
+                yield break;
+            }
+
+            foreach (BaseBossAttack attack in _attackOrder)
             {
                 if (_stopAttacking)
                     yield break;
 
-                yield return ExecuteAttack(_attackOrder[i]);
+                while (_isStunned && !_stopAttacking)
+                    yield return null;
 
                 if (_stopAttacking)
                     yield break;
+
+                if (attack == null || !attack.IsAvailable)
+                    continue;
+
+                yield return ExecuteAttack(attack);
+
+                if (_stopAttacking)
+                    yield break;
+
+                while (_isStunned && !_stopAttacking)
+                    yield return null;
+
+                if (_stopAttacking)
+                    yield break;
+
+                // Delay between attacks.
+                if (_delayBetweenAttacks > 0f)
+                    yield return new WaitForSeconds(
+                        _delayBetweenAttacks
+                    );
             }
 
-            // All four attack patterns have finished.
-            // Return to resting position.
+            if (_stopAttacking)
+                yield break;
+
+            // Return to resting position after all attacks.
             yield return RestSequence();
         }
+
+        _bossRoutine = null;
     }
 
-    private void BuildAndShuffleAttackList()
+    private void BuildAttackList()
     {
         _attackOrder.Clear();
-        _attackOrder.Add(AttackType.One);
-        _attackOrder.Add(AttackType.Two);
-        //_attackOrder.Add(AttackType.Three);
 
-        ShuffleList(_attackOrder);
+        foreach (BaseBossAttack attack in _attacks)
+        {
+            if (attack != null && attack.IsAvailable)
+                _attackOrder.Add(attack);
+        }
+
+        if (_shuffleAttacks)
+            ShuffleList(_attackOrder);
     }
 
-    private void ShuffleList(List<AttackType> list)
+    private void ShuffleList(List<BaseBossAttack> list)
     {
         for (int i = 0; i < list.Count; i++)
         {
             int randomIndex = Random.Range(i, list.Count);
-            (list[i], list[randomIndex]) = (list[randomIndex], list[i]);
+
+            (list[i], list[randomIndex]) =
+                (list[randomIndex], list[i]);
         }
+    }
+
+    private IEnumerator ExecuteAttack(BaseBossAttack attack)
+    {
+        _currentAttack = attack;
+
+        attack.StartAttack();
+
+        // Wait until this attack completes or is interrupted.
+        while (!_stopAttacking &&
+               !_isStunned &&
+               attack.IsRunning)
+        {
+            yield return null;
+        }
+
+        if ((_stopAttacking || _isStunned) && attack.IsRunning)
+            attack.CancelAttack();
+
+        _currentAttack = null;
     }
 
     private IEnumerator RestSequence()
     {
-        StopPingPongMovement();
+        // Boss-specific resting movement.
+        yield return MoveToRestPosition();
 
-        // Begin teleporting to the resting position.
-        Resting();
-
-        // Wait for the teleport animation to finish.
-        while (!_stopAttacking && !_isStunned && !IsBossAtRestPoint())
-        {
-            yield return null;
-        }
-
-        if (_stopAttacking || _isStunned)
+        if (_stopAttacking)
             yield break;
 
-        // Rest at the spawn position.
-        yield return new WaitForSeconds(_restDuration);
-    }
-    protected virtual bool IsBossAtRestPoint()
-    {
-        return true;
-    }
-
-    private IEnumerator ExecuteAttack(AttackType attack)
-    {
-
-        yield return new WaitForSeconds(_restDuration);
-        ResetCurrentAttackState();
-
-        switch (attack)
-        {
-            case AttackType.One:
-                AttackPatternOne();
-                break;
-            case AttackType.Two:
-                AttackPatternTwo();
-                break;
-            case AttackType.Three:
-                AttackPatternThree();
-                break;
-            case AttackType.Four:
-                AttackPatternFour();
-                break;
-        }
-
-        yield return WaitForCurrentAttackToFinish();
-    }
-
-    private IEnumerator WaitForCurrentAttackToFinish()
-    {
-        while (!_stopAttacking && !_isStunned && !_attackComplete)
-        {
-            if (_currentAttackEndMode == AttackEndMode.Duration &&
-                Time.time >= _attackEndTime)
-            {
-                _attackComplete = true;
-                break;
-            }
-
+        while (_isStunned && !_stopAttacking)
             yield return null;
-        }
 
-        StopPingPongMovement();
+        if (_stopAttacking)
+            yield break;
+
+        yield return new WaitForSeconds(_restDuration);
     }
 
-    protected void BeginHitCountAttack(int hitsNeeded)
+    // Each boss can define how it returns to rest.
+    protected virtual IEnumerator MoveToRestPosition()
     {
-        _currentAttackEndMode = AttackEndMode.HitCount;
-        _targetHits = Mathf.Max(1, hitsNeeded);
-        _currentHits = 0;
-        _attackComplete = false;
-    }
-
-    protected void BeginManualAttack()
-    {
-        _currentAttackEndMode = AttackEndMode.Manual;
-        _attackComplete = false;
-    }
-
-    protected void RegisterAttackHit(int amount = 1)
-    {
-        if (_currentAttackEndMode != AttackEndMode.HitCount || _attackComplete)
-            return;
-
-        _currentHits += amount;
-        if (_currentHits >= _targetHits)
-            _attackComplete = true;
-    }
-
-    protected void CompleteCurrentAttack()
-    {
-        _attackComplete = true;
-    }
-
-    protected void ResetCurrentAttackState()
-    {
-        _currentAttackEndMode = AttackEndMode.None;
-        _targetHits = 0;
-        _currentHits = 0;
-        _attackEndTime = 0f;
-        _attackComplete = false;
-    }
-
-    protected void StopPingPongMovement()
-    {
-        if (_movementRoutine != null)
-        {
-            StopCoroutine(_movementRoutine);
-            _movementRoutine = null;
-        }
+        yield break;
     }
 
     public void StunBoss(float duration)
     {
-
-        _stunDuration = duration;
         if (_stopAttacking || _isStunned)
             return;
 
-        if (_bossRoutine != null)
-            StopCoroutine(_bossRoutine);
+        _isStunned = true;
 
-        StartCoroutine(StunRoutine());
+        _currentAttack?.CancelAttack();
+        _currentAttack = null;
+
+        OnBossStunned();
+
+        StartCoroutine(StunRoutine(
+            Mathf.Max(0f, duration)
+        ));
     }
 
-    private IEnumerator StunRoutine()
+    private IEnumerator StunRoutine(float duration)
     {
-        _isStunned = true;
-        CompleteCurrentAttack();
-        StopPingPongMovement();
-        RestToNeutral();
+        yield return new WaitForSeconds(duration);
 
-        Debug.Log("IsStun");
-
-        yield return new WaitForSeconds(_stunDuration);
-
-        Debug.Log("FinishStun");
+        if (_stopAttacking)
+            yield break;
 
         _isStunned = false;
 
-        if (!_stopAttacking)
-            _bossRoutine = StartCoroutine(BossAttackLoop());
+        OnBossStunEnded();
     }
 
+    protected virtual void OnBossStunned() { }
+    protected virtual void OnBossStunEnded() { }
 
     public virtual void StopBossAttack()
     {
         _stopAttacking = true;
-        _bossRoutine = null;
+
+        _currentAttack?.CancelAttack();
+        _currentAttack = null;
+
         StopAllCoroutines();
+        _bossRoutine = null;
+        _isStunned = false;
     }
-    public void SetSpeed(float speed) => _movementSpeed = speed; 
-    public abstract void AttackPatternOne();
-    public abstract void AttackPatternTwo();
-    public abstract void AttackPatternThree();
-    public abstract void AttackPatternFour();
-    public abstract void Resting();
-    public abstract void RestToNeutral();
+
+    public void SetSpeed(float speed)
+    {
+        _movementSpeed = speed;
+    }
 }

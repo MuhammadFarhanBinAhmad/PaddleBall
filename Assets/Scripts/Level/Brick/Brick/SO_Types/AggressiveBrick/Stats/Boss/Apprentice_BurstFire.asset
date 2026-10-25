@@ -23,7 +23,7 @@ MonoBehaviour:
   _homingShot: 0
   _sniperlaserShot: 1
   _burstInterval: 0.1
-  _numberOfSuccession: 15
+  _numberOfSuccession: 30
   _numberOfProjectiles: 0
   _shotAngle: 0
   _buildUpTime: 3
