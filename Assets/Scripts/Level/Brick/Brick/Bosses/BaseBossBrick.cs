@@ -10,7 +10,7 @@ public abstract class BaseBossBrick : MonoBehaviour
     internal BossManager _bossManager;
     internal BaseBossFeedbackManager _bossFeedbackManager;
     TimeManager _timeManager;
-    [SerializeField]SO_BossBaseStats _stats;
+    [SerializeField] SO_BossBaseStats _stats;
 
     public SO_BossIntroText _bossIntroText;
     public List<SO_CutSceneEventContent> _startCutsceneEvents;
@@ -28,6 +28,7 @@ public abstract class BaseBossBrick : MonoBehaviour
     public ParticleSystem _hitEffect;
     [SerializeField] internal SO_BrickSpecialEffect _damageAnim;
     [SerializeField] internal Transform _bossBody;
+
     public Action _onTakingDamage;
 
     public virtual void Awake()
@@ -85,12 +86,15 @@ public abstract class BaseBossBrick : MonoBehaviour
     public List<SO_CutSceneEventContent> GetGameOverCutSceneEvents() => new List<SO_CutSceneEventContent>(_gameoverCutsceneEvents);
 
     internal abstract void HandleDamage(int damage);
+    internal abstract void RecoverHealth(int health);
     internal virtual void DamageFeedback()
     {
         GlobalFeedbackManager.Instance.PlayGlobalFeedback?.Invoke();
         _hitEffect.Play();
         _bossUIManager.UpdateBossHealthUI(_brickHealthComponent.GetHealth());
     }
+    internal virtual void UpdateHealthUI() => _bossUIManager.UpdateBossHealthUI(_brickHealthComponent.GetHealth());
+
     internal abstract void BossDeathEvent();
     internal abstract void GameOverBossEvent();
 }

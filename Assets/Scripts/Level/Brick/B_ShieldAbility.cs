@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 using Unity.Mathematics;
+using System.Collections;
 
 public class B_ShieldAbility : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class B_ShieldAbility : MonoBehaviour
 
     bool _activateStaticShield;
     bool _activateMovingShield;
+
+    [SerializeField] float delayBeforeSpawnShield;
 
     [Header("Static Shield")]
     public List<GameObject> _staticShield = new List<GameObject>();
@@ -35,7 +38,12 @@ public class B_ShieldAbility : MonoBehaviour
 
         _activateMovingShield = _stats._activateMovingShield;
         _activateStaticShield = _stats._activateStaticShield;
+        StartCoroutine(DelayActivateShield());
 
+    }
+    IEnumerator DelayActivateShield()
+    {
+        yield return new WaitForSeconds(delayBeforeSpawnShield);
         // Static shields
         if (_activateStaticShield)
             ActivateShield();
@@ -48,7 +56,6 @@ public class B_ShieldAbility : MonoBehaviour
         if (_activateMovingShield)
             InitializeShieldPositions();
     }
-
     public void ActivateShield()
     {
         // Disable all static shields first

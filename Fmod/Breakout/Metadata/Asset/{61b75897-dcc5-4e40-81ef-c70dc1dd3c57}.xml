@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="EncodableAsset" id="{61b75897-dcc5-4e40-81ef-c70dc1dd3c57}">
+		<property name="assetPath">
+			<value>Brick/SFX/Brick/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a75dfad4-8218-4122-a69e-b59d24be66e2}</destination>
+		</relationship>
+	</object>
+</objects>

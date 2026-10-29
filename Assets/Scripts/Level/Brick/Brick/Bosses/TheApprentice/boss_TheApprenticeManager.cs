@@ -23,9 +23,13 @@ public class boss_TheApprenticeManager : BaseBossBrick
 
         if (_brickHealthComponent.GetHealth() <= 0)
         {
-            print(_brickHealthComponent.GetHealth());
             BossDeathEvent();
         }
+    }
+    internal override void RecoverHealth(int health)
+    {
+        _brickHealthComponent.ModifyHealth(health);
+        UpdateHealthUI();
     }
 
     internal override void BossDeathEvent()

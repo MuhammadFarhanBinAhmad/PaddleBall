@@ -2,21 +2,11 @@
 using System.Collections;
 using UnityEngine;
 
-enum BOSS_ATTACK_EXECUTION_TYPE
-{
-    NONE,
-    TELEPORT,
-    MOVING,
-    TIME
-}
-
 
 public abstract class BaseBossAttack : MonoBehaviour
 {
     [Header("Attack Info")]
-    [SerializeField] string _attackName;
     [SerializeField] bool _isEnabled = true;
-    [SerializeField] internal BOSS_ATTACK_EXECUTION_TYPE _executionType;
     [Header("Ability")]
     [SerializeField] internal BrickAbilityManager _abilityManager;
     [SerializeField] internal ABILITY _ability;
@@ -31,7 +21,6 @@ public abstract class BaseBossAttack : MonoBehaviour
 
     private Coroutine _attackRoutine;
 
-    public string AttackName => _attackName;
     public bool IsAvailable => _isEnabled && isActiveAndEnabled;
     public bool IsRunning { get; private set; }
     public bool IsCompleted { get; private set; }

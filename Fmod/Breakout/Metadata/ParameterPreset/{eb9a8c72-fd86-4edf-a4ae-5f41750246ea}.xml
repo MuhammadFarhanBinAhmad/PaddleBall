@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{eb9a8c72-fd86-4edf-a4ae-5f41750246ea}">
+		<property name="name">
+			<value>InhalePower</value>
+		</property>
+		<relationship name="folder">
+			<destination>{55a03fd1-66c3-440d-9e29-8cf65508cb24}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{d4ea29cd-daa9-427c-b9bd-742342e58866}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{d4ea29cd-daa9-427c-b9bd-742342e58866}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<relationship name="automators">
+			<destination>{9973af0c-96de-45dd-b463-ce82b65321de}</destination>
+		</relationship>
+	</object>
+	<object class="Automator" id="{9973af0c-96de-45dd-b463-ce82b65321de}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>cursorPosition</value>
+		</property>
+	</object>
+</objects>

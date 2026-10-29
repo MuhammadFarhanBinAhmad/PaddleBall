@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class EnemyProjectile : BaseEnemyProjectile
 {

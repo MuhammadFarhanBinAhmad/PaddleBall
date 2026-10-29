@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{ce0dbaad-11c6-4403-9e23-cbe7e91b1f9f}">
+		<property name="name">
+			<value>ComboPitch</value>
+		</property>
+		<relationship name="folder">
+			<destination>{55a03fd1-66c3-440d-9e29-8cf65508cb24}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{5fadbbf7-53c5-4ac2-9b50-0ddccbd30b33}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{5fadbbf7-53c5-4ac2-9b50-0ddccbd30b33}">
+		<property name="maximum">
+			<value>4</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>
