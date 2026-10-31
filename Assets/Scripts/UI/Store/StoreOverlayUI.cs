@@ -17,7 +17,6 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] Button _dischargeAbility;
     [SerializeField] Button _toxicAbility;
     [SerializeField] Button _criticalAbility;
-    Animator _abilityAnimator;
     [SerializeField] Button _openSelectAbilityPage;
     [SerializeField] Button _closeSelectAbilityPage;
     [SerializeField] GameObject _selectAbilityOverlay;
@@ -69,11 +68,11 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
 
 
-        _openSelectAbilityPage.onClick.AddListener(() =>
-        {
-            OnSelectAbilityPageClicked?.Invoke();
-            HandleAbilityFlow();
-        });
+        //_openSelectAbilityPage.onClick.AddListener(() =>
+        //{
+        //    OnSelectAbilityPageClicked?.Invoke();
+        //    HandleAbilityFlow();
+        //});
         _closeSelectAbilityPage.onClick.AddListener(() =>
         {
             OnCloseSelectAbilityPageClicked?.Invoke();
@@ -96,6 +95,11 @@ public class StoreOverlayUI : BaseOverLayInteraction
 
         _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
 
+    }
+    public void HandleOpenSelectAbility()
+    {
+        OnSelectAbilityPageClicked?.Invoke();
+        HandleAbilityFlow();
     }
     private void Update()
     {
@@ -131,7 +135,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
         OpenOverlay(_selectAbilityOverlay);
         _isAnOverlayOpen = true;
         _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
-        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStore");
+        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStoreWithIntro");
     }
     void OpenPurchaseAbilityPage(STATUSTYPE type)
     {
@@ -148,7 +152,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
         AnimatorStateInfo state =
             _abilitySelectAbilityAnimator.GetCurrentAnimatorStateInfo(0);
 
-        yield return new WaitForSecondsRealtime(state.length - .2f);
+        yield return new WaitForSecondsRealtime(state.length - 1f);
         OpenOverlay(_abilityOverlay);
         _purchaseAbilityAnimator.SetTrigger("OpenAbilityPage");
         state =
@@ -176,7 +180,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
         {
             OpenOverlay(_selectAbilityOverlay);
         }
-        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStore");
+        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStoreWithoutIntro");
 
         yield return new WaitForSecondsRealtime(state.length);
         CloseOverlay(_abilityOverlay, false, true);

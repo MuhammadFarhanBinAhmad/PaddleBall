@@ -6,9 +6,9 @@ using UnityEngine;
 public class TowerManager : MonoBehaviour
 {
 
-    TimeManager _timeManager;
     StatManager _statManager;
     CutSceneManager _cutSceneManager;
+    StoreOverlayUI _storeOverlayUI;
 
     public GameObject _collectedBrick;
 
@@ -29,6 +29,9 @@ public class TowerManager : MonoBehaviour
     public int milestoneFloors;
     public int _maxIncreaseConversionValue;
     public int _increaseConversionRate;
+    public int _mileStoneEXP;
+    public Action _milestoneReach;
+
 
     [Header("Brick")]
     [SerializeField] int _brickToFloorConversionRate;
@@ -62,7 +65,6 @@ public class TowerManager : MonoBehaviour
     [SerializeField] int _startTowerHeightCheck, _endTowerHeightCheck;
     [SerializeField] int _totalTowerHeightCheck;
     public int[] _towerHeightCheck;
-    bool _receiveWarning;
 
     [Header("GameOver")]
     [SerializeField] List<SO_CutSceneEventContent> _gameover;
@@ -75,7 +77,7 @@ public class TowerManager : MonoBehaviour
 
     void Awake()
     {
-        _timeManager = FindAnyObjectByType<TimeManager>();
+        _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
         _cutSceneManager = FindAnyObjectByType<CutSceneManager>();
         _statManager = FindAnyObjectByType<StatManager>();
 
@@ -83,12 +85,6 @@ public class TowerManager : MonoBehaviour
     }
     private void Start()
     {
-        if (_timeManager != null)
-        {
-            _timeManager._dayPass += EndOfDayCheck;
-            _timeManager._endGame += EndOfGame;
-        }
-
         OnEssenceCollect += IncreaseBrickCount;
 
         _onTowerTakingDamage += TowerTakeDamage;
@@ -101,6 +97,9 @@ public class TowerManager : MonoBehaviour
         OnAddPureEssence += AddPureEssence;
         OnAddPureEssence += _statManager.AddTotalPureEssenceEarn;
 
+        _milestoneReach += ApplyEssenceMilestoneIncrease;
+        _milestoneReach += _storeOverlayUI.HandleOpenSelectAbility;
+
         PopulateTowerHeightCheck();
     }
 #if UNITY_EDITOR
@@ -112,9 +111,6 @@ public class TowerManager : MonoBehaviour
 #endif
     private void OnDisable()
     {
-        _timeManager._dayPass -= EndOfDayCheck;
-        
-        _timeManager._endGame -= EndOfGame;
         
         OnEssenceCollect -= IncreaseBrickCount;
 
@@ -127,6 +123,9 @@ public class TowerManager : MonoBehaviour
 
         OnAddPureEssence -= AddPureEssence;
         OnAddPureEssence -= _statManager.AddTotalPureEssenceEarn;
+
+        _milestoneReach -= ApplyEssenceMilestoneIncrease;
+        _milestoneReach -= _storeOverlayUI.HandleOpenSelectAbility;
 
     }
 
@@ -164,7 +163,8 @@ public class TowerManager : MonoBehaviour
             // Apply milestone logic: every milestoneFloors floors, increase essence threshold
             if (milestoneFloors > 0 && _currentTowerHeight % milestoneFloors == 0)
             {
-                ApplyEssenceMilestoneIncrease();
+                _mileStoneEXP++;
+                _milestoneReach?.Invoke();
             }
 
             OnHeightIncrease?.Invoke();
@@ -196,11 +196,6 @@ public class TowerManager : MonoBehaviour
 
 
         _essenceToPureEssenceConversionRate += increase;
-    }
-    void WarningGiven()
-    {
-        _receiveWarning = true;
-        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onFirstWarning,transform.position);
     }
 
     void CreateNewFloor()
@@ -338,31 +333,7 @@ public class TowerManager : MonoBehaviour
 
         _moveRoutine = null;
     }
-    public void EndOfDayCheck()
-    {
-        //if(_currentTowerHeight >= _towerHeightCheck[_timeManager.GetTotalDayPass()])
-        //{
-        //    print("pass");
-        //}
-        //else
-        //{
-        //    if (!_receiveWarning)
-        //    {
-        //        OnReceivingWarning?.Invoke();
-        //    }
-        //    else
-        //    {
-        //        _OnGameOver?.Invoke();
-        //        TimeManager.StopTime();
-        //        print("fail");
-        //    }
-        //}
-    }
-    public void EndOfGame()
-    {
-        print("end game");
-        //TimeManager.StopTime();
-    }
+   
     void PopulateTowerHeightCheck()
     {
         if (_totalTowerHeightCheck <= 0)
@@ -401,7 +372,12 @@ public class TowerManager : MonoBehaviour
         _currentPureEssence -= value;
         _statManager.AddTotalPureEssenceSpent(value);
     }
+    public void DeductMileStoneEXP()
+    {
+        _mileStoneEXP--;
+    }
     public int GetTotalPureEssenceCount() => _currentPureEssence;
+    public int GetMileStoneEXP() => _mileStoneEXP;
     public int GetCurrentBrickCount() => _currentBrickCount;
     public int GetBrickFloorConversionRate() => _brickToFloorConversionRate;
     public int GetEssencePureEssenceConversionRate() => _essenceToPureEssenceConversionRate;

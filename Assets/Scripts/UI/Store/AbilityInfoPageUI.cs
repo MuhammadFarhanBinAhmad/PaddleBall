@@ -66,6 +66,7 @@ public class AbilityInfoPageUI : MonoBehaviour
     }
     public void PurchaseAbility()
     {
+        print("hit");
         if (_storeAbilityManager.PurchaseAbility(ID))
         {
             _statManager.AddBallSpell();

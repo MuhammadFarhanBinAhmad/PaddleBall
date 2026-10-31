@@ -123,9 +123,9 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         _abilityPurchased = unlocked;
         _lockedOverlay.SetActive(!available);
 
-        if (unlocked)
-        {
-        }
+        //if (unlocked)
+        //{
+        //}
         if(_abilityPurchased)
         {
             _button.interactable = false;
@@ -145,7 +145,7 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         base.OnPointerEnter(eventData);
         _abilityInfoPageUI.SetUpAbilityDescription(_abilityInfo , _button);
         _storeOverlayUI.CalculatePriceCalculation(_storeAbilityManager.GetAbilityCost(_abilityInfo.ability_Level),
-                                                    _towerManager._currentPureEssence);
+                                                    _towerManager._mileStoneEXP);
 
     }
 

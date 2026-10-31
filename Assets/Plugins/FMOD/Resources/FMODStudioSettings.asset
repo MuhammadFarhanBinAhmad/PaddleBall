@@ -453,8 +453,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../FmodProjects/Breakout/Breakout.fspro
-  sourceBankPath: ../../FmodProjects/Breakout/Build
+  sourceProjectPath: Fmod/Breakout/Breakout.fspro
+  sourceBankPath: Fmod/Breakout/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1

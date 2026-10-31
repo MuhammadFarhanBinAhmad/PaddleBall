@@ -131,8 +131,8 @@ public class StoreAbilityManager : MonoBehaviour
             return false;
 
         int price = _abilityLevelAndCostState[abilityLevel].GetPrice();
-
-        if (_towerManager.GetTotalPureEssenceCount() < price)
+        //Now do both ability and card. need only for car
+        if (_towerManager.GetMileStoneEXP() < price)
         {
             _towerUIManager.PlayPopUpLackEssence();
             return false;
@@ -160,9 +160,7 @@ public class StoreAbilityManager : MonoBehaviour
         SOStoreAbilityContent ability = abilityLookup[abilityID];
         int abilityLevel = ability.ability_Level;
 
-        int price = _abilityLevelAndCostState[abilityLevel].GetPrice();
-
-        _towerManager.DeductPureEssence(price);
+        _towerManager.DeductMileStoneEXP();
         unlockedAbilities.Add(abilityID);
 
         _abilityLevelAndCostState[abilityLevel].RegisterPurchase();
