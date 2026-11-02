@@ -152,18 +152,13 @@ public class StoreOverlayUI : BaseOverLayInteraction
         AnimatorStateInfo state =
             _abilitySelectAbilityAnimator.GetCurrentAnimatorStateInfo(0);
 
-        yield return new WaitForSecondsRealtime(state.length - 1f);
+        yield return new WaitForSecondsRealtime(state.length - 2.25f);
         OpenOverlay(_abilityOverlay);
         _purchaseAbilityAnimator.SetTrigger("OpenAbilityPage");
         state =
         _purchaseAbilityAnimator.GetCurrentAnimatorStateInfo(0);
 
         yield return new WaitForSecondsRealtime(state.length - .2f);
-        //// must open select first
-        //if (!_selectAbilityOverlay.activeSelf)
-        //{
-        //    OpenOverlay(_selectAbilityOverlay);
-        //}
 
     }
     IEnumerator PlayClosePurchaseAbilityAnim()
