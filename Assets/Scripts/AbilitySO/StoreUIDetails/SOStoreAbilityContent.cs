@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 [CreateAssetMenu(menuName = "AbilityUI/Store Ability Content")]
 public class SOStoreAbilityContent : ScriptableObject
 {

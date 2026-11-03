@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_1_1
   ability_Name: Shock And Awe
+  spell_Type: 1
   ability_Description: Explosive charge will stun the brick upon explosion
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: 8c2d684996dee0444a30196e7f7f1e9f, type: 2}

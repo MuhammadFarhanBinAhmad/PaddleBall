@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level1_0_0
   ability_Name: Hidden Blade
+  spell_Type: 2
   ability_Description: 'Critical hit introduce a 10% to induce bleeding damage.
 
     Stackable

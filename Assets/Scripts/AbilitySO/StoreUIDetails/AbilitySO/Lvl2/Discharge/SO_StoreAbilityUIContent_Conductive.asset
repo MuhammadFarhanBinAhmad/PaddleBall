@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_1_2
   ability_Name: Conductive
+  spell_Type: 1
   ability_Description: "While charging, introduce 15% chance to \u201Ccharge\u201D
     nearby brick(1 brick distance)"
   ability_Level: 2

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_3_3
   ability_Name: Toxic Overload
+  spell_Type: 3
   ability_Description: "At max stack, \u201CToxic Overload\u201D occur. On next hit,
     All toxic stack are consumed, dealing massive damage to the brick with each stack
     dealing 200% damage"

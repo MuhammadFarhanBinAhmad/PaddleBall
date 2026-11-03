@@ -30,7 +30,7 @@ public class ShopLevelState
 
 public class StoreAbilityManager : MonoBehaviour
 {
-    private TowerManager _towerManager;
+    TowerManager _towerManager;
     TowerUIManager _towerUIManager;
 
     [Header("Ball Ability Database")]

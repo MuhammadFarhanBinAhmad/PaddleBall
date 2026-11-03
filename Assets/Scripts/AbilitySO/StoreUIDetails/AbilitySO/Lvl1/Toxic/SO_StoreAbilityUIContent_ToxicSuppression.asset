@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level1_3_0
   ability_Name: Toxic Suppression
+  spell_Type: 3
   ability_Description: Affected brick speed is slowed by 25%. Stack damage deal 25%
     more damage. Damage and speed effect can stack
   ability_Level: 1

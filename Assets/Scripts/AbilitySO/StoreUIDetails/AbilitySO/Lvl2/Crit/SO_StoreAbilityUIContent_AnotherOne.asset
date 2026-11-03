@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_0_1
   ability_Name: Another One
+  spell_Type: 2
   ability_Description: Destroy 2 layer instead of 1 instead.
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: d39c746feb6387a4da644ca895a1cdbe, type: 2}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_0_0
   ability_Name: Dead Eye
+  spell_Type: 2
   ability_Description: Instant kill brick with 3 layer or less. Replace piercer effect
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: 9efb0cd6f59ad2642bcca106c3d6840a, type: 2}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_3_2
   ability_Name: Toxic Explosion
+  spell_Type: 3
   ability_Description: "At max stack, \u201CToxic Explosion\u201D occur. On next
     hit, All toxic stack are consumed, and a massive smoke appears. All brick inside
     the smoke will get affected"

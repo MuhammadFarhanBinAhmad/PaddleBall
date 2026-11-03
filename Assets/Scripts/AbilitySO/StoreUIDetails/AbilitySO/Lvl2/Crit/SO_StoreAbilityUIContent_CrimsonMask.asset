@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_0_3
   ability_Name: Crimson Mask
+  spell_Type: 2
   ability_Description: When max stack of bleed is hit, consume all stack and brick
     deal 10x  crit damage
   ability_Level: 2

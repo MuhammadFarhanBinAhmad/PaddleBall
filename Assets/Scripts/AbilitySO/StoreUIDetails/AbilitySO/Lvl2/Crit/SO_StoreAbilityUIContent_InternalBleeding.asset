@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_0_2
   ability_Name: Internal Bleeding
+  spell_Type: 2
   ability_Description: Each bleeding stack brick  will increase crit chance by 3%
     and crit damage by 10%
   ability_Level: 2

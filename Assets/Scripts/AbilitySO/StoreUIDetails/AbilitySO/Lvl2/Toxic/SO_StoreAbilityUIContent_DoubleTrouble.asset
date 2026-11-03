@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_3_0
   ability_Name: Double Trouble
+  spell_Type: 3
   ability_Description: On hit, the stack applied is double.
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: 2756a18e285f4a14091cba7f68c69ed3, type: 2}

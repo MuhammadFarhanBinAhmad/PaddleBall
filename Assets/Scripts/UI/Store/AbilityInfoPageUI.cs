@@ -10,6 +10,7 @@ public class AbilityInfoPageUI : MonoBehaviour
     AbilityStoreLayoutUI _abilityStoreUI;
     StoreAbilityManager _storeAbilityManager;
     StatManager _statManager;
+    StoreOverlayUI _storeOverlayUI;
 
     [SerializeField] private Image _icon;
     [SerializeField] Button _button;
@@ -30,6 +31,7 @@ public class AbilityInfoPageUI : MonoBehaviour
         _abilityManager = FindAnyObjectByType<AbilityManager>();
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
         _statManager = FindAnyObjectByType<StatManager>();
+        _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
     }
     private void Start()
     {
@@ -66,34 +68,40 @@ public class AbilityInfoPageUI : MonoBehaviour
     }
     public void PurchaseAbility()
     {
-        print("hit");
         if (_storeAbilityManager.PurchaseAbility(ID))
         {
             _statManager.AddBallSpell();
-
             switch(ability_ToSpawn._statusType)
             {
                 case STATUSTYPE.EXPLOSION:
                     {
                         _statManager.AddTotalExplosionSpell();
+                        _storeOverlayUI.PlaySpellLearnAnim(STATUSTYPE.EXPLOSION);
                         break;
                     }
                 case STATUSTYPE.DISCHARGE:
                     {
                         _statManager.AddTotalDischargeSpell();
+                        _storeOverlayUI.PlaySpellLearnAnim(STATUSTYPE.DISCHARGE);
+
                         break;
                     }
                 case STATUSTYPE.CRIT:
                     {
                         _statManager.AddTotalCritSpell();
+                        _storeOverlayUI.PlaySpellLearnAnim(STATUSTYPE.CRIT);
+
                         break;
                     }
                 case STATUSTYPE.TOXIC:
                     {
                         _statManager.AddTotalToxicSpell();
+                        _storeOverlayUI.PlaySpellLearnAnim(STATUSTYPE.TOXIC);
+
                         break;
                     }
             }
+
             _abilityManager.AddAbility(ability_ToSpawn);
             IsAbilityPurchased(false);
             OnAbilityPurchase?.Invoke();

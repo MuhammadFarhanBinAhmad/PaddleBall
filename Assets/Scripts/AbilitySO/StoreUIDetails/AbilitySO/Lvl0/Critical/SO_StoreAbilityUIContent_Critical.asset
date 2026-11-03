@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level0_0_0
   ability_Name: Critical
+  spell_Type: 3
   ability_Description: Introduce chance to deal critical damage(x2 of base damage)
   ability_Level: 0
   ability_ToSpawn: {fileID: 11400000, guid: e36b15acbc52c134480959c4a5ac328f, type: 2}

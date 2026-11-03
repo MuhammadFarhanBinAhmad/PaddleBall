@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level1_1_0
   ability_Name: 'Explosive Shock '
+  spell_Type: 1
   ability_Description: A small explosion will appear after discharge. Explosion deal
     25% of ball damage
   ability_Level: 1

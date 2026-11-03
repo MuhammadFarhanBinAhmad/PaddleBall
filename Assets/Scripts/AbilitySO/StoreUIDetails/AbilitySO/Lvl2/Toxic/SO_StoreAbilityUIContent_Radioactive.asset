@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_3_1
   ability_Name: Radioactive
+  spell_Type: 3
   ability_Description: On hit, introduce 25% chance to produce smoke that can has
     a chance to affect nearby bricks
   ability_Level: 2

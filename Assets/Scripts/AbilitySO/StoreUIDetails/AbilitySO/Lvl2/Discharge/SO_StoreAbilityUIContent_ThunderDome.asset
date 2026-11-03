@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SOStoreAbilityContent
   abilityID: Level2_1_0
   ability_Name: ThunderDome
+  spell_Type: 1
   ability_Description: "Brick hit by the explosion will get a 25% of being \u201Ccharged\u201D"
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: e3c835e98494e164a8faf7e675eb58eb, type: 2}

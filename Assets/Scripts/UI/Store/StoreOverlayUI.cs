@@ -12,22 +12,22 @@ public class StoreOverlayUI : BaseOverLayInteraction
     AbilityStoreLayoutUI _abilityStoreLayoutUI;
     BookOverlayUI _bookOverlayUI;
 
+    [SerializeField] Animator _animator;
+
     [Header("SelectAbilityPage")]
     [SerializeField] Button _explosiveAbility;
     [SerializeField] Button _dischargeAbility;
     [SerializeField] Button _toxicAbility;
     [SerializeField] Button _criticalAbility;
-    [SerializeField] Button _openSelectAbilityPage;
-    [SerializeField] Button _closeSelectAbilityPage;
+    //[SerializeField] Button _openSelectAbilityPage;
+    //[SerializeField] Button _closeSelectAbilityPage;
     [SerializeField] GameObject _selectAbilityOverlay;
-    [SerializeField] Animator _abilitySelectAbilityAnimator;
     public event Action OnSelectAbilityPageClicked;
     public event Action OnCloseSelectAbilityPageClicked;
 
     [Header("AbilityPage")]
     [SerializeField] Button _closePurchaseAbilityOverlay;
     [SerializeField] GameObject _abilityOverlay;
-    [SerializeField] Animator _purchaseAbilityAnimator;
     [SerializeField] TextMeshProUGUI _apCardCostText;
     [SerializeField] TextMeshProUGUI _apCurrentPointText;
     [SerializeField] TextMeshProUGUI _apLeftOverPointText;
@@ -44,6 +44,11 @@ public class StoreOverlayUI : BaseOverLayInteraction
     [SerializeField] TextMeshProUGUI _rerollLeftText;
     public event Action OnOpenCardClicked;
     public event Action OnCloseCardClicked;
+
+    [Header("PurchaseItem")]
+    [SerializeField] GameObject _purchaseOverlay;
+    [SerializeField] Sprite[] _spellEmblem;
+    [SerializeField] Image _currentEmblem;
 
     [SerializeField]bool _isAnOverlayOpen;
 
@@ -67,17 +72,16 @@ public class StoreOverlayUI : BaseOverLayInteraction
         _criticalAbility.onClick.AddListener(() => OpenPurchaseAbilityPage(STATUSTYPE.CRIT));
 
 
-
         //_openSelectAbilityPage.onClick.AddListener(() =>
         //{
         //    OnSelectAbilityPageClicked?.Invoke();
         //    HandleAbilityFlow();
         //});
-        _closeSelectAbilityPage.onClick.AddListener(() =>
-        {
-            OnCloseSelectAbilityPageClicked?.Invoke();
-            HandleAbilityFlow();
-        });
+        //_closeSelectAbilityPage.onClick.AddListener(() =>
+        //{
+        //    OnCloseSelectAbilityPageClicked?.Invoke();
+        //    HandleAbilityFlow();
+        //});
         _closePurchaseAbilityOverlay.onClick.AddListener(ClosePurchaseAbilityPage);
 
         // Item
@@ -96,6 +100,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
         _rerollLeftText.text = _storeAbilityManager.GetNumberOfReroll().ToString();
 
     }
+
     public void HandleOpenSelectAbility()
     {
         OnSelectAbilityPageClicked?.Invoke();
@@ -135,7 +140,7 @@ public class StoreOverlayUI : BaseOverLayInteraction
         OpenOverlay(_selectAbilityOverlay);
         _isAnOverlayOpen = true;
         _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
-        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStoreWithIntro");
+        _animator.SetTrigger("OpenAbilityStoreWithIntro");
     }
     void OpenPurchaseAbilityPage(STATUSTYPE type)
     {
@@ -146,36 +151,36 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     IEnumerator PlayOpenPurchaseAbilityAnim()
     {
-        _abilitySelectAbilityAnimator.SetTrigger("SelectedAbility");
+        _animator.SetTrigger("SelectedAbility");
         yield return null;
 
         AnimatorStateInfo state =
-            _abilitySelectAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+            _animator.GetCurrentAnimatorStateInfo(0);
 
         yield return new WaitForSecondsRealtime(state.length - 2.25f);
         OpenOverlay(_abilityOverlay);
-        _purchaseAbilityAnimator.SetTrigger("OpenAbilityPage");
+        _animator.SetTrigger("OpenAbilityPage");
         state =
-        _purchaseAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+        _animator.GetCurrentAnimatorStateInfo(0);
 
         yield return new WaitForSecondsRealtime(state.length - .2f);
 
     }
     IEnumerator PlayClosePurchaseAbilityAnim()
     {
-        _purchaseAbilityAnimator.SetTrigger("CloseAbilityPage");
+        _animator.SetTrigger("CloseAbilityPage");
 
         yield return null;
 
         AnimatorStateInfo state =
-            _purchaseAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+            _animator.GetCurrentAnimatorStateInfo(0);
 
         // must open select first
         if (_selectAbilityOverlay.activeSelf)
         {
             OpenOverlay(_selectAbilityOverlay);
         }
-        _abilitySelectAbilityAnimator.SetTrigger("OpenAbilityStoreWithoutIntro");
+        _animator.SetTrigger("OpenAbilityStoreWithoutIntro");
 
         yield return new WaitForSecondsRealtime(state.length);
         CloseOverlay(_abilityOverlay, false, true);
@@ -223,19 +228,63 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     private IEnumerator CloseSelectAbilityAnimation()
     {
-        _abilitySelectAbilityAnimator.SetTrigger("CloseAbilityStore");
+        _animator.SetTrigger("CloseAbilityStore");
 
         yield return null;
 
         AnimatorStateInfo state =
-            _abilitySelectAbilityAnimator.GetCurrentAnimatorStateInfo(0);
+            _animator.GetCurrentAnimatorStateInfo(0);
 
         yield return new WaitForSecondsRealtime(state.length + 0.5f);
         CloseOverlay(_selectAbilityOverlay);
         _isAnOverlayOpen = false;
         _bookOverlayUI.SetIsOverlayOpen(_isAnOverlayOpen);
-
     }
+    public void PlaySpellLearnAnim(STATUSTYPE _st)
+    {
+        switch (_st)
+        {
+            case STATUSTYPE.EXPLOSION:
+                {
+                    _currentEmblem.sprite = _spellEmblem[0];
+                    break;
+                }
+            case STATUSTYPE.DISCHARGE:
+                {
+                    _currentEmblem.sprite = _spellEmblem[1];
+                    break;
+                }
+            case STATUSTYPE.TOXIC:
+                {
+                    _currentEmblem.sprite = _spellEmblem[2];
+                    break;
+                }
+            case STATUSTYPE.CRIT:
+                {
+                    _currentEmblem.sprite = _spellEmblem[3];
+                    break;
+                }
+        }
+
+        StartCoroutine(SpellLearnAnim());
+    }
+    public IEnumerator SpellLearnAnim()
+    {
+        print("hit");
+        _animator.SetTrigger("PurchaseSpell");
+        yield return null;
+
+        AnimatorStateInfo state =
+            _animator.GetCurrentAnimatorStateInfo(0);
+
+        yield return new WaitForSecondsRealtime(state.length + 0.5f);
+
+        CloseOverlay(_abilityOverlay);
+        CloseOverlay(_abilityOverlay);
+        CloseOverlay(_selectAbilityOverlay);
+        _isAnOverlayOpen = false;
+    }
+
     public void StartRerollCardAnim()
     {
         if (_storeAbilityManager.GetNumberOfReroll() > 0)
