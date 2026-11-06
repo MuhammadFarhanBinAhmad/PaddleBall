@@ -123,9 +123,6 @@ public class BallAbilityButtonUI : BaseButtonInteraction
         _abilityPurchased = unlocked;
         _lockedOverlay.SetActive(!available);
 
-        //if (unlocked)
-        //{
-        //}
         if(_abilityPurchased)
         {
             _button.interactable = false;

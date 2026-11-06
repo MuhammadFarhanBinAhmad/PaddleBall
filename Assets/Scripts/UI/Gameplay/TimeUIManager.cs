@@ -28,7 +28,7 @@ public class TimeUIManager : MonoBehaviour
     }
     void Start()
     {
-        _timeManager._dayPass += UpdateTimeUI;
+        _timeManager._dayEnd += UpdateTimeUI;
         _timeManager._onStartBossDay+= UpdateTimeUI;
         _timeManager._onEndBossDay += UpdateTimeUI;
 
@@ -36,7 +36,7 @@ public class TimeUIManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        _timeManager._dayPass -= UpdateTimeUI;
+        _timeManager._dayEnd -= UpdateTimeUI;
         _timeManager._onStartBossDay -= UpdateTimeUI;
         _timeManager._onEndBossDay -= UpdateTimeUI;
 

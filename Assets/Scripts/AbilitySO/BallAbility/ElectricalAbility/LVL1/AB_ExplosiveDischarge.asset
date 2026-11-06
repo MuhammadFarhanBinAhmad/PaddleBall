@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_ExplosiveDischarge
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _statusType: 1
+  _statusType: 2
   _type: 0
   _abilityPrefab: {fileID: 35344617963036952, guid: 3249fe8b67f43b44c9baa2f8cbd5b4b4, type: 3}
   _genericEffect: 1

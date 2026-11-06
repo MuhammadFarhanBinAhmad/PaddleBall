@@ -19,6 +19,8 @@ public abstract class TutorialOrder : MonoBehaviour
     [SerializeField] Transform _textBoxPos;
     [Header("Delay")]
     public float _delayBeforeNextStep;
+    [Header("Tutorial Hint")]
+    public GameObject _tutorialHint;
 
 
     public event Action<TutorialOrder> OnOrderCompleted;

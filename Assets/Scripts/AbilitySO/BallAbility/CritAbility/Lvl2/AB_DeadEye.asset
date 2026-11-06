@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_DeadEye
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _statusType: 0
+  _statusType: 4
   _type: 0
   _abilityPrefab: {fileID: 8152904187135326588, guid: 65278805b1296a64ebb5767f2fd2c46a, type: 3}
   _genericEffect: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   _stacksToAdd: 0
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
-  _damagePerStack: 0
+  _damagePerStackMultiplier: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
   _modifyTimeBeforeEffectActivate: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   _layerToDestroy: 0
   _instantKillThreshold: 1
   _explosionDamageMultiplier: 0
+  _explosionRadius: 0
   _explosionSizeMultiplier: 0
   _shieldMultiplier: 0
   _shieldAdd: 0

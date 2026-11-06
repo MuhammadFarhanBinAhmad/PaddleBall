@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class TimeManager : MonoBehaviour
@@ -10,8 +11,8 @@ public class TimeManager : MonoBehaviour
     StoreAbilityManager _storeAbilityManager;
     StoreOverlayUI _overlayUI;
     BossManager _bossManager;
-    EpisodeManager _episodeManager;
     TowerManager _towerManager;
+    TutorialManager _tutorialManager;
 
     [Header("TimeKeeper")]
     [SerializeField] int _maxGameDuration;
@@ -21,7 +22,12 @@ public class TimeManager : MonoBehaviour
     float _daysDuration;
     [SerializeField] float _currentDayDuration;
     [SerializeField] int _bossDayInterval;
+    bool _firstDay = true;
+    [Header("EndDayContent")]
+    [SerializeField] Button _startDayButton;
+    [SerializeField] GameObject _cardShopButton;
 
+    bool _hasDayEnd;
     bool _isBossDay;
     bool _bossFightEnded;
 
@@ -33,7 +39,9 @@ public class TimeManager : MonoBehaviour
     public Action _onEndBossDay;
     public Action _onBossDefeated;
 
-    public Action _dayPass;
+    public Action _dayEnd;
+    public Action _dayEndAllBrickDestroyed;
+    public Action _dayStart;
     public Action _endGame;
 
     [Header("Game Clock")]
@@ -65,18 +73,27 @@ public class TimeManager : MonoBehaviour
         _storeAbilityManager = FindAnyObjectByType<StoreAbilityManager>();
         _bossManager = FindAnyObjectByType<BossManager>();
         _brickpool = FindAnyObjectByType<BrickPool>();
-        _episodeManager = FindAnyObjectByType<EpisodeManager>();
         _overlayUI = FindAnyObjectByType<StoreOverlayUI>();
         _towerManager = FindAnyObjectByType<TowerManager>();
+        _tutorialManager = FindAnyObjectByType<TutorialManager>();
     }
 
     private void Start()
     {
-        _dayPass += PlayDayPassAudio;
-        _dayPass += _storeAbilityManager.SetItemAvailableToPurchase;
-        _dayPass += _storeAbilityManager.ResetRoroll;
-        _dayPass += _overlayUI.ResetItems;
-        _dayPass += _overlayUI.UpdateRerollText;
+        _dayEnd += PlayDayPassAudio;
+        _dayEnd += _storeAbilityManager.SetItemAvailableToPurchase;
+        _dayEnd += _storeAbilityManager.ResetRoroll;
+        _dayEnd += _overlayUI.ResetItems;
+        _dayEnd += _overlayUI.UpdateRerollText;
+        _dayEnd += StopDayTimer;
+
+        _dayEndAllBrickDestroyed += ActivateStartDayButton;
+        _dayEndAllBrickDestroyed += PlayEndDayTutorial;
+
+        _dayStart += StartDayTimer;
+        _dayStart += DeactivateStartDayButton;
+
+
 
         _onStartBossDay += SwitchBossDayDuration;
         _onStartBossDay += StopDayTimer;
@@ -90,6 +107,8 @@ public class TimeManager : MonoBehaviour
 
         _towerManager.OnHeightIncrease += MoveBackgroundsY;
 
+
+        _startDayButton.onClick.AddListener(() => _dayStart?.Invoke());
 
         _daysDuration = _fullDayDuration;
         _currentDayDuration = _daysDuration;
@@ -111,11 +130,18 @@ public class TimeManager : MonoBehaviour
         _onBossDefeated -= SetBossDefeated;
         //_onBossDefeated -= StartDayTimer;
 
-        _dayPass -= PlayDayPassAudio;
-        _dayPass -= _storeAbilityManager.SetItemAvailableToPurchase;
-        _dayPass -= _storeAbilityManager.ResetRoroll;
-        _dayPass -= _overlayUI.ResetItems;
-        _dayPass -= _overlayUI.UpdateRerollText;
+        _dayEnd -= PlayDayPassAudio;
+        _dayEnd -= _storeAbilityManager.SetItemAvailableToPurchase;
+        _dayEnd -= _storeAbilityManager.ResetRoroll;
+        _dayEnd -= _overlayUI.ResetItems;
+        _dayEnd -= _overlayUI.UpdateRerollText;
+        _dayEnd = StopDayTimer;
+
+        _dayEndAllBrickDestroyed -= ActivateStartDayButton;
+        _dayEndAllBrickDestroyed -= PlayEndDayTutorial;
+
+        _dayStart -= StartDayTimer;
+        _dayStart -= DeactivateStartDayButton;
 
         _towerManager.OnHeightIncrease -= MoveBackgroundsY;
     }
@@ -126,7 +152,6 @@ public class TimeManager : MonoBehaviour
             return;
 
         CountDayTime();
-
         _currentRealTimePass += Time.deltaTime;
     }
 
@@ -173,7 +198,8 @@ public class TimeManager : MonoBehaviour
         else
         {
             _totalDayPass++;
-
+            _dayEnd?.Invoke();
+            _hasDayEnd = true;
             if (_isBossDay)
             {
                 if (!_bossFightEnded)
@@ -200,8 +226,6 @@ public class TimeManager : MonoBehaviour
                 }
 
                 _currentDayDuration = _daysDuration;
-
-                _dayPass?.Invoke();
             }
         }
     }
@@ -246,11 +270,6 @@ public class TimeManager : MonoBehaviour
         ReSyncTime(_timeLeftPercent);
         _isBossDay = false;
     }
-    void SetNewEpisode()
-    {
-        int index = Random.Range(0,_episodeManager.GetTotalEpisode());
-        _episodeManager.OnStartEpisode?.Invoke(index);
-    }
 
     private float GetPercentDayTimeLeft()
     {
@@ -267,7 +286,9 @@ public class TimeManager : MonoBehaviour
     {
         if (_isBossDay)
             if (_brickpool.IsAllBrickDestroyed())
+            {
                 _bossManager.SpawnBoss();
+            }
     }
 
     public void SetBossDefeated()
@@ -276,12 +297,14 @@ public class TimeManager : MonoBehaviour
         _daySpeedMultiplier = _postBossSpeedMultiplier;
     }
 
-    public bool IsBossDay() => _isBossDay;
-    public bool IsBossFightEnded() => _bossFightEnded;
     public float GetCurrentDayDuration() => _currentDayDuration;
 
     public static void StopTime() => Time.timeScale = 0f;
-    public static void ResetTimeScale() => Time.timeScale = 1f;
+    public static void ResetTimeScale()
+    {
+        print("hit");
+        Time.timeScale = 1f;
+    }
     public static void SetCustomTimeScale(float val) => Time.timeScale = val;
     public static bool IsGamePause() => Time.timeScale == 0f;
 
@@ -295,7 +318,8 @@ public class TimeManager : MonoBehaviour
     }
     public void SkipDay() => _currentDayDuration = 1f;
 
-
+    public bool IsBossDay() => _isBossDay;
+    public bool IsEndOfDay() => _hasDayEnd;
     public void FadeSpriteAlpha(SpriteRenderer sprite, float targetAlpha)
     {
         StartCoroutine(FadeSpriteAlphaRoutine(sprite, targetAlpha));
@@ -481,5 +505,28 @@ public class TimeManager : MonoBehaviour
         }
 
         _backgroundMoveCoroutine = null;
+    }
+    public void ActivateStartDayButton()
+    {
+        _startDayButton.gameObject.SetActive(true);
+        _cardShopButton.SetActive(true);
+
+    }
+    public void DeactivateStartDayButton()
+    {
+        _startDayButton.gameObject.SetActive(false);
+        _cardShopButton.SetActive(false);
+    }
+
+    public void PlayEndDayTutorial()
+    {
+        if(_firstDay)
+        {
+            TimeManager.StopTime();
+            _tutorialManager.FillSectionOrder(TUTORIAL_TYPE.END_DAY);
+            _tutorialManager.StartTutorial();
+            _firstDay = false;
+        }
+
     }
 }

@@ -6,7 +6,7 @@ public class Ball : MonoBehaviour
 {
     internal Rigidbody2D _rigidbody;
     SpriteRenderer _spriteRenderer;
-    [SerializeField]ParticleSystem _deathEffect;
+    [SerializeField] ParticleSystem _deathEffect;
     [SerializeField] TrailRenderer _trailRenderer;
     AbilityManager _abilityManager;
     BrickPool _brickPool;
@@ -71,7 +71,7 @@ public class Ball : MonoBehaviour
     float _currentCoolDownPeriod;
     Coroutine _timeScaleRoutine;
     [SerializeField] bool _onAimingState;
-     bool _isBallDeactivate;
+    bool _isBallDeactivate;
     [SerializeField] ParticleSystem _shotParticle;
 
     [Header("ManaBar")]
@@ -87,7 +87,7 @@ public class Ball : MonoBehaviour
     public float _currentRespawnTimer;
     public Transform _respawnPos;
     bool _awaitingLaunch = true;
-    [SerializeField]bool _isBallDead;
+    [SerializeField] bool _isBallDead;
 
     [Header("RespawnAnimation")]
     [SerializeField] AnimationCurve easeOutElastic;
@@ -142,6 +142,7 @@ public class Ball : MonoBehaviour
         //OnBallReset += ResetPosition;
         OnBallReset += PlayBallDestroyAudio;
         OnBallReset += ResetBallDurability;
+        OnBallReset += TimeManager.ResetTimeScale;
 
         OnBallDestroy += DestroyCopyBall;
         OnBallDestroy += PlayBallDestroyAudio;
@@ -184,6 +185,7 @@ public class Ball : MonoBehaviour
         //OnBallReset -= ResetPosition;
         OnBallReset -= PlayBallDestroyAudio;
         OnBallReset -= ResetBallDurability;
+        OnBallReset -= TimeManager.ResetTimeScale;
 
         OnBallDestroy -= DestroyCopyBall;
         OnBallDestroy -= PlayBallDestroyAudio;
@@ -196,19 +198,12 @@ public class Ball : MonoBehaviour
     }
 
 
-private void Update()
+    private void Update()
     {
-        //if (_paddleHealth.IsPaddleDead())
-        //{
-        //    TimeManager.ResetTimeScale();
-        //    _ballDirectionArrow.DisableArrow(true);
-        //    return;
-        //}
-
-        if(!_isBallDead)
+        if (!_isBallDead)
             return;
 
-        if(_currentRespawnTimer >0)
+        if (_currentRespawnTimer > 0)
         {
             _currentRespawnTimer -= Time.deltaTime;
         }
@@ -275,7 +270,7 @@ private void Update()
             _targetTimeScale = _slowMotionTimeValue;
             _ballDirectionArrow.DisableArrow(false);
 
-            if (_onAimingState && Input.GetMouseButton(0) && _currentManaAmount  >= _manaShootCost)
+            if (_onAimingState && Input.GetMouseButton(0) && _currentManaAmount >= _manaShootCost)
                 OnBallRediect?.Invoke();
         }
         else // released
@@ -488,7 +483,7 @@ private void Update()
     public void ResetBallRespawnTimer()
     {
         _isBallDead = true;
-        _currentRespawnTimer = _respawnTime; 
+        _currentRespawnTimer = _respawnTime;
     }
     public void DeactivateBall()
     {
@@ -518,7 +513,6 @@ private void Update()
     public void PlayPaddleDeathEffect() => _deathEffect.gameObject.SetActive(true);
 
     void PlayBallDestroyAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallDestroy, transform.position);
-    void PlayBallRespawnAudio() => AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBallRespawn, transform.position);
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -533,7 +527,7 @@ private void Update()
         {
             StabilizeAfterCollision(other);
             GlobalFeedbackManager.Instance.SetFeedbackValue(so_OnBallHit);
-            GameObject vfx = Instantiate(_ballHitVFX,transform.position, Quaternion.identity);
+            GameObject vfx = Instantiate(_ballHitVFX, transform.position, Quaternion.identity);
             OnBallHit?.Invoke();
 
             Vector2 avgNormal = Vector2.zero;
@@ -602,7 +596,7 @@ private void Update()
         //}
     }
     void ResetBallDurability()
-    { 
+    {
         //_currentBallDurability = _maxBallDurability; 
     }
     //HELPER
@@ -650,7 +644,7 @@ private void Update()
 
     public void AddBonusDamage(int val) => _bonusDamage += val;
 
-    public float GetDurabilityPercentage() 
+    public float GetDurabilityPercentage()
     {
         //_currentBallDurability / _maxBallDurability;
         return 0;
@@ -737,5 +731,12 @@ private void Update()
         _rigidbody.linearVelocity =
             _lastStableDirection * _minimumVelocity;
     }
-    public void AddMana(float mana) => _currentManaAmount += mana;
+    public void AddMana(float mana)
+    {
+        _currentManaAmount += mana;
+        if (_currentManaAmount > _maxManaAmount)
+        {
+            _currentManaAmount = _maxManaAmount;
+        }
+    }
 }

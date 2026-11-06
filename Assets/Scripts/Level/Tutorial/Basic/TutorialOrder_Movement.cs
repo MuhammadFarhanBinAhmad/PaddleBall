@@ -7,7 +7,7 @@ public class TutorialOrder_Movement : TutorialOrder
 
     protected override void GiveInstruction()
     {
-        Debug.Log("Use the A and D keys to move left and right.");
+        _tutorialHint.SetActive(true);
     }
 
     protected override IEnumerator WaitForAction()
@@ -33,7 +33,7 @@ public class TutorialOrder_Movement : TutorialOrder
         }
 
         // Both keys have been pressed.
-
+        _tutorialHint.SetActive(false);
         // Brief delay before completing the order.
         yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }

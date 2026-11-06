@@ -5,7 +5,7 @@ public class TutorialOrder_RedirectBall : TutorialOrder
 {
     protected override void GiveInstruction()
     {
-        Debug.Log("Hold Right Mouse to aim. Click Left Mouse to Shoot");
+        _tutorialHint.SetActive(true);
     }
 
     protected override IEnumerator WaitForAction()
@@ -22,7 +22,7 @@ public class TutorialOrder_RedirectBall : TutorialOrder
 
             yield return null;
         }
-
+        _tutorialHint.SetActive(false);
         // Delay before advancing to the next tutorial order.
         yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }

@@ -19,8 +19,6 @@ MonoBehaviour:
   - There are 4 spell path you can learn - Explosion, Critical, Discharge, and Toxic
   - Each path are special and define who you are as a wizard
   - You can focus on one path or even try a bit of all the paths
-  - Take a look around.When you're done, close the book and we can move to Spell
-    Cards next
   _freezeGame: 0
   TEXTBOX_TYPE: 0
   _focusType: 0

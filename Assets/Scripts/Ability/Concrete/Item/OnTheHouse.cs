@@ -17,12 +17,12 @@ public class OnTheHouse : ABSAbility
             i.SetOnTheHouse(this);
         }
 
-        _timeManager._dayPass += ResetPurchase;
+        _timeManager._dayEnd += ResetPurchase;
 
     }
     private void OnDestroy()
     {
-        _timeManager._dayPass -= ResetPurchase;
+        _timeManager._dayEnd -= ResetPurchase;
     }
     public void ResetPurchase() => _itemPurchase = false;
 }

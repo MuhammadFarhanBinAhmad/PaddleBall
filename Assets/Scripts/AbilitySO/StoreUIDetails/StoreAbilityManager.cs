@@ -55,7 +55,12 @@ public class StoreAbilityManager : MonoBehaviour
     public Action OnStoreOpen, OnStoreClose;
     public bool _storeIsOpen;
 
-
+    [Header("Item Rarity Weights")]
+    [SerializeField, Min(0)] private int _commonWeight;
+    [SerializeField, Min(0)] private int _uncommonWeight;
+    [SerializeField, Min(0)] private int _rareWeight;
+    [SerializeField, Min(0)] private int _legendaryWeight;
+    [SerializeField, Min(0)] private int _odditiesWeight;
 
     public event Action<string> OnAbilityPurchased;
 
@@ -237,39 +242,78 @@ public class StoreAbilityManager : MonoBehaviour
         return _abilityLevelAndCostState[level].GetPrice();
     }
 
+
     public void SetItemAvailableToPurchase()
     {
-        // Safety check
-        if (_itemButtonsList.Count == 0)
+        if (_itemButtonsList == null || _itemButtonsList.Count == 0)
             return;
 
-        // Create a shuffled copy of available items
-        List<SOItemAbilityContentUI> shuffled =
-            new List<SOItemAbilityContentUI>(_itemAvailableList);
+        // Group available cards by rarity.
+        Dictionary<ITEMRARITY, List<SOItemAbilityContentUI>> rarityPools =
+            new Dictionary<ITEMRARITY, List<SOItemAbilityContentUI>>();
 
-        // Shuffle
-        for (int i = 0; i < shuffled.Count; i++)
+        HashSet<SOItemAbilityContentUI> purchasedItems =
+            new HashSet<SOItemAbilityContentUI>(_itemPurchasedList);
+
+        // Prevent duplicate entries in the database.
+        HashSet<SOItemAbilityContentUI> addedItems =
+            new HashSet<SOItemAbilityContentUI>();
+
+        foreach (SOItemAbilityContentUI item in _itemAvailableList)
         {
-            int rand = UnityEngine.Random.Range(i, shuffled.Count);
-            (shuffled[i], shuffled[rand]) = (shuffled[rand], shuffled[i]);
+            if (item == null ||
+                purchasedItems.Contains(item) ||
+                !addedItems.Add(item))
+            {
+                continue;
+            }
+
+            // CHANGE _rarity to the actual rarity field
+            // in your SOItemAbilityContentUI.
+            ITEMRARITY rarity = item._itemRarity;
+
+            if (rarity == ITEMRARITY.NULL)
+                continue;
+
+            if (!rarityPools.ContainsKey(rarity))
+                rarityPools[rarity] = new List<SOItemAbilityContentUI>();
+
+            rarityPools[rarity].Add(item);
         }
 
-        // Fill every card slot
+        // Fill each shop slot independently.
         for (int i = 0; i < _itemButtonsList.Count; i++)
         {
-            if (i < shuffled.Count)
+            ItemAbilityButtonUI button = _itemButtonsList[i];
+
+            if (button == null)
+                continue;
+
+            // Select an available rarity using weights.
+            ITEMRARITY selectedRarity = RollAvailableRarity(rarityPools);
+
+            if (selectedRarity == ITEMRARITY.NULL)
             {
-                // Fill with a real item
-                _itemButtonsList[i].SetItemAbilityContent(shuffled[i]);
+                button.SetItemAbilityContent(_emptyItem);
+                continue;
             }
-            else
-            {
-                // No more items available
-                // Fill the remaining slot with the empty item
-                _itemButtonsList[i].SetItemAbilityContent(_emptyItem);
-            }
+
+            List<SOItemAbilityContentUI> pool =
+                rarityPools[selectedRarity];
+
+            // Randomly select one card within the rarity.
+            int randomIndex = UnityEngine.Random.Range(0, pool.Count);
+
+            SOItemAbilityContentUI selectedItem = pool[randomIndex];
+
+            // Remove from temporary pool so no duplicate
+            // cards appear in the same shop roll.
+            pool.RemoveAt(randomIndex);
+
+            button.SetItemAbilityContent(selectedItem);
         }
     }
+
     public int GetItemCost(ITEMRARITY rarity)
     {
         int cost = 0;
@@ -292,6 +336,69 @@ public class StoreAbilityManager : MonoBehaviour
                 break;
         }
         return cost;
+    }
+
+    private ITEMRARITY RollAvailableRarity(
+        Dictionary<ITEMRARITY, List<SOItemAbilityContentUI>> rarityPools)
+    {
+        int totalWeight = 0;
+
+        // Calculate total weight from rarities that
+        // still have at least one available card.
+        foreach (var pair in rarityPools)
+        {
+            if (pair.Value.Count == 0)
+                continue;
+
+            totalWeight += GetRarityWeight(pair.Key);
+        }
+
+        // No selectable cards remain.
+        if (totalWeight <= 0)
+            return ITEMRARITY.NULL;
+
+        int randomValue = UnityEngine.Random.Range(0, totalWeight);
+
+        foreach (var pair in rarityPools)
+        {
+            if (pair.Value.Count == 0)
+                continue;
+
+            int weight = GetRarityWeight(pair.Key);
+
+            if (weight <= 0)
+                continue;
+
+            if (randomValue < weight)
+                return pair.Key;
+
+            randomValue -= weight;
+        }
+
+        return ITEMRARITY.NULL;
+    }
+    private int GetRarityWeight(ITEMRARITY rarity)
+    {
+        switch (rarity)
+        {
+            case ITEMRARITY.COMMON:
+                return _commonWeight;
+
+            case ITEMRARITY.UNCOMMON:
+                return _uncommonWeight;
+
+            case ITEMRARITY.RARE:
+                return _rareWeight;
+
+            case ITEMRARITY.LEGENDARY:
+                return _legendaryWeight;
+
+            case ITEMRARITY.ODDITIES:
+                return _odditiesWeight;
+
+            default:
+                return 0;
+        }
     }
     public void MoveAbility(SOItemAbilityContentUI item)
     {

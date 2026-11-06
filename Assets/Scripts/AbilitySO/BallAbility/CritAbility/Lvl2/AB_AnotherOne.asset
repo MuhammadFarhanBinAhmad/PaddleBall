@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_AnotherOne
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: 
-  _statusType: 0
+  _statusType: 4
   _type: 0
   _abilityPrefab: {fileID: 7505153902111768393, guid: e730f8bec5dc85a448c1dd33598a0647, type: 3}
   _genericEffect: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   _stacksToAdd: 0
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
-  _damagePerStack: 0
+  _damagePerStackMultiplier: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
   _modifyTimeBeforeEffectActivate: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   _layerToDestroy: 1
   _instantKillThreshold: 0
   _explosionDamageMultiplier: 0
+  _explosionRadius: 0
   _explosionSizeMultiplier: 0
   _shieldMultiplier: 0
   _shieldAdd: 0

@@ -9,7 +9,7 @@ public class TutorialOrder_Intro : TutorialOrder
 
     protected override IEnumerator WaitForAction()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }
 
 }

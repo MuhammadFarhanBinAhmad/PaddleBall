@@ -7,7 +7,7 @@ public class TutorialOrder_HitPaddle : TutorialOrder
 
     protected override void GiveInstruction()
     {
-        print("The ball can bounce off Paddle. Try it");
+        _tutorialHint.SetActive(true);
     }
 
     protected override IEnumerator WaitForAction()
@@ -26,6 +26,7 @@ public class TutorialOrder_HitPaddle : TutorialOrder
         void HandleBallHit(Ball ball)
         {
             ballHitPaddle = true;
+            _tutorialHint.SetActive(false);
         }
 
         _paddleReflection.OnBallHitPaddle += HandleBallHit;

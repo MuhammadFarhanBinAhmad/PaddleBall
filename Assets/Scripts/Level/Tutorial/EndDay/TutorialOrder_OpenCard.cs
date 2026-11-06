@@ -10,12 +10,10 @@ public class TutorialOrder_OpenCard : TutorialOrder
 
     protected override void GiveInstruction()
     {
-        Debug.Log("Open the Card!");
     }
 
     protected override IEnumerator WaitForAction()
     {
-        _worldToCanvasPosition.ToggleFocus(false);
         if (_storeOverlayUI == null)
         {
             Debug.LogError(
@@ -29,7 +27,6 @@ public class TutorialOrder_OpenCard : TutorialOrder
 
         // Subscribe to the button click event.
         _storeOverlayUI.OnOpenCardClicked += HandlePageClicked;
-
         // Wait until the player clicks the button.
         while (!_pageClicked)
         {
@@ -38,7 +35,7 @@ public class TutorialOrder_OpenCard : TutorialOrder
 
         // Stop listening once the action is complete.
         _storeOverlayUI.OnOpenCardClicked -= HandlePageClicked;
-
+        _worldToCanvasPosition.ToggleFocus(false);
         yield return new WaitForSecondsRealtime(_delayBeforeNextStep);
     }
 

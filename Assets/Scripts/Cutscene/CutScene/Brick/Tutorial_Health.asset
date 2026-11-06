@@ -23,7 +23,7 @@ MonoBehaviour:
   - So as punishment, I used his lifeforce to rebuild the tower
   - So guard the tower with your left
   - No Pressure tho
-  _freezeGame: 0
+  _freezeGame: 1
   TEXTBOX_TYPE: 0
   _focusType: 0
   _popInEffectLerp:

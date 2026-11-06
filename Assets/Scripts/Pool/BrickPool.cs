@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class BrickPool : MonoBehaviour
 {
-    BrickGenerator _brickGenerator;
     TimeManager _timeManager;
-    BossManager _bossManager;
 
     public GameObject _brickPrefab;
 
@@ -17,9 +15,7 @@ public class BrickPool : MonoBehaviour
 
     private void Awake()
     {
-        _brickGenerator = FindAnyObjectByType<BrickGenerator>();
         _timeManager = FindAnyObjectByType<TimeManager>();
-        _bossManager = FindAnyObjectByType<BossManager>();
 
         SpawnBrick();
 
@@ -74,7 +70,20 @@ public class BrickPool : MonoBehaviour
             return;
 
         _activeBrick.Remove(brick);
-        _timeManager.CheckToSpawnBoss();
+
+        if(_timeManager.IsBossDay())
+        {
+            _timeManager.CheckToSpawnBoss();
+        }
+        if(_timeManager.IsEndOfDay())
+        {
+            if (IsAllBrickDestroyed())
+            {
+                _timeManager._dayEndAllBrickDestroyed?.Invoke();
+            }
+        }
+
+
 
     }
     public bool IsAllBrickDestroyed() => _activeBrick.Count <= 0;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_RemnantsAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: ExplosionAbility
-  _statusType: 256
+  _statusType: 257
   _type: 0
   _abilityPrefab: {fileID: 3493604495244174640, guid: 508a0f6bc26b0824d91ee0b1ec8ab4be, type: 3}
   _genericEffect: 0

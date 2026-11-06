@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,12 +9,24 @@ public enum TUTORIAL_SECTION
     BASIC,
     BRICK,
     TOWER,
-    CARDS_AND_SPELLS,
+    MILESTONE,
+    END_DAY,
     BOOK
 }
+public enum TUTORIAL_TYPE
+{
+    INTRO,
+    MILESTONE,
+    END_DAY,
+}
+
 public class TutorialManager : MonoBehaviour
 {
     [Header("Tutorial Section Order")]
+    [SerializeField] float _startTutorialDelay;
+    [SerializeField] List<TutorialSection> _startingTutorial = new List<TutorialSection>();
+    [SerializeField] List<TutorialSection> _mileStoneTutorial = new List<TutorialSection>();
+    [SerializeField] List<TutorialSection> _endDayTutorial = new List<TutorialSection>();
     [SerializeField]
     private List<TutorialSection> _sectionOrder =
         new List<TutorialSection>();
@@ -25,6 +38,8 @@ public class TutorialManager : MonoBehaviour
 
     BrickGenerator _brickGenerator;
     CutSceneManager _cutSceneManager;
+
+    TUTORIAL_TYPE _currentTutorialType;
 
     public TUTORIAL_SECTION CurrentSection
     {
@@ -54,12 +69,19 @@ public class TutorialManager : MonoBehaviour
         _brickGenerator = FindAnyObjectByType<BrickGenerator>();
         _cutSceneManager = FindAnyObjectByType<CutSceneManager>();
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SkipTutorial();
+        }
+    }
     private void Start()
     {
         OnTutorialCompleted += _brickGenerator.StartGame;
-
-        StartTutorial();
+        _currentTutorialType = TUTORIAL_TYPE.INTRO;
+        FillSectionOrder(TUTORIAL_TYPE.INTRO);
+        Invoke("StartTutorial", _startTutorialDelay);
     }
     private void OnDestroy()
     {
@@ -267,32 +289,123 @@ public class TutorialManager : MonoBehaviour
     }
     public void SkipTutorial()
     {
-        if (!_tutorialActive)
-            return;
-
-        // First stop any active tutorial cutscene and clean up its UI.
-        if (_cutSceneManager != null)
+        switch (_currentTutorialType)
         {
-            _cutSceneManager.CancelTutorialCutscene();
+            case TUTORIAL_TYPE.INTRO:
+                {
+                    if (!_tutorialActive)
+                        return;
+
+                    // First stop any active tutorial cutscene and clean up its UI.
+                    if (_cutSceneManager != null)
+                    {
+                        _cutSceneManager.CancelTutorialCutscene();
+                    }
+
+                    // Then stop the current tutorial section.
+                    if (IsValidSectionIndex())
+                    {
+                        TutorialSection currentSection =
+                            _sectionOrder[_currentSectionIndex];
+
+                        if (currentSection != null)
+                        {
+                            currentSection.OnSectionCompleted -= HandleSectionCompleted;
+                            currentSection.gameObject.SetActive(false);
+                        }
+                    }
+
+                    _tutorialActive = false;
+                    _currentSectionIndex = _sectionOrder.Count;
+
+                    // Trigger the existing game-start flow.
+                    CompleteTutorial();
+                    break;
+                }
+            case TUTORIAL_TYPE.END_DAY:
+                {
+                    if (!_tutorialActive)
+                        return;
+
+                    // First stop any active tutorial cutscene and clean up its UI.
+                    if (_cutSceneManager != null)
+                    {
+                        _cutSceneManager.CancelTutorialCutscene();
+                    }
+
+                    // Then stop the current tutorial section.
+                    if (IsValidSectionIndex())
+                    {
+                        TutorialSection currentSection =
+                            _sectionOrder[_currentSectionIndex];
+
+                        if (currentSection != null)
+                        {
+                            currentSection.OnSectionCompleted -= HandleSectionCompleted;
+                            currentSection.gameObject.SetActive(false);
+                        }
+                    }
+
+                    _tutorialActive = false;
+                    _currentSectionIndex = _sectionOrder.Count;
+                    _skipTutorial.gameObject.SetActive(false);
+                    break;
+                }
+            case TUTORIAL_TYPE.MILESTONE:
+                {
+                    if (!_tutorialActive)
+                        return;
+
+                    // First stop any active tutorial cutscene and clean up its UI.
+                    if (_cutSceneManager != null)
+                    {
+                        _cutSceneManager.CancelTutorialCutscene();
+                    }
+
+                    // Then stop the current tutorial section.
+                    if (IsValidSectionIndex())
+                    {
+                        TutorialSection currentSection =
+                            _sectionOrder[_currentSectionIndex];
+
+                        if (currentSection != null)
+                        {
+                            currentSection.OnSectionCompleted -= HandleSectionCompleted;
+                            currentSection.gameObject.SetActive(false);
+                        }
+                    }
+
+                    _tutorialActive = false;
+                    _currentSectionIndex = _sectionOrder.Count;
+                    _skipTutorial.gameObject.SetActive(false);
+                    break;
+                }
         }
 
-        // Then stop the current tutorial section.
-        if (IsValidSectionIndex())
+        
+    }
+    public void FillSectionOrder(TUTORIAL_TYPE tut)
+    {
+        switch (tut)
         {
-            TutorialSection currentSection =
-                _sectionOrder[_currentSectionIndex];
-
-            if (currentSection != null)
-            {
-                currentSection.OnSectionCompleted -= HandleSectionCompleted;
-                currentSection.gameObject.SetActive(false);
-            }
+            case TUTORIAL_TYPE.INTRO:
+                {
+                    _currentTutorialType = TUTORIAL_TYPE.INTRO;
+                    _sectionOrder = _startingTutorial;
+                    break;
+                }
+            case TUTORIAL_TYPE.MILESTONE:
+                {
+                    _currentTutorialType = TUTORIAL_TYPE.MILESTONE;
+                    _sectionOrder = _mileStoneTutorial;
+                    break;
+                }
+            case TUTORIAL_TYPE.END_DAY:
+                {
+                    _currentTutorialType = TUTORIAL_TYPE.END_DAY;
+                    _sectionOrder = _endDayTutorial;
+                    break;
+                }
         }
-
-        _tutorialActive = false;
-        _currentSectionIndex = _sectionOrder.Count;
-
-        // Trigger the existing game-start flow.
-        CompleteTutorial();
     }
 }

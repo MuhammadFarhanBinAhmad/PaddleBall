@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_InternalBleeding
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: Internal Bleeding
-  _statusType: 0
+  _statusType: 4
   _type: 0
   _abilityPrefab: {fileID: 6145277303174951212, guid: bff5893014ec41c4ba201207403c1c09, type: 3}
   _genericEffect: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   _stacksToAdd: 0
   _maxStacksToAdd: 0
   _increaseStacksToAdd: 0
-  _damagePerStack: 0
+  _damagePerStackMultiplier: 0
   _stackLifeTime: 0
   _timeBeforeEffectActivate: 0
   _modifyTimeBeforeEffectActivate: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   _layerToDestroy: 0
   _instantKillThreshold: 0
   _explosionDamageMultiplier: 0
+  _explosionRadius: 0
   _explosionSizeMultiplier: 0
   _shieldMultiplier: 0
   _shieldAdd: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_MOABAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: ExplosionAbility
-  _statusType: 0
+  _statusType: 1
   _type: 0
   _abilityPrefab: {fileID: 6748425886243712705, guid: 7cf6ff19d94cc6344bc1ef3fd03ac738, type: 3}
   _genericEffect: 0

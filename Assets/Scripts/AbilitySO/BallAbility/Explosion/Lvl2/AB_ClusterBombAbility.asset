@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AB_ClusterBombAbility
   m_EditorClassIdentifier: Assembly-CSharp::SOAbilityEffect
   _abilityName: ClusterBombAbility
-  _statusType: 512
+  _statusType: 513
   _type: 0
   _abilityPrefab: {fileID: 7360566436940035924, guid: 8174bb13bcaf19e489cb25a05c69492f, type: 3}
   _genericEffect: 0

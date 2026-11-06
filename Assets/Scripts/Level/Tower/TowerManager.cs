@@ -9,6 +9,7 @@ public class TowerManager : MonoBehaviour
     StatManager _statManager;
     CutSceneManager _cutSceneManager;
     StoreOverlayUI _storeOverlayUI;
+    TutorialManager _tutorialManager;
 
     public GameObject _collectedBrick;
 
@@ -31,7 +32,7 @@ public class TowerManager : MonoBehaviour
     public int _increaseConversionRate;
     public int _mileStoneEXP;
     public Action _milestoneReach;
-
+    bool _firstMileStone = true;
 
     [Header("Brick")]
     [SerializeField] int _brickToFloorConversionRate;
@@ -80,6 +81,7 @@ public class TowerManager : MonoBehaviour
         _storeOverlayUI = FindAnyObjectByType<StoreOverlayUI>();
         _cutSceneManager = FindAnyObjectByType<CutSceneManager>();
         _statManager = FindAnyObjectByType<StatManager>();
+        _tutorialManager = FindAnyObjectByType<TutorialManager>();
 
         _essenceToPureEssenceConversionRate = _initialEssenceThreshold;
     }
@@ -99,6 +101,8 @@ public class TowerManager : MonoBehaviour
 
         _milestoneReach += ApplyEssenceMilestoneIncrease;
         _milestoneReach += _storeOverlayUI.HandleOpenSelectAbility;
+        _milestoneReach += PlayMileStoneTutorial;
+
 
         PopulateTowerHeightCheck();
     }
@@ -126,6 +130,7 @@ public class TowerManager : MonoBehaviour
 
         _milestoneReach -= ApplyEssenceMilestoneIncrease;
         _milestoneReach -= _storeOverlayUI.HandleOpenSelectAbility;
+        _milestoneReach -= PlayMileStoneTutorial;
 
     }
 
@@ -359,6 +364,16 @@ public class TowerManager : MonoBehaviour
             float val = Mathf.Lerp(_startTowerHeightCheck, _endTowerHeightCheck, eased);
             _towerHeightCheck[i] = Mathf.RoundToInt(val);    // integer thresholds
         }
+    }
+    public void PlayMileStoneTutorial()
+    {
+        if (_firstMileStone)
+        {
+            _tutorialManager.FillSectionOrder(TUTORIAL_TYPE.MILESTONE);
+            _tutorialManager.StartTutorial();
+            _firstMileStone = false;
+        }
+
     }
     public void OnGameOver()
     {

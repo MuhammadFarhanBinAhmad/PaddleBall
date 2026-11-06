@@ -76,7 +76,7 @@ public class BrickGenerator : MonoBehaviour
     [Header("Timer before next wave spawn")]
     [SerializeField] float _timerBeforeNextWaveSpawn;
     public Action _onSpawnNextWave;
-
+    public Action _onAllBrickDestroyed;
 
     private void Awake()
     {
@@ -90,13 +90,14 @@ public class BrickGenerator : MonoBehaviour
 
     private void Start()
     {
-        _timeManager._dayPass += CheckBrickToAdd;
-        _timeManager._dayPass += _brickModifierList.CheckModifierToAdd;
-        _timeManager._dayPass += SetAPOfTheDay;
+        _timeManager._dayEnd += StopWaveSpawning;
+        _timeManager._dayEnd += CheckBrickToAdd;
+        _timeManager._dayEnd += _brickModifierList.CheckModifierToAdd;
+        _timeManager._dayEnd += SetAPOfTheDay;
+
+        _timeManager._dayStart += DelayBeforeStartWave;
 
         _timeManager._onStartBossDay += StopWaveSpawning;
-
-        _timeManager._onEndBossDay += DelayBeforeStartWave;
 
         _timeManager._endGame += StopWaveSpawning;
 
@@ -128,12 +129,14 @@ public class BrickGenerator : MonoBehaviour
     private void OnDisable()
     {
         _onSpawnNextWave -= SpawnNextWave;
-        _timeManager._dayPass -= CheckBrickToAdd;
-        _timeManager._dayPass -= SetAPOfTheDay;
+        _timeManager._dayEnd -= CheckBrickToAdd;
+        _timeManager._dayEnd -= SetAPOfTheDay;
+        _timeManager._dayEnd -= StopWaveSpawning;
+
+        _timeManager._dayStart -= DelayBeforeStartWave;
 
         _timeManager._onStartBossDay -= StopWaveSpawning;
 
-        _timeManager._onEndBossDay -= DelayBeforeStartWave;
 
         _timeManager._endGame -= StopWaveSpawning;
 

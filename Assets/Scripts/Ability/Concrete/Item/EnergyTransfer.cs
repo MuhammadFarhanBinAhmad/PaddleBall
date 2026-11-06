@@ -16,7 +16,7 @@ public class EnergyTransfer : ABSAbility
     }
     private void Start()
     {
-        _timeManager._dayPass += ConvertEssence;
+        _timeManager._dayEnd += ConvertEssence;
     }
     void ConvertEssence()
     {
