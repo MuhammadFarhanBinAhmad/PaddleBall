@@ -19,7 +19,7 @@ MonoBehaviour:
   - Collect enough of them and you'll create a brick for the tower
   - Create enough bricks and a floor will be build
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

@@ -41,7 +41,7 @@ MonoBehaviour:
   _increaseStacksToAdd: 0
   _damagePerStackMultiplier: 1
   _stackLifeTime: 3
-  _timeBeforeEffectActivate: 2.99
+  _timeBeforeEffectActivate: 2.9
   _modifyTimeBeforeEffectActivate: 0
   _resetStackTimer: 0
   _affectSpeed: 0

@@ -302,7 +302,7 @@ public class TimeManager : MonoBehaviour
     public static void StopTime() => Time.timeScale = 0f;
     public static void ResetTimeScale()
     {
-        print("hit");
+        print("REset");
         Time.timeScale = 1f;
     }
     public static void SetCustomTimeScale(float val) => Time.timeScale = val;
@@ -508,8 +508,11 @@ public class TimeManager : MonoBehaviour
     }
     public void ActivateStartDayButton()
     {
-        _startDayButton.gameObject.SetActive(true);
         _cardShopButton.SetActive(true);
+
+        if (_firstDay)
+            return;
+        _startDayButton.gameObject.SetActive(true);
 
     }
     public void DeactivateStartDayButton()
@@ -522,7 +525,7 @@ public class TimeManager : MonoBehaviour
     {
         if(_firstDay)
         {
-            TimeManager.StopTime();
+            StopTime();
             _tutorialManager.FillSectionOrder(TUTORIAL_TYPE.END_DAY);
             _tutorialManager.StartTutorial();
             _firstDay = false;

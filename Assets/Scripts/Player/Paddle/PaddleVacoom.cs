@@ -39,6 +39,8 @@ public class PaddleVacoom : MonoBehaviour
 
     HashSet<TowerEssence> _currentlySuckedEssences =
     new HashSet<TowerEssence>();
+    private HashSet<TowerEssence> _nextSuckedEssences =
+    new HashSet<TowerEssence>();
 
     private void Awake()
     {
@@ -154,6 +156,7 @@ public class PaddleVacoom : MonoBehaviour
 
     void SuctionObject()
     {
+        _nextSuckedEssences.Clear();
 
         Vector2 paddlePosition = transform.position;
 
@@ -228,7 +231,11 @@ public class PaddleVacoom : MonoBehaviour
             }
         }
 
-        _currentlySuckedEssences = currentTargets;
+        HashSet<TowerEssence> previous =
+            _currentlySuckedEssences;
+
+        _currentlySuckedEssences = _nextSuckedEssences;
+        _nextSuckedEssences = previous;
     }
     void StopSuction()
     {

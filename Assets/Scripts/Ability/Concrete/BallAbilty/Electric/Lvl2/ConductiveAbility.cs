@@ -33,8 +33,7 @@ public class ConductiveAbility : ABSAbility
                 _abilityManager.ApplyStackableModifiers(statusCtx);
 
                 brickHealthComponents[i].ApplyStatus(
-                statusCtx,
-                STATUSTYPE.DISCHARGE);
+                statusCtx);
                 brickHealthComponents[i].SpawnStatusVFX(STATUSTYPE.DISCHARGE);
             }
         }

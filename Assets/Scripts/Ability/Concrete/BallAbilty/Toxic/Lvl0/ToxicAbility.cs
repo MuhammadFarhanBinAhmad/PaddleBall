@@ -26,8 +26,7 @@ public class ToxicAbility : ABSAbility
 
         ctx._health.SpawnStatusVFX(STATUSTYPE.TOXIC);
         ctx._health.ApplyStatus(
-            statusCtx,
-            STATUSTYPE.TOXIC
+            statusCtx
         );
 
     }

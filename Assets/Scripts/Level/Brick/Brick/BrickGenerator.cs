@@ -62,7 +62,7 @@ public class BrickGenerator : MonoBehaviour
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
     [SerializeField] float _capscaleMultiplier;
-    Vector3 _startingScale;
+    [SerializeField] Vector3 _startingScale;
 
     [Header("Level and Wave")]
     public List<int> _spawnedWaves = new List<int>();
@@ -366,7 +366,6 @@ public class BrickGenerator : MonoBehaviour
     }
     IEnumerator AnimateBrickSpawn(Transform brickTransform)
     {
-        _startingScale = brickTransform.localScale;
         Vector3 startScale = Vector3.zero;
         Vector3 targetScale = _startingScale;
 
@@ -383,6 +382,9 @@ public class BrickGenerator : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+
+        brickTransform.localScale = _startingScale;
+
 
     }
 

@@ -18,7 +18,7 @@ MonoBehaviour:
   - The ball can bounce off Paddle.
   - Try moving about and deflect the ball
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

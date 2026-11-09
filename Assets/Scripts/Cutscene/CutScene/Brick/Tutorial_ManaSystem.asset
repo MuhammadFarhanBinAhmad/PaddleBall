@@ -19,8 +19,10 @@ MonoBehaviour:
   - The ball has a mana gauge. Mana is use to change the ball's direction
   - Mana takes time to recharge after use
   - Hitting incoming bricks regain some mana back
+  - Now let's try changing the ball's direction
+  - Hold Right Mouse to aim. Then click Left Mouse to Shoot
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 2
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

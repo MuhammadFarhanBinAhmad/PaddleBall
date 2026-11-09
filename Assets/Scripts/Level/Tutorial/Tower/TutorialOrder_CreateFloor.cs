@@ -20,8 +20,7 @@ public class TutorialOrder_CreateFloor : TutorialOrder
     [SerializeField] TowerManager _towerManager;
 
     [Header("Spawn Settings")]
-    [SerializeField] float _timerBeforeNextWave = 1f;
-    [SerializeField] int _numberToSpawn = 1;
+    [SerializeField] float _timerBeforeNextWave;
 
     [Header("Cleanup")]
     [SerializeField] float _cleanupDelay = 0.25f;
@@ -64,9 +63,11 @@ public class TutorialOrder_CreateFloor : TutorialOrder
         _towerManager.OnHeightIncrease -= HandleFloorCreated;
         _towerManager.OnHeightIncrease += HandleFloorCreated;
 
-        // Spawn and track tutorial bricks.
-        for (int i = 0; i < _numberToSpawn; i++)
+        // Continuously spawn until the player creates a floor.
+        while (!_floorCreated &&
+               _towerManager._currentTowerHeight <= startingTowerHeight)
         {
+            // Spawn the tutorial formation.
             yield return _brickGenerator.SpawnTutorialFormationRoutine(
                 _tutorialFormation,
                 _tutorialBrickStats,
@@ -74,27 +75,28 @@ public class TutorialOrder_CreateFloor : TutorialOrder
                 RegisterSpawnedBrick
             );
 
-            if (i < _numberToSpawn - 1)
+            // Check again in case a floor was created during spawning.
+            if (_floorCreated ||
+                _towerManager._currentTowerHeight > startingTowerHeight)
             {
-                yield return new WaitForSeconds(
-                    _timerBeforeNextWave
-                );
+                break;
             }
-        }
 
-        // Wait for a newly created floor.
-        while (!_floorCreated &&
-               _towerManager != null &&
-               _towerManager._currentTowerHeight <= startingTowerHeight)
-        {
-            yield return null;
+            // Wait before spawning the next wave.
+            float timer = 0f;
+
+            while (timer < _timerBeforeNextWave && !_floorCreated)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
         }
 
         StopListeningForFloor();
 
         Debug.Log("Tutorial floor successfully created!");
 
-        // Clean up any tutorial bricks that remain alive.
+        // Clean up remaining tutorial bricks.
         yield return StartCoroutine(CleanupRemainingBricks());
 
         yield return new WaitForSecondsRealtime(

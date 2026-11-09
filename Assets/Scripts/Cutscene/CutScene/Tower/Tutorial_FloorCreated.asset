@@ -17,7 +17,7 @@ MonoBehaviour:
   _dialougeTexts:
   - Congrats, you made your first floor
   - Everytime you create a floor, you earn a 'Pure Essence" point
-  - Pure Essence point can be use to learn Spells and purchase Cards
+  - Pure Essence point can be use to purchase Cards
   _freezeGame: 1
   TEXTBOX_TYPE: 0
   _focusType: 0

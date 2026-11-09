@@ -79,7 +79,6 @@ public class TutorialSection : MonoBehaviour
             {
                 order.ShowFocusArea();
             }
-
             _cutSceneManager.PlayTutorialCutscene(
             order._cutsceneContent,
             () =>

@@ -6,6 +6,9 @@ public class ExplosiveDischarge : ABSAbility, IModifyStackableAbility
 
     public void ModifyStackableAbility(AbilityContext _abc)
     {
+        if (_abc._statusType != STATUSTYPE.DISCHARGE)
+            return;
+
         ExplosionContext ectx = new ExplosionContext
         {
             _source = gameObject,

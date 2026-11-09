@@ -19,7 +19,7 @@ MonoBehaviour:
   - The ball can be use to bounce off walls and damage incoming enemies
   - Move mouse to aim. Press Left Mouse to launch ball
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

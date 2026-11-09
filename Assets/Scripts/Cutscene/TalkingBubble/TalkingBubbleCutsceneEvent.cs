@@ -6,7 +6,9 @@ using UnityEngine;
 
 public enum TEXTBOX_TYPE
 {
-    TUTORIAL,
+    TUTORIAL_BOTTOM,
+    TUTORIAL_LEFT,
+    TUTORIAL_RIGHT,
     BOSS,
     PLAYER
 }
@@ -51,19 +53,29 @@ public class TalkingBubbleCutsceneEvent : BaseCutsceneEvent
 
         switch (_content.TEXTBOX_TYPE)
         {
-            case TEXTBOX_TYPE.TUTORIAL:
+            case TEXTBOX_TYPE.TUTORIAL_LEFT:
                 {
                     _currTextBoxContent = _TextBoxType[0].content;
                     break;
                 }
-            case TEXTBOX_TYPE.BOSS:
+            case TEXTBOX_TYPE.TUTORIAL_RIGHT:
                 {
                     _currTextBoxContent = _TextBoxType[1].content;
                     break;
                 }
-            case TEXTBOX_TYPE.PLAYER:
+            case TEXTBOX_TYPE.TUTORIAL_BOTTOM:
                 {
                     _currTextBoxContent = _TextBoxType[2].content;
+                    break;
+                }
+            case TEXTBOX_TYPE.BOSS:
+                {
+                    _currTextBoxContent = _TextBoxType[3].content;
+                    break;
+                }
+            case TEXTBOX_TYPE.PLAYER:
+                {
+                    _currTextBoxContent = _TextBoxType[4].content;
                     break;
                 }
         }

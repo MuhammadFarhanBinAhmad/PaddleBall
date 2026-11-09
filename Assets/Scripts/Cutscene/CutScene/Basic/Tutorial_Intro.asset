@@ -23,7 +23,7 @@ MonoBehaviour:
   - But no need to panic. Ill give you a quick run through on how to rebuild the
     tower
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

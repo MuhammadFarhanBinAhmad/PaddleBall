@@ -52,6 +52,8 @@ public class StatusInstance
 
     public bool affectsSpeed;
     public float speedMultiplier;
+
+    
 }
 public class BrickBar : MonoBehaviour
 {
@@ -89,6 +91,7 @@ public class BrickBar : MonoBehaviour
     [SerializeField] float _manaToGive;
     [SerializeField] internal SplineContainer _brickPath;
     [SerializeField] GameObject parentObject;
+    [SerializeField] Vector3 _defaultScale;
     float progress;
     bool _speedDirty;
 
@@ -347,15 +350,19 @@ public class BrickBar : MonoBehaviour
 
     void HandleMovement()
     {
-        if (_brickPath != null)
-        {
-            progress += _fallSpeed * Time.deltaTime;
+        if (_brickPath == null || progress >= 1f)
+            return;
 
-            if (progress > 1f)
-                progress = 1f;
-            transform.position =
-                _brickPath.EvaluatePosition(progress);
-        }
+        if (_fallSpeed <= 0f)
+            return;
+
+        progress = Mathf.Min(
+            1f,
+            progress + _fallSpeed * Time.deltaTime
+        );
+
+        transform.position =
+            _brickPath.EvaluatePosition(progress);
 
     }
     public void RecalculateSpeed(float speedMultiplier = 0)

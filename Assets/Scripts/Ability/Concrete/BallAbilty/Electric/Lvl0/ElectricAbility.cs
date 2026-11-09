@@ -11,6 +11,7 @@ public class ElectricAbility : ABSAbility
             _statusType = _SOAbilityEffect._statusType,
         };
         float dmg = ctx._damageValue * _SOAbilityEffect._damagePerStackMultiplier;
+        print(dmg);
         statusCtx._Stats[STATID.STACKS_TO_ADD] = _SOAbilityEffect._stacksToAdd;
         statusCtx._Stats[STATID.MAX_STACKS] = _SOAbilityEffect._maxStacks;
         statusCtx._Stats[STATID.DAMAGE_PER_STACK] = dmg;
@@ -22,9 +23,7 @@ public class ElectricAbility : ABSAbility
         _abilityManager.ApplyDischargeModifiers(ctx, statusCtx);
         _abilityManager.ApplyStackableModifiers(statusCtx);
         ctx._health.ApplyStatus(
-            statusCtx,
-            STATUSTYPE.DISCHARGE
-        );
+            statusCtx);
         ctx._health.SpawnStatusVFX(STATUSTYPE.DISCHARGE);
     }
 }

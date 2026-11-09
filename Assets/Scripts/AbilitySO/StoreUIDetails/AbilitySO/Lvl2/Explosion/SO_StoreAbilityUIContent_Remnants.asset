@@ -18,7 +18,7 @@ MonoBehaviour:
     explosion
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: a6f2e56c280f2454ca73e1040df1ea39, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: 5132483357453684033, guid: b868777c430666249ae9b4a4527288e6, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level1_2_0

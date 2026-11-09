@@ -14,9 +14,6 @@ public abstract class TutorialOrder : MonoBehaviour
     public FOCUS_TYPE _type;
     [SerializeField] internal WorldToCanvasPosition _worldToCanvasPosition;
     [SerializeField] Transform _target;
-    [Header("Text Box")]
-    public bool _moveTextBoxPosition;
-    [SerializeField] Transform _textBoxPos;
     [Header("Delay")]
     public float _delayBeforeNextStep;
     [Header("Tutorial Hint")]

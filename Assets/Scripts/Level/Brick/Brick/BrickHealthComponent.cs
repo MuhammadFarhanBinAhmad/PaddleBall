@@ -43,6 +43,11 @@ public class BrickHealthComponent : MonoBehaviour
     public GameObject _toxicBuildVFX;
     public GameObject _toxicPopVFX;
 
+    [Header("Damage Text Settings")]
+    [SerializeField] float _minDamageTextYOffset;
+    [SerializeField] float _maxDamageTextYOffset;
+    [SerializeField] float _damageTextXOffset;
+
     float _dmgMultiplier;
 
     bool _vulnerableToDamage = true;
@@ -79,82 +84,110 @@ public class BrickHealthComponent : MonoBehaviour
 
     void ExecuteStatusEffect()
     {
+        if (pendingDeath || _statuses.Count == 0)
+            return;
+
         float dt = Time.deltaTime;
         toRemove.Clear();
 
-        if (pendingDeath)
-            return;
+        bool updateSpeed = false;
 
         foreach (var kvp in _statuses)
         {
-            var status = kvp.Value;
-            //Damage effect timer
-            //if (status.type == STATUSTYPE.STUN)
-            //{
-            //    _fallSpeed = 0;
-            //}
-            //else
-            //{
-            //    // DOT tick
-            //    status.remainingEffectTime -= dt;
-            //    if (status.remainingEffectTime <= 0)
-            //    {
-            //        status.remainingEffectTime = status.timeBeforeEffect;
-            //        OnDamage(status.stacks * status.damagePerStack); //total stack * stack/dmg
-            //    }
-            //}
+            StatusInstance status = kvp.Value;
 
-            // Stack timer
+            if (status.stacks <= 0)
+            {
+                toRemove.Add(kvp.Key);
+                continue;
+            }
+
+            // Update both timers independently.
             status.remainingStackTime -= dt;
-            if (status.remainingStackTime <= 0f)
+            status.remainingEffectTime -= dt;
+
+            bool stackExpired = status.remainingStackTime <= 0f;
+
+            // Different damage behavior for each status.
+            bool shouldDealDamage;
+
+            if (status.type == STATUSTYPE.DISCHARGE)
+            {
+                // Discharge deals damage when its stack expires.
+                shouldDealDamage = stackExpired;
+
+                print("Discharge time before effect:" + status.remainingStackTime);
+            }
+            else
+            {
+                // Toxic and other periodic statuses
+                // use their effect interval.
+                shouldDealDamage =
+                    status.remainingEffectTime <= 0f;
+            }
+
+            // Apply damage BEFORE removing stacks.
+            if (shouldDealDamage)
+            {
+
+                int damage = status.stacks *
+                             status.damagePerStack;
+
+                OnDamage(damage, status.type);
+                PlayPopVFX(status.type);
+
+                if (status._explosiveContext != null)
+                {
+                    _explosionPool.SpawnExplosion(
+                        status._explosiveContext,
+                        transform
+                    );
+                }
+
+                // Reset periodic effect timer.
+                status.remainingEffectTime = Mathf.Max(
+                    0.01f,
+                    status.timeBeforeEffect
+                );
+            }
+
+            // Handle stack expiration AFTER damage.
+            if (stackExpired)
             {
                 status.stacks--;
-                SetSpeedMultiplier();
+
+                if (status.affectsSpeed)
+                    updateSpeed = true;
 
                 if (status.stacks <= 0)
                 {
-                    RemoveStatusVFX(status.type);
                     toRemove.Add(kvp.Key);
                 }
                 else
                 {
-                    status.remainingStackTime = status.stackLifeTime;
+                    status.remainingStackTime = Mathf.Max(
+                        0.01f,
+                        status.stackLifeTime
+                    );
                 }
-
-
-
 
                 if (status._ability != null)
                 {
                     status._ability.ActivateAbility(gameObject);
                 }
             }
-            if (status.stacks > 0)
-            {
-                //Effect timer
-                status.remainingEffectTime -= dt;
-                if (status.remainingEffectTime <= 0)
-                {
-                    status.remainingEffectTime = status.timeBeforeEffect;
-                    OnDamage(status.stacks * status.damagePerStack, status.type); //total stack * stack/dmg
-                    PlayPopVFX(status.type);
-
-                    if (status._explosiveContext != null)
-                    {
-                        print("Not null");
-                        _explosionPool.SpawnExplosion(status._explosiveContext, transform);
-                    }
-
-                }
-            }
-
         }
 
-        //remove all completed status effect
-        foreach (var key in toRemove)
+        // Remove expired statuses after iteration.
+        foreach (STATUSTYPE type in toRemove)
         {
-            _statuses.Remove(key);
+            RemoveStatusVFX(type);
+            _statuses.Remove(type);
         }
+
+        // Recalculate only when a speed-related stack changes.
+        if (updateSpeed)
+            SetSpeedMultiplier();
     }
     public void SetSpeedMultiplier()
     {
@@ -218,6 +251,8 @@ public class BrickHealthComponent : MonoBehaviour
             _statManager.AddMaxDamage(dmg);
             _statManager.AddTotalDamage(dmg);
             SpawnDamageText(modified, dmgType);
+
+
         }
         else
         {
@@ -276,7 +311,7 @@ public class BrickHealthComponent : MonoBehaviour
         }
 
     }
-    public void ApplyStatus(AbilityContext _statusEffect, STATUSTYPE type)
+    public void ApplyStatus(AbilityContext _statusEffect)
     {
         //check if status already exist
         if (_statuses.TryGetValue(_statusEffect._statusType, out StatusInstance existing))
@@ -304,8 +339,12 @@ public class BrickHealthComponent : MonoBehaviour
                 stacks = (int)_statusEffect._Stats[STATID.STACKS_TO_ADD],
                 maxStacks = (int)_statusEffect._Stats[STATID.MAX_STACKS],
                 damagePerStack = (int)_statusEffect._Stats[STATID.DAMAGE_PER_STACK],
-                stackLifeTime = (int)_statusEffect._Stats[STATID.STACK_LIFETIME],
-                remainingStackTime = (int)_statusEffect._Stats[STATID.STACK_LIFETIME],
+                stackLifeTime = Mathf.Max(
+                    0.01f,
+                    _statusEffect._Stats[STATID.STACK_LIFETIME]),
+                remainingStackTime = Mathf.Max(
+                    0.01f,
+                    _statusEffect._Stats[STATID.STACK_LIFETIME]),
                 timeBeforeEffect = _statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
                 remainingEffectTime = _statusEffect._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE],
                 resetStackLifeTimeUponHit = _statusEffect._Statsbool[STATID.RESET_STACK_TIMER],
@@ -314,11 +353,14 @@ public class BrickHealthComponent : MonoBehaviour
                 speedMultiplier = _statusEffect._Stats[STATID.SPEED_MULTIPLIER]
             };
             _statuses.Add(_statusEffect._statusType, sinst);
+
+            print(sinst.type.ToString());
+            print("Total status:" + _statuses.Count);
+
             SpawnStatusVFX(_statusEffect._statusType);
             SetSpeedMultiplier();
             if (_statusEffect._explosionContext != null)
             {
-                print("ADD EXPLSION");
                 sinst._explosiveContext = _statusEffect._explosionContext;
             }
         }
@@ -463,11 +505,9 @@ public class BrickHealthComponent : MonoBehaviour
     }
     public void SpawnDamageText(int dmg, STATUSTYPE type)
     {
-        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 3f;
-
         Vector3 spawnPosition = transform.position + new Vector3(
-            randomOffset.x,
-            randomOffset.y,
+            UnityEngine.Random.Range(-_damageTextXOffset, _damageTextXOffset),
+            UnityEngine.Random.Range(_minDamageTextYOffset, _maxDamageTextYOffset),
             0f
         );
 
@@ -478,8 +518,6 @@ public class BrickHealthComponent : MonoBehaviour
         );
 
         dmgText.GetComponent<DamageTextFeedback>().SetValue(dmg, type);
-
-        //StartCoroutine(HitFlash());
     }
     //IEnumerator HitFlash()
     //{

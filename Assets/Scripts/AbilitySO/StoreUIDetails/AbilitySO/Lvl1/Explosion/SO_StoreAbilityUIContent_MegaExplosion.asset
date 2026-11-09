@@ -17,7 +17,7 @@ MonoBehaviour:
   ability_Description: Increase explosion size and damage
   ability_Level: 1
   ability_ToSpawn: {fileID: 11400000, guid: 9d809accaa2b50a428e7a4f605419616, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: 3023806810004360019, guid: 485f4dca3c7023e43b6b777e953de5bf, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level0_2_0

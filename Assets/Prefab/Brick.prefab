@@ -719,7 +719,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 1
-      minScalar: 0.1
+      minScalar: 0.25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -889,8 +889,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
-      minScalar: 1
+      scalar: 15
+      minScalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1214,7 +1214,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 5
-      minScalar: 1
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1274,7 +1274,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 1, y: 1, z: 0}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -1353,7 +1353,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1
+      value: 2.74
       mode: 0
       spread: 0
       speed:
@@ -1798,10 +1798,10 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1854,7 +1854,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1907,9 +1907,9 @@ ParticleSystem:
         m_RotationOrder: 4
     curve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.7853982
-      minScalar: 0.7853982
+      minMaxState: 3
+      scalar: 6.283185
+      minScalar: 3.1415925
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1968,8 +1968,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 1, g: 0.9843135, b: 0.5990566, a: 1}
+        key1: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2151,12 +2151,12 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
-      minScalar: 0
+      minMaxState: 3
+      scalar: 25
+      minScalar: -25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2207,9 +2207,9 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
-      minScalar: 0
+      minMaxState: 3
+      scalar: -10
+      minScalar: -20
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2260,9 +2260,9 @@ ParticleSystem:
         m_RotationOrder: 4
     z:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
-      minScalar: 0
+      minMaxState: 3
+      scalar: 1
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4594,7 +4594,7 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     mode: 0
     ratio: 1
     lifetime:
@@ -4652,15 +4652,15 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 34.17, y: 22.89}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
     dieWithParticles: 1
-    sizeAffectsWidth: 1
+    sizeAffectsWidth: 0
     sizeAffectsLifetime: 0
     inheritParticleColor: 1
-    generateLightingData: 0
+    generateLightingData: 1
     splitSubEmitterRibbons: 0
     attachRibbonsToTransform: 0
     colorOverLifetime:
@@ -4730,9 +4730,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     widthOverTrail:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      minMaxState: 3
+      scalar: 0.25
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5442,6 +5442,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 8f058c2cdaf72614fa066b56dfb3dc18, type: 2}
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -5667,7 +5668,7 @@ RectTransform:
   - {fileID: 3708164092102141292}
   - {fileID: 8032785544256724840}
   - {fileID: 891436732996682638}
-  m_Father: {fileID: 6195151533019013417}
+  m_Father: {fileID: 218326084500640645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6196,6 +6197,7 @@ Transform:
   m_LocalScale: {x: 5, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1765679009813345076}
   - {fileID: 6195151533019013417}
   - {fileID: 4791381338460474646}
   - {fileID: 903489354649920537}
@@ -6234,6 +6236,7 @@ MonoBehaviour:
   _manaToGive: 10
   _brickPath: {fileID: 0}
   parentObject: {fileID: 0}
+  _defaultScale: {x: 5, y: 4, z: 1}
   _onDamageAnimEffect: {fileID: 11400000, guid: 3f05282951564bf4588e34e29fdd91b7, type: 2}
   _onDeathAnimEffect: {fileID: 11400000, guid: 15899b26e3d4795419603351b4e00b62, type: 2}
   so_OnBrickDestroy: {fileID: 11400000, guid: 0128efff5b30c7d44a376c9eb59f0b57, type: 2}
@@ -6416,6 +6419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe8f940e3463544e9b0d19921c7e8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::B_ShieldAbility
+  delayBeforeSpawnShield: 0
   _staticShield:
   - {fileID: 4557218173773136818}
   - {fileID: 2251918700226440787}
@@ -7332,7 +7336,6 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4713351664711627867}
-  - {fileID: 1765679009813345076}
   m_Father: {fileID: 218326084500640645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2821014205068229272
@@ -7397,7 +7400,6 @@ MonoBehaviour:
   _health: 0
   _tickTimer: 0
   _damageText: {fileID: 4269139500996097731, guid: 49ac76b83082ab64781a2799ec10c319, type: 3}
-  _hitFlash: {fileID: 8109881121445184266}
   _flashPeriod: 0.1
   _rayDistance: 10
   _brickLayer:
@@ -7408,6 +7410,9 @@ MonoBehaviour:
   _dischargePopVFX: {fileID: 2021498435083084119, guid: 92b2c05e9ea292242a090c1ad6179c0e, type: 3}
   _toxicBuildVFX: {fileID: 7857503364302934976, guid: c287de16725413a4786f2eaf3fb3e523, type: 3}
   _toxicPopVFX: {fileID: 0}
+  _minDamageTextYOffset: 5
+  _maxDamageTextYOffset: 7
+  _damageTextXOffset: 7
 --- !u!50 &177569811498738227
 Rigidbody2D:
   serializedVersion: 5

@@ -19,7 +19,7 @@ MonoBehaviour:
   - You got all the skill needed to suceed
   - So best to do so. Cause if you don't
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

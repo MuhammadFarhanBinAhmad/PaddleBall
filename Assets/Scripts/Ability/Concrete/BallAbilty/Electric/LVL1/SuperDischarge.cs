@@ -4,12 +4,21 @@ public class SuperDischarge : ABSAbility, IModifyStackableAbility
 {
 
 
-    public void ModifyStackableAbility(AbilityContext _abc)
+    public void ModifyStackableAbility(AbilityContext ctx)
     {
-        float addOnDmg = _abc._Stats[STATID.DAMAGE_PER_STACK] * _SOAbilityEffect._damagePerStackMultiplier;
+        if (ctx._statusType != STATUSTYPE.DISCHARGE)
+            return;
 
-        _abc._Stats[STATID.DAMAGE_PER_STACK] += addOnDmg;
-        _abc._Stats[STATID.STACK_LIFETIME] = _SOAbilityEffect._stackLifeTime;
-        _abc._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] = _SOAbilityEffect._timeBeforeEffectActivate;
+        float additionalDamage =
+            ctx._Stats[STATID.DAMAGE_PER_STACK] *
+            _SOAbilityEffect._damagePerStackMultiplier;
+
+        ctx._Stats[STATID.DAMAGE_PER_STACK] += additionalDamage;
+
+        ctx._Stats[STATID.STACK_LIFETIME] =
+            _SOAbilityEffect._stackLifeTime;
+
+        ctx._Stats[STATID.TIME_BEFORE_EFFECT_ACTIVATE] =
+            _SOAbilityEffect._timeBeforeEffectActivate;
     }
 }

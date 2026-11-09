@@ -10,12 +10,14 @@ public class TutorialOrder_ContinueNextDay : TutorialOrder
 
     protected override void GiveInstruction()
     {
-        _continueDay.gameObject.SetActive(true);
-        _worldToCanvasPosition.ToggleFocus(true);
+
     }
 
     protected override IEnumerator WaitForAction()
     {
+        _continueDay.gameObject.SetActive(true);
+        _worldToCanvasPosition.ToggleFocus(true);
+
         _buttonClicked = false;
 
         _continueDay.onClick.AddListener(OnButtonClicked);

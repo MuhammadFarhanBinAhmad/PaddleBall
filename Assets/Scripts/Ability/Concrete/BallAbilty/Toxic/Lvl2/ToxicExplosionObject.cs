@@ -99,7 +99,7 @@ public class ToxicExplosionObject : MonoBehaviour
             if (!col.TryGetComponent(out BrickBar brick))
                 continue;
 
-            brick._brickHealthComponent.ApplyStatus(_context,STATUSTYPE.TOXIC);
+            brick._brickHealthComponent.ApplyStatus(_context);
         }
     }
 

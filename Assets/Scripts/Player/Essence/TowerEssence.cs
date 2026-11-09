@@ -1,31 +1,49 @@
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class TowerEssence : MonoBehaviour
 {
-    TowerManager _towerManager;
-    PaddleVacoom _paddleVacoom;
+    private TowerManager _towerManager;
+    private PaddleVacoom _paddleVacoom;
+    private Transform _cachedTransform;
 
     [Header("Essence Stats")]
-    [SerializeField] int _essenceMinWorth;
-    [SerializeField] int _essenceMaxWorth;
-    [SerializeField] float _essenceBonusMultiplier;
-    [SerializeField] float[] _essenceExpirationTime;
-    [SerializeField] float _essenceCurrentLiveTime;
-    int _currentExpirationPhase;
-    Action _OnCollectionEvent;
+    [SerializeField] private int _essenceMinWorth;
+    [SerializeField] private int _essenceMaxWorth;
+    [SerializeField] private float _essenceBonusMultiplier;
 
-    [Header("Light")]
-    [SerializeField] Light2D _light2D;
-    [SerializeField] float _startIntensity;
-    [SerializeField] float _endIntensity;
+    // Cumulative times, e.g. [5, 10, 15].
+    [SerializeField]
+    private float[] _essenceExpirationTime =
+        { 5f, 10f, 15f };
 
-    float intensityTimer;
-    bool intensityDone;
+    [SerializeField] private float _essenceCurrentLiveTime;
 
-    [SerializeField] float intensityDuration;
+    private int _currentExpirationPhase;
+    private float _totalLifetime;
+
+    [Header("Essence Scaling")]
+    [SerializeField, Min(0f)]
+    private float _startScaleMultiplier = 1.5f;
+
+    [SerializeField, Min(0f)]
+    private float _endScaleMultiplier = 0f;
+
+    [SerializeField]
+    private AnimationCurve _shrinkCurve =
+        AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+    [Header("Essence Pulse")]
+    [SerializeField, Range(0f, 1f)]
+    private float _minPulseMultiplier = 0.7f;
+
+    [SerializeField, Min(0f)]
+    private float _pulseSpeed = 2f;
+
+    private float _pulseTimer;
+    private Vector3 _originalScale;
 
     [Header("Movement")]
     [Tooltip("Maximum movement speed.")]
@@ -38,70 +56,89 @@ public class TowerEssence : MonoBehaviour
     public float minImpulse;
     public float maxImpulse;
 
-    Vector2 _velocity;
+    private Vector2 _velocity;
 
     [Header("Suction / Collection")]
     public float _collectDistance;
 
     [Header("Suction Tuning")]
-    [Tooltip("How strongly the Essence accelerates toward the vacuum.")]
-    [SerializeField] float _attractStrength;
-    [SerializeField]float _attractRadius;
+    [SerializeField] private float _attractStrength;
+    [SerializeField] private float _attractRadius;
 
     [Tooltip("How much velocity is retained while being sucked.")]
     [Range(0f, 1f)]
     public float suctionDragMultiplier;
 
-    // Attraction state
-    bool _isAttracted;
-    Vector2 _attractorPos;
-    Transform _attractorTransform;
+    private bool _isAttracted;
+    private Vector2 _attractorPos;
+    private Transform _attractorTransform;
 
     [Header("Auto Attract")]
-    [SerializeField] float _autoAttractStrength;
-    [SerializeField] float _autoAttractRadius;
-    [SerializeField] bool _autoAttract;
+    [SerializeField] private float _autoAttractStrength;
+    [SerializeField] private float _autoAttractRadius;
+    [SerializeField] private bool _autoAttract;
 
-    [Header("Light Alpha")]
-    [SerializeField, Range(0f, 1f)] float _minAlpha;
-    [SerializeField, Range(0f, 1f)] float _maxAlpha;
-    [SerializeField] float _alphaPingPongSpeed;
+    private bool _defaultAutoAttract;
 
     [Header("Gravity")]
-    [Tooltip("Downward acceleration when the essence is not being sucked.")]
-    [SerializeField] float _gravityStrength = 2f;
-    [Tooltip("Maximum falling speed.")]
-    [SerializeField] float _maxFallSpeed = 3f;
+    [SerializeField]
+    private float _gravityStrength;
 
 
-    //TUTORIAL
-    // All currently active Essence objects.
+
+
+    [SerializeField]
+    private float _maxFallSpeed;
+
+    // Tutorial tracking.
     private static readonly HashSet<TowerEssence> _activeEssences =
         new HashSet<TowerEssence>();
 
     public static IEnumerable<TowerEssence> ActiveEssences =>
         _activeEssences;
 
-    // Notifies listeners when a pooled Essence becomes active.
     public static event Action<TowerEssence> OnEssenceSpawned;
 
-    // Notifies listeners when this Essence is collected.
     public event Action<TowerEssence> OnCollected;
 
-
-    void Awake()
+    private void Awake()
     {
+        _cachedTransform = transform;
+        _originalScale = _cachedTransform.localScale;
+
         _towerManager = FindAnyObjectByType<TowerManager>();
         _paddleVacoom = FindAnyObjectByType<PaddleVacoom>();
+
+        _defaultAutoAttract = _autoAttract;
+
+        // Cache expiration duration instead of calculating it
+        // every Update.
+        if (_essenceExpirationTime != null &&
+            _essenceExpirationTime.Length > 0)
+        {
+            _totalLifetime = _essenceExpirationTime[
+                _essenceExpirationTime.Length - 1
+            ];
+        }
     }
 
     private void OnEnable()
     {
-        // Reset movement state.
-        _velocity = Vector2.zero;
+        // Reset all state when reused by the object pool.
+        _essenceCurrentLiveTime = 0f;
+        _currentExpirationPhase = 0;
 
-        // Reproduce the old initial Rigidbody impulse
-        // using our own velocity instead.
+        _isAttracted = false;
+        _attractorTransform = null;
+        _attractorPos = Vector2.zero;
+        _autoAttract = _defaultAutoAttract;
+
+        _velocity = Vector2.zero;
+        _pulseTimer = 0f;
+
+        _cachedTransform.localScale =
+            _originalScale * _startScaleMultiplier;
+        // Initial impulse.
         Vector2 direction = UnityEngine.Random.insideUnitCircle;
 
         if (direction.sqrMagnitude < 0.0001f)
@@ -109,16 +146,16 @@ public class TowerEssence : MonoBehaviour
 
         direction.Normalize();
 
-        float magnitude =
-            UnityEngine.Random.Range(minImpulse, maxImpulse);
+        float magnitude = UnityEngine.Random.Range(
+            minImpulse,
+            maxImpulse
+        );
 
         _velocity = direction * magnitude;
 
-        // Reset visual state.
-        intensityTimer = 0f;
-        intensityDone = false;
-
-        _light2D.intensity = _startIntensity;
+        // Reset to the starting scale.
+        _cachedTransform.localScale =
+            _originalScale * _startScaleMultiplier;
 
         _activeEssences.Add(this);
         OnEssenceSpawned?.Invoke(this);
@@ -126,96 +163,149 @@ public class TowerEssence : MonoBehaviour
 
     private void OnDisable()
     {
-        _OnCollectionEvent = null;
         _activeEssences.Remove(this);
 
+        _isAttracted = false;
+        _attractorTransform = null;
+        _velocity = Vector2.zero;
     }
+
+    private void FixedUpdate()
+    {
+        float deltaTime = Time.deltaTime;
+
+        // Stop processing if Essence has expired.
+        if (UpdateLifetime(deltaTime))
+            return;
+
+        UpdateScale();
+
+        if (_isAttracted || _autoAttract)
+            UpdateAttraction(deltaTime);
+
+        Move(deltaTime);
+    }
+
+    // -------------------------
+    // Lifetime
+    // -------------------------
+
+    private bool UpdateLifetime(float deltaTime)
+    {
+        _essenceCurrentLiveTime += deltaTime;
+
+        if (_essenceExpirationTime == null ||
+            _essenceExpirationTime.Length == 0)
+        {
+            return false;
+        }
+
+        // Supports passing multiple expiration thresholds
+        // in a single frame.
+        while (_currentExpirationPhase <
+               _essenceExpirationTime.Length &&
+               _essenceCurrentLiveTime >=
+               _essenceExpirationTime[_currentExpirationPhase])
+        {
+            _currentExpirationPhase++;
+
+            // Existing collection rewards use phases 0, 1, 2.
+            // Expire after the final phase threshold.
+            if (_currentExpirationPhase >= 3 ||
+                _currentExpirationPhase >=
+                _essenceExpirationTime.Length)
+            {
+                ResetStats();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // -------------------------
+    // Scaling
+    // -------------------------
+
+
+    private void UpdateScale()
+    {
+        if (_totalLifetime <= 0f)
+            return;
+
+        // Step 1: Calculate how much lifetime has passed.
+        float lifetimeProgress = Mathf.Clamp01(
+            _essenceCurrentLiveTime / _totalLifetime
+        );
+
+        // Step 2: Calculate the current maximum size.
+        float shrinkProgress = Mathf.Clamp01(
+            _shrinkCurve.Evaluate(lifetimeProgress)
+        );
+
+        float currentMaxScale = Mathf.Lerp(
+            _startScaleMultiplier,
+            _endScaleMultiplier,
+            shrinkProgress
+        );
+
+        // Step 3: Calculate ping-pong effect.
+        _pulseTimer += Time.deltaTime;
+
+        float pulse = Mathf.PingPong(
+            _pulseTimer * _pulseSpeed,
+            1f
+        );
+
+        // Step 4: Calculate size relative to current maximum.
+        float pulseMultiplier = Mathf.Lerp(
+            _minPulseMultiplier,
+            1f,
+            pulse
+        );
+
+        // Step 5: Apply final scale.
+        float finalScale = currentMaxScale * pulseMultiplier;
+
+        _cachedTransform.localScale =
+            _originalScale * finalScale;
+    }
+
+
+    // -------------------------
+    // Attraction
+    // -------------------------
 
     public void SetToAutoAttract()
     {
         _autoAttract = true;
+        _isAttracted = true;
     }
 
-    private void Update()
+    private void UpdateAttraction(float deltaTime)
     {
-        UpdateLifetime();
-        UpdateLight();
-        UpdateLightAlpha();
+        float strength = _attractStrength;
+        float radius = _attractRadius;
 
-        if (_isAttracted)
-        {
-            UpdateAttraction();
-        }
-
-        Move();
-    }
-
-    void UpdateLifetime()
-    {
-        _essenceCurrentLiveTime += Time.deltaTime;
-
-        if (_currentExpirationPhase >= _essenceExpirationTime.Length)
-            return;
-
-        if (_essenceCurrentLiveTime >
-            _essenceExpirationTime[_currentExpirationPhase])
-        {
-            _currentExpirationPhase++;
-
-
-            if (_currentExpirationPhase == 3)
-            {
-                ResetStats();
-            }
-        }
-    }
-
-    void UpdateLight()
-    {
-        if (intensityDone)
-            return;
-
-        intensityTimer += Time.deltaTime;
-
-        float time =
-            Mathf.Clamp01(intensityTimer / intensityDuration);
-
-        _light2D.intensity =
-            Mathf.Lerp(_startIntensity, _endIntensity, time);
-
-        if (time >= 1f)
-        {
-            intensityDone = true;
-        }
-    }
-    void UpdateLightAlpha()
-    {
-        float alpha = Mathf.Lerp(
-            _minAlpha,
-            _maxAlpha,
-            Mathf.PingPong(Time.time * _alphaPingPongSpeed, 1f)
-        );
-
-        Color color = _light2D.color;
-        color.a = alpha;
-        _light2D.color = color;
-    }
-    void UpdateAttraction()
-    {
-        // Auto-attract override.
         if (_autoAttract)
         {
+            if (_paddleVacoom == null)
+                return;
+
             _attractorPos = _paddleVacoom.transform.position;
-            _attractStrength = _autoAttractStrength;
-            _attractRadius = _autoAttractRadius;
+
+            strength = _autoAttractStrength;
+            radius = _autoAttractRadius;
         }
         else if (_attractorTransform != null)
         {
             _attractorPos = _attractorTransform.position;
         }
 
+        radius = Mathf.Max(0.01f, radius);
+
         Vector2 toTarget =
-            _attractorPos - (Vector2)transform.position;
+            _attractorPos - (Vector2)_cachedTransform.position;
 
         float distanceSqr = toTarget.sqrMagnitude;
 
@@ -224,74 +314,63 @@ public class TowerEssence : MonoBehaviour
 
         float distance = Mathf.Sqrt(distanceSqr);
 
-        if (distance > _attractRadius)
+        if (distance > radius && !_autoAttract)
         {
-            if (!_autoAttract)
-            {
-                StopAttraction();
-                return;
-            }
+            StopAttraction();
+            return;
         }
 
-        float t =
-            Mathf.Clamp01(
-                1f - (distance / _attractRadius)
-            );
+        float t = Mathf.Clamp01(
+            1f - distance / radius
+        );
 
-        float pull =
-            _attractStrength *
-            (t * 0.9f + 0.1f);
+        float pull = strength * (t * 0.9f + 0.1f);
 
-        Vector2 direction =
-            toTarget / distance;
+        Vector2 direction = toTarget / distance;
 
-        // Accelerate toward the target.
-        _velocity +=
-            direction *
-            pull *
-            Time.deltaTime;
+        _velocity += direction * pull * deltaTime;
 
-        // Apply suction drag.
-        _velocity *=
-            Mathf.Pow(
-                suctionDragMultiplier,
-                Time.deltaTime * 60f
-            );
+        _velocity *= Mathf.Pow(
+            suctionDragMultiplier,
+            deltaTime * 60f
+        );
 
-        // Limit velocity.
-        if (_velocity.sqrMagnitude >
-            maxSpeed * maxSpeed)
+        float maxSpeedSqr = maxSpeed * maxSpeed;
+
+        if (_velocity.sqrMagnitude > maxSpeedSqr &&
+            maxSpeed > 0f)
         {
-            _velocity =
-                _velocity.normalized * maxSpeed;
+            _velocity = _velocity.normalized * maxSpeed;
         }
     }
 
-    void Move()
+    // -------------------------
+    // Movement
+    // -------------------------
+
+    private void Move(float deltaTime)
     {
-        if (_velocity.sqrMagnitude <= 0.000001f)
-            return;
-
-        if (!_isAttracted)
+        if (!_isAttracted && !_autoAttract)
         {
-            // Apply gravity, accelerating the essence downward.
-            _velocity.y -= _gravityStrength * Time.deltaTime;
+            // Gravity must continue even if velocity is zero.
+            _velocity.y -= _gravityStrength * deltaTime;
 
-            // Clamp downward velocity.
             _velocity.y = Mathf.Max(
                 _velocity.y,
                 -_maxFallSpeed
             );
 
-            // Apply normal drag.
             _velocity *= Mathf.Pow(
-                normalDrag,
-                Time.deltaTime
+                Mathf.Max(0f, normalDrag),
+                deltaTime
             );
         }
 
-        transform.position +=
-            (Vector3)(_velocity * Time.deltaTime);
+        if (_velocity.sqrMagnitude <= 0.000001f)
+            return;
+
+        _cachedTransform.position +=
+            (Vector3)(_velocity * deltaTime);
     }
 
     // -------------------------
@@ -303,19 +382,19 @@ public class TowerEssence : MonoBehaviour
         float strength,
         float radius)
     {
+        if (targetTransform == null)
+            return;
+
         _attractorTransform = targetTransform;
         _attractorPos = targetTransform.position;
 
-        _attractRadius =
-            Mathf.Max(0.01f, radius);
-
+        _attractRadius = Mathf.Max(0.01f, radius);
         _attractStrength = strength;
 
         _isAttracted = true;
     }
 
-    public void UpdateAttractionTarget(
-        Vector2 targetPosition)
+    public void UpdateAttractionTarget(Vector2 targetPosition)
     {
         _attractorPos = targetPosition;
     }
@@ -332,39 +411,41 @@ public class TowerEssence : MonoBehaviour
 
     public void HandleCollection()
     {
+        // Prevent duplicate collection attempts.
+        if (!isActiveAndEnabled)
+            return;
+
         AudioManager.Instance.PlayOneShot(
             FmodEvent.Instance.sfx_essenceCollect,
-            transform.position
+            _cachedTransform.position
         );
+
+        int value = 0;
 
         switch (_currentExpirationPhase)
         {
             case 0:
-                _towerManager.IncreaseEssenceCount(
-                    GetBonusEssence()
-                );
+                value = GetBonusEssence();
                 break;
 
             case 1:
-                _towerManager.IncreaseEssenceCount(
-                    GetNormalEssence()
-                );
+                value = GetNormalEssence();
                 break;
 
             case 2:
-                _towerManager.IncreaseEssenceCount(
-                    GetHalfEssence()
-                );
+                value = GetHalfEssence();
                 break;
         }
 
-        // Notify the tutorial before this pooled object is deactivated.
+        _towerManager.IncreaseEssenceCount(value);
+
+        // Notify tutorial listeners before returning to pool.
         OnCollected?.Invoke(this);
 
         ResetStats();
     }
 
-    void ResetStats()
+    private void ResetStats()
     {
         _velocity = Vector2.zero;
 
@@ -382,42 +463,28 @@ public class TowerEssence : MonoBehaviour
     // Essence Value
     // -------------------------
 
-    int GetBonusEssence()
+    private int GetRandomEssence()
     {
-        int essence =
-            UnityEngine.Random.Range(
-                _essenceMinWorth,
-                _essenceMaxWorth
-            );
-
-        return (int)(
-            essence *
-            _essenceBonusMultiplier
+        return UnityEngine.Random.Range(
+            _essenceMinWorth,
+            _essenceMaxWorth
         );
     }
 
-    int GetNormalEssence()
+    private int GetBonusEssence()
     {
-        int essence =
-                    UnityEngine.Random.Range(
-                        _essenceMinWorth,
-                        _essenceMaxWorth
-                    );
-
-        return 
-            essence
-        ;
+        return (int)(
+            GetRandomEssence() * _essenceBonusMultiplier
+        );
     }
 
-    int GetHalfEssence()
+    private int GetNormalEssence()
     {
-        int essence =
-                    UnityEngine.Random.Range(
-                        _essenceMinWorth,
-                        _essenceMaxWorth
-                    );
+        return GetRandomEssence();
+    }
 
-        return (int)(
-            essence * .5f);
+    private int GetHalfEssence()
+    {
+        return (int)(GetRandomEssence() * 0.5f);
     }
 }

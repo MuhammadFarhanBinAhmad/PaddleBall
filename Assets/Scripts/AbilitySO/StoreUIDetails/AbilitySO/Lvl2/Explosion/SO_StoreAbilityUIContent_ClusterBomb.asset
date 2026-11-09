@@ -18,7 +18,7 @@ MonoBehaviour:
     damage
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: db00cc9cc634a4e4cb079da6a3e48063, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: -767416009206893661, guid: 4ef8479524a921a408ee30aa54f6e6e6, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level1_2_1

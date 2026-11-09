@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6627371649810385262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 15, y: 5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8744914417490998083
 CanvasRenderer:
@@ -92,15 +92,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3
-  m_fontSizeBase: 3
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
   _feedback: {fileID: 11400000, guid: 64a488fd685d31d4da4f564acb0d869e, type: 2}
   _moveUpDistance: 3
   _explosionColour: {r: 1, g: 0.53027105, b: 0, a: 1}
-  _dischargeColour: {r: 1, g: 0.9982651, b: 0, a: 1}
+  _dischargeColour: {r: 1, g: 0.99092615, b: 0, a: 1}
   _toxicColour: {r: 0.37781304, g: 1, b: 0.3754716, a: 1}
   _critColour: {r: 0.65245277, g: 0.8792586, b: 0.93207544, a: 1}
   _defaultColour: {r: 1, g: 1, b: 1, a: 1}

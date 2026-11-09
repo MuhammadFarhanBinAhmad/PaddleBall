@@ -18,7 +18,7 @@ MonoBehaviour:
     reduce to half
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: a6f2e56c280f2454ca73e1040df1ea39, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: -1521691872612245852, guid: 23f84152aabb8b64bbf8529abd870748, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level1_2_1

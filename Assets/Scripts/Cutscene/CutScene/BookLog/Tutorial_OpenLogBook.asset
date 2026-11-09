@@ -19,7 +19,7 @@ MonoBehaviour:
   - It contains all Spells and Cards you have obtained
   - Open it and give it a quick look
   _freezeGame: 1
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

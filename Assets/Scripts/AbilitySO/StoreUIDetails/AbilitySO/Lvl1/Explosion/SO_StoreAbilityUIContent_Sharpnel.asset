@@ -18,7 +18,7 @@ MonoBehaviour:
     Shrapnel damage is base on ball base damage
   ability_Level: 1
   ability_ToSpawn: {fileID: 11400000, guid: 5dcb711000751a3419e58d1d7adea391, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: -7352648317119044060, guid: 3fa5c67c3f2b05e458cc7ff06a2a9cdb, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level0_2_0

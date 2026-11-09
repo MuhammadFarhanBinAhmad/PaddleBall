@@ -46,6 +46,7 @@ public class TowerManager : MonoBehaviour
     [Header("Layer")]
     public int _currentTowerHeight;
     [SerializeField]List<GameObject> _createdBricks = new List<GameObject>();
+    [SerializeField] int _maxBrick;
     public Action OnHeightIncrease;
     public Action OnHeightDecrease;
 
@@ -150,6 +151,12 @@ public class TowerManager : MonoBehaviour
             brick.transform.position = pos;
             _createdBricks.Add(brick);
             AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_onBrickMade, transform.position);
+            if (_createdBricks.Count > _maxBrick)
+            {
+                GameObject b = _createdBricks[0];
+                _createdBricks.RemoveAt(0);
+                Destroy(b);
+            }
         }
         OnEssenceCollect?.Invoke();
     }

@@ -23,7 +23,7 @@ MonoBehaviour:
   - Force to be Paladins...
   - Anyway no pressure you got this. See you later Paddles
   _freezeGame: 0
-  TEXTBOX_TYPE: 0
+  TEXTBOX_TYPE: 1
   _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2

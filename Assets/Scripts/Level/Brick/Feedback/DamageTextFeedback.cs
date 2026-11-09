@@ -44,6 +44,7 @@ public class DamageTextFeedback : MonoBehaviour
         switch (type)
         {
             case STATUSTYPE.EXPLOSION:
+                _startScale *= 2;
                 _startColor = _explosionColour;
                 break;
             case STATUSTYPE.TOXIC:

@@ -21,7 +21,7 @@ public class GlobalFeedbackManager : MonoBehaviour
 
     [Header("AffectedObjects")]
     [SerializeField] List<GameObject> _wallTransforms = new List<GameObject>();
-    [SerializeField] Transform[] _brickTransforms;
+    [SerializeField] Canvas[] _brickCanvas;
     [SerializeField] AnimationCurve _feedbackAnimCurve;
     float _animationDuration;
     
@@ -72,11 +72,11 @@ public class GlobalFeedbackManager : MonoBehaviour
             ballOriginalScale = _ballTransform.localScale;
 
         List<GameObject> bricks = _brickPool.GetListOfBrick();
-        _brickTransforms = new Transform[bricks.Count];
+        _brickCanvas = new Canvas[bricks.Count];
 
         for (int i = 0; i < bricks.Count; i++)
         {
-            _brickTransforms[i] = bricks[i].transform;
+            _brickCanvas[i] = bricks[i].transform.GetComponentInChildren<Canvas>(true);
         }
 
         // cache original scales
@@ -88,9 +88,9 @@ public class GlobalFeedbackManager : MonoBehaviour
 
 
 
-        brickOriginalScales = new Vector3[_brickTransforms.Length];
-        for (int i = 0; i < _brickTransforms.Length; i++)
-            brickOriginalScales[i] = _brickTransforms[i].localScale;
+        brickOriginalScales = new Vector3[_brickCanvas.Length];
+        for (int i = 0; i < _brickCanvas.Length; i++)
+            brickOriginalScales[i] = _brickCanvas[i].transform.localScale;
 
         PlayGlobalFeedback += PlayShakeWorldAnimation;
         PlayGlobalFeedback += PlayCamShakeEvent;
@@ -142,8 +142,8 @@ public class GlobalFeedbackManager : MonoBehaviour
                 _wallTransforms[i].transform.localScale = wallOriginalScales[i];
 
         for(int i=0; i < brickOriginalScales.Length;i++)
-            if(_brickTransforms[i] != null)
-                _brickTransforms[i].localScale = brickOriginalScales[i];
+            if(_brickCanvas[i] != null)
+                _brickCanvas[i].transform.localScale = brickOriginalScales[i];
     }
 
     IEnumerator AnimateSizeLerpWorld()
@@ -196,11 +196,11 @@ public class GlobalFeedbackManager : MonoBehaviour
             }
 
             //bricks
-            for(int i=0; i < _brickTransforms.Length;i++)
+            for(int i=0; i < _brickCanvas.Length;i++)
             {
-                var bt = _brickTransforms[i];
+                var bt = _brickCanvas[i];
                 if (bt == null || !bt.gameObject.activeInHierarchy) continue;
-                bt.localScale = Vector3.LerpUnclamped(brickStarts[i], brickTargets[i], curveValue);
+                bt.transform.localScale = Vector3.LerpUnclamped(brickStarts[i], brickTargets[i], curveValue);
             }
 
             time += Time.deltaTime;
@@ -219,9 +219,9 @@ public class GlobalFeedbackManager : MonoBehaviour
             if (_wallTransforms[i] != null)
                 _wallTransforms[i].transform.localScale = wallOriginalScales[i];
 
-        for(int i =0;i < _brickTransforms.Length;i++)
-            if (_brickTransforms[i] != null)
-                _brickTransforms[i].localScale = brickOriginalScales[i];
+        for(int i =0;i < _brickCanvas.Length;i++)
+            if (_brickCanvas[i] != null)
+                _brickCanvas[i].transform.localScale = brickOriginalScales[i];
 
         _shakeWorldRoutine = null;
     }
@@ -253,34 +253,23 @@ public class GlobalFeedbackManager : MonoBehaviour
     }
     IEnumerator FreezeFrameRoutine()
     {
-        // Save original time values
-        float originalTimeScale = 1;
-        float originalFixedDelta = Time.fixedDeltaTime;
 
-        // Choose target timescale: either full freeze (0) or small slow-mo
-        float targetScale = _useFullFreeze ? 0f : Mathf.Clamp(_slowMotionScale, 0.0001f, 1f);
-
-        // Apply freeze/slowdown
-        Time.timeScale = targetScale;
-        // Adjust fixedDelta to keep physics consistent when timeScale changes
-        Time.fixedDeltaTime = originalFixedDelta * Time.timeScale;
-
+        TimeManager.SetCustomTimeScale(_slowMotionScale);
         // Wait in real time (unaffected by Time.timeScale)
         yield return new WaitForSecondsRealtime(_freezeRealtimeDuration);
-
-        // Restore original values
-        Time.timeScale = originalTimeScale;
-        Time.fixedDeltaTime = originalFixedDelta;
+        TimeManager.ResetTimeScale();
 
         _freezeRoutine = null;
 
         //Flash
         if (_playFlash)
+        {
             _flashScreen.SetActive(true);
+            yield return new WaitForSecondsRealtime(_flashDuration);
+            _flashScreen.SetActive(false);
+        }
         else
             yield return null;
 
-        yield return new WaitForSecondsRealtime(_flashDuration);
-        _flashScreen.SetActive(false);
     }
 }

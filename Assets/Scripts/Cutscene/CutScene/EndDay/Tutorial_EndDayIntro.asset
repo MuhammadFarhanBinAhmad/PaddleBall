@@ -18,7 +18,7 @@ MonoBehaviour:
   - Congrats Paddle you survive your first day!!!
   - On the end of each day, the bricks will stop spawning and the Card store will
     open
-  _freezeGame: 0
+  _freezeGame: 1
   TEXTBOX_TYPE: 0
   _focusType: 0
   _popInEffectLerp:

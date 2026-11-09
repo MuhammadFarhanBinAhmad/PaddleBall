@@ -22,16 +22,24 @@ public enum TUTORIAL_TYPE
 
 public class TutorialManager : MonoBehaviour
 {
+
+    TimeManager _timeManager;
+
     [Header("Tutorial Section Order")]
     [SerializeField] float _startTutorialDelay;
     [SerializeField] List<TutorialSection> _startingTutorial = new List<TutorialSection>();
     [SerializeField] List<TutorialSection> _mileStoneTutorial = new List<TutorialSection>();
     [SerializeField] List<TutorialSection> _endDayTutorial = new List<TutorialSection>();
     [SerializeField]
-    private List<TutorialSection> _sectionOrder =
+    List<TutorialSection> _sectionOrder =
         new List<TutorialSection>();
-
+    Coroutine _startTutorialRoutine;
     [SerializeField] Button _skipTutorial;
+
+    [Header("SkipEndDayContent")]
+    [SerializeField] GameObject _arrow;
+    [SerializeField] GameObject _startDayButton;
+
 
     int _currentSectionIndex = -1;
     bool _tutorialActive;
@@ -68,6 +76,7 @@ public class TutorialManager : MonoBehaviour
     {
         _brickGenerator = FindAnyObjectByType<BrickGenerator>();
         _cutSceneManager = FindAnyObjectByType<CutSceneManager>();
+        _timeManager = FindAnyObjectByType<TimeManager>();
     }
     private void Update()
     {
@@ -79,9 +88,11 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         OnTutorialCompleted += _brickGenerator.StartGame;
+
         _currentTutorialType = TUTORIAL_TYPE.INTRO;
         FillSectionOrder(TUTORIAL_TYPE.INTRO);
-        Invoke("StartTutorial", _startTutorialDelay);
+
+        StartTutorial();
     }
     private void OnDestroy()
     {
@@ -94,39 +105,36 @@ public class TutorialManager : MonoBehaviour
 
     public void StartTutorial()
     {
-        _skipTutorial.gameObject.SetActive(true);
+        // Prevent duplicate tutorial starts.
+        if (_tutorialActive || _startTutorialRoutine != null)
+            return;
+
+        _startTutorialRoutine = StartCoroutine(StartTutorialAfterDelay());
+    }
+    private IEnumerator StartTutorialAfterDelay()
+    {
+        // Wait even if the game is paused.
+        yield return new WaitForSecondsRealtime(_startTutorialDelay);
+
+        _startTutorialRoutine = null;
+
+        BeginTutorial();
+    }
+    private void BeginTutorial()
+    {
         if (_sectionOrder == null || _sectionOrder.Count == 0)
         {
             Debug.LogWarning("Tutorial has no sections.");
             return;
         }
 
+        _skipTutorial.gameObject.SetActive(true);
+
         _tutorialActive = true;
         _currentSectionIndex = 0;
 
         StartCurrentSection();
     }
-
-    public void StartTutorialAt(TUTORIAL_SECTION section)
-    {
-        for (int i = 0; i < _sectionOrder.Count; i++)
-        {
-            if (_sectionOrder[i] != null &&
-                _sectionOrder[i].SectionType == section)
-            {
-                _tutorialActive = true;
-                _currentSectionIndex = i;
-
-                StartCurrentSection();
-                return;
-            }
-        }
-
-        Debug.LogWarning(
-            $"Tutorial section {section} is not in the current tutorial order."
-        );
-    }
-
     // --------------------------------------------------
     // Section Flow
     // --------------------------------------------------
@@ -349,6 +357,8 @@ public class TutorialManager : MonoBehaviour
                     _tutorialActive = false;
                     _currentSectionIndex = _sectionOrder.Count;
                     _skipTutorial.gameObject.SetActive(false);
+                    _startDayButton.gameObject.SetActive(true);
+                    _arrow.gameObject.SetActive(false);
                     break;
                 }
             case TUTORIAL_TYPE.MILESTONE:
@@ -384,8 +394,10 @@ public class TutorialManager : MonoBehaviour
 
         
     }
+
     public void FillSectionOrder(TUTORIAL_TYPE tut)
     {
+
         switch (tut)
         {
             case TUTORIAL_TYPE.INTRO:

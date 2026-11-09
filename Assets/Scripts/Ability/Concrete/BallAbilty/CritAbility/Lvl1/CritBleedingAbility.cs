@@ -27,9 +27,7 @@ public class CritBleedingAbility : ABSAbility
             _abilityManager.ApplyStackableModifiers(statusCtx);
 
             ctx._health.ApplyStatus(
-                statusCtx,
-                _SOAbilityEffect._statusType
-            );
+                statusCtx            );
         }
 
         return; // only one crit owner

@@ -18,7 +18,7 @@ MonoBehaviour:
     range
   ability_Level: 2
   ability_ToSpawn: {fileID: 11400000, guid: f9282e1ad90419244a65707772627148, type: 2}
-  icon: {fileID: -6522164157311176969, guid: 85f57c6658d92cf44aaa2b00761f94e5, type: 3}
+  icon: {fileID: 8743630486958587357, guid: 044695c58f95dde41a1a02c854768f5c, type: 3}
   _availableToPurchaseAtStart: 0
   requiredAbilityIDs:
   - Level1_2_0
