@@ -15841,8 +15841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityManager
   _brickAbilities: []
-  test:
-  - {fileID: 11400000, guid: 2deeb38661cb26843bdfc6b0443a3e7e, type: 2}
+  test: []
 --- !u!4 &381268553
 Transform:
   m_ObjectHideFlags: 0
@@ -19306,10 +19305,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   _maxGameDuration: 21
-  _fullDayDuration: 60
+  _fullDayDuration: 3
   _bossDayDuration: 240
   _currentDayDuration: 5
-  _bossDayInterval: 21
+  _bossDayInterval: 1
   _startDayButton: {fileID: 151292396}
   _cardShopButton: {fileID: 1387117515}
   _postBossSpeedMultiplier: 10
