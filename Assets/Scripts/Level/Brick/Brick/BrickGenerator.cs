@@ -62,6 +62,7 @@ public class BrickGenerator : MonoBehaviour
     [SerializeField] AnimationCurve easeOutElastic;
     [SerializeField] float animationDuration;
     [SerializeField] float _capscaleMultiplier;
+    [SerializeField] float _spawnInterval;
     [SerializeField] Vector3 _startingScale;
 
     [Header("Level and Wave")]
@@ -122,7 +123,7 @@ public class BrickGenerator : MonoBehaviour
     }
     IEnumerator SpawnFirstWave()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(_spawnInterval);
         StartFirstWaveOfEpisode();
 
     }

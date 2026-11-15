@@ -44,12 +44,12 @@ public abstract class BaseBossAttack : MonoBehaviour
 
     private IEnumerator AttackWrapper()
     {
-        // Execute the unique attack behaviour.
         yield return ExecuteAttack();
 
-        // Don't complete an attack that was cancelled.
         if (IsRunning)
             CompleteAttack();
+
+        _attackRoutine = null;
     }
 
     // Each attack defines its own behaviour and

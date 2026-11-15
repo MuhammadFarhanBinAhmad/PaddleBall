@@ -8,37 +8,51 @@ public class Apprentice_ShieldAndRecover : BaseBossAttack
     [SerializeField] private BaseBossBrick _baseBossBrick;
 
     [Header("Health Recovery")]
-    [SerializeField] private int _healAmount = 5;
-    [SerializeField] private float _healInterval = 1f;
-    [SerializeField] private int _maxHealTicks = 0;
+    [SerializeField] private int _healAmount;
+    [SerializeField] private float _healInterval;
+    [SerializeField] private GameObject _healEffect;
 
     private Coroutine _healRoutine;
 
     protected override IEnumerator ExecuteAttack()
     {
-        // Activate defensive ability.
+        // Step 1: Start movement sequence.
+        _bossManager.StartRandomSplineMovement();
+
+        // Step 2: Wait until teleportation finishes
+        // and actual spline movement begins.
+        while (_bossManager.IsMoving &&
+               !_bossManager.IsTraversingSpline)
+        {
+            yield return null;
+        }
+
+        // If movement failed or was interrupted,
+        // do not activate the attack.
+        if (!_bossManager.IsTraversingSpline)
+            yield break;
+
+        // Step 3: Activate defensive ability.
         _abilityManager.SetBrickAbilityStats(_abilityStats);
         _abilityManager.ActivateAbilities(_ability);
 
-        // Start health regeneration.
+        // Step 4: Start health regeneration.
         _healRoutine = StartCoroutine(RecoverHealthRoutine());
 
-        // Start movement.
-        _bossManager.StartRandomSplineMovement();
-
-        // Wait until movement is completed.
+        // Step 5: Wait until movement finishes.
         while (_bossManager.IsMoving)
         {
             yield return null;
         }
 
-        // Finish attack.
+        // Step 6: Finish attack.
         CompleteAttack();
     }
 
     private IEnumerator RecoverHealthRoutine()
     {
-        int healTicks = 0;
+        if (_healEffect != null)
+            _healEffect.SetActive(true);
 
         while (IsRunning)
         {
@@ -51,11 +65,7 @@ public class Apprentice_ShieldAndRecover : BaseBossAttack
 
             if (_baseBossBrick != null)
                 _baseBossBrick.RecoverHealth(_healAmount);
-
-            healTicks++;
         }
-
-        _healRoutine = null;
     }
 
     private void StopHealing()
@@ -67,10 +77,24 @@ public class Apprentice_ShieldAndRecover : BaseBossAttack
         }
     }
 
-    protected override void OnAttackCompleted()
+    private void CleanupAttack()
     {
         StopHealing();
-        _bossManager.StopSplineMovement();
+
+        if (_healEffect != null)
+            _healEffect.SetActive(false);
+
+        _bossManager?.StopSplineMovement();
         _abilityManager?.ResetAllAbility();
+    }
+
+    protected override void OnAttackCompleted()
+    {
+        CleanupAttack();
+    }
+
+    protected override void OnAttackCancelled()
+    {
+        CleanupAttack();
     }
 }

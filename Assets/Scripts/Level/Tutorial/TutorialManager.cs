@@ -39,6 +39,7 @@ public class TutorialManager : MonoBehaviour
     [Header("SkipEndDayContent")]
     [SerializeField] GameObject _arrow;
     [SerializeField] GameObject _startDayButton;
+    [SerializeField] GameObject _cardStoreButton;
 
 
     int _currentSectionIndex = -1;
@@ -257,7 +258,10 @@ public class TutorialManager : MonoBehaviour
         _skipTutorial.gameObject.SetActive(false);
         _tutorialActive = false;
 
-        OnTutorialCompleted?.Invoke();
+        if(_currentTutorialType == TUTORIAL_TYPE.INTRO)
+            OnTutorialCompleted?.Invoke();
+
+
     }
 
     // --------------------------------------------------
@@ -358,6 +362,7 @@ public class TutorialManager : MonoBehaviour
                     _currentSectionIndex = _sectionOrder.Count;
                     _skipTutorial.gameObject.SetActive(false);
                     _startDayButton.gameObject.SetActive(true);
+                    _cardStoreButton.gameObject.SetActive(true);
                     _arrow.gameObject.SetActive(false);
                     break;
                 }

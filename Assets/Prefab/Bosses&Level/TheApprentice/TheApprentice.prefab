@@ -9726,7 +9726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_BurstFireAttack
   _isEnabled: 1
-  _executionType: 0
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 2
   _abilityStats: {fileID: 11400000, guid: 0b8baf1e9270c3345bc4cf12fcfc7339, type: 2}
@@ -10259,7 +10258,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_ShieldAndRecover
   _isEnabled: 1
-  _executionType: 0
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 4
   _abilityStats: {fileID: 11400000, guid: d664403225afa7c48af2be93ab8879aa, type: 2}
@@ -10268,7 +10266,6 @@ MonoBehaviour:
   _baseBossBrick: {fileID: 8147492841803621049}
   _healAmount: 5
   _healInterval: 3
-  _maxHealTicks: 0
   _healEffect: {fileID: 2869852476374575600}
 --- !u!1 &2768094326379321997
 GameObject:
@@ -10405,8 +10402,6 @@ MonoBehaviour:
   _attacks:
   - {fileID: 8980400365732773515}
   _shuffleAttacks: 1
-  _restDuration: 1
-  _delayBetweenAttacks: 10
   _defaultStunDuration: 2
   _movementSpeed: 20
   _movementPos:
@@ -10417,7 +10412,6 @@ MonoBehaviour:
   _lerpInEffect: {fileID: 11400000, guid: ed8f9b5f58749914aa3f8023696edbb3, type: 2}
   _lerpOutEffect: {fileID: 11400000, guid: 2351f7f4b9b584e46aa0d60c70401e93, type: 2}
   _bossTransform: {fileID: 7859496079033589972}
-  _teleportDelay: 0.25
   _startMovementDelay: 1
   _endRestDelay: 2
   _brickAbilityManager: {fileID: 8213812749613968555}
@@ -21072,7 +21066,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_SpawnFromAboveAttack
   _isEnabled: 1
-  _executionType: 0
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 0
   _abilityStats: {fileID: 0}
@@ -26297,7 +26290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe8f940e3463544e9b0d19921c7e8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::B_ShieldAbility
-  delayBeforeSpawnShield: 2
+  delayBeforeSpawnShield: 0
   _staticShield:
   - {fileID: 2929316650345559634}
   - {fileID: 7425215322635038117}
@@ -32297,7 +32290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_ShotGunAttack
   _isEnabled: 1
-  _executionType: 0
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 2
   _abilityStats: {fileID: 11400000, guid: edc2de2a09257bf469e1d3b27c864022, type: 2}

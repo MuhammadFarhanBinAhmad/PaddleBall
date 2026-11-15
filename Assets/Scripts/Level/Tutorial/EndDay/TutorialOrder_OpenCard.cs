@@ -5,6 +5,7 @@ public class TutorialOrder_OpenCard : TutorialOrder
 {
     [Header("Spell Book")]
     [SerializeField] StoreOverlayUI _storeOverlayUI;
+    [SerializeField] GameObject _cardStoreButton;
 
     bool _pageClicked;
 
@@ -14,6 +15,7 @@ public class TutorialOrder_OpenCard : TutorialOrder
 
     protected override IEnumerator WaitForAction()
     {
+        _cardStoreButton.SetActive(true);
         if (_storeOverlayUI == null)
         {
             Debug.LogError(

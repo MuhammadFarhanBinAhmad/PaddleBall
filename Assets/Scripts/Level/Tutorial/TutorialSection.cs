@@ -133,10 +133,6 @@ public class TutorialSection : MonoBehaviour
 
         _sectionActive = false;
 
-        Debug.Log(
-            $"Tutorial Section Completed: {_sectionType}"
-        );
-
         OnSectionCompleted?.Invoke(this);
     }
 

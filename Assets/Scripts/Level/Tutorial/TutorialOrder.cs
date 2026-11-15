@@ -62,10 +62,6 @@ public abstract class TutorialOrder : MonoBehaviour
     {
         IsCompleted = true;
 
-        Debug.Log(
-            $"Tutorial Order Completed: {GetType().Name}"
-        );
-
         OnOrderCompleted?.Invoke(this);
     }
 }

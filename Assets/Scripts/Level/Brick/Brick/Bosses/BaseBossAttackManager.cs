@@ -11,8 +11,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     [SerializeField]  bool _shuffleAttacks = true;
 
     [Header("Boss Attack Flow")]
-    [SerializeField] protected float _restDuration;
-    [SerializeField] protected float _delayBetweenAttacks;
+    float _restDuration;
+    internal float _delayBetweenAttacks;
 
     [Header("Stun")]
     [SerializeField]  float _defaultStunDuration;
@@ -22,12 +22,13 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     [SerializeField] internal List<SplineContainer> _movementPos = new List<SplineContainer>();
     [SerializeField] internal SO_BrickSpecialEffect _lerpInEffect, _lerpOutEffect;
     [SerializeField] internal Transform _bossTransform;
-    [SerializeField] float _teleportDelay;
+    float _teleportDelay;
     [SerializeField] float _startMovementDelay;
     [SerializeField] float _endRestDelay;
     Coroutine _movementRoutine;
     bool _isMoving;
-
+    private bool _isTraversingSpline;
+    public bool IsTraversingSpline => _isTraversingSpline;
 
     protected bool _stopAttacking = true;
     protected bool _isStunned;
@@ -47,6 +48,9 @@ public abstract class BaseBossAttackManager : MonoBehaviour
             if (attack != null)
                 attack.Initialize(this);
         }
+        _teleportDelay = _lerpInEffect._lerpDuration + _lerpOutEffect._lerpDuration;
+        _restDuration = _teleportDelay + _startMovementDelay;
+        _delayBetweenAttacks = _restDuration;
     }
 
     public virtual void StartBossFight()
@@ -62,7 +66,6 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
     private IEnumerator BossAttackLoop()
     {
-        yield return new WaitForSeconds(_delayBetweenAttacks);
         while (!_stopAttacking)
         {
             BuildAttackList();
@@ -90,6 +93,8 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
                 if (attack == null || !attack.IsAvailable)
                     continue;
+
+                yield return new WaitForSeconds(_delayBetweenAttacks);
 
                 yield return ExecuteAttack(attack);
 
@@ -146,6 +151,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
     private IEnumerator ExecuteAttack(BaseBossAttack attack)
     {
+        yield return new WaitForSeconds(_delayBetweenAttacks);
         _currentAttack = attack;
 
         attack.StartAttack();
@@ -317,13 +323,17 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         // Step 4: Move along the spline.
         float splineLength = selectedSpline.CalculateLength();
 
-        if (splineLength <= 0.001f)
+        if (splineLength <= 0.001f || _movementSpeed <= 0f)
         {
             FinishMovement();
             yield break;
         }
 
         float t = 0f;
+
+        // Teleportation is completed.
+        // Actual movement is now starting.
+        _isTraversingSpline = true;
 
         while (t < 1f && !_stopAttacking && !_isStunned)
         {
@@ -347,6 +357,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
                     selectedSpline.EvaluatePosition(1f)
                 );
         }
+        _isTraversingSpline = false;
 
         yield return new WaitForSeconds(_endRestDelay);
 
@@ -356,6 +367,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     private void FinishMovement()
     {
         _isMoving = false;
+        _isTraversingSpline = false;
         _movementRoutine = null;
     }
 
@@ -368,6 +380,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
         }
 
         _isMoving = false;
+        _isTraversingSpline = false;
     }
     public void SetSpeed(float speed)
     {
