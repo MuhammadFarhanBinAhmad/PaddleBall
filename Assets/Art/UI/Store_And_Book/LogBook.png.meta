@@ -1,0 +1,885 @@
+fileFormatVersion: 2
+guid: 4dd2a97a1ccf7c0458e5d099644d5473
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8712860951307656572
+    second: LogBook_0
+  - first:
+      213: -6820823062237558391
+    second: LogBook_1
+  - first:
+      213: -2776016026590518313
+    second: LogBook_2
+  - first:
+      213: 3412778794576084373
+    second: LogBook_3
+  - first:
+      213: 4493888831863097940
+    second: LogBook_4
+  - first:
+      213: 5148553743529613110
+    second: LogBook_5
+  - first:
+      213: -2612525533978048374
+    second: LogBook_6
+  - first:
+      213: -1544806768068993065
+    second: LogBook_7
+  - first:
+      213: 4861403851900285109
+    second: LogBook_8
+  - first:
+      213: -6287823688055180002
+    second: LogBook_9
+  - first:
+      213: -7278087667588393234
+    second: LogBook_10
+  - first:
+      213: -6891141222346340881
+    second: LogBook_11
+  - first:
+      213: -4628664532797008335
+    second: LogBook_12
+  - first:
+      213: 5560043431922458550
+    second: LogBook_13
+  - first:
+      213: -7526831591020864167
+    second: LogBook_14
+  - first:
+      213: 5494873871305581554
+    second: LogBook_15
+  - first:
+      213: -3865411938439905468
+    second: LogBook_16
+  - first:
+      213: 984618960130133982
+    second: LogBook_17
+  - first:
+      213: -3378628371029793603
+    second: LogBook_18
+  - first:
+      213: -2841735817661497003
+    second: LogBook_19
+  - first:
+      213: -5916603751843139821
+    second: LogBook_20
+  - first:
+      213: -7437966521549674325
+    second: LogBook_21
+  - first:
+      213: 6352071443938689356
+    second: LogBook_22
+  - first:
+      213: -5205283066442819226
+    second: LogBook_23
+  - first:
+      213: -8214604989645820842
+    second: LogBook_24
+  - first:
+      213: 6794103099774480936
+    second: LogBook_25
+  - first:
+      213: -5825916293372201227
+    second: LogBook_26
+  - first:
+      213: 1264835010448715531
+    second: LogBook_27
+  - first:
+      213: 4880606319932498888
+    second: LogBook_28
+  - first:
+      213: -1243021006321279615
+    second: LogBook_29
+  - first:
+      213: 464916991923395062
+    second: LogBook_30
+  - first:
+      213: -1633793850246424897
+    second: LogBook_31
+  - first:
+      213: 6320418904926115073
+    second: LogBook_32
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LogBook_0
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 954
+        width: 802
+        height: 905
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7d901c5fdc4ae870800000000000000
+      internalID: 8712860951307656572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_1
+      rect:
+        serializedVersion: 2
+        x: 865
+        y: 964
+        width: 1583
+        height: 895
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 989c98b20919751a0800000000000000
+      internalID: -6820823062237558391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_2
+      rect:
+        serializedVersion: 2
+        x: 2466
+        y: 964
+        width: 791
+        height: 863
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d3e74cb12c9979d0800000000000000
+      internalID: -2776016026590518313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_3
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 470
+        width: 344
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59d71b36b30ac5f20800000000000000
+      internalID: 3412778794576084373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_4
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 574
+        width: 10
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45a8b4b35108d5e30800000000000000
+      internalID: 4493888831863097940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_5
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 751
+        width: 526
+        height: 178
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 637171ef956537740800000000000000
+      internalID: 5148553743529613110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_6
+      rect:
+        serializedVersion: 2
+        x: 983
+        y: 755
+        width: 526
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a88c99c5ed17ebbd0800000000000000
+      internalID: -2612525533978048374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_7
+      rect:
+        serializedVersion: 2
+        x: 1518
+        y: 42
+        width: 1587
+        height: 896
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dfd0aedd6ebf8ae0800000000000000
+      internalID: -1544806768068993065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_8
+      rect:
+        serializedVersion: 2
+        x: 3112
+        y: 128
+        width: 239
+        height: 777
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b07b36eb0d277340800000000000000
+      internalID: 4861403851900285109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_9
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 355
+        width: 54
+        height: 209
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e153f278ba92db8a0800000000000000
+      internalID: -6287823688055180002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_10
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 562
+        width: 522
+        height: 173
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee61e39c3d90ffa90800000000000000
+      internalID: -7278087667588393234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_11
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 562
+        width: 527
+        height: 178
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe5cef0b19fbd50a0800000000000000
+      internalID: -6891141222346340881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_12
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 381
+        width: 79
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1365f22912ea3cfb0800000000000000
+      internalID: -4628664532797008335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_13
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 460
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bf5b7ffa0e392d40800000000000000
+      internalID: 5560043431922458550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_14
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 375
+        width: 88
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d530dfb825b8790800000000000000
+      internalID: -7526831591020864167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_15
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 375
+        width: 89
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f3aeb04ca6b14c40800000000000000
+      internalID: 5494873871305581554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_16
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 371
+        width: 525
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44f3cb2625c4b5ac0800000000000000
+      internalID: -3865411938439905468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_17
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 370
+        width: 525
+        height: 179
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edfcbad3ab11aad00800000000000000
+      internalID: 984618960130133982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_18
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 266
+        width: 104
+        height: 97
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db466b4b563bc11d0800000000000000
+      internalID: -3378628371029793603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_19
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 266
+        width: 104
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55148ca74502098d0800000000000000
+      internalID: -2841735817661497003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_20
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 192
+        width: 146
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31f65a63c3004eda0800000000000000
+      internalID: -5916603751843139821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_21
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 180
+        width: 522
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba8a8cf4bd807c890800000000000000
+      internalID: -7437966521549674325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_22
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 179
+        width: 525
+        height: 177
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c414ed3d257172850800000000000000
+      internalID: 6352071443938689356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_23
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 162
+        width: 92
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 669d15d31ae13c7b0800000000000000
+      internalID: -5205283066442819226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_24
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 156
+        width: 102
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65c6206e84cdffd80800000000000000
+      internalID: -8214604989645820842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_25
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 17
+        width: 522
+        height: 152
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8223075c5c0894e50800000000000000
+      internalID: 6794103099774480936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_26
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 13
+        width: 522
+        height: 152
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f6b36a8fff262fa0800000000000000
+      internalID: -5825916293372201227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_27
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 154
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0fe5499db89d8110800000000000000
+      internalID: 1264835010448715531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LogBook_28
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 63
+        width: 351
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac2ec5a082e4334b8658b39d8b23a0f
+      internalID: 183677710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: efddbe2bdcb7a01468d2713bdc2279b1
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      LogBook_0: 8712860951307656572
+      LogBook_1: -6820823062237558391
+      LogBook_10: -7278087667588393234
+      LogBook_11: -6891141222346340881
+      LogBook_12: -4628664532797008335
+      LogBook_13: 5560043431922458550
+      LogBook_14: -7526831591020864167
+      LogBook_15: 5494873871305581554
+      LogBook_16: -3865411938439905468
+      LogBook_17: 984618960130133982
+      LogBook_18: -3378628371029793603
+      LogBook_19: -2841735817661497003
+      LogBook_2: -2776016026590518313
+      LogBook_20: -5916603751843139821
+      LogBook_21: -7437966521549674325
+      LogBook_22: 6352071443938689356
+      LogBook_23: -5205283066442819226
+      LogBook_24: -8214604989645820842
+      LogBook_25: 6794103099774480936
+      LogBook_26: -5825916293372201227
+      LogBook_27: 1264835010448715531
+      LogBook_28: 183677710
+      LogBook_3: 3412778794576084373
+      LogBook_4: 4493888831863097940
+      LogBook_5: 5148553743529613110
+      LogBook_6: -2612525533978048374
+      LogBook_7: -1544806768068993065
+      LogBook_8: 4861403851900285109
+      LogBook_9: -6287823688055180002
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

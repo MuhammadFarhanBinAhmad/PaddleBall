@@ -221,6 +221,8 @@ public class TimeManager : MonoBehaviour
             _totalDayPass++;
             _dayEnd?.Invoke();
             _hasDayEnd = true;
+
+
             if (_isBossDay)
             {
                 if (!_bossFightEnded)
