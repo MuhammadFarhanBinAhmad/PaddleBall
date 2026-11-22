@@ -9726,11 +9726,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_BurstFireAttack
   _isEnabled: 1
+  _movementType: 1
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 2
   _abilityStats: {fileID: 11400000, guid: 0b8baf1e9270c3345bc4cf12fcfc7339, type: 2}
-  _attackDuration: 12
-  _teleportAmount: 0
+  _attackDuration: 0
+  _teleportAmount: 3
+  _stayDuration: 11
+  _staticDuration: 0
+--- !u!1 &1010753299831263554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7256300261819948816}
+  m_Layer: 8
+  m_Name: TelePos_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7256300261819948816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010753299831263554}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.3, y: 56, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1276148210196695208
 GameObject:
   m_ObjectHideFlags: 0
@@ -10258,11 +10292,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_ShieldAndRecover
   _isEnabled: 1
+  _movementType: 1
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 4
   _abilityStats: {fileID: 11400000, guid: d664403225afa7c48af2be93ab8879aa, type: 2}
   _attackDuration: 0
   _teleportAmount: 0
+  _stayDuration: 0
+  _staticDuration: 0
   _baseBossBrick: {fileID: 8147492841803621049}
   _healAmount: 5
   _healInterval: 3
@@ -10400,7 +10437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::boss_TheApprenticeAttackManager
   _attacks:
-  - {fileID: 8980400365732773515}
+  - {fileID: 6946816970677009151}
   _shuffleAttacks: 1
   _defaultStunDuration: 2
   _movementSpeed: 20
@@ -10414,6 +10451,18 @@ MonoBehaviour:
   _bossTransform: {fileID: 7859496079033589972}
   _startMovementDelay: 1
   _endRestDelay: 2
+  _staticPos: {fileID: 8977534508613430191}
+  _staticDuration: 5
+  _teleportAmount: 0
+  _teleportPosition:
+  - {fileID: 8436588436035087348}
+  - {fileID: 5989362204870006044}
+  - {fileID: 6874338398430195660}
+  - {fileID: 2212398062290615879}
+  - {fileID: 8452673024638213849}
+  - {fileID: 7256300261819948816}
+  _teleportStayDuration: 0
+  _minTeleportDistance: 0.1
   _brickAbilityManager: {fileID: 8213812749613968555}
 --- !u!114 &8213812749613968555
 MonoBehaviour:
@@ -20758,6 +20807,68 @@ MonoBehaviour:
       m_Data: []
   m_Knots:
     m_KnotsLink: []
+--- !u!1 &3654485114355807332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6874338398430195660}
+  m_Layer: 8
+  m_Name: TelePos_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6874338398430195660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3654485114355807332}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 41.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3697106473316782092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8452673024638213849}
+  m_Layer: 8
+  m_Name: TelePos_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8452673024638213849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3697106473316782092}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.3, y: 29.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4115076114250557562
 GameObject:
   m_ObjectHideFlags: 0
@@ -20895,6 +21006,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &4197637648088220732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5989362204870006044}
+  m_Layer: 8
+  m_Name: TelePos_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5989362204870006044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4197637648088220732}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -35.8, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4657908051407015041
 GameObject:
   m_ObjectHideFlags: 0
@@ -21020,6 +21162,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 10.5, y: 2.5}
   m_EdgeRadius: 0
+--- !u!1 &4714658309254466632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8977534508613430191}
+  m_Layer: 8
+  m_Name: StaticPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8977534508613430191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4714658309254466632}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1942675324118052613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4901707782458693776
 GameObject:
   m_ObjectHideFlags: 0
@@ -21066,11 +21239,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_SpawnFromAboveAttack
   _isEnabled: 1
+  _movementType: 2
   _abilityManager: {fileID: 8213812749613968555}
-  _ability: 0
-  _abilityStats: {fileID: 0}
+  _ability: 4
+  _abilityStats: {fileID: 11400000, guid: b5f16a65a18141349ae3ca8e64a6f885, type: 2}
   _attackDuration: 0
   _teleportAmount: 0
+  _stayDuration: 0
+  _staticDuration: 1
   _meteor: {fileID: 5190755072940398529, guid: c8c29fc663a342f428d67af2254d5e7e, type: 3}
   _meteorWarning: {fileID: 8980146510286686381, guid: 14525330bf013454ca3b7cbdca3c882b, type: 3}
   _meteorWarningDelay: 2.1
@@ -26533,6 +26709,37 @@ Transform:
   - {fileID: 8157545479111737135}
   m_Father: {fileID: 7004230330875697945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6560559567803799679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8436588436035087348}
+  m_Layer: 8
+  m_Name: TelePos_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8436588436035087348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560559567803799679}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 30.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6736459059586453562
 GameObject:
   m_ObjectHideFlags: 0
@@ -31705,6 +31912,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 530729319596734176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7335068203135173422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2212398062290615879}
+  m_Layer: 8
+  m_Name: TelePos_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2212398062290615879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7335068203135173422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.8, y: 43.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592901244447673765}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7425215322635038117
 GameObject:
   m_ObjectHideFlags: 0
@@ -32102,6 +32340,7 @@ Transform:
   - {fileID: 7859496079033589972}
   - {fileID: 1942675324118052613}
   - {fileID: 4825311946431069812}
+  - {fileID: 7592901244447673765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8147492841803621049
@@ -32290,11 +32529,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Apprentice_ShotGunAttack
   _isEnabled: 1
+  _movementType: 0
   _abilityManager: {fileID: 8213812749613968555}
   _ability: 2
   _abilityStats: {fileID: 11400000, guid: edc2de2a09257bf469e1d3b27c864022, type: 2}
   _attackDuration: 0
-  _teleportAmount: 0
+  _teleportAmount: 3
+  _stayDuration: 5
+  _staticDuration: 0
 --- !u!1 &8636821438650904712
 GameObject:
   m_ObjectHideFlags: 0
@@ -32328,6 +32570,8 @@ Transform:
   - {fileID: 1590130730175562170}
   - {fileID: 680353648256960332}
   - {fileID: 3152383433954162404}
+  - {fileID: 6755645926568828737}
+  - {fileID: 8977534508613430191}
   m_Father: {fileID: 8814793812229418955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8817629389918924759
@@ -37166,6 +37410,74 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &8891639387428691233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7592901244447673765}
+  m_Layer: 8
+  m_Name: ApprenticeTelePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7592901244447673765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8891639387428691233}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8436588436035087348}
+  - {fileID: 5989362204870006044}
+  - {fileID: 6874338398430195660}
+  - {fileID: 2212398062290615879}
+  - {fileID: 8452673024638213849}
+  - {fileID: 7256300261819948816}
+  m_Father: {fileID: 8814793812229418955}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9181840483093605417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6755645926568828737}
+  m_Layer: 0
+  m_Name: DefaultPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6755645926568828737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181840483093605417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1942675324118052613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9200113421737145955
 GameObject:
   m_ObjectHideFlags: 0

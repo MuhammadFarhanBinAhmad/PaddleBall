@@ -16,20 +16,13 @@ public class Apprentice_ShieldAndRecover : BaseBossAttack
 
     protected override IEnumerator ExecuteAttack()
     {
-        // Step 1: Start movement sequence.
-        _bossManager.StartRandomSplineMovement();
+        // Step 1: Start the selected movement type
+        // and wait until the boss is ready to attack.
+        yield return StartMovementAndWaitForReady();
 
-        // Step 2: Wait until teleportation finishes
-        // and actual spline movement begins.
-        while (_bossManager.IsMoving &&
-               !_bossManager.IsTraversingSpline)
-        {
-            yield return null;
-        }
-
-        // If movement failed or was interrupted,
-        // do not activate the attack.
-        if (!_bossManager.IsTraversingSpline)
+        // Step 2: If movement failed or was interrupted,
+        // do not activate the ability.
+        if (!IsRunning || !IsMovementReady())
             yield break;
 
         // Step 3: Activate defensive ability.
@@ -39,13 +32,14 @@ public class Apprentice_ShieldAndRecover : BaseBossAttack
         // Step 4: Start health regeneration.
         _healRoutine = StartCoroutine(RecoverHealthRoutine());
 
-        // Step 5: Wait until movement finishes.
+        // Step 5: Wait for the movement or static
+        // duration to finish.
         while (_bossManager.IsMoving)
         {
             yield return null;
         }
 
-        // Step 6: Finish attack.
+        // Step 6: Complete attack.
         CompleteAttack();
     }
 

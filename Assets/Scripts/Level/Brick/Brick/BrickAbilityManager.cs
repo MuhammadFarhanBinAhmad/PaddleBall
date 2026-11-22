@@ -15,23 +15,68 @@ public class BrickAbilityManager : MonoBehaviour
 
     public void SetBrickAbilityStats(SO_BrickAbilityStats stats) => _BrickAbilityStats = stats;
 
-    public void ActivateAbilities(ABILITY _ABS)
+
+    public void ActivateAbilities(ABILITY selectedAbilities)
     {
+        if (_BrickAbilityStats == null)
+        {
+            Debug.LogError($"{name}: BrickAbilityStats is NULL!");
+            return;
+        }
+
         foreach (AbilityObject ability in _abilityList)
         {
-            bool isActive = (_ABS & ability._ability) != 0;
+            if (ability == null || ability._gameObject == null)
+                continue;
 
-            ability._gameObject.SetActive(isActive);
+            GameObject abilityObject = ability._gameObject;
+
+            // Check whether THIS ability should be active.
+            bool isActive =
+                (selectedAbilities & ability._ability) != 0;
+
+            // Enable or disable the GameObject.
+            if (abilityObject.activeSelf != isActive)
+                abilityObject.SetActive(isActive);
+
+            // Skip abilities that were not selected.
+            if (!isActive)
+                continue;
+
+            // Shooting ability.
             if ((ability._ability & ABILITY.SHOOT_PROJECTILE) != 0)
             {
-                ability._gameObject.GetComponent<B_ShootProjectileAbility>().SetStats(_BrickAbilityStats);
+                if (abilityObject.TryGetComponent(
+                    out B_ShootProjectileAbility shooting))
+                {
+                    shooting.SetStats(_BrickAbilityStats);
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"{abilityObject.name}: Missing B_ShootProjectileAbility!"
+                    );
+                }
             }
+
+            // Defensive ability.
             if ((ability._ability & ABILITY.DEFENSE) != 0)
             {
-                ability._gameObject.GetComponent<B_ShieldAbility>().SetStats(_BrickAbilityStats);
+                if (abilityObject.TryGetComponent(
+                    out B_ShieldAbility shield))
+                {
+                    shield.SetStats(_BrickAbilityStats);
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"{abilityObject.name}: Missing B_ShieldAbility!"
+                    );
+                }
             }
         }
     }
+
 
     public void ResetAllAbility()
     {

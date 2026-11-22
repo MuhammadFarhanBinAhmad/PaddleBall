@@ -3,19 +3,30 @@ using System.Collections;
 using UnityEngine;
 
 
+public enum MOVEMENT_TYPE
+{
+    SPLINE_MOVEMENT,
+    TELEPORT,
+    STATIC
+}
+
+
 public abstract class BaseBossAttack : MonoBehaviour
 {
     [Header("Attack Info")]
     [SerializeField] bool _isEnabled = true;
+    [SerializeField] MOVEMENT_TYPE _movementType;
     [Header("Ability")]
     [SerializeField] internal BrickAbilityManager _abilityManager;
     [SerializeField] internal ABILITY _ability;
     [SerializeField] internal SO_BrickAbilityStats _abilityStats;
-
     [Header("TIME")]
     [SerializeField] internal float _attackDuration;
     [Header("Teleport")]
-    [SerializeField] internal int _teleportAmount;
+    public int _teleportAmount;
+    public float _stayDuration;
+    [Header("StaticDuration")]
+    public float _staticDuration;
 
     protected BaseBossAttackManager _bossManager;
 
@@ -56,6 +67,30 @@ public abstract class BaseBossAttack : MonoBehaviour
     // decides when its execution finishes.
     protected abstract IEnumerator ExecuteAttack();
 
+    public void StartMovementType()
+    {
+        switch (_movementType)
+        {
+            case MOVEMENT_TYPE.SPLINE_MOVEMENT:
+                {
+                    _bossManager.StartRandomSplineMovement();
+                    break;
+                }
+            case MOVEMENT_TYPE.TELEPORT:
+                {
+                    _bossManager.SetTeleValue(_teleportAmount, _stayDuration);
+                    _bossManager.StartRandomTeleportMovement();
+                    break;
+                }
+            case MOVEMENT_TYPE.STATIC:
+                {
+                    _bossManager.SetStaticDuration(_staticDuration);
+                    _bossManager.StartStaticPosition();
+                    break;
+                }
+        }
+    }
+
     protected void CompleteAttack()
     {
         if (!IsRunning)
@@ -91,5 +126,41 @@ public abstract class BaseBossAttack : MonoBehaviour
     protected virtual void OnDisable()
     {
         CancelAttack();
+    }
+
+    protected bool IsMovementReady()
+    {
+        if (_bossManager == null)
+            return false;
+
+        switch (_movementType)
+        {
+            case MOVEMENT_TYPE.SPLINE_MOVEMENT:
+                return _bossManager.IsTraversingSpline;
+
+            case MOVEMENT_TYPE.TELEPORT:
+                return _bossManager.IsTeleportReady;
+
+            case MOVEMENT_TYPE.STATIC:
+                return _bossManager.IsAtStaticPosition;
+
+            default:
+                return false;
+        }
+    }
+
+    protected IEnumerator StartMovementAndWaitForReady()
+    {
+        // Step 1: Start selected movement type.
+        StartMovementType();
+
+        // Step 2: Wait for the boss to finish teleporting
+        // and enter the selected movement state.
+        while (IsRunning &&
+               _bossManager.IsMoving &&
+               !IsMovementReady())
+        {
+            yield return null;
+        }
     }
 }

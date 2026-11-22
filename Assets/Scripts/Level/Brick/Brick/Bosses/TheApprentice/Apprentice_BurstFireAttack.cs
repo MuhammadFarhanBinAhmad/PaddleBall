@@ -15,16 +15,28 @@ public class Apprentice_BurstFireAttack : BaseBossAttack
             yield break;
         }
 
-        // Step 1: Assign the stats.
-        _abilityManager.SetBrickAbilityStats(_abilityStats);
+        // Step 1: Start the selected movement type
+        // and wait until the boss is ready to attack.
+        yield return StartMovementAndWaitForReady();
 
-        // Step 2: Activate the ability.
+        // Step 2: If movement failed or was interrupted,
+        // do not activate the ability.
+        if (!IsRunning || !IsMovementReady())
+            yield break;
+
+        // Step 3: Assign the stats and activate the ability.
+        _abilityManager.SetBrickAbilityStats(_abilityStats);
         _abilityManager.ActivateAbilities(_ability);
 
-        // Step 3: Wait for attack duration.
-        yield return new WaitForSeconds(_attackDuration);
 
-        // Step 4: Complete attack.
+        // Step 5: Wait for the movement or static
+        // duration to finish.
+        while (_bossManager.IsMoving)
+        {
+            yield return null;
+        }
+
+        // Step 6: Complete attack.
         CompleteAttack();
     }
 

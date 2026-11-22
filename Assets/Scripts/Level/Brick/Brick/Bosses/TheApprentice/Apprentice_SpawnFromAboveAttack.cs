@@ -24,6 +24,25 @@ public class Apprentice_SpawnFromAboveAttack : BaseBossAttack
             yield break;
         }
 
+        yield return StartMovementAndWaitForReady();
+
+        // Step 2: If movement failed or was interrupted,
+        // do not activate the ability.
+        if (!IsRunning || !IsMovementReady())
+            yield break;
+
+        // Step 3: Assign the stats and activate the ability.
+        _abilityManager.SetBrickAbilityStats(_abilityStats);
+        _abilityManager.ActivateAbilities(_ability);
+
+
+        // Step 5: Wait for the movement or static
+        // duration to finish.
+        while (_bossManager.IsMoving)
+        {
+            yield return null;
+        }
+
         for (int i = 0; i < _amountToDrop; i++)
         {
             // Generate a random X position.

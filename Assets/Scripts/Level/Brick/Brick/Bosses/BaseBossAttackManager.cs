@@ -25,6 +25,23 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     float _teleportDelay;
     [SerializeField] float _startMovementDelay;
     [SerializeField] float _endRestDelay;
+
+    [Header("Static")]
+    [SerializeField] Transform _staticPos;
+    [SerializeField] float _staticDuration;
+    private bool _isAtStaticPosition;
+    public bool IsAtStaticPosition => _isAtStaticPosition;
+
+    [Header("Teleport")]
+    [SerializeField, Min(0)] private int _teleportAmount = 3;
+    [SerializeField] private List<Transform> _teleportPosition = new List<Transform>();
+    [SerializeField, Min(0f)]
+    private float _teleportStayDuration;
+    [SerializeField, Min(0f)]
+    private float _minTeleportDistance;
+    private bool _isTeleportReady;
+    public bool IsTeleportReady => _isTeleportReady;
+
     Coroutine _movementRoutine;
     bool _isMoving;
     private bool _isTraversingSpline;
@@ -238,6 +255,7 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     }
 
     #region Movement
+    //-----SPLINE MOVEMENT-----//
     public void StartRandomSplineMovement()
     {
         if (_stopAttacking || _isStunned)
@@ -368,6 +386,9 @@ public abstract class BaseBossAttackManager : MonoBehaviour
     {
         _isMoving = false;
         _isTraversingSpline = false;
+        _isAtStaticPosition = false;
+        _isTeleportReady = false;
+
         _movementRoutine = null;
     }
 
@@ -381,11 +402,244 @@ public abstract class BaseBossAttackManager : MonoBehaviour
 
         _isMoving = false;
         _isTraversingSpline = false;
+        _isAtStaticPosition = false;
+        _isTeleportReady = false;
     }
     public void SetSpeed(float speed)
     {
         _movementSpeed = speed;
     }
 
+    //-----STATIC-----//
+    public void SetStaticDuration(float statDuration)
+    {
+        _staticDuration = statDuration;
+    }
+    public void StartStaticPosition()
+    {
+        if (_stopAttacking || _isStunned)
+            return;
+
+        if (_bossTransform == null || _staticPos == null)
+        {
+            Debug.LogWarning(
+                $"{name}: Boss transform or static position is missing."
+            );
+            return;
+        }
+
+        // Stop any existing movement.
+        StopSplineMovement();
+
+        _isMoving = true;
+        _movementRoutine = StartCoroutine(
+            StaticPositionRoutine()
+        );
+    }
+
+    private IEnumerator StaticPositionRoutine()
+    {
+        // Step 1: Disappear.
+        if (_lerpInEffect != null)
+        {
+            GlobalEffects.Instance.PlayLerpObject(
+                _bossTransform.gameObject,
+                _lerpInEffect
+            );
+
+            yield return new WaitForSeconds(
+                _lerpInEffect._lerpDuration
+            );
+        }
+
+        if (_stopAttacking || _isStunned)
+        {
+            FinishMovement();
+            yield break;
+        }
+
+        // Step 2: Teleport to the static position.
+        _bossTransform.position = _staticPos.position;
+
+        // Step 3: Reappear.
+        if (_lerpOutEffect != null)
+        {
+            GlobalEffects.Instance.PlayLerpObject(
+                _bossTransform.gameObject,
+                _lerpOutEffect
+            );
+
+            yield return new WaitForSeconds(
+                _lerpOutEffect._lerpDuration
+            );
+        }
+
+        if (_stopAttacking || _isStunned)
+        {
+            FinishMovement();
+            yield break;
+        }
+
+        // Step 4: Boss is now at the static position.
+        _isAtStaticPosition = true;
+
+        // Remain here for the configured duration.
+        yield return new WaitForSeconds(
+            Mathf.Max(0f, _staticDuration)
+        );
+
+        // Step 5: Finish.
+        FinishMovement();
+    }
+    //-----TELEPORT-----//
+    public void SetTeleValue(int _teleAmt, float _stayDur)
+    {
+        _teleportAmount = _teleAmt;
+        _teleportStayDuration = _stayDur;
+    }
+    public void StartRandomTeleportMovement()
+    {
+        if (_stopAttacking || _isStunned)
+            return;
+
+        StopSplineMovement();
+
+        if (_bossTransform == null ||
+            _teleportPosition == null ||
+            _teleportPosition.Count == 0 ||
+            _teleportAmount <= 0)
+        {
+            Debug.LogWarning(
+                $"{name}: Missing teleport references or invalid teleport amount."
+            );
+            return;
+        }
+
+        _isMoving = true;
+
+        _movementRoutine = StartCoroutine(
+            RandomTeleportMovementRoutine()
+        );
+    }
+
+    private IEnumerator RandomTeleportMovementRoutine()
+    {
+        // Optional initial delay before teleporting.
+        if (_startMovementDelay > 0f)
+            yield return new WaitForSeconds(_startMovementDelay);
+
+        // Perform the specified number of teleports.
+        for (int i = 0; i < _teleportAmount; i++)
+        {
+            if (_stopAttacking || _isStunned)
+            {
+                FinishMovement();
+                yield break;
+            }
+
+            // Choose a position different from the current one.
+            Transform selectedPosition = GetRandomTeleportPosition();
+
+            if (selectedPosition == null)
+            {
+                Debug.LogWarning(
+                    $"{name}: No valid alternative teleport position."
+                );
+
+                FinishMovement();
+                yield break;
+            }
+
+            // Step 1: Disappear.
+            if (_lerpInEffect != null)
+            {
+                GlobalEffects.Instance.PlayLerpObject(
+                    _bossTransform.gameObject,
+                    _lerpInEffect
+                );
+
+                yield return new WaitForSeconds(
+                    _lerpInEffect._lerpDuration
+                );
+            }
+
+            if (_stopAttacking || _isStunned)
+            {
+                FinishMovement();
+                yield break;
+            }
+
+            // Step 2: Teleport to the selected position.
+            _bossTransform.position = selectedPosition.position;
+
+            // Step 3: Reappear.
+            if (_lerpOutEffect != null)
+            {
+                GlobalEffects.Instance.PlayLerpObject(
+                    _bossTransform.gameObject,
+                    _lerpOutEffect
+                );
+
+                yield return new WaitForSeconds(
+                    _lerpOutEffect._lerpDuration
+                );
+            }
+
+            if (_stopAttacking || _isStunned)
+            {
+                FinishMovement();
+                yield break;
+            }
+
+            // Step 4: Boss has completed at least one teleport.
+            // Allow the active attack to begin.
+            _isTeleportReady = true;
+
+            // Step 5: Stay at the position before teleporting again.
+            // Small minimum delay ensures the attack coroutine
+            // can observe the ready state.
+            yield return new WaitForSeconds(
+                Mathf.Max(0.05f, _teleportStayDuration)
+            );
+        }
+
+        // All teleports completed.
+        FinishMovement();
+    }
+    private Transform GetRandomTeleportPosition()
+    {
+        Transform selected = null;
+        int validCount = 0;
+
+        Vector2 currentPosition = _bossTransform.position;
+
+        float minDistanceSqr =
+            _minTeleportDistance * _minTeleportDistance;
+
+        foreach (Transform position in _teleportPosition)
+        {
+            if (position == null)
+                continue;
+
+            Vector2 candidatePosition = position.position;
+
+            // Skip positions matching or too close
+            // to the boss's current location.
+            if ((candidatePosition - currentPosition).sqrMagnitude
+                <= minDistanceSqr)
+            {
+                continue;
+            }
+
+            // Uniform random selection without
+            // allocating a temporary list.
+            validCount++;
+
+            if (Random.Range(0, validCount) == 0)
+                selected = position;
+        }
+
+        return selected;
+    }
     #endregion
 }
