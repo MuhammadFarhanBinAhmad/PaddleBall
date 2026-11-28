@@ -43,10 +43,11 @@ public class GlobalFeedbackManager : MonoBehaviour
 
     //Starting Scale
     float _paddleStartScaleMultiplier;
-    //float _ballStartScaleMultiplier;
+    float _ballStartScaleMultiplier;
+    [SerializeField]float _ballScaleMultiplierAddOn;
     float _wallStartScaleMultipler;
     float _brickStartScaleMultipler;
-    //float _ballEndScaleMultiplier
+    float _ballEndScaleMultiplier;
     float _paddleEndScaleMultiplier, _wallEndScaleMultipler, _brickEndScaleMultipler;
 
     Coroutine _shakeWorldRoutine;
@@ -154,8 +155,8 @@ public class GlobalFeedbackManager : MonoBehaviour
         Vector3 paddleTarget = paddleOriginalScale * _paddleEndScaleMultiplier;
         Vector3 paddleStart = paddleOriginalScale * _paddleStartScaleMultiplier;
 
-        //Vector3 ballTarget = ballOriginalScale * _ballEndScaleMultiplier;
-        //Vector3 ballStart = ballOriginalScale * _ballStartScaleMultiplier;
+        Vector3 ballTarget = ballOriginalScale * _ballEndScaleMultiplier * _ballScaleMultiplierAddOn;
+        Vector3 ballStart = ballOriginalScale * _ballStartScaleMultiplier;
 
         Vector3[] wallTargets = new Vector3[wallOriginalScales.Length];
         Vector3[] wallStarts = new Vector3[wallOriginalScales.Length];
@@ -184,8 +185,8 @@ public class GlobalFeedbackManager : MonoBehaviour
                 _paddleTransform.localScale = Vector3.LerpUnclamped(paddleStart, paddleTarget, curveValue);
 
             // ball
-            //if (_ballTransform != null)
-            //    _ballTransform.localScale = Vector3.LerpUnclamped(ballStart, ballTarget, curveValue);
+            if (_ballTransform != null)
+                _ballTransform.localScale = Vector3.LerpUnclamped(ballStart, ballTarget, curveValue);
 
             // walls
             for (int i = 0; i < _wallTransforms.Count; i++)
@@ -235,11 +236,11 @@ public class GlobalFeedbackManager : MonoBehaviour
         _animationDuration = _fe.animationDuration;
 
         _paddleStartScaleMultiplier = _fe._startscaleMultiplier;
-        //_ballStartScaleMultiplier = so_OnBrickDestroy._startscaleMultiplier;
+        _ballStartScaleMultiplier = _fe._startscaleMultiplier;
         _wallStartScaleMultipler = _fe._startscaleMultiplier;
         _brickStartScaleMultipler = _fe._startscaleMultiplier;
 
-        //_ballEndScaleMultiplier = so_OnBrickDestroy._endscaleMultiplier;
+        _ballEndScaleMultiplier = _fe._endscaleMultiplier;
         _paddleEndScaleMultiplier = _fe._endscaleMultiplier;
         _wallEndScaleMultipler = _fe._endscaleMultiplier;
         _brickEndScaleMultipler = _fe._endscaleMultiplier;

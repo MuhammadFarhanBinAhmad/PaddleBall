@@ -62,6 +62,9 @@ public class FmodEvent : MonoBehaviour
     [field: Header("Music")]
     [field: SerializeField] public EventReference music_PlayScenes { get; private set; }
 
+    [field: Header("Tutorial")]
+    [field: SerializeField] public EventReference sfx_TutorialWinJingle { get; private set; }
+
 
 
     public static FmodEvent Instance { get; private set; }

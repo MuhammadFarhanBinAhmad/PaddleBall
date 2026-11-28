@@ -142,18 +142,19 @@ MonoBehaviour:
   _minPulseMultiplier: 0.7
   _pulseSpeed: 2
   maxSpeed: 50
-  normalDrag: 0.25
-  minImpulse: 5
-  maxImpulse: 15
+  normalDrag: 0.8
+  minImpulse: 1
+  maxImpulse: 2
   _collectDistance: 3
-  _attractStrength: 10
+  _attractStrength: 15
   _attractRadius: 1
-  suctionDragMultiplier: 1
-  _autoAttractStrength: 100
-  _autoAttractRadius: 999
+  suctionDragMultiplier: 0.999
+  _isAttracted: 0
+  _autoAttractStrength: 0
+  _autoAttractRadius: 0
   _autoAttract: 0
-  _gravityStrength: 2
-  _maxFallSpeed: 25
+  _gravityStrength: 0
+  _maxFallSpeed: 10
 --- !u!61 &3033111623831855939
 BoxCollider2D:
   m_ObjectHideFlags: 0

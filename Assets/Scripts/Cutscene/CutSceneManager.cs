@@ -35,6 +35,7 @@ public  class CutSceneManager : MonoBehaviour
     [SerializeField] DestroyBossCutsceneEvent _destryoBossCutSceneEvent;
     [SerializeField] FadeInCanvasBlackRingEventCutScene _FadeInCanvasBlackRingEventCutScene;
     [SerializeField] FadeInOutScreenEventCutScene _FadeInOutScreenEventCutScene;
+    [SerializeField] ZoomInOutCamEvent _zoomInOutEventCutScene;
 
     BaseCutsceneEvent _currentEvent;
     [SerializeField] int _cutSceneIndex;
@@ -42,8 +43,6 @@ public  class CutSceneManager : MonoBehaviour
 
     public Action<bool> _setBoolOnStartCutScene;
     public Action<bool> _setBoolOnEndCutScene;
-    private bool _cutSceneBatchResolved;
-    private bool _advancingCutscene;
     private bool _skipRequested;
 
     public Action _onStartCutScene;
@@ -252,6 +251,13 @@ public  class CutSceneManager : MonoBehaviour
             _FadeInOutScreenEventCutScene.OnEventFinished = HandleCutsceneEventFinished;
             _FadeInOutScreenEventCutScene.ExecuteEvent();
         }
+        if ((type & CUTSCENETYPE.ZOOM_IN_OUT) != 0)
+        {
+            _zoomInOutEventCutScene.SetTarget(_currentBossObject.transform);
+            _zoomInOutEventCutScene.SetUpContent(content);
+            _zoomInOutEventCutScene.OnEventFinished = HandleCutsceneEventFinished;
+            _zoomInOutEventCutScene.ExecuteEvent();
+        }
         if (_activeCutsceneEventCount == 0)
         {
             EventEnded();
@@ -284,6 +290,7 @@ public  class CutSceneManager : MonoBehaviour
         if ((type & CUTSCENETYPE.DESTROY_BOSS) != 0) count++;
         if ((type & CUTSCENETYPE.FADE_IN_CANVAS_RING) != 0) count++;
         if ((type & CUTSCENETYPE.FADE_IN_OUT) != 0) count++;
+        if ((type & CUTSCENETYPE.ZOOM_IN_OUT) != 0) count++;
 
 
         return count;
@@ -304,8 +311,9 @@ public  class CutSceneManager : MonoBehaviour
         _destryoBossCutSceneEvent?.EndEvent();
         _FadeInCanvasBlackRingEventCutScene?.EndEvent();
         _FadeInOutScreenEventCutScene?.EndEvent();
+        _zoomInOutEventCutScene?.EndEvent();
 
-        switch(_cutsceneToPlay)
+        switch (_cutsceneToPlay)
         {
             case BOSSCUTSCENETOPLAY.INTRO:
                 {
@@ -371,6 +379,7 @@ public  class CutSceneManager : MonoBehaviour
         _destryoBossCutSceneEvent?.EndEvent();
         _FadeInCanvasBlackRingEventCutScene?.EndEvent();
         _FadeInOutScreenEventCutScene?.EndEvent();
+        _zoomInOutEventCutScene?.EndEvent();
 
         // Restore player controls.
         _setBoolOnEndCutScene?.Invoke(false);

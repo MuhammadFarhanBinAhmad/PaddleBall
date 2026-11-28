@@ -22,6 +22,7 @@ public class TutorialOrder_RedirectBall : TutorialOrder
 
             yield return null;
         }
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);    
         _tutorialHint.SetActive(false);
         // Delay before advancing to the next tutorial order.
         yield return new WaitForSecondsRealtime(_delayBeforeNextStep);

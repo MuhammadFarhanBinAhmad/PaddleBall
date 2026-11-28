@@ -14,6 +14,8 @@ public class TutorialOrder_LaunchBall : TutorialOrder
         {
             yield return null;
         }
+
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
         _tutorialHint.SetActive(false);
         // Wait briefly after the player clicks.
         yield return new WaitForSecondsRealtime(_delayBeforeNextStep);

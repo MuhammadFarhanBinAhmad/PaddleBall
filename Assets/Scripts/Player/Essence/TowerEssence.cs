@@ -49,8 +49,9 @@ public class TowerEssence : MonoBehaviour
     [Tooltip("Maximum movement speed.")]
     public float maxSpeed;
 
-    [Tooltip("Normal movement drag.")]
-    public float normalDrag;
+    [Header("Movement")]
+    [Tooltip("Velocity retained per second when not attracted. 0 = stop, 1 = no slowdown.")]
+    [Range(0f, 1f)] public float normalDrag;
 
     [Tooltip("Starting movement impulse.")]
     public float minImpulse;
@@ -69,9 +70,9 @@ public class TowerEssence : MonoBehaviour
     [Range(0f, 1f)]
     public float suctionDragMultiplier;
 
-    private bool _isAttracted;
-    private Vector2 _attractorPos;
-    private Transform _attractorTransform;
+     [SerializeField] bool _isAttracted;
+     Vector2 _attractorPos;
+     Transform _attractorTransform;
 
     [Header("Auto Attract")]
     [SerializeField] private float _autoAttractStrength;
@@ -352,23 +353,36 @@ public class TowerEssence : MonoBehaviour
     {
         if (!_isAttracted && !_autoAttract)
         {
-            // Gravity must continue even if velocity is zero.
-            _velocity.y -= _gravityStrength * deltaTime;
+            // Apply gravity when not attracted.
+            if (_gravityStrength > 0f)
+            {
+                _velocity.y -= _gravityStrength * deltaTime;
+            }
 
-            _velocity.y = Mathf.Max(
-                _velocity.y,
-                -_maxFallSpeed
-            );
+            // Only clamp falling speed if a positive
+            // maximum fall speed has been configured.
+            if (_maxFallSpeed > 0f)
+            {
+                _velocity.y = Mathf.Max(
+                    _velocity.y,
+                    -_maxFallSpeed
+                );
+            }
 
-            _velocity *= Mathf.Pow(
-                Mathf.Max(0f, normalDrag),
+            // Gradually reduce the current velocity.
+            // Do not reset velocity when suction stops.
+            float dragFactor = Mathf.Pow(
+                Mathf.Clamp01(normalDrag),
                 deltaTime
             );
+
+            _velocity *= dragFactor;
         }
 
         if (_velocity.sqrMagnitude <= 0.000001f)
             return;
 
+        // Continue moving using retained momentum.
         _cachedTransform.position +=
             (Vector3)(_velocity * deltaTime);
     }

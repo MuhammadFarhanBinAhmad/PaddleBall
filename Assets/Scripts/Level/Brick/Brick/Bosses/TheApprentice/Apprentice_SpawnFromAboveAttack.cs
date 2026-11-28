@@ -65,7 +65,6 @@ public class Apprentice_SpawnFromAboveAttack : BaseBossAttack
             if (i < _amountToDrop - 1)
                 yield return new WaitForSeconds(_spawnInterval);
         }
-        print("Complete atttach");
         CompleteAttack();
     }
     protected override void OnAttackCompleted()

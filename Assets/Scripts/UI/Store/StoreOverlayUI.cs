@@ -108,16 +108,16 @@ public class StoreOverlayUI : BaseOverLayInteraction
     }
     private void Update()
     {
-        if(!_bookOverlayUI.GetIsOverlayOpen())
-            if (!_isAnOverlayOpen)
-            {
-                if (Input.GetKeyDown(KeyCode.S))
-                    HandleAbilityFlow();
+        //if(!_bookOverlayUI.GetIsOverlayOpen())
+        //    if (!_isAnOverlayOpen)
+        //    {
+        //        if (Input.GetKeyDown(KeyCode.S))
+        //            HandleAbilityFlow();
 
-                if (Input.GetKeyDown(KeyCode.C))
-                    ToggleCardPage();
+        //        if (Input.GetKeyDown(KeyCode.C))
+        //            ToggleCardPage();
 
-            }
+        //    }
 
     }
     void HandleAbilityFlow()

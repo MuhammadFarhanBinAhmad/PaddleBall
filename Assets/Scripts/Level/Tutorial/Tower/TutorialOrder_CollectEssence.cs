@@ -39,7 +39,7 @@ public class TutorialOrder_CollectEssence : TutorialOrder
         }
 
         StopTracking();
-
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
         Debug.Log("All tutorial Essence collected!");
 
         // Give the player a moment before the next instruction.

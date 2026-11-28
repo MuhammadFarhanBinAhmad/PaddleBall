@@ -5,7 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     internal Rigidbody2D _rigidbody;
-    SpriteRenderer _spriteRenderer;
+    [SerializeField]SpriteRenderer _spriteRenderer;
     [SerializeField] ParticleSystem _deathEffect;
     [SerializeField] TrailRenderer _trailRenderer;
     AbilityManager _abilityManager;
@@ -123,7 +123,6 @@ public class Ball : MonoBehaviour
         _rigidbody.sleepMode = RigidbodySleepMode2D.NeverSleep;
         _rigidbody.freezeRotation = true;
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<CircleCollider2D>();
 
         _abilityManager = FindAnyObjectByType<AbilityManager>();

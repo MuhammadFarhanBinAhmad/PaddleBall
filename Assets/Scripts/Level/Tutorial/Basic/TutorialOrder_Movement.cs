@@ -32,6 +32,7 @@ public class TutorialOrder_Movement : TutorialOrder
             yield return null;
         }
 
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
         // Both keys have been pressed.
         _tutorialHint.SetActive(false);
         // Brief delay before completing the order.

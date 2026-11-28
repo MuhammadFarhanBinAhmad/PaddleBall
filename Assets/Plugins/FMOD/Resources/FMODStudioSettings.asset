@@ -487,6 +487,7 @@ MonoBehaviour:
   - Music
   - Paddle
   - Time
+  - Tutorial
   - UI
   BanksToLoad: []
   LiveUpdatePort: 9264

@@ -15,6 +15,9 @@ MonoBehaviour:
   type: 8
   _speakerName: The Former Apprentice
   _dialougeTexts: []
+  _freezeGame: 0
+  TEXTBOX_TYPE: 0
+  _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2
     m_Curve:
@@ -51,7 +54,7 @@ MonoBehaviour:
   _startScaleMultiplier: 0
   _endScaleMultiplier: 1
   _animationPopInDuration: 1
-  _particleEffectPrefab: {fileID: 5898855646081462555, guid: 0baed40d0cfcbca44a03d60e17dd210d, type: 3}
+  _particleEffectPrefab: {fileID: 5709904626060109338, guid: 43e0f1090bf59244981920012f3ba2a7, type: 3}
   _duration: 0.5
   _trauma: 1
   _ringAnim:
@@ -64,3 +67,12 @@ MonoBehaviour:
   _startAlpha: 0
   _endAlpha: 0
   _timeDelay: 3
+  _FadeAnim:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _Fadetime: 0
+  _startFadeAlpha: 0
+  _endFadeAlpha: 0

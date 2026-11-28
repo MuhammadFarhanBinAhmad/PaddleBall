@@ -97,7 +97,7 @@ public class TutorialOrder_CreateFloor : TutorialOrder
         Debug.Log("Tutorial floor successfully created!");
 
         // Clean up remaining tutorial bricks.
-        yield return StartCoroutine(CleanupRemainingBricks());
+        CleanupRemainingBricks();
 
         yield return new WaitForSecondsRealtime(
             _delayBeforeNextStep
@@ -132,29 +132,16 @@ public class TutorialOrder_CreateFloor : TutorialOrder
         }
     }
 
-    private IEnumerator CleanupRemainingBricks()
+    private void CleanupRemainingBricks()
     {
-        // Work on a copy because destroying bricks modifies the list.
-        List<BrickBar> bricksToClean = new List<BrickBar>(
-            _remainingBricks
-        );
-
-        foreach (BrickBar brick in bricksToClean)
+        foreach (BrickBar brick in _remainingBricks)
         {
             if (brick == null)
-            {
-                _remainingBricks.Remove(brick);
                 continue;
-            }
 
-            // Unsubscribe before destruction to avoid duplicate removal.
             brick.OnBrickDestroyed -= HandleTutorialBrickDestroyed;
-            _remainingBricks.Remove(brick);
 
-            // Use the brick's existing death/pool logic.
             brick.HandleDeath();
-
-            yield return new WaitForSecondsRealtime(_cleanupDelay);
         }
 
         _remainingBricks.Clear();
@@ -164,6 +151,7 @@ public class TutorialOrder_CreateFloor : TutorialOrder
 
     private void HandleFloorCreated()
     {
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
         _floorCreated = true;
         Debug.Log("TowerManager detected a new floor.");
     }

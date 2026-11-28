@@ -83,16 +83,10 @@ public class PaddleVacoom : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (_paddleHealth.IsPaddleDead())
-            return;
-
-        if (_disableVacoom)
-        {
-            StopSuction();
-            return;
-        }
-
-        if (!Input.GetKey(KeyCode.Space))
+        // Release all Essence if the vacuum cannot operate.
+        if (_paddleHealth.IsPaddleDead() ||
+            _disableVacoom ||
+            !Input.GetKey(KeyCode.Space))
         {
             StopSuction();
             return;
@@ -154,8 +148,11 @@ public class PaddleVacoom : MonoBehaviour
         //    return;
     }
 
-    void SuctionObject()
+
+    private void SuctionObject()
     {
+        // Reuse the existing HashSet instead of
+        // creating a new one every FixedUpdate.
         _nextSuckedEssences.Clear();
 
         Vector2 paddlePosition = transform.position;
@@ -167,16 +164,12 @@ public class PaddleVacoom : MonoBehaviour
             _suctionResults
         );
 
-        HashSet<TowerEssence> currentTargets =
-            new HashSet<TowerEssence>();
-
         Vector2 forward = _mouseForward;
 
         float halfAngleRad =
             (coneAngle * 0.5f) * Mathf.Deg2Rad;
 
-        float cosThreshold =
-            Mathf.Cos(halfAngleRad);
+        float cosThreshold = Mathf.Cos(halfAngleRad);
 
         for (int i = 0; i < hitCount; i++)
         {
@@ -194,50 +187,53 @@ public class PaddleVacoom : MonoBehaviour
             if (sqrDistance <= 0.0001f)
                 continue;
 
-            Vector2 direction =
-                toTarget.normalized;
+            Vector2 direction = toTarget.normalized;
 
-            // Outside cone
+            // Ignore objects outside the suction cone.
             if (Vector2.Dot(forward, direction) < cosThreshold)
                 continue;
 
             TowerEssence essence =
                 collider.GetComponent<TowerEssence>();
 
-            if (essence == null)
+            if (essence == null || !essence.isActiveAndEnabled)
                 continue;
 
-            currentTargets.Add(essence);
+            // IMPORTANT: Add to the correct HashSet!
+            // Also prevent duplicate processing.
+            if (!_nextSuckedEssences.Add(essence))
+                continue;
 
+            // Essence is inside the suction cone.
             essence.StartAttraction(
                 transform,
                 _pushPullStrength,
                 attractRadius
             );
 
-            essence.UpdateAttractionTarget(
-                paddlePosition
-            );
+            essence.UpdateAttractionTarget(paddlePosition);
         }
 
-        // Stop Essences that are no longer
-        // inside the suction cone.
+        // Stop attracting Essence that was previously
+        // inside the cone but is no longer inside it.
         foreach (TowerEssence essence in _currentlySuckedEssences)
         {
-            if (!currentTargets.Contains(essence))
+            if (essence != null &&
+                !_nextSuckedEssences.Contains(essence))
             {
-                if (essence != null)
-                    essence.StopAttraction();
+                essence.StopAttraction();
             }
         }
 
+        // Swap the two HashSets for the next physics update.
         HashSet<TowerEssence> previous =
             _currentlySuckedEssences;
 
         _currentlySuckedEssences = _nextSuckedEssences;
         _nextSuckedEssences = previous;
     }
-    void StopSuction()
+
+    private void StopSuction()
     {
         foreach (TowerEssence essence in _currentlySuckedEssences)
         {
@@ -246,6 +242,7 @@ public class PaddleVacoom : MonoBehaviour
         }
 
         _currentlySuckedEssences.Clear();
+        _nextSuckedEssences.Clear();
     }
 
     void PlaySuctionAudio()

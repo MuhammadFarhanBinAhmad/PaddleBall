@@ -15,6 +15,7 @@ public enum CUTSCENETYPE
     REMOVE_CANVAS_RING = 1 << 7,
     DELAY = 1 << 8,
     FADE_IN_OUT = 1 << 9,
+    ZOOM_IN_OUT = 10 << 10,
 
 }
 public enum FOCUS_TYPE

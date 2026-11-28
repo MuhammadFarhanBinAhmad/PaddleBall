@@ -69,6 +69,8 @@ public class TutorialOrder_DestroyBrick : TutorialOrder
             yield return new WaitForSeconds(_delayBeforeNextStep);
         }
 
+
+        AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
         Debug.Log("All tutorial bricks destroyed.");
     }
 

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f9446efe5c2f84fa22fd7542242f05, type: 3}
   m_Name: TheApprentice_IntroCutScene_03
   m_EditorClassIdentifier: Assembly-CSharp::SO_CutSceneEventContent
-  type: 1
+  type: 10241
   _speakerName: Paddle
   _dialougeTexts:
   - Oh hello. Who are you?
+  _freezeGame: 0
+  TEXTBOX_TYPE: 0
+  _focusType: 0
   _popInEffectLerp:
     serializedVersion: 2
     m_Curve:
@@ -65,3 +68,12 @@ MonoBehaviour:
   _startAlpha: 0
   _endAlpha: 0
   _timeDelay: 0
+  _FadeAnim:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _Fadetime: 0
+  _startFadeAlpha: 0
+  _endFadeAlpha: 0

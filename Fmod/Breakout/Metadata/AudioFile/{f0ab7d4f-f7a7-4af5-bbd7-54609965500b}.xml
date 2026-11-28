@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{f0ab7d4f-f7a7-4af5-bbd7-54609965500b}">
+		<property name="assetPath">
+			<value>UI/Tutorial/531512__cogfirestudios__positive-blip-effect.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>3.0046458333333335</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a75dfad4-8218-4122-a69e-b59d24be66e2}</destination>
+		</relationship>
+	</object>
+</objects>

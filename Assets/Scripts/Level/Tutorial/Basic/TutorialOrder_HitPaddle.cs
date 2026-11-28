@@ -25,6 +25,7 @@ public class TutorialOrder_HitPaddle : TutorialOrder
 
         void HandleBallHit(Ball ball)
         {
+            AudioManager.Instance.PlayOneShot(FmodEvent.Instance.sfx_TutorialWinJingle, transform.position);
             ballHitPaddle = true;
             _tutorialHint.SetActive(false);
         }
